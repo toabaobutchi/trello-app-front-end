@@ -1,0 +1,38 @@
+.btn {
+  border: none;
+  outline: none;
+  border-radius: var(--primary-radius);
+  cursor: pointer;
+  font-weight: bold;
+  padding: 1rem;
+  font-family: inherit;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &.filled-btn {
+    color: #fff;
+    &.primary-btn {
+        background-color: var(--primary-color);
+    }
+    &.secondary-btn {
+        background-color: var(--secondary-color);
+    }
+    &.danger-btn {
+        background-color: var(--danger-color);
+    }
+    &.info-btn {
+        background-color: var(--info-color);
+    }
+    &.warning-btn {
+        background-color: var(--warning-color);
+    }
+    &.light-btn {
+        background-color: var(--light-color);
+    }
+    &.dark-btn {
+        background-color: var(--dark-color);
+    }
+  }
+}

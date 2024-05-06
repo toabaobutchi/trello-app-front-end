@@ -1,0 +1,44 @@
+.menu-group {
+  &-title {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__close {
+      cursor: pointer;
+      transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+      width: 20px;
+      height: 20px;
+      border-radius: var(--primary-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: var(--hover-menu-color);
+      }
+      
+      &.hide {
+        i {
+          transform: rotateZ(180deg);
+        }
+
+        &.tooltip {
+          transform: rotateZ(0);
+        }
+      }
+    }
+  }
+
+  &-content {
+    margin-bottom: 1rem;
+    padding-left: 0.7rem;
+    padding-bottom: 0.5rem;
+  }
+
+  &.divisor > &-content {
+    border-bottom: var(--thin-border-width) solid var(--divisor-line);
+  }
+}

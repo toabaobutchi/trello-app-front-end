@@ -1,0 +1,10 @@
+.menu-item {
+  padding: 1rem 0.5rem;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--hover-menu-color);
+    border-radius: var(--primary-radius);
+  }
+}

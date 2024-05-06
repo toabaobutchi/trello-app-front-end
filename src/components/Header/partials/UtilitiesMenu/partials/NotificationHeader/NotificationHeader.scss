@@ -1,0 +1,34 @@
+.notification-header-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.notification-header-options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    font-size: 0.9rem;
+    height: 100%;
+
+    &__unread {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-weight: 400;
+    }
+
+    &-setting {
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.3rem 0.6rem;
+
+        &:hover {
+            background-color: var(--hover-menu-color);
+        }
+    }
+}

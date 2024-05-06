@@ -1,0 +1,43 @@
+@use '../../../GlobalStyles/mixins' as *;
+
+.utils-menu {
+  @include flex();
+  gap: 1rem;
+  color: var(--header-text-primary-color);
+
+  &__hover,
+  &-user {
+    // padding: 0.4rem 0.8rem;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    @include flex(center);
+    border-radius: 50% !important;
+    font-size: 1.1rem;
+  }
+  &__hover:hover {
+    background-color: var(--hover-menu-color);
+  }
+  &-user {
+    width: 25px;
+    height: 25px;
+    background-color: var(--warning-color);
+    font-size: 0.8rem;
+    line-height: var(--header-line-height);
+  }
+
+  .fixed-menu {
+    color: var(--text-primary-color);
+  }
+
+  .menu-header {
+    gap: 2rem;
+  }
+
+  &-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
