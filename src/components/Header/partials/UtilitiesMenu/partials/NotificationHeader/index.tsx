@@ -2,7 +2,7 @@
 import MenuItem from '@comps/MenuItem'
 import './NotificationHeader.scss'
 import SwitchButton from '@comps/SwitchButton'
-import DropdownMenu from '@comps/DropdownMenu/v2/DropdownMenu'
+import DropdownMenu from '@comps/DropdownMenu'
 
 function NotificationHeader() {
   return (

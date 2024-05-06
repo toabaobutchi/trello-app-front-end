@@ -1,4 +1,4 @@
-import DropdownMenu from '@comps/DropdownMenu/v2/DropdownMenu'
+import DropdownMenu from '@comps/DropdownMenu'
 import './MainMenu.scss'
 import MenuItem from '@comps/MenuItem'
 import MenuGroup from '@comps/MenuGroup'
