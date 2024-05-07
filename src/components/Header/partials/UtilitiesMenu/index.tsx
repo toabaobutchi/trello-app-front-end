@@ -1,7 +1,7 @@
 import NotificationHeader from './partials/NotificationHeader'
 import SearchInput from '@comps/SearchInput'
 import MenuHeader from '@comps/MenuHeader'
-import FixedMenu from '@comps/FixedMenu/v2/FixedMenu'
+import FixedMenu from '@comps/FixedMenu'
 import ImageBox from '@comps/ImageBox'
 import './UtilitiesMenu.scss'
 import MenuFooter from '@comps/MenuFooter'
@@ -12,28 +12,6 @@ function UtilitiesMenu() {
     <>
       <div className='utils-menu'>
         <SearchInput attributes={{ placeholder: 'Search', id: 'search-workspace' }} />
-        {/* <FixedMenu
-          title={{
-            content: <i className='fa-regular fa-bell'></i>,
-            classes: 'utils-menu__hover utils-menu-notification tooltip',
-            customHtmlAttributes: { 'tooltip-content': 'Notifications' }
-          }}
-          style={{ top: '3.43rem', right: '0.5%', paddingTop: '0' }}
-          // height='half'
-          width='450px'
-          side='right'
-        >
-          <MenuHeader>
-            <NotificationHeader />
-          </MenuHeader>
-          <ImageBox
-            src='https://trello.com/assets/ee2660df9335718b1a80.svg'
-            caption={{
-              content: 'No unread notifications',
-              style: { fontSize: '1.2rem' }
-            }}
-          />
-        </FixedMenu> */}
 
         <FixedMenu
           title={{
@@ -42,7 +20,6 @@ function UtilitiesMenu() {
             customHtmlAttributes: { 'tooltip-content': 'Notifications' }
           }}
           style={{ top: '3.43rem', right: '0.5%', paddingTop: '0' }}
-          // height='half'
           width='450px'
           side='right'
           layout={{
