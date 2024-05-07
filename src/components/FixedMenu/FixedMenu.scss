@@ -5,8 +5,8 @@
     border-radius: var(--primary-radius);
 
     &.open {
-        color: var(--primary-color);
-        background-color: #0c66e421;
+      color: var(--primary-color);
+      background-color: #0c66e421;
     }
   }
 
@@ -23,7 +23,8 @@
     padding: 1rem;
     height: max-content;
 
-    &-header, &-footer {
+    &-header,
+    &-footer {
       width: 100%;
     }
 
@@ -33,7 +34,8 @@
     &.footer-menu {
       padding-bottom: 0;
     }
-    &.header-menu, &.footer-menu {
+    &.header-menu,
+    &.footer-menu {
       display: flex;
       align-items: center;
       flex-direction: column;
@@ -45,30 +47,38 @@
     }
   }
 
-  &.left-menu, &.right-menu {
+  &.left-menu,
+  &.right-menu {
     &.h-half {
-        .fixed-menu-content {
-            // bottom: 50%;
-            max-height: 50%;
-            // overflow-y: auto;
-        }
+      .fixed-menu-content {
+        // bottom: 50%;
+        max-height: 50%;
+        // overflow-y: auto;
+      }
     }
     &.h-quarter {
-        .fixed-menu-content {
-            // bottom: 25%;
-            max-height: 25%;
-            // overflow-y: auto;
-        }
+      .fixed-menu-content {
+        // bottom: 25%;
+        max-height: 25%;
+        // overflow-y: auto;
+      }
+    }
+    &.h-full {
+      .fixed-menu-content {
+        // bottom: 25%;
+        max-height: 100%;
+        // overflow-y: auto;
+      }
     }
   }
   &.left-menu {
     .fixed-menu-content {
-        left: 0;
+      left: 0;
     }
   }
   &.right-menu {
     .fixed-menu-content {
-        right: 0;
+      right: 0;
     }
   }
 }

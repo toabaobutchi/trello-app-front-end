@@ -48,7 +48,7 @@ function UtilitiesMenu() {
             customHtmlAttributes: { 'tooltip-content': 'Information' }
           }}
           style={{ top: '3.43rem', right: '0.5%' }}
-          height='half'
+          // height='half'
           width='350px'
           side='right'
           layout={{
@@ -89,13 +89,6 @@ function UtilitiesMenu() {
               style: { fontSize: '1rem' }
             }}
           />
-
-          <MenuItem>Item 1</MenuItem>
-          <MenuItem>Item 1</MenuItem>
-          <MenuItem>Item 1</MenuItem>
-          <MenuItem>Item 1</MenuItem>
-          <MenuItem>Item 1</MenuItem>
-          <MenuItem>Item 1</MenuItem>
         </FixedMenu>
 
         <div className='utils-menu-user tooltip' tooltip-content='Account'>
