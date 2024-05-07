@@ -10,7 +10,8 @@ function AccountMenu() {
         title={{
           content: 'AH',
           classes: 'utils-menu-user tooltip',
-          customHtmlAttributes: { 'tooltip-content': 'Account' }
+          customHtmlAttributes: { 'tooltip-content': 'Account' },
+          style: { padding: 0 }
         }}
         style={{ top: '3.43rem', right: '0.3%' }}
         width='330px'

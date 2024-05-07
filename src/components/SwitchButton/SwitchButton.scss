@@ -85,7 +85,7 @@
     cursor: pointer;
     position: relative;
     border-radius: 10px;
-    border: 1px solid var(--light-color);
+    border: var(--thin-border-width) solid var(--light-color);
     background-color: var(--secondary-color);
     display: block;
 
