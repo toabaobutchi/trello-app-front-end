@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import './MenuGroup.scss'
+import CustomizablePropType from '@utils/CustomizablePropType'
 
 interface MenuGroupProps {
-  title?: string
+  title?: CustomizablePropType
   children?: React.ReactNode
   divisor?: boolean
 }
 
-function MenuGroup({ title = '', children = '', divisor = false }: MenuGroupProps) {
+function MenuGroup({ title = undefined, children = '', divisor = false }: MenuGroupProps) {
   const [collapse, setColapse] = useState(true)
   const handleCollapse = () => {
     setColapse(!collapse)
@@ -15,9 +16,9 @@ function MenuGroup({ title = '', children = '', divisor = false }: MenuGroupProp
   return (
     <>
       <div className={`menu-group ${divisor ? 'divisor' : ''}`}>
-        <div className='menu-group-title'>
+        <div className={`menu-group-title ${title?.classes ?? ''}`} style={title?.style}>
           <p>
-            {title} {!collapse && <span>({React.Children.count(children)})</span>}
+            {title?.content} {!collapse && <span>({React.Children.count(children)})</span>}
           </p>
           <div className={`menu-group-title__close ${!collapse && 'hide'}`} onClick={handleCollapse}>
             <i className='fa-solid fa-chevron-down'></i>
