@@ -23,7 +23,7 @@ function MenuGroup({ title = undefined, children = '', divisor = false, expandGr
           </p>
           {expandGroup !== null && (
             <div className={`menu-group-title__close ${!collapse && 'hide'}`} onClick={handleCollapse}>
-              <i className='fa-solid fa-chevron-down'></i>
+              <i className='fa-solid fa-chevron-up'></i>
             </div>
           )}
         </div>
