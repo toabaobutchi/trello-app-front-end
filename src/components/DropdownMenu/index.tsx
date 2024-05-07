@@ -156,7 +156,7 @@ function DropdownMenu({
             )}
             {layout?.header?.content && (
               <div
-                className={`dropdown-menu-content-header ${layout?.header?.classes}`}
+                className={`dropdown-menu-content-header ${layout?.header?.classes ?? ''}`}
                 style={layout?.header?.style}
                 {...layout?.header?.customHtmlAttributes}
               >
@@ -168,7 +168,7 @@ function DropdownMenu({
             </div>
             {layout?.footer && (
               <div
-                className={`dropdown-menu-content-footer ${layout?.footer?.classes}`}
+                className={`dropdown-menu-content-footer ${layout?.footer?.classes ?? ''}`}
                 style={layout?.footer?.style}
                 {...layout?.footer?.customHtmlAttributes}
               >

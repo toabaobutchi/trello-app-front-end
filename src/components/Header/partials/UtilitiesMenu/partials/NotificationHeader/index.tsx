@@ -11,7 +11,6 @@ function NotificationHeader() {
       <div className='notification-header-options'>
         <div className='notification-header-options__unread'>
           <span> Only show unread </span>
-          {/* <input defaultChecked type='checkbox' /> */}
           <SwitchButton
             inputAttributes={{
               type: 'checkbox',
@@ -34,17 +33,11 @@ function NotificationHeader() {
             footer: { content: 'Notifications setting footer' },
             useScrollbar: true
           }}
-          style={{ height: '400px', width: '300px' }}
+          style={{ maxHeight: '400px', width: '300px' }}
         >
           <MenuItem>Menu 1</MenuItem>
           <MenuItem>Menu 2</MenuItem>
           <MenuItem>Menu 3</MenuItem>
-          <MenuItem>Menu 4</MenuItem>
-          <MenuItem>Menu 5</MenuItem>
-          <MenuItem>Menu 6</MenuItem>
-          <MenuItem>Menu 7</MenuItem>
-          <MenuItem>Menu 8</MenuItem>
-          <MenuItem>Menu 9</MenuItem>
         </DropdownMenu>
       </div>
     </>
