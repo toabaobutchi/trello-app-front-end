@@ -6,10 +6,11 @@ interface MenuGroupProps {
   title?: CustomizablePropType
   children?: React.ReactNode
   divisor?: boolean
+  expandGroup?: boolean | null
 }
 
-function MenuGroup({ title = undefined, children = '', divisor = false }: MenuGroupProps) {
-  const [collapse, setColapse] = useState(true)
+function MenuGroup({ title = undefined, children = '', divisor = false, expandGroup = true }: MenuGroupProps) {
+  const [collapse, setColapse] = useState(expandGroup !== null ? expandGroup : true);
   const handleCollapse = () => {
     setColapse(!collapse)
   }
@@ -18,11 +19,13 @@ function MenuGroup({ title = undefined, children = '', divisor = false }: MenuGr
       <div className={`menu-group ${divisor ? 'divisor' : ''}`}>
         <div className={`menu-group-title ${title?.classes ?? ''}`} style={title?.style}>
           <p>
-            {title?.content} {!collapse && <span>({React.Children.count(children)})</span>}
+            {title?.content} {!collapse && expandGroup !== null && <span>({React.Children.count(children)})</span>}
           </p>
-          <div className={`menu-group-title__close ${!collapse && 'hide'}`} onClick={handleCollapse}>
-            <i className='fa-solid fa-chevron-down'></i>
-          </div>
+          {expandGroup !== null && (
+            <div className={`menu-group-title__close ${!collapse && 'hide'}`} onClick={handleCollapse}>
+              <i className='fa-solid fa-chevron-down'></i>
+            </div>
+          )}
         </div>
         <div className='menu-group-content'>{collapse && children}</div>
       </div>
