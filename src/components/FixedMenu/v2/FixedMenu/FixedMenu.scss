@@ -23,6 +23,10 @@
     padding: 1rem;
     height: max-content;
 
+    &-header, &-footer {
+      width: 100%;
+    }
+
     &.header-menu {
       padding-top: 0;
     }
@@ -36,6 +40,7 @@
 
       .fixed-menu-content-body {
         flex: 1;
+        overflow-y: auto;
       }
     }
   }
