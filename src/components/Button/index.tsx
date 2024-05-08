@@ -7,7 +7,8 @@ interface ButtonProps {
   style?: React.CSSProperties
   attributes?: React.ComponentPropsWithoutRef<'button'>,
   theme?: 'primary' | 'secondary' | 'info' | 'danger' | 'warning' | 'light' | 'dark'
-  onClick?: () => void
+  onClick?: () => void,
+  classes?: string
 }
 
 function Button({
@@ -17,7 +18,7 @@ function Button({
   style = {},
   attributes = {},
   onClick = () => {},
-  theme = 'primary'
+  theme = 'primary', classes = ''
 }: ButtonProps) {
   const handleClick = () => {
     onClick()
@@ -25,7 +26,7 @@ function Button({
   return (
     <>
       <button
-        className={`btn ${variant}-btn ${theme}-btn`}
+        className={`btn ${variant}-btn ${theme}-btn ${classes}`}
         style={style}
         {...attributes}
         onClick={handleClick}
