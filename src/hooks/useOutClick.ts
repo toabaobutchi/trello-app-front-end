@@ -2,21 +2,20 @@ import { useEffect } from 'react'
 
 function useOutClick(
   element: Element,
-  // eslint-disable-next-line no-unused-vars
-  dispatch: (value?: boolean) => void
+  handleOutsideClick: () => void
 ) {
   useEffect(() => {
-    const handleCloseMenu = (e: MouseEvent) => {
+    const handler = (e: MouseEvent) => {
       if (element && !element.contains(e.target as Node)) {
-        dispatch(false)
+        handleOutsideClick()
       }
     }
-    document.addEventListener('click', handleCloseMenu)
+    document.addEventListener('click', handler)
 
     return () => {
-      document.removeEventListener('click', handleCloseMenu)
+      document.removeEventListener('click', handler)
     }
-  }, [element, dispatch])
+  }, [element, handleOutsideClick])
 }
 
 export default useOutClick

@@ -5,7 +5,7 @@
   --header-line-height: 1.5rem;
   --header-topbot-padding: 0.5rem;
   --header-height: 3.43rem;
-  --header-text-primary-color: #44546F;
+  --header-text-primary-color: #44546f;
 
   max-height: var(--header-height);
   padding: var(--header-topbot-padding) 1rem;
@@ -14,21 +14,15 @@
   line-height: var(--header-line-height);
   color: var(--header-text-primary-color);
 
-  .dropdown-menu {
+  .dropdown-menu-content {
     &.ltr-menu,
     &.rtl-menu {
-      .dropdown-menu-content {
-        top: calc(
-          100% + var(--header-topbot-padding) + 6 * var(--thin-border-width)
-        );
-      }
+      top: calc(100% + var(--header-topbot-padding) + 6 * var(--thin-border-width));
 
       &::before {
         position: absolute;
         content: '';
-        height: calc(
-          var(--header-topbot-padding) + 6 * var(--thin-border-width)
-        );
+        height: calc(var(--header-topbot-padding) + 6 * var(--thin-border-width));
         top: 100%;
         left: 0;
         width: 100%;
