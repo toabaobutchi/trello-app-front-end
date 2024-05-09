@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 
 function useOutClick(
   element: Element,
-  dispatch: React.Dispatch<React.SetStateAction<boolean>>
+  // eslint-disable-next-line no-unused-vars
+  dispatch: (value?: boolean) => void
 ) {
   useEffect(() => {
     const handleCloseMenu = (e: MouseEvent) => {

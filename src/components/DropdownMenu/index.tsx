@@ -1,11 +1,10 @@
-import { useRef, useState } from 'react'
-import useOutClick from '@hooks/useOutClick'
-import './DropdownMenu.scss'
 import CustomizablePropType from '@utils/CustomizablePropType'
+import useOutClick from '@hooks/useOutClick'
+import { useRef, useState } from 'react'
+import './DropdownMenu.scss'
 
 interface DropdownMenuProps {
   children?: React.ReactNode
-  title?: CustomizablePropType
   showOn?: 'click' | 'hover'
   useArrow?: React.ReactNode | false
   style?: React.CSSProperties
@@ -15,25 +14,21 @@ interface DropdownMenuProps {
     header?: CustomizablePropType
     useScrollbar?: boolean
     footer?: CustomizablePropType
-  }
+  },
+  // eslint-disable-next-line no-unused-vars
+  handleToggleMenu?: (value?: boolean) => void
 }
 
 function DropdownMenu({
   children = '',
-  title = undefined,
   showOn = 'click',
-  useArrow = <i className='fa-solid fa-chevron-down'></i>,
   style = {},
   dir = 'ltr',
   useCloseIcon = false,
-  layout = undefined
+  layout = undefined,
+  handleToggleMenu = () => {}
 }: DropdownMenuProps) {
-  const [clicked, setClicked] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
-
-  const handleToggleMenu = () => {
-    setClicked(!clicked)
-  }
 
   // dành cho việc ấn nút đóng menu
   const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -41,21 +36,10 @@ function DropdownMenu({
     handleToggleMenu()
   }
 
-  useOutClick(menuRef.current as Element, setClicked)
+  useOutClick(menuRef.current as Element, handleToggleMenu)
   return (
     <>
       <div ref={menuRef} className={`menu dropdown-menu ${showOn}-menu ${dir}-menu`}>
-        <div
-          className={`dropdown-menu-title${clicked ? ' open' : ''} ${title?.classes}`}
-          onClick={handleToggleMenu}
-          {...title?.customHtmlAttributes}
-          style={title?.style}
-        >
-          {title?.content}
-          {useArrow && <span>&nbsp;&nbsp;</span>}
-          {useArrow}
-        </div>
-        {clicked && (
           <div
             className={`dropdown-menu-content menu-content-box-shadow ${layout?.header ? 'header-menu' : ''} ${
               layout?.footer ? 'footer-menu' : ''
@@ -89,11 +73,10 @@ function DropdownMenu({
               </div>
             )}
           </div>
-        )}
+        
       </div>
     </>
   )
 }
 
 export default DropdownMenu
-

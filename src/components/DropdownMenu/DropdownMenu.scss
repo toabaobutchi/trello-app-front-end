@@ -1,31 +1,29 @@
 .dropdown-menu {
   position: relative;
 
-  &-title {
-    cursor: pointer;
-    padding: 0.3rem 0.6rem;
-    border-radius: var(--primary-radius);
+  // &-title {
+  //   cursor: pointer;
+  //   padding: 0.3rem 0.6rem;
+  //   border-radius: var(--primary-radius);
 
-    &:hover {
-      background-color: var(--hover-menu-color);
-    }
+  //   &:hover {
+  //     background-color: var(--hover-menu-color);
+  //   }
 
-    &.open {
-      color: #0c66e4;
-      background-color: #0c66e421;
-    }
-  }
+  //   &.open {
+  //     color: #0c66e4;
+  //     background-color: #0c66e421;
+  //   }
+  // }
 
   &-content {
     position: absolute;
     background-color: #fff;
     box-shadow: 0 0 3px #777;
     border-radius: var(--primary-radius);
-    // width: 300px; // cho người dùng tự customize lại độ rộng
-    width: max-content;
+    width: max-content; // người dùng có thể tuỳ chọn độ rộng
     max-width: 100vw;
     height: max-content;
-    // max-height: 50vh;
     padding: 1rem; // tuỳ chọn cho header và footer
     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 
