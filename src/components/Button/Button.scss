@@ -1,38 +1,140 @@
 .btn {
   border: none;
   outline: none;
-  border-radius: var(--primary-radius);
+  border-radius: var(--secondary-radius);
   cursor: pointer;
-  font-weight: bold;
-  padding: 1rem;
+  font-weight: 600;
   font-family: inherit;
+  background-color: inherit;
 
   &:disabled {
     cursor: not-allowed;
   }
 
+  &.small-btn {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.9rem;
+    outline: none;
+    font-family: inherit;
+  }
+
+  &.medium-btn {
+    padding: 0.5rem 1.1rem;
+    font-size: 1rem;
+    outline: none;
+    font-family: inherit;
+  }
+
+  &.large-btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+    outline: none;
+    font-family: inherit;
+  }
+
+  &.text-btn,
+  &.filled-btn {
+    border: none;
+  }
+
   &.filled-btn {
     color: #fff;
-    &.primary-btn {
-        background-color: var(--primary-color);
+    &:hover {
+      box-shadow: var(--button-hover-shadow);
     }
-    &.secondary-btn {
-        background-color: var(--secondary-color);
+  }
+
+  &.primary-btn {
+    &.text-btn,
+    &.outlined-btn {
+      color: var(--primary-color);
+
+      &:hover {
+        background-color: var(--primary-button-hover-color);
+      }
     }
-    &.danger-btn {
-        background-color: var(--danger-color);
+    &.filled-btn {
+      background-color: var(--primary-color);
+
+      &:hover {
+        background-color: var(--primary-filled-button-hover-color);
+      }
     }
-    &.info-btn {
-        background-color: var(--info-color);
+    &.outlined-btn {
+      border: var(--thin-border-width) solid var(--primary-color);
     }
-    &.warning-btn {
-        background-color: var(--warning-color);
+  }
+  &.danger-btn {
+    &.text-btn,
+    &.outlined-btn {
+      color: var(--danger-color);
     }
-    &.light-btn {
-        background-color: var(--light-color);
+    &.filled-btn {
+      background-color: var(--danger-color);
     }
-    &.dark-btn {
-        background-color: var(--dark-color);
+    &.outlined-btn {
+      border: var(--thin-border-width) solid var(--danger-color);
+    }
+  }
+  &.warning-btn {
+    &.text-btn,
+    &.outlined-btn {
+      color: var(--warning-color);
+    }
+    &.filled-btn {
+      background-color: var(--warning-color);
+    }
+    &.outlined-btn {
+      border: var(--thin-border-width) solid var(--warning-color);
+    }
+  }
+  &.info-btn {
+    &.text-btn,
+    &.outlined-btn {
+      color: var(--info-color);
+    }
+    &.filled-btn {
+      background-color: var(--info-color);
+    }
+    &.outlined-btn {
+      border: var(--thin-border-width) solid var(--info-color);
+    }
+  }
+  &.secondary-btn,
+  &:disabled {
+    &.text-btn,
+    &.outlined-btn {
+      color: var(--secondary-color);
+    }
+    &.filled-btn {
+      background-color: var(--secondary-color);
+    }
+    &.outlined-btn {
+      border: var(--thin-border-width) solid var(--secondary-color);
+    }
+  }
+  &.light-btn {
+    &.text-btn,
+    &.outlined-btn {
+      color: var(--light-color);
+    }
+    &.filled-btn {
+      background-color: var(--light-color);
+    }
+    &.outlined-btn {
+      border: var(--thin-border-width) solid var(--light-color);
+    }
+  }
+  &.dark-btn {
+    &.text-btn,
+    &.outlined-btn {
+      color: var(--dark-color);
+    }
+    &.filled-btn {
+      background-color: var(--dark-color);
+    }
+    &.outlined-btn {
+      border: var(--thin-border-width) solid var(--dark-color);
     }
   }
 }

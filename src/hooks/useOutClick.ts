@@ -2,11 +2,12 @@ import { useEffect } from 'react'
 
 function useOutClick(
   element: Element,
-  dispatch: React.Dispatch<React.SetStateAction<boolean>>
+  dispatch: React.Dispatch<React.SetStateAction<boolean>>,
+  excludes?: (HTMLElement | null)[]
 ) {
   useEffect(() => {
     const handleCloseMenu = (e: MouseEvent) => {
-      if (element && !element.contains(e.target as Node)) {
+      if (element && !element.contains(e.target as Node) && !excludes?.includes(e.target as HTMLElement)) {
         dispatch(false)
       }
     }
@@ -15,7 +16,7 @@ function useOutClick(
     return () => {
       document.removeEventListener('click', handleCloseMenu)
     }
-  }, [element, dispatch])
+  }, [element, dispatch, excludes])
 }
 
 export default useOutClick

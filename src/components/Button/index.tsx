@@ -1,14 +1,15 @@
 import './Button.scss'
 
 interface ButtonProps {
-  variant?: 'filled' | 'outlined'
+  variant?: 'text' | 'filled' | 'outlined'
   disabled?: boolean
   children?: React.ReactNode
   style?: React.CSSProperties
-  attributes?: React.ComponentPropsWithoutRef<'button'>,
+  attributes?: React.ComponentPropsWithoutRef<'button'>
   theme?: 'primary' | 'secondary' | 'info' | 'danger' | 'warning' | 'light' | 'dark'
-  onClick?: () => void,
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void
   classes?: string
+  size?: 'small' | 'medium' | 'large'
 }
 
 function Button({
@@ -17,16 +18,19 @@ function Button({
   children = '',
   style = {},
   attributes = {},
-  onClick = () => {},
-  theme = 'primary', classes = ''
+  onClick = (e: React.MouseEvent<HTMLElement>) => {},
+  theme = 'primary',
+  classes = '',
+  size = 'medium'
 }: ButtonProps) {
-  const handleClick = () => {
-    onClick()
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    onClick(e)
   }
+
   return (
     <>
       <button
-        className={`btn ${variant}-btn ${theme}-btn ${classes}`}
+        className={`btn ${variant}-btn ${theme}-btn ${size}-btn ${classes}`}
         style={style}
         {...attributes}
         onClick={handleClick}

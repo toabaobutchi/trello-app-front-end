@@ -6,15 +6,22 @@
   --bold-border-width: 2px;
   --hover-menu-color: #75757525;
   --primary-radius: 5px;
+  --secondary-radius: 3px;
   --light-color: #ccc;
   --secondary-color: #777;
   --danger-color: #e90678;
   --info-color: #2e70ff;
   --warning-color: #d89e00;
-  --primary-color: #0c66e4;
+
+  --primary-color: #1976d2;
+  --primary-button-hover-color: #1976d20a;
+  --primary-filled-button-hover-color: #1565c0;
+
   --success-color: #02a430;
   --dark-color: #333;
   --clicked-menu-color: #0c66e421;
+
+  --button-hover-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
 
   --tiny-switch-height: 17px;
   --small-switch-height: 19px;

@@ -1,0 +1,12 @@
+.anchor-menu {
+  background-color: #fff;
+  max-width: 100%;
+  transition: 0.25s ease;
+  border-radius: var(--primary-radius);
+  display: none;
+  padding: 1rem;
+
+  &.open {
+    display: block;
+  }
+}

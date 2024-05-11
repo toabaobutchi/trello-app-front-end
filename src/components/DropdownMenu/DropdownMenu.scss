@@ -11,8 +11,8 @@
     }
 
     &.open {
-      color: #0c66e4;
-      background-color: #0c66e421;
+      color: var(--primary-color);
+      background-color: var(--clicked-menu-color);
     }
   }
 
