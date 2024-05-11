@@ -41,7 +41,7 @@ function MainMenu() {
           size='small'
           theme='default'
           style={{ fontSize: 'inherit' }}
-          classes={`header-toggle-menu-button${anchorEl?.id === 'openButton' ? ' open' : ''}`}
+          className={`header-toggle-menu-button${anchorEl?.id === 'openButton' ? ' open' : ''}`}
           onClick={handleClickToggleButton}
           id='openButton'
         >
