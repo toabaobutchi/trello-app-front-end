@@ -7,12 +7,12 @@ function useOutClick(
 ) {
   useEffect(() => {
     const handleCloseMenu = (e: MouseEvent) => {
-      if (element && !element.contains(e.target as Node) && !excludes?.includes(e.target as HTMLElement)) {
-        let isClickOnExcludesElement = null; // không click trên phần tử ngoại lệ
-        if(excludes) {
-          isClickOnExcludesElement = excludes?.find(exc => exc?.contains(e.target as HTMLElement))
+      if (element && !element.contains(e.target as Node)) {
+        let isClickOnExcludesElement = null // không click trên phần tử ngoại lệ
+        if (excludes) {
+          isClickOnExcludesElement = excludes?.find((exc) => exc?.contains(e.target as HTMLElement))
         }
-        if(!isClickOnExcludesElement) {
+        if (!isClickOnExcludesElement) {
           dispatch(false)
         }
       }

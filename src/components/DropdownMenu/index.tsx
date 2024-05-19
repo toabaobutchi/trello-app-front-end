@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
-import useOutClick from '@hooks/useOutClick'
-import './DropdownMenu.scss'
 import CustomizablePropType from '@utils/CustomizablePropType'
+import useOutClick from '@hooks/useOutClick'
+import { useRef, useState } from 'react'
+import './DropdownMenu.scss'
 
 interface DropdownMenuProps {
   children?: React.ReactNode

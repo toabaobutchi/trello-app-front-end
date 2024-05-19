@@ -16,10 +16,11 @@ function Button({
   size = 'medium',
   ...props
 }: ButtonProps) {
-  const { style = {}, className = '', ...buttonProps } = props
+  const { style = {}, className = '', onClick = () => {}, ...buttonProps } = props
   return (
     <>
       <button
+        onClick={onClick}
         className={`btn ${variant}-btn ${theme}-btn ${size}-btn ${className}`}
         style={style}
         disabled={disabled}
