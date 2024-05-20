@@ -6,7 +6,7 @@ type MenuProps = {
   anchorElement: HTMLElement | null
   open: boolean
   // eslint-disable-next-line no-unused-vars
-  onClose?: (id: string) => void
+  onClose?: () => void
 } & React.ComponentProps<'div'>
 
 function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) {
@@ -16,30 +16,25 @@ function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) 
     top: `${(anchorElement?.offsetTop ?? 0) + (anchorElement?.offsetHeight ?? 0)}px`
   }
   const handleClose = () => {
-    onClose(anchorElement?.id ?? '')
+    onClose()
   }
-  const { outClick, setOutClick } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
+  const { outClick, reset } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
   useEffect(() => {
     if (outClick.isOutClick) {
       handleClose()
-
-      // reset
-      setOutClick({
-        isOutClick: false,
-        clickedElement: null
-      })
+      reset()
     }
   })
 
   return (
     <>
-      <div
+      {open && <div
         ref={menuRef}
         className={`menu menu-content-box-shadow anchor-menu${open ? ' open' : ''} ${props?.className ?? ''}`}
         style={{ position: 'fixed', ...position, ...props?.style }}
       >
         {props?.children}
-      </div>
+      </div>}
     </>
   )
 }

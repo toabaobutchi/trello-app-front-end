@@ -9,6 +9,14 @@ export default function useClickTracker(trackedElement: HTMLElement, excludesEle
     clickedElement: null
   })
 
+  // call reset function after handle out click event
+  const reset = () => {
+    setOutClick({
+      isOutClick: false,
+      clickedElement: null
+    })
+  }
+
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       // reset tracker state
@@ -37,5 +45,5 @@ export default function useClickTracker(trackedElement: HTMLElement, excludesEle
     }
   }, [trackedElement, excludesElements, outClick])
 
-  return { outClick, setOutClick }
+  return { outClick, reset }
 }
