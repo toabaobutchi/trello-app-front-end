@@ -1,13 +1,12 @@
 import { useEffect, useRef } from 'react'
 import './Menu.scss'
 import useClickTracker from '@hooks/useClickTracker'
-import { isOutClick } from '@utils/functions'
 
 type MenuProps = {
   anchorElement: HTMLElement | null
   open: boolean
   // eslint-disable-next-line no-unused-vars
-  onClose?: (element: HTMLElement | null) => void
+  onClose?: (id: string) => void
 } & React.ComponentProps<'div'>
 
 function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) {
@@ -17,15 +16,18 @@ function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) 
     top: `${(anchorElement?.offsetTop ?? 0) + (anchorElement?.offsetHeight ?? 0)}px`
   }
   const handleClose = () => {
-    console.log(menuRef.current)
-    onClose(anchorElement)
+    onClose(anchorElement?.id ?? '')
   }
-  const { outClick, setOutClick } = useClickTracker(menuRef.current as HTMLElement)
+  const { outClick, setOutClick } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
   useEffect(() => {
-    if (outClick.isOutClick && open) {
-      if (isOutClick(anchorElement as HTMLElement, outClick.clickedElement)) {
-        handleClose()
-      }
+    if (outClick.isOutClick) {
+      handleClose()
+
+      // reset
+      setOutClick({
+        isOutClick: false,
+        clickedElement: null
+      })
     }
   })
 

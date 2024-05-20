@@ -4,17 +4,32 @@ import { useState } from 'react'
 import Menu from '@comps/Menu'
 import './NavBar.scss'
 
+type AnchorElements = {
+  [key: string]: HTMLElement | null
+}
+
 function NavBar() {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const handleClickToggleButton = (e: React.MouseEvent<HTMLElement>) => {
-    if (anchorEl && anchorEl === e.currentTarget) {
-      setAnchorEl(null)
-    } else {
-      setAnchorEl(e.currentTarget)
-    }
+  const [anchorEls, setAnchorEls] = useState<AnchorElements>({
+    ['workspace-menu-toggle-btn']: null,
+    ['recent-menu-toggle-btn']: null,
+    ['pinned-menu-toggle-btn']: null,
+    ['nav-bar-mobile-menu-button']: null,
+    ['active']: null
+  })
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEls({
+      ...anchorEls,
+      [e.currentTarget?.id ?? 'no-element']: e.currentTarget as HTMLElement,
+      ['active']: e.currentTarget as HTMLElement
+    })
   }
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleClose = (id: string) => {
+    if(anchorEls['active']?.id === id) {
+      setAnchorEls({
+       ...anchorEls,
+        ['active']: null
+      })
+    }
   }
   return (
     <>
@@ -25,16 +40,16 @@ function NavBar() {
           theme='default'
           style={{ fontSize: 'inherit' }}
           className={`header-toggle-menu-button nav-bar-desktop-button${
-            anchorEl?.id === 'workspace-menu-toggle-btn' ? ' open' : ''
+            anchorEls['active']?.id === 'workspace-menu-toggle-btn' ? ' open' : ''
           }`}
-          onClick={handleClickToggleButton}
+          onClick={handleButtonClick}
           id='workspace-menu-toggle-btn'
         >
           <span>Workspace</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
         </Button>
         <Menu
-          anchorElement={anchorEl}
-          open={anchorEl?.id === 'workspace-menu-toggle-btn'}
+          anchorElement={anchorEls['workspace-menu-toggle-btn']}
+          open={anchorEls['active']?.id === 'workspace-menu-toggle-btn'}
           style={{ width: '300px', top: '3.43rem' }}
           onClose={handleClose}
         >
@@ -49,16 +64,16 @@ function NavBar() {
           theme='default'
           style={{ fontSize: 'inherit' }}
           className={`header-toggle-menu-button nav-bar-desktop-button${
-            anchorEl?.id === 'recent-menu-toggle-btn' ? ' open' : ''
+            anchorEls['active']?.id === 'recent-menu-toggle-btn' ? ' open' : ''
           }`}
-          onClick={handleClickToggleButton}
+          onClick={handleButtonClick}
           id='recent-menu-toggle-btn'
         >
           <span>Recent</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
         </Button>
         <Menu
-          anchorElement={anchorEl}
-          open={anchorEl?.id === 'recent-menu-toggle-btn'}
+          anchorElement={anchorEls['recent-menu-toggle-btn']}
+          open={anchorEls['active']?.id === 'recent-menu-toggle-btn'}
           style={{ width: '300px', top: '3.43rem' }}
           onClose={handleClose}
         >
@@ -73,16 +88,16 @@ function NavBar() {
           theme='default'
           style={{ fontSize: 'inherit' }}
           className={`header-toggle-menu-button nav-bar-desktop-button${
-            anchorEl?.id === 'pinned-menu-toggle-btn' ? ' open' : ''
+            anchorEls['active']?.id === 'pinned-menu-toggle-btn' ? ' open' : ''
           }`}
-          onClick={handleClickToggleButton}
+          onClick={handleButtonClick}
           id='pinned-menu-toggle-btn'
         >
           <span>Pinned</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
         </Button>
         <Menu
-          anchorElement={anchorEl}
-          open={anchorEl?.id === 'pinned-menu-toggle-btn'}
+          anchorElement={anchorEls['pinned-menu-toggle-btn']}
+          open={anchorEls['active']?.id === 'pinned-menu-toggle-btn'}
           style={{ width: '300px', top: '3.43rem' }}
           onClose={handleClose}
         >
@@ -96,16 +111,16 @@ function NavBar() {
           theme='default'
           style={{ fontSize: 'inherit' }}
           className={`header-toggle-menu-button nav-bar-mobile-menu-button${
-            anchorEl?.id === 'nav-bar-mobile-menu-button' ? ' open' : ''
+            anchorEls['active']?.id === 'nav-bar-mobile-menu-button' ? ' open' : ''
           }`}
-          onClick={handleClickToggleButton}
+          onClick={handleButtonClick}
           id='nav-bar-mobile-menu-button'
         >
           <span>More</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
         </Button>
         <Menu
-          anchorElement={anchorEl}
-          open={anchorEl?.id === 'nav-bar-mobile-menu-button'}
+          anchorElement={anchorEls['nav-bar-mobile-menu-button']}
+          open={anchorEls['active']?.id === 'nav-bar-mobile-menu-button'}
           style={{ width: '300px', top: '3.43rem' }}
           onClose={handleClose}
           className='nav-bar-mobile-menu'
