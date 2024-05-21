@@ -1,0 +1,55 @@
+.nav-bar {
+  &-mobile-menu-button {
+    display: none;
+
+    @media screen and (max-width: 1280px) {
+      display: block;
+    }
+  }
+
+  &-mobile-menu {
+    .menu-item {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+
+      @media screen and (max-width: 1280px) {
+        &:last-child {
+          display: flex;
+        }
+      }
+
+      @media screen and (max-width: 1160px) {
+        &:nth-last-child(2) {
+          display: flex;
+        }
+      }
+
+      @media screen and (max-width: 900px) {
+        &:first-child {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  &-desktop-button {
+    @media screen and (max-width: 1280px) {
+      &:nth-last-of-type(2) {
+        // nút gần cuối - trừ nút mobile
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 1160px) {
+      &:nth-of-type(2) {
+        display: none;
+      }
+    }
+    @media screen and (max-width: 900px) {
+      &:first-of-type {
+        display: none;
+      }
+    }
+  }
+}

@@ -4,34 +4,34 @@
   justify-content: center;
   gap: 2rem;
 
-  &-mobile-menu-button {
-    display: none;
+  // &-mobile-menu-button {
+  //   display: none;
 
-    @media screen and (max-width: 1280px) {
-      display: block;
-    }
-  }
+  //   @media screen and (max-width: 1280px) {
+  //     display: block;
+  //   }
+  // }
 
-  &-mobile-menu {
-    .menu-item {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
+  // &-mobile-menu {
+  //   .menu-item {
+  //     display: none;
+  //     align-items: center;
+  //     justify-content: space-between;
 
-      @media screen and (max-width: 1280px) {
-        &:last-child {
-          display: flex;
-        }
-      }
-    }
-  }
+  //     @media screen and (max-width: 1280px) {
+  //       &:last-child {
+  //         display: flex;
+  //       }
+  //     }
+  //   }
+  // }
 
-  &-desktop-button {
-    @media screen and (max-width: 1280px) {
-      &:nth-last-of-type(2) {
-        // nút gần cuối
-        display: none;
-      }
-    }
-  }
+  // &-desktop-button {
+  //   @media screen and (max-width: 1280px) {
+  //     &:nth-last-of-type(2) {
+  //       // nút gần cuối
+  //       display: none;
+  //     }
+  //   }
+  // }
 }

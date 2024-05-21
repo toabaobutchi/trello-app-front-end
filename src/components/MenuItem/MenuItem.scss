@@ -1,7 +1,16 @@
 .menu-item {
-  padding: 1rem 0.5rem;
   width: 100%;
   cursor: pointer;
+
+  &-medium {
+    padding: 1rem 0.5rem;
+  }
+  &-small {
+    padding: 0.5rem 0.25rem;
+  }
+  &-large {
+    padding: 1.5rem 1rem;
+  }
 
   &:hover {
     background-color: var(--hover-menu-color);
