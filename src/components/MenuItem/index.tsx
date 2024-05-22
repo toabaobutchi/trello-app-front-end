@@ -6,13 +6,13 @@ interface MenuItemProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
   size?: 'small' | 'medium' | 'large'
 }
-function MenuItem({ children = '', onClick = () => {}, size = 'medium' }: MenuItemProps) {
+function MenuItem({ children = '', onClick = () => {}, size = 'medium', ...props }: MenuItemProps) {
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     onClick(e)
   }
   return (
     <>
-      <div className={`menu-item menu-item-${size}`} onClick={handleClick}>
+      <div className={`menu-item menu-item-${size}`} onClick={handleClick} {...props}>
         {children}
       </div>
     </>

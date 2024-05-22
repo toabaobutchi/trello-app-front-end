@@ -21,6 +21,7 @@ function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) 
   const { outClick, reset } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
   useEffect(() => {
     if (outClick.isOutClick) {
+      console.log('outClick')
       handleClose()
       reset()
     }
