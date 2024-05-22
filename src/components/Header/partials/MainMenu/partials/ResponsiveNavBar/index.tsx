@@ -93,10 +93,10 @@ function ResponsiveNavBar({
           }}
           divisor
         >
-          <MenuItem>My Workspace item 1</MenuItem>
-          <MenuItem>My Workspace item 2</MenuItem>
+          <MenuItem>Luận văn tốt nghiệp</MenuItem>
+          <MenuItem>Đồ án chuyên ngành</MenuItem>
         </MenuGroup>
-        <MenuItem>My Workspace item 3</MenuItem>
+        <MenuItem>Ứng dụng thời gian thực nhóm 3</MenuItem>
       </Menu>
       <Menu
         anchorElement={anchorElement}
@@ -108,9 +108,8 @@ function ResponsiveNavBar({
         style={{ width: '300px', top: '3.43rem' }}
         onClose={handleCloseMenu}
       >
-        <MenuItem>My Recent menu 1</MenuItem>
-        <MenuItem>My Recent menu 2</MenuItem>
-        <MenuItem>My Recent menu 3</MenuItem>
+        <MenuItem>Luận văn tốt nghiệp</MenuItem>
+        <MenuItem>Ứng dụng thời gian thực nhóm 3</MenuItem>
       </Menu>
       <Menu
         anchorElement={anchorElement}
