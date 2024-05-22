@@ -1,6 +1,6 @@
 .menu-group {
   &-title {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--secondary-color);
     display: flex;
     align-items: center;
@@ -19,7 +19,7 @@
       &:hover {
         background-color: var(--hover-menu-color);
       }
-      
+
       &.hide {
         i {
           transform: rotateZ(180deg);
@@ -33,11 +33,8 @@
   }
 
   &-content {
-    margin-bottom: 1rem;
     padding-left: 0.3rem;
     padding-bottom: 0.5rem;
-
-    
   }
   &:last-child {
     .menu-group-content {

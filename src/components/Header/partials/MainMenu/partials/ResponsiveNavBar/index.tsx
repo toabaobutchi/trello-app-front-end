@@ -3,6 +3,7 @@ import Button from '@comps/Button'
 import './ResponsiveNavBar.scss'
 import Menu from '@comps/Menu'
 import { useState } from 'react'
+import MenuGroup from '@comps/MenuGroup'
 
 type MenuItemType = {
   title: string
@@ -85,8 +86,16 @@ function ResponsiveNavBar({
         style={{ width: '300px', top: '3.43rem' }}
         onClose={handleCloseMenu}
       >
-        <MenuItem>My Workspace item 1</MenuItem>
-        <MenuItem>My Workspace item 2</MenuItem>
+        <MenuGroup
+          title={{
+            content: 'Your workspace',
+            style: { textTransform: 'capitalize' }
+          }}
+          divisor
+        >
+          <MenuItem>My Workspace item 1</MenuItem>
+          <MenuItem>My Workspace item 2</MenuItem>
+        </MenuGroup>
         <MenuItem>My Workspace item 3</MenuItem>
       </Menu>
       <Menu
