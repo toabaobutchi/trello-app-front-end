@@ -43,17 +43,7 @@
     justify-content: center;
     width: 100%;
   }
-
-  .search-input {
-    @media screen and (max-width: 720px) {
-      display: none;
-    }
-  }
   .search-button-mobile {
     display: none;
-    
-    @media screen and (max-width: 720px) {
-      display: block;
-    }
   }
 }

@@ -1,6 +1,6 @@
+import useClickTracker from '@hooks/useClickTracker'
 import { useEffect, useRef } from 'react'
 import './Menu.scss'
-import useClickTracker from '@hooks/useClickTracker'
 
 type MenuProps = {
   anchorElement: HTMLElement | null
@@ -21,7 +21,6 @@ function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) 
   const { outClick, reset } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
   useEffect(() => {
     if (outClick.isOutClick && open) {
-      console.log('outClick', open)
       handleClose()
       reset()
     }

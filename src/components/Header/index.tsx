@@ -1,4 +1,5 @@
 import './Header.scss'
+import './Header.responsive.scss'
 import MainMenu from './partials/MainMenu'
 import UtilitiesMenu from './partials/UtilitiesMenu'
 

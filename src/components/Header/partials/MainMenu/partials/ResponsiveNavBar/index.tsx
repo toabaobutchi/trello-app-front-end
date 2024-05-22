@@ -39,7 +39,7 @@ function ResponsiveNavBar({
     setToggleId(e.currentTarget.getAttribute('toggle-id') ?? '')
   }
   const handleCloseMenu = () => {
-    setToggleId(defaultToggleId)
+    setToggleId('')
     handleClose()
   }
   return (
