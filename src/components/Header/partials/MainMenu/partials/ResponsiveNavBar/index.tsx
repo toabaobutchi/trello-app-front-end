@@ -25,7 +25,7 @@ function ResponsiveNavBar({
   handleClose = () => {},
   menuItems = []
 }: ResponsiveNavBarProps) {
-  const [toggleId, setToggleId] = useState(defaultToggleId)
+  const [toggleId, setToggleId] = useState('')
   const handleToggleMenu = (e: React.MouseEvent<HTMLElement>) => {
     if (anchorElement && toggleId !== defaultToggleId) {
       setAnchorElement(e.currentTarget as HTMLElement)
@@ -36,13 +36,12 @@ function ResponsiveNavBar({
     }
   }
   const handleChangeMenu = (e: React.MouseEvent<HTMLElement>) => {
-    setToggleId(e.currentTarget.getAttribute('toggle-id') ?? defaultToggleId)
+    setToggleId(e.currentTarget.getAttribute('toggle-id') ?? '')
   }
   const handleCloseMenu = () => {
     setToggleId(defaultToggleId)
     handleClose()
   }
-  console.log({ anchorElement }, toggleId)
   return (
     <>
       <Button
@@ -59,22 +58,23 @@ function ResponsiveNavBar({
         <span>More</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
       </Button>
 
-      {Boolean(anchorElement) &&
-        (anchorElement?.getAttribute('toggle-id') === defaultToggleId || toggleId === defaultToggleId) && (
-          <Menu
-            anchorElement={anchorElement}
-            open
-            style={{ width: '300px', top: '3.43rem' }}
-            onClose={handleCloseMenu}
-            className='nav-bar-mobile-menu'
-          >
-            {menuItems.map(item => (
-              <MenuItem size='small' key={item.toggleId} onClick={handleChangeMenu} toggle-id={item.toggleId}>
-                <span>{item.title}</span> <i className='fa-solid fa-chevron-right'></i>
-              </MenuItem>
-            ))}
-          </Menu>
-        )}
+      <Menu
+        anchorElement={anchorElement}
+        open={
+          Boolean(anchorElement) &&
+          (anchorElement?.getAttribute('toggle-id') === defaultToggleId || toggleId === defaultToggleId)
+        }
+        style={{ width: '300px', top: '3.43rem' }}
+        onClose={handleCloseMenu}
+        className='nav-bar-mobile-menu'
+      >
+        {menuItems.map(item => (
+          <MenuItem size='small' key={item.toggleId} onClick={handleChangeMenu} toggle-id={item.toggleId}>
+            <span>{item.title}</span> <i className='fa-solid fa-chevron-right'></i>
+          </MenuItem>
+        ))}
+      </Menu>
+
       <Menu
         anchorElement={anchorElement}
         open={

@@ -4,8 +4,27 @@
   @include flex(space-evenly);
   gap: 2rem;
 
+  @media screen and (max-width: 450px) {
+    gap: 1rem;
+  }
+
   &-header-text {
     font-weight: 600;
     font-size: 1.2rem;
+  }
+  &-create-button {
+
+    &-desktop {
+      @media screen and (max-width: 900px) {
+        display: none;
+      }
+    }
+    &-mobile {
+      display: none;
+
+      @media screen and (max-width: 900px) {
+        display: block;
+      }
+    }
   }
 }

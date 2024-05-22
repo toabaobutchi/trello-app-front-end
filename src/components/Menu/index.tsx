@@ -20,8 +20,8 @@ function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) 
   }
   const { outClick, reset } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
   useEffect(() => {
-    if (outClick.isOutClick) {
-      console.log('outClick')
+    if (outClick.isOutClick && open) {
+      console.log('outClick', open)
       handleClose()
       reset()
     }

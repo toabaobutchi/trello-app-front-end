@@ -25,6 +25,7 @@ export default function useClickTracker(trackedElement: HTMLElement, excludesEle
         clickedElement: null
       }
       if (trackedElement && !trackedElement.contains(e.target as Node)) {
+        console.log(e.target, ' is outside of ', trackedElement)
         let isClickOnExcludesElement = null
         if (excludesElements) {
           isClickOnExcludesElement = excludesElements?.find(exc => exc?.contains(e.target as HTMLElement))
