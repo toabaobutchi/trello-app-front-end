@@ -1,0 +1,12 @@
+.checkbox {
+  input[type='checkbox'] {
+    display: none;
+  }
+  label {
+    cursor: pointer;
+
+    .checked-label, .unchecked-label {
+      color: var(--color);
+    }
+  }
+}

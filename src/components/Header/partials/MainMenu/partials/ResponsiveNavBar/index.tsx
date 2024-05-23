@@ -4,6 +4,8 @@ import './ResponsiveNavBar.scss'
 import Menu from '@comps/Menu'
 import { useState } from 'react'
 import MenuGroup from '@comps/MenuGroup'
+import InfoRow from '@comps/InfoRow'
+import CheckBox from '@comps/CheckBox'
 
 type MenuItemType = {
   title: string
@@ -93,8 +95,46 @@ function ResponsiveNavBar({
           }}
           divisor
         >
-          <MenuItem>Luận văn tốt nghiệp</MenuItem>
-          <MenuItem>Đồ án chuyên ngành</MenuItem>
+          <MenuItem size='small'>
+            <InfoRow
+              layout={{
+                imgColor: '#2e70ff',
+                mainContent: 'Luận văn tốt nghiệp',
+                subContent: 'Trello workspace',
+                actions: (
+                  <>
+                    <CheckBox
+                      inputAttrs={{ id: 'pinned-checkbox-1', checked: true }}
+                      icons={{
+                        checked: { icon: <i className='fa-solid fa-star'></i> },
+                        unchecked: { icon: <i className='fa-regular fa-star'></i> }
+                      }}
+                    />
+                  </>
+                )
+              }}
+            />
+          </MenuItem>
+          <MenuItem size='small'>
+            <InfoRow
+              layout={{
+                imgColor: '#e90678',
+                mainContent: 'Đồ án chuyên ngành',
+                subContent: 'Trello workspace',
+                actions: (
+                  <>
+                    <CheckBox
+                      inputAttrs={{ id: 'pinned-checkbox-2', checked: true }}
+                      icons={{
+                        checked: { icon: <i className='fa-solid fa-star'></i> },
+                        unchecked: { icon: <i className='fa-regular fa-star'></i> }
+                      }}
+                    />
+                  </>
+                )
+              }}
+            />
+          </MenuItem>
         </MenuGroup>
         <MenuItem>Ứng dụng thời gian thực nhóm 3</MenuItem>
       </Menu>
