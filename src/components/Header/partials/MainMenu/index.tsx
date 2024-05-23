@@ -14,9 +14,6 @@ function MainMenu() {
             <i className='fa-solid fa-plus'></i>
           </span>
         </Button>
-        {/* <Button className='main-menu-create-button-mobile' variant='filled' style={{ padding: '0.6rem 0.7rem' }}>
-        <i className="fa-solid fa-plus"></i>
-        </Button> */}
       </div>
     </>
   )
