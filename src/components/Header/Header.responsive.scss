@@ -16,7 +16,7 @@
         display: none;
       }
       &-mobile {
-        display: block;
+        display: block !important;
       }
     }
   }
@@ -72,11 +72,11 @@
     gap: 0.5rem;
   }
   @media screen and (max-width: 720px) {
-    .search-input {
+    > .search-input {
       display: none;
     }
     .search-button-mobile {
-      display: block;
+      display: block !important;
     }
   }
 }

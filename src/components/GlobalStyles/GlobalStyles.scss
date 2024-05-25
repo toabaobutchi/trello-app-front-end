@@ -12,6 +12,7 @@
   --danger-color: #e90678;
   --info-color: #2e70ff;
   --warning-color: #d89e00;
+  --overlay-color: #00000007;
 
   --primary-color: #1976d2;
   --primary-button-hover-color: #1976d20a;
@@ -30,7 +31,8 @@
   --large-switch-height: 25px;
   --switch-width: 35px;
 
-  --tooltip-z-index: 1000;
+  --tooltip-z-index: 100;
+  --modal-z-index: 101;
 }
 
 * {
