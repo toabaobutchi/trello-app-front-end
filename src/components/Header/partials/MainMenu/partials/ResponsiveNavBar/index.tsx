@@ -30,9 +30,9 @@ function ResponsiveNavBar({
 }: ResponsiveNavBarProps) {
   const [toggleId, setToggleId] = useState('')
   const handleToggleMenu = (e: React.MouseEvent<HTMLElement>) => {
+    setToggleId(defaultToggleId)
     if (anchorElement && toggleId !== defaultToggleId) {
       setAnchorElement(e.currentTarget as HTMLElement)
-      setToggleId(defaultToggleId)
     } else if (anchorElement && anchorElement.getAttribute('toggle-id') === defaultToggleId) setAnchorElement(null)
     else {
       setAnchorElement(e.currentTarget as HTMLElement)
@@ -60,13 +60,10 @@ function ResponsiveNavBar({
       >
         <span>More</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
       </Button>
-
+      {/* anchorElement?.getAttribute('toggle-id') === defaultToggleId ||  */}
       <Menu
         anchorElement={anchorElement}
-        open={
-          Boolean(anchorElement) &&
-          (anchorElement?.getAttribute('toggle-id') === defaultToggleId || toggleId === defaultToggleId)
-        }
+        open={Boolean(anchorElement) && toggleId === defaultToggleId}
         style={{ width: '300px', top: '3.43rem' }}
         onClose={handleCloseMenu}
         className='nav-bar-mobile-menu'
