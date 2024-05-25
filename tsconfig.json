@@ -9,6 +9,7 @@
       "@comps/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
       "@hooks/*": ["./src/hooks/*"],
+      "@confs/*": ["./src/configs/*"],
       "@utils/*": ["./src/utils/*"]
     },
 

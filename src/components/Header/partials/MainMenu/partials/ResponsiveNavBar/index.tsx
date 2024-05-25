@@ -6,6 +6,7 @@ import { useState } from 'react'
 import MenuGroup from '@comps/MenuGroup'
 import InfoRow from '@comps/InfoRow'
 import CheckBox from '@comps/CheckBox'
+import { HEADER_HEIGHT } from '@confs/app'
 
 type MenuItemType = {
   title: string
@@ -64,7 +65,7 @@ function ResponsiveNavBar({
       <Menu
         anchorElement={anchorElement}
         open={Boolean(anchorElement) && toggleId === defaultToggleId}
-        style={{ width: '300px', top: '3.43rem' }}
+        style={{ width: '300px', top: HEADER_HEIGHT }}
         onClose={handleCloseMenu}
         className='nav-bar-mobile-menu'
       >
@@ -82,7 +83,7 @@ function ResponsiveNavBar({
           (anchorElement?.getAttribute('toggle-id') === 'workspace-menu-toggle-btn' ||
             toggleId === 'workspace-menu-toggle-btn')
         }
-        style={{ width: '300px', top: '3.43rem' }}
+        style={{ width: '300px', top: HEADER_HEIGHT }}
         onClose={handleCloseMenu}
       >
         <MenuGroup
@@ -142,7 +143,7 @@ function ResponsiveNavBar({
           (anchorElement?.getAttribute('toggle-id') === 'recent-menu-toggle-btn' ||
             toggleId === 'recent-menu-toggle-btn')
         }
-        style={{ width: '300px', top: '3.43rem' }}
+        style={{ width: '300px', top: HEADER_HEIGHT }}
         onClose={handleCloseMenu}
       >
         <MenuItem>Luận văn tốt nghiệp</MenuItem>
@@ -155,7 +156,7 @@ function ResponsiveNavBar({
           (anchorElement?.getAttribute('toggle-id') === 'pinned-menu-toggle-btn' ||
             toggleId === 'pinned-menu-toggle-btn')
         }
-        style={{ width: '300px', top: '3.43rem' }}
+        style={{ width: '300px', top: HEADER_HEIGHT }}
         onClose={handleCloseMenu}
       >
         <MenuItem>My Pinned menu 1</MenuItem>

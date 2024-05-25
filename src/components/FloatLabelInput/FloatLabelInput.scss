@@ -1,0 +1,49 @@
+.input-group {
+  &.small-input {
+    --input-padding: 0.5rem;
+  }
+  &.medium-input {
+    --input-padding: 0.7rem;
+  }
+  &.large-input {
+    --input-padding: 1rem;
+  }
+  &.float-label {
+    position: relative;
+    // --float-label-input-padding: 0.5rem;
+    height: max-content;
+
+    label {
+      position: absolute;
+      top: 50%;
+      left: var(--input-padding);
+      transform: translateY(-50%);
+      background-color: #fff;
+      padding: 0 0.5rem;
+      color: var(--secondary-color);
+      transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: text;
+      user-select: none;
+    }
+
+    > input {
+      width: 100%;
+      padding: var(--input-padding);
+      font: inherit;
+      border-radius: var(--primary-radius);
+      outline: none;
+      border: var(--thin-border-width) solid var(--light-color);
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        border: var(--thin-border-width) solid var(--primary-color);
+        ~ label {
+          top: 0;
+          font-size: 0.85rem;
+          font-weight: bolder;
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+}
