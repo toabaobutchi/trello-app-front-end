@@ -2,6 +2,7 @@ import FixedMenu from '@comps/FixedMenu'
 import MenuHeader from '@comps/MenuHeader'
 import NotificationHeader from '../NotificationHeader'
 import ImageBox from '@comps/ImageBox'
+import config from '@confs/app.config'
 
 function NotificationMenu() {
   return (
@@ -12,7 +13,7 @@ function NotificationMenu() {
           classes: 'utils-menu__hover utils-menu-notification tooltip',
           customHtmlAttributes: { 'tooltip-content': 'Notifications' }
         }}
-        style={{ top: '3.43rem', right: '0.5%', paddingTop: '0' }}
+        style={{ top: config.header.height, right: '0.5%', paddingTop: '0' }}
         width='450px'
         side='right'
         layout={{

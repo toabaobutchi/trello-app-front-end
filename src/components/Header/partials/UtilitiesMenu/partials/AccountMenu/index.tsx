@@ -2,6 +2,7 @@ import FixedMenu from '@comps/FixedMenu'
 import MenuGroup from '@comps/MenuGroup'
 import MenuItem from '@comps/MenuItem'
 import './AccountMenu.scss'
+import config from '@confs/app.config'
 
 function AccountMenu() {
   return (
@@ -14,7 +15,7 @@ function AccountMenu() {
           customHtmlAttributes: { 'tooltip-content': 'Account' },
           style: { padding: 0 }
         }}
-        style={{ top: '3.43rem', right: '0.3%' }}
+        style={{ top: config.header.height, right: '0.3%' }}
         width='330px'
       >
         <MenuGroup title={{ content: 'Account', style: { textTransform: 'uppercase' } }} divisor expandGroup={null}>

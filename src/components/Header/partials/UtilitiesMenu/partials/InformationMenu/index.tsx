@@ -1,6 +1,7 @@
 import FixedMenu from '@comps/FixedMenu'
 import ImageBox from '@comps/ImageBox'
 import MenuFooter from '@comps/MenuFooter'
+import config from '@confs/app.config'
 
 function InformationMenu() {
   return (
@@ -11,7 +12,7 @@ function InformationMenu() {
           classes: 'utils-menu__hover utils-menu-help tooltip',
           customHtmlAttributes: { 'tooltip-content': 'Information' }
         }}
-        style={{ top: '3.43rem', right: '0.5%' }}
+        style={{ top: config.header.height, right: '0.5%' }}
         width='350px'
         side='right'
         layout={{
