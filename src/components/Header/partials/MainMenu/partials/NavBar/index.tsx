@@ -9,7 +9,7 @@ type MenuItemType = {
 }
 const toggleButtons: MenuItemType[] = [
   {
-    title: 'Workspace',
+    title: 'Workspaces',
     toggleId: 'workspace-menu-toggle-btn'
   },
   {
