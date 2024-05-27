@@ -1,0 +1,13 @@
+.menu-header-with-action {
+  padding-bottom: 1rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-primary-color);
+
+  .menu-header-content {
+    flex: 1;
+    text-align: center;
+  }
+}

@@ -1,6 +1,7 @@
 import Button from '@comps/Button'
 import FloatLabelInput from '@comps/FloatLabelInput'
 import Menu from '@comps/Menu'
+import MenuHeaderWithAction from '@comps/MenuHeaderWithAction'
 import MenuItem from '@comps/MenuItem'
 import config from '@confs/app.config'
 import { useReducer } from 'react'
@@ -35,7 +36,7 @@ const reducer = (state: State, action: Action) => {
     case EActionType.OPEN_MENU:
       return {
         ...prev,
-        anchorEl: action.element // mở menu, set phần tử anchorEl
+        anchorEl: action.element ?? prev.anchorEl // mở menu, set phần tử anchorEl
       } as State
     case EActionType.CREATE_BOARD_MENU:
       return { ...prev, createBoard: { boardTitle: action.data ?? '' } }
@@ -62,6 +63,9 @@ function CreateBoardMenu() {
       dispatch({ type: EActionType.OPEN_MENU, element: e.currentTarget })
     }
   }
+  const backToMainMenu = () => {
+    dispatch({ type: EActionType.OPEN_MENU })
+  }
   const handleCloseMenu = () => {
     dispatch({ type: EActionType.CLOSE_MENU })
   }
@@ -74,6 +78,20 @@ function CreateBoardMenu() {
   const openCreateWorkspaceMenu = () => {
     dispatch({ type: EActionType.CREATE_WORKSPACE_MENU })
   }
+  const BackButton = (
+    <>
+      <Button onClick={backToMainMenu} variant='text' size='small' theme='default'>
+      <i className="fa-solid fa-chevron-left"></i>
+      </Button>
+    </>
+  )
+  const CloseButton = (
+    <>
+      <Button onClick={handleCloseMenu} variant='text' size='small' theme='default'>
+        <i className='fa-solid fa-xmark'></i>
+      </Button>
+    </>
+  )
   return (
     <>
       <Button
@@ -101,6 +119,16 @@ function CreateBoardMenu() {
         open={state.anchorEl !== null && state.openMenu === EActionType.CREATE_BOARD_MENU}
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
+        header={
+          <>
+            <MenuHeaderWithAction
+              beforeButton={BackButton}
+              afterButton={CloseButton}
+            >
+              Create board
+            </MenuHeaderWithAction>
+          </>
+        }
       >
         <FloatLabelInput
           onChange={handleChangeBoardTitle}
@@ -108,7 +136,7 @@ function CreateBoardMenu() {
           input={{ id: 'create-board', autoFocus: true }}
         />
         <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-          Create board
+          Create new board
         </Button>
       </Menu>
 
@@ -117,6 +145,16 @@ function CreateBoardMenu() {
         open={state.anchorEl !== null && state.openMenu === EActionType.CREATE_WORKSPACE_MENU}
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
+        header={
+          <>
+            <MenuHeaderWithAction
+              beforeButton={BackButton}
+              afterButton={CloseButton}
+            >
+              Create new workspace
+            </MenuHeaderWithAction>
+          </>
+        }
       >
         <FloatLabelInput
           // onChange={handleChangeBoardTitle}

@@ -5,11 +5,12 @@ import './Menu.scss'
 type MenuProps = {
   anchorElement: HTMLElement | null
   open: boolean
+  header?: React.ReactNode
   // eslint-disable-next-line no-unused-vars
   onClose?: () => void
 } & React.ComponentProps<'div'>
 
-function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) {
+function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: MenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   const position = {
     left: `${anchorElement?.offsetLeft}px`,
@@ -28,13 +29,16 @@ function Menu({ anchorElement, open, onClose = () => {}, ...props }: MenuProps) 
 
   return (
     <>
-      {open && <div
-        ref={menuRef}
-        className={`menu menu-content-box-shadow anchor-menu${open ? ' open' : ''} ${props?.className ?? ''}`}
-        style={{ position: 'fixed', ...position, ...props?.style }}
-      >
-        {props?.children}
-      </div>}
+      {open && (
+        <div
+          ref={menuRef}
+          className={`menu menu-content-box-shadow anchor-menu${open ? ' open' : ''} ${props?.className ?? ''}`}
+          style={{ position: 'fixed', ...position, ...props?.style }}
+        >
+          {header}
+          <div className='menu-body'>{props?.children}</div>
+        </div>
+      )}
     </>
   )
 }

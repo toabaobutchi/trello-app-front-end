@@ -1,15 +1,13 @@
 import './MenuHeader.scss'
 
 interface MenuHeaderProps {
-    children?: React.ReactNode
+  children?: React.ReactNode
 }
 
-function MenuHeader({children = ''}: MenuHeaderProps) {
+function MenuHeader({ children = '' }: MenuHeaderProps) {
   return (
     <>
-      <div className='menu-header row jcsb'>
-        {children}
-      </div>
+      <div className='menu-header row jcsb'>{children}</div>
     </>
   )
 }
