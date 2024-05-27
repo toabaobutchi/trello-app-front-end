@@ -1,9 +1,11 @@
-import Header from "@comps/Header";
+import Header from '@comps/Header'
 
 function Home() {
-    return <>
-        <Header />
+  return (
+    <>
+      <Header />
     </>
+  )
 }
 
-export default Home;
+export default Home

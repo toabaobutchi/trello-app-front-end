@@ -3,7 +3,6 @@ import CreateBoardMenu from './partials/CreateBoardMenu'
 import NavBar from './partials/NavBar'
 
 function MainMenu() {
-  
   return (
     <>
       <div className='main-menu'>
