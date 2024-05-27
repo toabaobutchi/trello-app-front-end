@@ -3,9 +3,9 @@ import FloatLabelInput from '@comps/FloatLabelInput'
 import Menu from '@comps/Menu'
 import MenuItem from '@comps/MenuItem'
 import config from '@confs/app.config'
-import { Reducer, useReducer } from 'react'
+import { useReducer } from 'react'
 
-enum ActionType {
+enum EActionType {
   OPEN_MENU,
   CREATE_BOARD_MENU,
   CREATE_WORKSPACE_MENU,
@@ -13,14 +13,14 @@ enum ActionType {
 }
 
 type Action = {
-  type: ActionType
+  type: EActionType
   element?: HTMLElement | null
   data?: string | null
 }
 
 type State = {
   anchorEl: HTMLElement | null
-  openMenu?: ActionType
+  openMenu?: EActionType
   createBoard?: {
     boardTitle: string
   } | null
@@ -32,21 +32,21 @@ type State = {
 const reducer = (state: State, action: Action) => {
   const prev = { ...state, openMenu: action.type } as State
   switch (action.type) {
-    case ActionType.OPEN_MENU:
+    case EActionType.OPEN_MENU:
       return {
         ...prev,
         anchorEl: action.element // mở menu, set phần tử anchorEl
       } as State
-    case ActionType.CREATE_BOARD_MENU:
+    case EActionType.CREATE_BOARD_MENU:
       return { ...prev, createBoard: { boardTitle: action.data ?? '' } }
-    case ActionType.CREATE_WORKSPACE_MENU:
+    case EActionType.CREATE_WORKSPACE_MENU:
       return {
         ...prev,
         createWorkspace: {
           workspaceTitle: ''
         }
       } as State
-    case ActionType.CLOSE_MENU:
+    case EActionType.CLOSE_MENU:
       return { ...prev, anchorEl: null } as State
     default:
       return prev
@@ -57,24 +57,23 @@ function CreateBoardMenu() {
   const [state, dispatch] = useReducer(reducer, { anchorEl: null } as State)
   const toggleMainMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (state.anchorEl !== null) {
-      dispatch({ type: ActionType.CLOSE_MENU })
+      dispatch({ type: EActionType.CLOSE_MENU })
     } else {
-      dispatch({ type: ActionType.OPEN_MENU, element: e.currentTarget })
+      dispatch({ type: EActionType.OPEN_MENU, element: e.currentTarget })
     }
   }
   const handleCloseMenu = () => {
-    dispatch({ type: ActionType.CLOSE_MENU })
+    dispatch({ type: EActionType.CLOSE_MENU })
   }
   const handleChangeBoardTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: ActionType.CREATE_BOARD_MENU, data: e.currentTarget.value })
+    dispatch({ type: EActionType.CREATE_BOARD_MENU, data: e.currentTarget.value })
   }
   const openCreateBoardMenu = () => {
-    dispatch({ type: ActionType.CREATE_BOARD_MENU })
+    dispatch({ type: EActionType.CREATE_BOARD_MENU })
   }
   const openCreateWorkspaceMenu = () => {
-    dispatch({ type: ActionType.CREATE_WORKSPACE_MENU })
+    dispatch({ type: EActionType.CREATE_WORKSPACE_MENU })
   }
-  console.log('Current state >>> ', state)
   return (
     <>
       <Button
@@ -90,7 +89,7 @@ function CreateBoardMenu() {
       </Button>
       <Menu
         anchorElement={state.anchorEl}
-        open={state.anchorEl !== null && state.openMenu === ActionType.OPEN_MENU}
+        open={state.anchorEl !== null && state.openMenu === EActionType.OPEN_MENU}
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
       >
@@ -99,7 +98,7 @@ function CreateBoardMenu() {
       </Menu>
       <Menu
         anchorElement={state.anchorEl}
-        open={state.anchorEl !== null && state.openMenu === ActionType.CREATE_BOARD_MENU}
+        open={state.anchorEl !== null && state.openMenu === EActionType.CREATE_BOARD_MENU}
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
       >
@@ -115,7 +114,7 @@ function CreateBoardMenu() {
 
       <Menu
         anchorElement={state.anchorEl}
-        open={state.anchorEl !== null && state.openMenu === ActionType.CREATE_WORKSPACE_MENU}
+        open={state.anchorEl !== null && state.openMenu === EActionType.CREATE_WORKSPACE_MENU}
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
       >
