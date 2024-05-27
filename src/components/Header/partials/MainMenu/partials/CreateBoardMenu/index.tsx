@@ -80,14 +80,14 @@ function CreateBoardMenu() {
   }
   const BackButton = (
     <>
-      <Button onClick={backToMainMenu} variant='text' size='small' theme='default'>
-      <i className="fa-solid fa-chevron-left"></i>
+      <Button style={{fontSize: '1rem'}} onClick={backToMainMenu} variant='text' size='small' theme='secondary'>
+        <i className='fa-solid fa-chevron-left'></i>
       </Button>
     </>
   )
   const CloseButton = (
     <>
-      <Button onClick={handleCloseMenu} variant='text' size='small' theme='default'>
+      <Button style={{fontSize: '1.2rem'}} onClick={handleCloseMenu} variant='text' size='small' theme='secondary'>
         <i className='fa-solid fa-xmark'></i>
       </Button>
     </>
@@ -111,8 +111,19 @@ function CreateBoardMenu() {
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
       >
-        <MenuItem onClick={openCreateBoardMenu}>Create board</MenuItem>
-        <MenuItem onClick={openCreateWorkspaceMenu}>Create workspace</MenuItem>
+        <MenuItem size='small' onClick={openCreateBoardMenu}>
+          <div className='row jcsb'>
+            <p>Create board</p>
+            <i className='fa-solid fa-chevron-right'></i>
+          </div>
+        </MenuItem>
+        <MenuItem size='small' onClick={openCreateWorkspaceMenu}>
+          <div className='row jcsb'>
+            <p>Create workspace</p>
+            <i className='fa-solid fa-chevron-right'></i>
+          </div>
+          
+        </MenuItem>
       </Menu>
       <Menu
         anchorElement={state.anchorEl}
@@ -121,11 +132,8 @@ function CreateBoardMenu() {
         onClose={handleCloseMenu}
         header={
           <>
-            <MenuHeaderWithAction
-              beforeButton={BackButton}
-              afterButton={CloseButton}
-            >
-              Create board
+            <MenuHeaderWithAction beforeButton={BackButton} afterButton={CloseButton}>
+              Create new board
             </MenuHeaderWithAction>
           </>
         }
@@ -136,7 +144,7 @@ function CreateBoardMenu() {
           input={{ id: 'create-board', autoFocus: true }}
         />
         <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-          Create new board
+          Create board
         </Button>
       </Menu>
 
@@ -147,10 +155,7 @@ function CreateBoardMenu() {
         onClose={handleCloseMenu}
         header={
           <>
-            <MenuHeaderWithAction
-              beforeButton={BackButton}
-              afterButton={CloseButton}
-            >
+            <MenuHeaderWithAction beforeButton={BackButton} afterButton={CloseButton}>
               Create new workspace
             </MenuHeaderWithAction>
           </>
