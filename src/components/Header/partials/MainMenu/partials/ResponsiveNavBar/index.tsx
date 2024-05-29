@@ -61,7 +61,6 @@ function ResponsiveNavBar({
       >
         <span>More</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
       </Button>
-      {/* anchorElement?.getAttribute('toggle-id') === defaultToggleId ||  */}
       <Menu
         anchorElement={anchorElement}
         open={Boolean(anchorElement) && toggleId === defaultToggleId}
@@ -134,7 +133,26 @@ function ResponsiveNavBar({
             />
           </MenuItem>
         </MenuGroup>
-        <MenuItem>Ứng dụng thời gian thực nhóm 3</MenuItem>
+        <MenuItem>
+        <InfoRow
+              layout={{
+                imgColor: '#d89e00',
+                mainContent: 'My company 1',
+                subContent: 'Trello workspace',
+                actions: (
+                  <>
+                    <CheckBox
+                      inputAttrs={{ id: 'pinned-checkbox-3', checked: true }}
+                      icons={{
+                        checked: { icon: <i className='fa-solid fa-star'></i> },
+                        unchecked: { icon: <i className='fa-regular fa-star'></i> }
+                      }}
+                    />
+                  </>
+                )
+              }}
+            />
+        </MenuItem>
       </Menu>
       <Menu
         anchorElement={anchorElement}

@@ -21,6 +21,7 @@ const toggleButtons: MenuItemType[] = [
     toggleId: 'pinned-menu-toggle-btn'
   }
 ]
+
 function NavBar() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const handleToggleMenu = (e: React.MouseEvent<HTMLElement>) => {
