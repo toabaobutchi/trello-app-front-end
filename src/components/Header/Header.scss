@@ -13,6 +13,7 @@
   border-bottom: var(--thin-border-width) solid var(--divisor-line);
   line-height: var(--header-line-height);
   color: var(--header-text-primary-color);
+  width: 100%;
 
   .dropdown-menu {
     &.ltr-menu,
@@ -37,6 +38,10 @@
     &.open {
       color: var(--primary-color) !important;
       background-color: var(--clicked-menu-color);
+
+      &:hover {
+        background-color: var(--clicked-menu-color) !important;
+      }
     }
   }
 }

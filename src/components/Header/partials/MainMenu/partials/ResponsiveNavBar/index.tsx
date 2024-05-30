@@ -44,6 +44,7 @@ function ResponsiveNavBar({
   }
   const handleCloseMenu = () => {
     setToggleId('')
+    console.log('close menu - responsive navbar')
     handleClose()
   }
   return (
@@ -171,15 +172,15 @@ function ResponsiveNavBar({
         anchorElement={anchorElement}
         open={
           Boolean(anchorElement) &&
-          (anchorElement?.getAttribute('toggle-id') === 'pinned-menu-toggle-btn' ||
-            toggleId === 'pinned-menu-toggle-btn')
+          (anchorElement?.getAttribute('toggle-id') === 'filters-menu-toggle-btn' ||
+            toggleId === 'filters-menu-toggle-btn')
         }
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
       >
-        <MenuItem>My Pinned menu 1</MenuItem>
-        <MenuItem>My Pinned menu 2</MenuItem>
-        <MenuItem>My Pinned menu 3</MenuItem>
+        <MenuItem>My Filters menu 1</MenuItem>
+        <MenuItem>My Filters menu 2</MenuItem>
+        <MenuItem>My Filters menu 3</MenuItem>
       </Menu>
     </>
   )

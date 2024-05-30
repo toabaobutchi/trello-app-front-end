@@ -17,16 +17,17 @@ const toggleButtons: MenuItemType[] = [
     toggleId: 'recent-menu-toggle-btn'
   },
   {
-    title: 'Pinned',
-    toggleId: 'pinned-menu-toggle-btn'
+    title: 'Filters',
+    toggleId: 'filters-menu-toggle-btn'
   }
 ]
 
 function NavBar() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const handleToggleMenu = (e: React.MouseEvent<HTMLElement>) => {
-    if (anchorEl && anchorEl.getAttribute('toggle-id') === e.currentTarget.getAttribute('toggle-id')) setAnchorEl(null)
-    else setAnchorEl(e.currentTarget as HTMLElement)
+    if (anchorEl && anchorEl.getAttribute('toggle-id') === e.currentTarget.getAttribute('toggle-id')) {
+      setAnchorEl(null)
+    } else setAnchorEl(e.currentTarget as HTMLElement)
   }
   const handleCloseMenu = () => {
     setAnchorEl(null)

@@ -1,0 +1,20 @@
+.sidebar-item {
+  --bg-hover: #fff;
+  font: inherit;
+  padding: 1rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+  cursor: pointer;
+  border-radius: var(--primary-radius);
+
+  &-icon {
+    font-size: 1.2rem;
+  }
+
+  &-content {
+    flex: 1;
+  }
+}

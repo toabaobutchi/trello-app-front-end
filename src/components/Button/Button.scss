@@ -5,12 +5,14 @@
   --danger-filled-button-hover-color: #d3086d;
   --secondary-button-hover-color: #77777722;
   --secondary-filled-button-hover-color: #646464;
+  --default-button-hover-color: #44546F22;
+  --default-filled-button-hover-color: #37475F;
 
   border: none;
   outline: none;
   border-radius: var(--secondary-radius);
   cursor: pointer;
-  font-weight: 600;
+  // font-weight: 600;
   font-family: inherit;
   background-color: inherit;
 
@@ -155,9 +157,16 @@
     &.text-btn,
     &.outlined-btn {
       color: var(--text-secondary-color);
+
+      &:hover {
+        background-color: var(--default-button-hover-color);
+      }
     }
     &.filled-btn {
       background-color: var(--text-secondary-color);
+      &:hover {
+        background-color: var(--default-filled-button-hover-color);
+      }
     }
     &.outlined-btn {
       border: var(--thin-border-width) solid var(--text-secondary-color);
