@@ -3,10 +3,21 @@
 .main-menu {
   @include flex(space-evenly);
   gap: 2rem;
+  &-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
-  &-header-text {
-    font-weight: 600;
-    font-size: 1.2rem;
+    .btn {
+      padding: 0.3rem 0.6rem !important;
+      font-size: 1.3rem !important;
+      font-weight: 700 !important;
+    }
+
+    &-text {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
   }
   &-create-button {
     &-mobile {

@@ -1,23 +1,13 @@
-import Header from '@comps/Header'
-import SideBar from '@comps/SideBar'
+import DefaultLayout from '@layouts/DefaultLayout'
 
 function Home() {
   return (
     <>
-      <Header />
-      <div
-        className='row jcsb'
-        style={{
-          flex: 1,
-          width: '100%',
-        }}
-      >
-        <SideBar />
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus ullam odit esse pariatur sunt totam, rerum ea
-          dolore quas? Nisi aut voluptatibus expedita quisquam voluptatum excepturi esse, quam explicabo rem!
-        </p>
-      </div>
+      <DefaultLayout>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni nobis sequi rerum quia dolorem commodi quasi
+        excepturi! Distinctio assumenda molestiae officia cum ea! Dolore quibusdam molestias obcaecati aspernatur?
+        Nesciunt, nobis!
+      </DefaultLayout>
     </>
   )
 }

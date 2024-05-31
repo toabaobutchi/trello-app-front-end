@@ -1,9 +1,18 @@
 .sidebar {
   padding: 1rem;
-  // padding-right: 0;
   color: var(--text-primary-color);
   height: 100%;
-  width: 15%;
+  max-width: 100%;
   font-size: 1.1rem;
   border-right: var(--thin-border-width) solid var(--light-color);
+  transition: max-width 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  white-space: nowrap;
+
+  &.collapsed {
+    max-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+    // opacity: 0;
+  }
 }

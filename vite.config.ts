@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -10,6 +9,8 @@ export default defineConfig({
       { find: '@hooks', replacement: '/src/hooks' },
       { find: '@utils', replacement: '/src/utils' },
       { find: '@confs', replacement: '/src/configs' },
+      { find: '@layouts', replacement: '/src/layouts' },
+      { find: '@contexts', replacement: '/src/contexts' },
       { find: '@pages', replacement: '/src/pages' }
     ]
   }
