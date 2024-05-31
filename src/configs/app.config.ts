@@ -3,7 +3,8 @@ const config = {
     height: '3.43rem',
   },
   sideBar: {
-    expand: true
+    expand: true,
+    maxWidth: '300px'
   },
   mainMenu: {
     width: '300px'

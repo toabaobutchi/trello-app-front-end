@@ -1,8 +1,9 @@
 import Expander from '@comps/Expander'
 import './SideBar.scss'
+import './SideBar.responsive.scss'
 import SideBarItem from './partials/SideBarItem'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
+import { RootState } from '@redux/store'
 
 function SideBar() {
   const sideBarStatus = useSelector((state: RootState) => state.sideBar.expand)

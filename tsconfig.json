@@ -11,7 +11,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@confs/*": ["./src/configs/*"],
       "@layouts/*": ["./src/layouts/*"],
-      "@contexts/*": ["./src/contexts/*"],
+      "@redux/*": ["./src/redux/*"],
       "@utils/*": ["./src/utils/*"]
     },
 

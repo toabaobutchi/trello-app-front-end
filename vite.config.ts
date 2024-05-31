@@ -10,7 +10,7 @@ export default defineConfig({
       { find: '@utils', replacement: '/src/utils' },
       { find: '@confs', replacement: '/src/configs' },
       { find: '@layouts', replacement: '/src/layouts' },
-      { find: '@contexts', replacement: '/src/contexts' },
+      { find: '@redux', replacement: '/src/redux' },
       { find: '@pages', replacement: '/src/pages' }
     ]
   }

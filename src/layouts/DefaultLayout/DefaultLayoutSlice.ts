@@ -1,9 +1,10 @@
+import config from '@confs/app.config'
 import { createSlice } from '@reduxjs/toolkit'
 
 export const defaultLayoutSlice = createSlice({
   name: 'sidebar',
   initialState: {
-    expand: true
+    expand: config.sideBar.expand
   },
   reducers: {
     toggleSidebar: (state) => {

@@ -1,0 +1,21 @@
+.sidebar {
+  @media screen and (max-width: 768px) {
+    position: fixed;
+    top: 3.43rem;
+    left: 0;
+    // width: 300px;
+    width: 0;
+    max-width: 100%;
+    z-index: var(--sidebar-z-index);
+    min-width: 0;
+    background-color: #fff;
+    padding-left: 0;
+    padding-right: 0;
+
+    &.collapsed {
+      // override desktop styles
+      width: 300px;
+      padding: 1rem;
+    }
+  }
+}
