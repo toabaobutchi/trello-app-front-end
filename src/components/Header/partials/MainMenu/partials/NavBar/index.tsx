@@ -1,7 +1,16 @@
 import Button from '@comps/Button'
-import { useState } from 'react'
+import { Reducer, useReducer } from 'react'
 import './NavBar.scss'
-import ResponsiveNavBar from '../ResponsiveNavBar'
+import reducer from './reducer'
+import { closeMenu, mobileOpenMenu, toggleMenu } from './actions'
+import Menu from '@comps/Menu'
+import config from '@confs/app.config'
+import MenuItem from '@comps/MenuItem'
+import { Action, State } from './types'
+import InfoRow from '@comps/InfoRow'
+import CheckBox from '@comps/CheckBox'
+import MenuGroup from '@comps/MenuGroup'
+import '../ResponsiveNavBar/ResponsiveNavBar.scss'
 
 type MenuItemType = {
   title: string
@@ -22,15 +31,18 @@ const toggleButtons: MenuItemType[] = [
   }
 ]
 
+const mobileToggleButton = 'nav-bar-mobile-menu-button'
+
 function NavBar() {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const [state, dispatch] = useReducer<Reducer<State, Action>>(reducer, { anchorEl: null })
   const handleToggleMenu = (e: React.MouseEvent<HTMLElement>) => {
-    if (anchorEl && anchorEl.getAttribute('toggle-id') === e.currentTarget.getAttribute('toggle-id')) {
-      setAnchorEl(null)
-    } else setAnchorEl(e.currentTarget as HTMLElement)
+    dispatch(toggleMenu(e.currentTarget as HTMLElement, e.currentTarget.getAttribute('toggle-id') ?? ''))
   }
   const handleCloseMenu = () => {
-    setAnchorEl(null)
+    dispatch(closeMenu())
+  }
+  const handleChangeMenuInMobileMode = (toggleId: string) => {
+    dispatch(mobileOpenMenu(toggleId))
   }
   return (
     <>
@@ -43,7 +55,7 @@ function NavBar() {
             theme='default'
             style={{ fontSize: 'inherit' }}
             className={`header-toggle-menu-button nav-bar-desktop-button${
-              anchorEl?.getAttribute('toggle-id') === toggleId ? ' open' : ''
+              state.openMenu === toggleId ? ' open' : ''
             }`}
             onClick={handleToggleMenu}
             toggle-id={toggleId}
@@ -51,12 +63,128 @@ function NavBar() {
             <span>{title}</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
           </Button>
         ))}
-        <ResponsiveNavBar
-          anchorElement={anchorEl}
-          setAnchorElement={setAnchorEl}
-          handleClose={handleCloseMenu}
-          menuItems={toggleButtons}
-        />
+
+        <Button
+          variant='text'
+          size='small'
+          theme='default'
+          style={{ fontSize: 'inherit' }}
+          className={`header-toggle-menu-button nav-bar-mobile-menu-button${
+            state.openMenu === mobileToggleButton ? ' open' : ''
+          }`}
+          onClick={handleToggleMenu}
+          toggle-id={mobileToggleButton}
+        >
+          <span>More</span> &nbsp;<i className='fa-solid fa-chevron-down'></i>
+        </Button>
+        <Menu
+          anchorElement={state.anchorEl as HTMLElement}
+          open={Boolean(state.anchorEl) && state.openMenu === mobileToggleButton}
+          style={{ width: config.mainMenu.width, top: config.header.height }}
+          onClose={handleCloseMenu}
+          className='nav-bar-mobile-menu'
+        >
+          {toggleButtons.map(item => (
+            <MenuItem size='small' key={item.toggleId} onClick={() => handleChangeMenuInMobileMode(item.toggleId)} toggle-id={item.toggleId}>
+              <span>{item.title}</span> <i className='fa-solid fa-chevron-right'></i>
+            </MenuItem>
+          ))}
+        </Menu>
+
+        <Menu
+          anchorElement={state.anchorEl as HTMLElement}
+          open={Boolean(state.anchorEl) && state.openMenu === 'workspace-menu-toggle-btn'}
+          style={{ width: config.mainMenu.width, top: config.header.height }}
+          onClose={handleCloseMenu}
+        >
+          <MenuGroup
+            title={{
+              content: 'Your workspace',
+              style: { textTransform: 'capitalize' }
+            }}
+            divisor
+          >
+            <MenuItem size='small'>
+              <InfoRow
+                layout={{
+                  imgColor: '#2e70ff',
+                  mainContent: 'Luận văn tốt nghiệp',
+                  subContent: 'Trello workspace',
+                  actions: (
+                    <>
+                      <CheckBox
+                        inputAttrs={{ id: 'pinned-checkbox-1', checked: true }}
+                        icons={{
+                          checked: { icon: <i className='fa-solid fa-star'></i> },
+                          unchecked: { icon: <i className='fa-regular fa-star'></i> }
+                        }}
+                      />
+                    </>
+                  )
+                }}
+              />
+            </MenuItem>
+            <MenuItem size='small'>
+              <InfoRow
+                layout={{
+                  imgColor: '#e90678',
+                  mainContent: 'Đồ án chuyên ngành',
+                  subContent: 'Trello workspace',
+                  actions: (
+                    <>
+                      <CheckBox
+                        inputAttrs={{ id: 'pinned-checkbox-2', checked: true }}
+                        icons={{
+                          checked: { icon: <i className='fa-solid fa-star'></i> },
+                          unchecked: { icon: <i className='fa-regular fa-star'></i> }
+                        }}
+                      />
+                    </>
+                  )
+                }}
+              />
+            </MenuItem>
+          </MenuGroup>
+          <MenuItem>
+            <InfoRow
+              layout={{
+                imgColor: '#d89e00',
+                mainContent: 'My company 1',
+                subContent: 'Trello workspace',
+                actions: (
+                  <>
+                    <CheckBox
+                      inputAttrs={{ id: 'pinned-checkbox-3', checked: true }}
+                      icons={{
+                        checked: { icon: <i className='fa-solid fa-star'></i> },
+                        unchecked: { icon: <i className='fa-regular fa-star'></i> }
+                      }}
+                    />
+                  </>
+                )
+              }}
+            />
+          </MenuItem>
+        </Menu>
+        <Menu
+          anchorElement={state.anchorEl as HTMLElement}
+          open={Boolean(state.anchorEl) && state.openMenu === 'recent-menu-toggle-btn'}
+          style={{ width: config.mainMenu.width, top: config.header.height }}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem>Luận văn tốt nghiệp</MenuItem>
+          <MenuItem>Ứng dụng thời gian thực nhóm 3</MenuItem>
+        </Menu>
+        <Menu
+          anchorElement={state.anchorEl as HTMLElement}
+          open={Boolean(state.anchorEl) && state.openMenu === 'filters-menu-toggle-btn'}
+          style={{ width: config.mainMenu.width, top: config.header.height }}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem>My Filters menu 1</MenuItem>
+          <MenuItem>My Filters menu 2</MenuItem>
+          <MenuItem>My Filters menu 3</MenuItem>
+        </Menu>
       </div>
     </>
   )
