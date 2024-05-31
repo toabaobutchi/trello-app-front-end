@@ -10,7 +10,6 @@ import { Action, State } from './types'
 import InfoRow from '@comps/InfoRow'
 import CheckBox from '@comps/CheckBox'
 import MenuGroup from '@comps/MenuGroup'
-import '../ResponsiveNavBar/ResponsiveNavBar.scss'
 
 type MenuItemType = {
   title: string

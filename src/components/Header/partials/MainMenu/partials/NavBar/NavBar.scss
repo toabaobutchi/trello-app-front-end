@@ -7,4 +7,15 @@
   button {
     font-weight: 500;
   }
+
+  &-mobile-menu-button {
+    display: none;
+  }
+  &-mobile-menu {
+    .menu-item {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
 }
