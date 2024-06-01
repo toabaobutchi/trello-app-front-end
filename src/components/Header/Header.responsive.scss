@@ -7,9 +7,32 @@
       padding-bottom: 1rem;
     }
 
-    .main-menu, .utils-menu {
+    .main-menu,
+    .utils-menu {
       width: 100%;
       justify-content: space-around;
+    }
+    .utils-menu {
+      .fixed-menu {
+        top: 0 !important;
+        right: 0;
+      }
+    }
+  }
+  @media screen and (max-width: 360px) {
+    .utils-menu {
+      .fixed-menu {
+        .menu-header {
+          gap: 1rem;
+          .notification-header-options {
+            width: 100%;
+            justify-content: space-between;
+          }
+          .notification-header-options__unread {
+            flex: 1;
+          }
+        }
+      }
     }
   }
 }

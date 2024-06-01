@@ -1,0 +1,29 @@
+.today-tasks {
+  width: 100%;
+  &-title {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+  }
+  &-content {
+    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .expander {
+    &-header {
+      &-text {
+        font-size: 1.4rem;
+        color: var(--primary-color);
+        flex: none;
+        font-weight: 600;
+      }
+      &-icon {
+        color: var(--primary-color);
+      }
+    }
+  }
+}

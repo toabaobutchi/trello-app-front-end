@@ -13,8 +13,8 @@ function NotificationMenu() {
           classes: 'utils-menu__hover utils-menu-notification tooltip',
           customHtmlAttributes: { 'tooltip-content': 'Notifications' }
         }}
-        style={{ top: config.header.height, right: '0.5%', paddingTop: '0' }}
-        width='450px'
+        style={{ top: config.header.height, right: '0.5%', paddingTop: '0', minWidth: 'min(450px, 100%)'}}
+        width='15%'
         side='right'
         layout={{
           header: {

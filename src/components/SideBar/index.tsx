@@ -18,6 +18,7 @@ function SideBar() {
       <div className={`sidebar-overlay${sideBarStatus ? ' hide' : ''}`} onClick={toggleSidebar}></div>
       <div className={`sidebar${sideBarStatus ? '' : ' collapsed'}`}>
         <SideBarItem icon={<i className='fa-solid fa-house-flag'></i>}>Home - Overview</SideBarItem>
+        <SideBarItem icon={<i className="fa-solid fa-list-check"></i>}>Your tasks</SideBarItem>
         <Expander header='Workspaces'>
           <SideBarItem>Home - Overview</SideBarItem>
           <SideBarItem>Home - Overview</SideBarItem>

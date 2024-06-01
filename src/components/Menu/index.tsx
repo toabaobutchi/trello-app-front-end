@@ -1,6 +1,7 @@
 import useClickTracker from '@hooks/useClickTracker'
 import { useEffect, useRef } from 'react'
 import './Menu.scss'
+import { isOutOfScreen } from '@utils/functions'
 
 type MenuProps = {
   anchorElement: HTMLElement | null
@@ -20,6 +21,16 @@ function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: Men
     onClose()
   }
   const { outClick, reset } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
+
+  useEffect(() => {
+    if (menuRef.current && open) {
+      const isOutScreen = isOutOfScreen(menuRef.current as HTMLElement)
+      if (isOutScreen.horizontal?.isOverflow) {
+        menuRef.current.style.transform = `translateX(-${isOutScreen.horizontal.diff}px)`
+      }
+    }
+  }, [open])
+
   useEffect(() => {
     if (outClick.isOutClick && open) {
       handleClose()

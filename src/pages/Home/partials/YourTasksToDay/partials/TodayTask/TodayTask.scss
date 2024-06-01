@@ -1,0 +1,40 @@
+.today-tasks-item {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: var(--thin-border-width) solid var(--light-color);
+  color: var(--text-primary-color);
+
+  &-header {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--primary-color);
+    flex-wrap: wrap;
+
+    &-due-date {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--danger-color);
+    }
+  }
+  &-content {
+    &-description {
+      &-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding-bottom: 0.5rem;
+      }
+      &-content {
+        text-align: justify;
+      }
+    }
+  }
+
+  &-go-to-project-btn {
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+}

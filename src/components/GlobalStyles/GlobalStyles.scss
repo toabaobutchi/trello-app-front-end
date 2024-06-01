@@ -16,7 +16,7 @@
   --danger-color: #e90678;
   --info-color: #2e70ff;
   --warning-color: #d89e00;
-  --overlay-color: #00000007;
+  --overlay-color: #0000001f;
 
   --primary-color: #1976d2;
 
@@ -93,6 +93,7 @@ html {
 .row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 .jcc {
   display: flex;
