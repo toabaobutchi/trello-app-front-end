@@ -1,9 +1,8 @@
-.sidebar {
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
+  .sidebar {
     position: fixed;
-    top: 3.43rem;
+    top: 0;
     left: 0;
-    // width: 300px;
     width: 0;
     max-width: 100%;
     z-index: var(--sidebar-z-index);
@@ -17,5 +16,24 @@
       width: 300px;
       padding: 1rem;
     }
+  }
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: calc(var(--sidebar-z-index) - 1);
+    background: #0000001f;
+  }
+}
+
+@media screen and (max-width: 440px) {
+  .sidebar-close-button-on-mobile {
+    display: block;
+    position: absolute;
+    bottom: 3%;
+    right: 3%;
   }
 }

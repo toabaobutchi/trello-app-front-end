@@ -1,7 +1,16 @@
 .header {
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 430px) {
     max-height: none;
     height: auto;
+
+    .main-menu {
+      padding-bottom: 1rem;
+    }
+
+    .main-menu, .utils-menu {
+      width: 100%;
+      justify-content: space-around;
+    }
   }
 }
 

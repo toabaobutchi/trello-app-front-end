@@ -22,6 +22,7 @@
     box-shadow: 0 0 3px 0 var(--secondary-color);
     padding: 1rem;
     height: max-content;
+    z-index: var(--menu-z-index);
 
     &-header,
     &-footer {

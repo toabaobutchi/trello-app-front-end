@@ -15,5 +15,14 @@
     width: 0;
     padding-left: 0;
     padding-right: 0;
+    min-width: 0;
   }
+
+  &-close-button-on-mobile {
+    display: none;
+  }
+}
+
+.sidebar-overlay, .sidebar-overlay.hide {
+  display: none;
 }

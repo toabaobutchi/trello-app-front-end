@@ -12,9 +12,20 @@
     }
 
     &-icon {
-      transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+      .expander-icon {
+        &:nth-of-type(2) {
+          display: none;
+        }
+      }
       &.expanded {
-        transform: rotate(180deg);
+        .expander-icon {
+          &:first-of-type {
+            display: none;
+          }
+          &:nth-of-type(2) {
+            display: block;
+          }
+        }
       }
     }
   }

@@ -16,8 +16,9 @@ function Expander({ children = '', header = '', defaultExpand = false, ...props 
     <>
       <div className='expander-header' onClick={handleToggleExpanded}>
         <div className='expander-header-text'>{header}</div>
-        <div className={`expander-header-icon ${expanded ? 'expanded' : ''}`.trimEnd()}>
-          <i className='fa-solid fa-chevron-down'></i>
+        <div className={`expander-header-icon${expanded ? ' expanded' : ''}`}>
+          <i className='fa-solid fa-chevron-up expander-icon'></i>
+          <i className='fa-solid fa-chevron-down expander-icon'></i>
         </div>
       </div>
       <div
