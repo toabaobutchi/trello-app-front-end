@@ -7,7 +7,6 @@ type MenuProps = {
   anchorElement: HTMLElement | null
   open: boolean
   header?: React.ReactNode
-  // eslint-disable-next-line no-unused-vars
   onClose?: () => void
 } & React.ComponentProps<'div'>
 

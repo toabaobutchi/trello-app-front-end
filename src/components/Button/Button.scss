@@ -6,7 +6,8 @@
   --secondary-button-hover-color: #77777722;
   --secondary-filled-button-hover-color: #646464;
   --default-button-hover-color: #44546F22;
-  --default-filled-button-hover-color: #37475F;
+  --default-filled-button-hover-color: #77777746;
+  --default-filled-button-color: #77777728;
 
   border: none;
   outline: none;
@@ -163,7 +164,8 @@
       }
     }
     &.filled-btn {
-      background-color: var(--text-secondary-color);
+      background-color: var(--default-filled-button-color);
+      color: var(--secondary-color);
       &:hover {
         background-color: var(--default-filled-button-hover-color);
       }

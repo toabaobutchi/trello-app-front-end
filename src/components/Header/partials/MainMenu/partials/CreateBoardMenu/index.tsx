@@ -8,8 +8,9 @@ import { useReducer } from 'react'
 
 enum EActionType {
   OPEN_MENU,
-  CREATE_BOARD_MENU,
-  CREATE_WORKSPACE_MENU,
+  ADD_BOARD_MENU,
+  ADD_WORKSPACE_MENU,
+  JOIN_BOARD_MENU,
   CLOSE_MENU
 }
 
@@ -28,6 +29,9 @@ type State = {
   createWorkspace?: {
     workspaceTitle: string
   } | null
+  joinBoard?: {
+    boardId: string
+  } | null
 }
 
 const reducer = (state: State, action: Action) => {
@@ -38,13 +42,20 @@ const reducer = (state: State, action: Action) => {
         ...prev,
         anchorEl: action.element ?? prev.anchorEl // mở menu, set phần tử anchorEl
       } as State
-    case EActionType.CREATE_BOARD_MENU:
+    case EActionType.ADD_BOARD_MENU:
       return { ...prev, createBoard: { boardTitle: action.data ?? '' } }
-    case EActionType.CREATE_WORKSPACE_MENU:
+    case EActionType.ADD_WORKSPACE_MENU:
       return {
         ...prev,
         createWorkspace: {
           workspaceTitle: ''
+        }
+      } as State
+    case EActionType.JOIN_BOARD_MENU:
+      return {
+        ...prev,
+        joinBoard: {
+          boardId: ''
         }
       } as State
     case EActionType.CLOSE_MENU:
@@ -70,13 +81,16 @@ function CreateBoardMenu() {
     dispatch({ type: EActionType.CLOSE_MENU })
   }
   const handleChangeBoardTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: EActionType.CREATE_BOARD_MENU, data: e.currentTarget.value })
+    dispatch({ type: EActionType.ADD_BOARD_MENU, data: e.currentTarget.value })
   }
   const openCreateBoardMenu = () => {
-    dispatch({ type: EActionType.CREATE_BOARD_MENU })
+    dispatch({ type: EActionType.ADD_BOARD_MENU })
   }
   const openCreateWorkspaceMenu = () => {
-    dispatch({ type: EActionType.CREATE_WORKSPACE_MENU })
+    dispatch({ type: EActionType.ADD_WORKSPACE_MENU })
+  }
+  const openJoinBoardMenu = () => {
+    dispatch({ type: EActionType.JOIN_BOARD_MENU })
   }
   const BackButton = (
     <>
@@ -100,7 +114,7 @@ function CreateBoardMenu() {
         variant='filled'
         style={{ padding: '0.6rem 0.7rem' }}
       >
-        <span className='main-menu-create-button-desktop'>Create</span>
+        <span className='main-menu-create-button-desktop'>Add</span>
         <span className='main-menu-create-button-mobile'>
           <i className='fa-solid fa-plus'></i>
         </span>
@@ -113,27 +127,32 @@ function CreateBoardMenu() {
       >
         <MenuItem size='small' onClick={openCreateBoardMenu}>
           <div className='row jcsb'>
-            <p>Create board</p>
+            <p>Add new board</p>
             <i className='fa-solid fa-chevron-right'></i>
           </div>
         </MenuItem>
         <MenuItem size='small' onClick={openCreateWorkspaceMenu}>
           <div className='row jcsb'>
-            <p>Create workspace</p>
+            <p>Add workspace</p>
             <i className='fa-solid fa-chevron-right'></i>
           </div>
-          
+        </MenuItem>
+        <MenuItem size='small' onClick={openJoinBoardMenu}>
+          <div className='row jcsb'>
+            <p>Join a board</p>
+            <i className='fa-solid fa-chevron-right'></i>
+          </div>
         </MenuItem>
       </Menu>
       <Menu
         anchorElement={state.anchorEl}
-        open={state.anchorEl !== null && state.openMenu === EActionType.CREATE_BOARD_MENU}
+        open={state.anchorEl !== null && state.openMenu === EActionType.ADD_BOARD_MENU}
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
         header={
           <>
             <MenuHeaderWithAction beforeButton={BackButton} afterButton={CloseButton}>
-              Create new board
+              Add new board
             </MenuHeaderWithAction>
           </>
         }
@@ -144,30 +163,52 @@ function CreateBoardMenu() {
           input={{ id: 'create-board', autoFocus: true }}
         />
         <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
-          Create board
+          Add board
         </Button>
       </Menu>
 
       <Menu
         anchorElement={state.anchorEl}
-        open={state.anchorEl !== null && state.openMenu === EActionType.CREATE_WORKSPACE_MENU}
+        open={state.anchorEl !== null && state.openMenu === EActionType.ADD_WORKSPACE_MENU}
         style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleCloseMenu}
         header={
           <>
             <MenuHeaderWithAction beforeButton={BackButton} afterButton={CloseButton}>
-              Create new workspace
+              Add new workspace
             </MenuHeaderWithAction>
           </>
         }
       >
         <FloatLabelInput
           // onChange={handleChangeBoardTitle}
-          label='Board title'
+          label='Workspace title'
           input={{ id: 'create-board', autoFocus: true }}
         />
         <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
           Create workspace
+        </Button>
+      </Menu>
+
+      <Menu
+        anchorElement={state.anchorEl}
+        open={state.anchorEl !== null && state.openMenu === EActionType.JOIN_BOARD_MENU}
+        style={{ width: config.mainMenu.width, top: config.header.height }}
+        onClose={handleCloseMenu}
+        header={
+          <>
+            <MenuHeaderWithAction beforeButton={BackButton} afterButton={CloseButton}>
+              Join a board
+            </MenuHeaderWithAction>
+          </>
+        }
+      >
+        <FloatLabelInput
+          label='Board id'
+          input={{ id: 'create-board', autoFocus: true }}
+        />
+        <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
+          Send resquest
         </Button>
       </Menu>
     </>
