@@ -17,9 +17,9 @@ function SideBar() {
     <>
       <div className={`sidebar-overlay${sideBarStatus ? ' hide' : ''}`} onClick={toggleSidebar}></div>
       <div className={`sidebar${sideBarStatus ? '' : ' collapsed'}`}>
-        <SideBarItem icon={<i className='fa-solid fa-house-flag'></i>}>Home - Overview</SideBarItem>
-        <SideBarItem icon={<i className="fa-solid fa-list-check"></i>}>Your tasks</SideBarItem>
-        <Expander header='Workspaces'>
+        <SideBarItem className='active' icon={<i className='fa-solid fa-house-flag'></i>}>Home - Overview</SideBarItem>
+        <SideBarItem icon={<i className='fa-solid fa-list-check'></i>}>Your tasks</SideBarItem>
+        <Expander header={{ content: 'Workspaces', style: { flex: 1 } }} defaultExpand>
           <SideBarItem>Home - Overview</SideBarItem>
           <SideBarItem>Home - Overview</SideBarItem>
           <SideBarItem>Home - Overview</SideBarItem>
@@ -34,7 +34,7 @@ function SideBar() {
           theme='danger'
           style={{ fontSize: '1.3rem' }}
         >
-          <i className="fa-solid fa-chevron-left"></i>
+          <i className='fa-solid fa-chevron-left'></i>
         </Button>
       </div>
     </>

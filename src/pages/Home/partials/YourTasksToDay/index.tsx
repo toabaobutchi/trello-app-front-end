@@ -1,3 +1,4 @@
+import Button from '@comps/Button'
 import './YourTasksToDay.scss'
 import TodayTask from './partials/TodayTask'
 
@@ -20,6 +21,7 @@ function YourTasksToDay() {
             )
           })}
         </div>
+        <p className='mt-1'>Visit <Button size='small'><i className='fa-solid fa-list-check'></i> Your Tasks</Button> for more!</p>
       </div>
     </>
   )

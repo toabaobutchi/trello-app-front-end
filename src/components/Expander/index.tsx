@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import './Expander.scss'
+import CustomizablePropType from '@utils/CustomizablePropType'
 
 interface ExpanderProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
-  header?: React.ReactNode
+  header?: CustomizablePropType
   defaultExpand?: boolean
 }
 
-function Expander({ children = '', header = '', defaultExpand = false, ...props }: ExpanderProps) {
+function Expander({ children = '', header, defaultExpand = false, ...props }: ExpanderProps) {
   const [expanded, setExpanded] = useState(defaultExpand)
   const handleToggleExpanded = () => {
     setExpanded(!expanded)
@@ -15,7 +16,7 @@ function Expander({ children = '', header = '', defaultExpand = false, ...props 
   return (
     <>
       <div className='expander-header' onClick={handleToggleExpanded}>
-        <div className='expander-header-text'>{header}</div>
+        <div style={header?.style} className={`expander-header-text ${header?.className ?? ''}`.trimEnd()}>{header?.content}</div>
         <div className={`expander-header-icon${expanded ? ' expanded' : ''}`}>
           <i className='fa-solid fa-chevron-up expander-icon'></i>
           <i className='fa-solid fa-chevron-down expander-icon'></i>

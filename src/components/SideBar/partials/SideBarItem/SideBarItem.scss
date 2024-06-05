@@ -1,5 +1,5 @@
 .sidebar-item {
-  --bg-hover: #fff;
+  --bg-hover: var(--side-bar-item-hover-color);
   font: inherit;
   padding: 1rem 0.5rem;
   display: flex;
@@ -16,5 +16,12 @@
 
   &-content {
     flex: 1;
+  }
+
+  &.active {
+    background-color: var(--bg-hover);
+    color: var(--primary-color);
+    border-radius: 2rem;
+    padding: 1rem;
   }
 }

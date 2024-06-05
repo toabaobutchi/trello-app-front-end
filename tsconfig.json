@@ -12,6 +12,7 @@
       "@confs/*": ["./src/configs/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@redux/*": ["./src/redux/*"],
+      "@assets/*": ["./src/assets/*"],
       "@utils/*": ["./src/utils/*"]
     },
 

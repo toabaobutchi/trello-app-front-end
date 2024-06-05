@@ -35,7 +35,7 @@ function FixedMenu({
     <>
       <div ref={menuRef} className={`menu fixed-menu ${side}-menu h-${height}`}>
         <div
-          className={`fixed-menu-title ${clicked && 'open'} ${title?.classes}`}
+          className={`fixed-menu-title ${clicked && 'open'} ${title?.className ?? ''}`}
           onClick={handleToggleMenu}
           style={title?.style}
           {...title?.customHtmlAttributes}
@@ -51,7 +51,7 @@ function FixedMenu({
           >
             {layout?.header?.content && (
               <div
-                className={`fixed-menu-content-header ${layout?.header?.classes ?? ''}`}
+                className={`fixed-menu-content-header ${layout?.header?.className ?? ''}`}
                 style={layout?.header?.style}
                 {...layout?.header?.customHtmlAttributes}
               >
@@ -61,7 +61,7 @@ function FixedMenu({
             <div className='fixed-menu-content-body'>{children}</div>
             {layout?.footer?.content && (
               <div
-                className={`fixed-menu-content-footer ${layout?.footer?.classes ?? ''}`}
+                className={`fixed-menu-content-footer ${layout?.footer?.className ?? ''}`}
                 style={layout?.footer?.style}
                 {...layout?.footer?.customHtmlAttributes}
               >

@@ -23,7 +23,7 @@ function NotificationHeader() {
         <DropdownMenu
           title={{
             content: <i className='fa-solid fa-ellipsis-vertical'></i>,
-            classes: 'notification-header-options-setting'
+            className: 'notification-header-options-setting'
           }}
           dir='rtl'
           useArrow={false}

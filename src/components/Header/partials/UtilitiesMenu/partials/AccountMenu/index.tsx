@@ -11,7 +11,7 @@ function AccountMenu() {
         side='right'
         title={{
           content: 'AH',
-          classes: 'utils-menu-user tooltip',
+          className: 'utils-menu-user tooltip',
           customHtmlAttributes: { 'tooltip-content': 'Account' },
           style: { padding: 0 }
         }}

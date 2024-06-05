@@ -10,7 +10,7 @@ function NotificationMenu() {
       <FixedMenu
         title={{
           content: <i className='fa-regular fa-bell'></i>,
-          classes: 'utils-menu__hover utils-menu-notification tooltip',
+          className: 'utils-menu__hover utils-menu-notification tooltip',
           customHtmlAttributes: { 'tooltip-content': 'Notifications' }
         }}
         style={{ top: config.header.height, right: '0.5%', paddingTop: '0', minWidth: 'min(450px, 100%)'}}

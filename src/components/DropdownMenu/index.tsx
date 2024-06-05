@@ -46,7 +46,7 @@ function DropdownMenu({
     <>
       <div ref={menuRef} className={`menu dropdown-menu ${showOn}-menu ${dir}-menu`}>
         <div
-          className={`dropdown-menu-title${clicked ? ' open' : ''} ${title?.classes ?? ''}`}
+          className={`dropdown-menu-title${clicked ? ' open' : ''} ${title?.className ?? ''}`}
           onClick={handleToggleMenu}
           {...title?.customHtmlAttributes}
           style={title?.style}
@@ -69,7 +69,7 @@ function DropdownMenu({
             )}
             {layout?.header?.content && (
               <div
-                className={`dropdown-menu-content-header ${layout?.header?.classes ?? ''}`}
+                className={`dropdown-menu-content-header ${layout?.header?.className ?? ''}`}
                 style={layout?.header?.style}
                 {...layout?.header?.customHtmlAttributes}
               >
@@ -81,7 +81,7 @@ function DropdownMenu({
             </div>
             {layout?.footer && (
               <div
-                className={`dropdown-menu-content-footer ${layout?.footer?.classes ?? ''}`}
+                className={`dropdown-menu-content-footer ${layout?.footer?.className ?? ''}`}
                 style={layout?.footer?.style}
                 {...layout?.footer?.customHtmlAttributes}
               >

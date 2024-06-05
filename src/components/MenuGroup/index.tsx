@@ -17,7 +17,7 @@ function MenuGroup({ title = undefined, children = '', divisor = false, expandGr
   return (
     <>
       <div className={`menu-group ${divisor ? 'divisor' : ''}`}>
-        <div className={`menu-group-title ${title?.classes ?? ''}`} style={title?.style}>
+        <div className={`menu-group-title ${title?.className ?? ''}`} style={title?.style}>
           <p>
             {title?.content} {!collapse && expandGroup !== null && <span>({React.Children.count(children)})</span>}
           </p>

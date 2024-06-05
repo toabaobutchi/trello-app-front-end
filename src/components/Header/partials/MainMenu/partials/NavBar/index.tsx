@@ -25,8 +25,8 @@ const toggleButtons: MenuItemType[] = [
     toggleId: 'recent-menu-toggle-btn'
   },
   {
-    title: 'Filters',
-    toggleId: 'filters-menu-toggle-btn'
+    title: 'Pinned',
+    toggleId: 'pinned-menu-toggle-btn'
   }
 ]
 
@@ -176,7 +176,7 @@ function NavBar() {
         </Menu>
         <Menu
           anchorElement={state.anchorEl as HTMLElement}
-          open={Boolean(state.anchorEl) && state.openMenu === 'filters-menu-toggle-btn'}
+          open={Boolean(state.anchorEl) && state.openMenu === 'pinned-menu-toggle-btn'}
           style={{ width: config.mainMenu.width, top: config.header.height }}
           onClose={handleCloseMenu}
         >
