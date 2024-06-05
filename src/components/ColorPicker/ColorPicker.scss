@@ -1,0 +1,15 @@
+.color-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  > label, > input {
+    font: inherit;
+  }
+
+
+  > input[type=color] {
+    cursor: pointer;
+  }
+}

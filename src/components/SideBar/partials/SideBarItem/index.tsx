@@ -1,7 +1,7 @@
 import './SideBarItem.scss'
 
 interface SideBarItemProps extends React.ComponentProps<'div'> {
-  children: React.ReactNode
+  children?: React.ReactNode
   icon?: React.ReactNode
 }
 

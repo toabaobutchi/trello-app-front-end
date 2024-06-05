@@ -26,14 +26,10 @@
   }
 
   &-content {
-    max-height: 0;
-    height: auto;
-    transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-    overflow: hidden;
     padding-left: 1rem;
 
-    &.expanded {
-      max-height: 100%;
-    }
+    // .expander-header {
+    //   padding: 0;
+    // }
   }
 }

@@ -21,7 +21,7 @@ function YourTasksToDay() {
             )
           })}
         </div>
-        <p className='mt-1'>Visit <Button size='small'><i className='fa-solid fa-list-check'></i> Your Tasks</Button> for more!</p>
+        <p className='mt-1'>Visit <Button size='small'><i className='fa-solid fa-list-check'></i> Your tasks</Button> for more!</p>
       </div>
     </>
   )

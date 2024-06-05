@@ -1,4 +1,5 @@
 import Button from '@comps/Button'
+import ColorPicker from '@comps/ColorPicker'
 import FloatLabelInput from '@comps/FloatLabelInput'
 import Menu from '@comps/Menu'
 import MenuHeaderWithAction from '@comps/MenuHeaderWithAction'
@@ -94,14 +95,14 @@ function CreateBoardMenu() {
   }
   const BackButton = (
     <>
-      <Button style={{fontSize: '1rem'}} onClick={backToMainMenu} variant='text' size='small' theme='secondary'>
+      <Button style={{ fontSize: '1rem' }} onClick={backToMainMenu} variant='text' size='small' theme='secondary'>
         <i className='fa-solid fa-chevron-left'></i>
       </Button>
     </>
   )
   const CloseButton = (
     <>
-      <Button style={{fontSize: '1.2rem'}} onClick={handleCloseMenu} variant='text' size='small' theme='secondary'>
+      <Button style={{ fontSize: '1.2rem' }} onClick={handleCloseMenu} variant='text' size='small' theme='secondary'>
         <i className='fa-solid fa-xmark'></i>
       </Button>
     </>
@@ -162,6 +163,10 @@ function CreateBoardMenu() {
           label='Board title'
           input={{ id: 'create-board', autoFocus: true }}
         />
+        <ColorPicker
+          label={{ content: 'Choose background color for project:', style: { marginTop: '0.5rem' } }}
+          input={{ id: 'project-color' }}
+        />
         <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
           Add board
         </Button>
@@ -203,10 +208,7 @@ function CreateBoardMenu() {
           </>
         }
       >
-        <FloatLabelInput
-          label='Board id'
-          input={{ id: 'create-board', autoFocus: true }}
-        />
+        <FloatLabelInput label='Board id' input={{ id: 'create-board', autoFocus: true }} />
         <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
           Send resquest
         </Button>
