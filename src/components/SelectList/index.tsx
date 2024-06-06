@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './SelectList.scss'
 import useClickTracker from '@hooks/useClickTracker'
-import { isOutClick } from '@utils/functions'
 import CustomizablePropType from '@utils/CustomizablePropType'
 
 interface SelectListItem {
