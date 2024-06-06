@@ -8,9 +8,9 @@ function InformationMenu() {
     <>
       <FixedMenu
         title={{
-          content: <i className='fa-regular fa-circle-question'></i>,
+          content: <i className="fa-solid fa-screwdriver-wrench"></i>,
           className: 'utils-menu__hover utils-menu-help tooltip',
-          customHtmlAttributes: { 'tooltip-content': 'Information' }
+          customHtmlAttributes: { 'tooltip-content': 'Settings' }
         }}
         style={{ top: config.header.height, right: '0.5%' }}
         width='350px'

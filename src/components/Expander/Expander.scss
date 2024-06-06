@@ -8,17 +8,17 @@
 
     &-icon {
       .expander-icon {
-        &:nth-of-type(2) {
+        &:first-of-type {
           display: none;
         }
       }
       &.expanded {
         .expander-icon {
           &:first-of-type {
-            display: none;
+            display: block;
           }
           &:nth-of-type(2) {
-            display: block;
+            display: none;
           }
         }
       }

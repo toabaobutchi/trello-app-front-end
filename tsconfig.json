@@ -13,6 +13,7 @@
       "@layouts/*": ["./src/layouts/*"],
       "@redux/*": ["./src/redux/*"],
       "@assets/*": ["./src/assets/*"],
+      "@routes/*": ["./src/routes/*"],
       "@utils/*": ["./src/utils/*"]
     },
 

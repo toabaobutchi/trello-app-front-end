@@ -12,7 +12,6 @@ function ColorPicker({ label, onChange = () => {}, input, ...props }: ColorPicke
   const [color, setColor] = useState(input?.value ?? '#000000')
   const handleChangeColor = (e: React.ChangeEvent<HTMLInputElement>) => {
     setColor(e.target.value)
-    console.log(e.target.value)
     onChange(e)
   }
   return (

@@ -1,12 +1,11 @@
-import DefaultLayout from '@layouts/DefaultLayout'
 import YourTasksToDay from './partials/YourTasksToDay'
+import Workspaces from './partials/Workspaces'
 
 function Home() {
   return (
     <>
-      <DefaultLayout>
-        <YourTasksToDay />
-      </DefaultLayout>
+      <YourTasksToDay />
+      <Workspaces />
     </>
   )
 }

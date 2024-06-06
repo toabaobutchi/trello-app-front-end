@@ -1,11 +1,17 @@
 import Button from '@comps/Button'
 import './YourTasksToDay.scss'
 import TodayTask from './partials/TodayTask'
+import routeLinks from '@routes/router'
+import { redirect, useNavigate } from 'react-router-dom'
 
 // fake data
 const taskList = ['Database design', 'Frontend', 'Research']
 
 function YourTasksToDay() {
+  const navigate = useNavigate()
+  const handleRedirect = (path: string) => {
+    navigate(path)
+  }
   return (
     <>
       <div className='today-tasks'>
@@ -21,7 +27,13 @@ function YourTasksToDay() {
             )
           })}
         </div>
-        <p className='mt-1'>Visit <Button size='small'><i className='fa-solid fa-list-check'></i> Your tasks</Button> for more!</p>
+        <p className='mt-1'>
+          Visit{' '}
+          <Button onClick={() => handleRedirect(routeLinks.yourTasks)} size='small'>
+            <i className='fa-solid fa-list-check'></i> Your tasks
+          </Button>{' '}
+          for more!
+        </p>
       </div>
     </>
   )

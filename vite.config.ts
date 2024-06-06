@@ -12,6 +12,7 @@ export default defineConfig({
       { find: '@layouts', replacement: '/src/layouts' },
       { find: '@redux', replacement: '/src/redux' },
       { find: '@assets', replacement: '/src/assets' },
+      { find: '@routes', replacement: '/src/routes' },
       { find: '@pages', replacement: '/src/pages' }
     ]
   }
