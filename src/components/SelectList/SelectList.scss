@@ -1,0 +1,39 @@
+.select-list {
+  position: relative;
+  font: inherit;
+  border: var(--thin-border-width) solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: var(--primary-radius);
+
+  .selected-item {
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+  }
+
+  &-label {
+    padding: 0 0 0.25rem;
+    color: inherit;
+  }
+
+  &-data-context {
+    position: absolute;
+    top: calc(100% + 0.3rem);
+    left: 0;
+    width: 100%;
+    padding: 1rem 0.5rem;
+    color: var(--text-secondary-color);
+    border: var(--thin-border-width) solid var(--light-color);
+    border-radius: var(--primary-radius);
+    background-color: #fff;
+
+    &-item {
+      padding: 0.5rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--hover-menu-color);
+        border-radius: var(--primary-radius);
+      }
+    }
+  }
+}

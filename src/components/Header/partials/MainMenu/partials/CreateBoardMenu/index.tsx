@@ -4,6 +4,7 @@ import FloatLabelInput from '@comps/FloatLabelInput'
 import Menu from '@comps/Menu'
 import MenuHeaderWithAction from '@comps/MenuHeaderWithAction'
 import MenuItem from '@comps/MenuItem'
+import SelectList from '@comps/SelectList'
 import config from '@confs/app.config'
 import { useReducer } from 'react'
 
@@ -65,6 +66,8 @@ const reducer = (state: State, action: Action) => {
       return prev
   }
 }
+
+const itemMarginTop = '0.5rem'
 
 function CreateBoardMenu() {
   const [state, dispatch] = useReducer(reducer, { anchorEl: null } as State)
@@ -164,8 +167,16 @@ function CreateBoardMenu() {
           input={{ id: 'create-board', autoFocus: true }}
         />
         <ColorPicker
-          label={{ content: 'Choose background color for project:', style: { marginTop: '0.5rem' } }}
+          label={{ content: 'Choose background color for project:', style: { marginTop: itemMarginTop } }}
           input={{ id: 'project-color' }}
+        />
+        <SelectList
+          label={{ content: 'Select workspace:', style: { marginTop: itemMarginTop } }}
+          items={[
+            { value: 'work-space-1', display: 'Workspace 1' },
+            { value: 'work-space-2', display: 'Workspace 2' },
+            { value: 'work-space-3', display: 'Workspace 3' }
+          ]}
         />
         <Button disabled={!state.createBoard?.boardTitle} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
           Add board
