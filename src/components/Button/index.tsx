@@ -4,7 +4,7 @@ interface ButtonProps extends React.ComponentProps<'button'> {
   variant?: 'text' | 'filled' | 'outlined'
   disabled?: boolean
   children?: React.ReactNode
-  theme?: 'primary' | 'secondary' | 'info' | 'danger' | 'warning' | 'light' | 'dark' | 'default'
+  theme?: 'primary' | 'secondary' | 'info' | 'danger' | 'warning' | 'light' | 'dark' | 'default' | 'success'
   size?: 'small' | 'medium' | 'large'
 }
 

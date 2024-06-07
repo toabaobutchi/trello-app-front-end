@@ -7,6 +7,7 @@ import { RootState } from '@redux/store'
 import { defaultLayoutSlice } from '@layouts/DefaultLayout/DefaultLayoutSlice'
 import Button from '@comps/Button'
 import routeLinks from '@routes/router'
+import config from '@confs/app.config'
 
 function SideBar() {
   const sideBarStatus = useSelector((state: RootState) => state.sideBar.expand)
@@ -14,14 +15,19 @@ function SideBar() {
   const toggleSidebar = () => {
     dispatch(defaultLayoutSlice.actions.toggleSidebar())
   }
+  const closeSidebarWhenRedirectInMobileMode = () => {
+    if (window.innerWidth <= config.sideBar.startMobileMode.width) {
+      dispatch(defaultLayoutSlice.actions.toggleSidebar())
+    }
+  }
   return (
     <>
       <div className={`sidebar-overlay${sideBarStatus ? ' hide' : ''}`} onClick={toggleSidebar}></div>
       <div className={`sidebar${sideBarStatus ? '' : ' collapsed'}`}>
-        <SideBarItem.Link to={routeLinks.home}>
+        <SideBarItem.Link to={routeLinks.home} onClick={closeSidebarWhenRedirectInMobileMode}>
           <i className='fa-solid fa-house-flag'></i> Home - Overview
         </SideBarItem.Link>
-        <SideBarItem.Link to={routeLinks.yourTasks}>
+        <SideBarItem.Link to={routeLinks.yourTasks} onClick={closeSidebarWhenRedirectInMobileMode}>
           <i className='fa-solid fa-list-check'></i> Your tasks
         </SideBarItem.Link>
         <SideBarItem style={{ paddingTop: 0, paddingBottom: 0 }}>

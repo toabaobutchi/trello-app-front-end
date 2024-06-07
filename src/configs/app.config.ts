@@ -1,10 +1,13 @@
 const config = {
   header: {
-    height: '3.43rem',
+    height: '3.43rem'
   },
   sideBar: {
     expand: true,
-    maxWidth: '300px'
+    maxWidth: '300px',
+    startMobileMode: {
+      width: 768
+    }
   },
   mainMenu: {
     width: '300px'

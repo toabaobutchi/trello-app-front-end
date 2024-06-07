@@ -1,0 +1,157 @@
+.input-group {
+  &.same-line-label-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+
+    > input {
+      flex: 1;
+    }
+    > label {
+      margin-bottom: 0;
+    }
+  }
+
+  > label {
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  > input {
+    width: 100%;
+    padding: var(--input-padding);
+    font: inherit;
+    outline: none;
+    border: var(--thin-border-width) solid var(--light-color);
+    border-radius: var(--primary-radius);
+    color: inherit;
+
+    &:focus, &:not(:placeholder-shown) {
+      border: var(--thin-border-width) solid var(--primary-color);
+    }
+  }
+}
+
+.input-checkbox {
+  > input {
+    display: none;
+  }
+
+  > label {
+    cursor: pointer;
+    display: inline-block;
+    border: var(--thin-border-width) solid;
+    border-radius: var(--primary-radius);
+  }
+
+  &.light-border {
+    > label {
+      border-color: var(--light-color);
+    }
+  }
+
+  &.primary-checked {
+    > input {
+      &:checked + label {
+        border-color: var(--primary-color);
+      }
+    }
+    &.apply-text-color {
+      > input {
+        &:checked + label {
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+  &.danger-checked {
+    > input {
+      &:checked + label {
+        border-color: var(--danger-color);
+      }
+    }
+    &.apply-text-color {
+      > input {
+        &:checked + label {
+          color: var(--danger-color);
+        }
+      }
+    }
+  }
+  &.success-checked {
+    > input {
+      &:checked + label {
+        border-color: var(--success-color);
+      }
+    }
+
+    &.apply-text-color {
+      > input {
+        &:checked + label {
+          color: var(--success-color);
+        }
+      }
+    }
+  }
+  &.warning-checked {
+    > input {
+      &:checked + label {
+        border-color: var(--warning-color);
+      }
+    }
+
+    &.apply-text-color {
+      > input {
+        &:checked + label {
+          color: var(--warning-color);
+        }
+      }
+    }
+  }
+  &.light-checked {
+    > input {
+      &:checked + label {
+        border-color: var(--light-color);
+      }
+    }
+
+    &.apply-text-color {
+      > input {
+        &:checked + label {
+          color: var(--light-color);
+        }
+      }
+    }
+  }
+  &.info-checked {
+    > input {
+      &:checked + label {
+        border-color: var(--info-color);
+      }
+    }
+
+    &.apply-text-color {
+      > input {
+        &:checked + label {
+          color: var(--info-color);
+        }
+      }
+    }
+  }
+  &.secondary-checked {
+    > input {
+      &:checked + label {
+        border-color: var(--secondary-color);
+      }
+    }
+
+    &.apply-text-color {
+      > input {
+        &:checked + label {
+          color: var(--secondary-color);
+        }
+      }
+    }
+  }
+}

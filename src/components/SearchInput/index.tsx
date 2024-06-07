@@ -11,7 +11,7 @@ interface SearchInputProps {
 
 function SearchInput({
   beforeButton = <i className="fa-solid fa-magnifying-glass"></i>,
-  onChange = (e) => {},
+  onChange = () => {},
   attributes = {},
   style = {}
 }: SearchInputProps) {

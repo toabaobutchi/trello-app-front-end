@@ -11,10 +11,24 @@ function SideBarItem({ children = '', ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function Link({ to, activeClassname = 'active', children }: { to: string; activeClassname?: string; children?: React.ReactNode }) {
+function Link({
+  to,
+  activeClassname = 'active',
+  children,
+  onClick = () => {}
+}: {
+  to: string
+  activeClassname?: string
+  children?: React.ReactNode
+  onClick?: () => void
+}) {
   return (
     <>
-      <NavLink to={to} className={({ isActive }) => (isActive ? activeClassname : '') + ' sidebar-item'}>
+      <NavLink
+        onClick={onClick}
+        to={to}
+        className={({ isActive }) => (isActive ? activeClassname : '') + ' sidebar-item'}
+      >
         {children}
       </NavLink>
     </>

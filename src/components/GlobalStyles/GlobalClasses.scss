@@ -82,3 +82,22 @@
 .jcsa {
   justify-content: space-around;
 }
+
+.page-header {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  // width: 100%;
+  &.small-input {
+    --input-padding: 0.5rem;
+  }
+  &.medium-input {
+    --input-padding: 0.7rem;
+  }
+  &.large-input {
+    --input-padding: 1rem;
+  }
+}

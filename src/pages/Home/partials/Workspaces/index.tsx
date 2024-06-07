@@ -12,7 +12,7 @@ function Workspaces() {
   return (
     <>
       <div className='workspaces'>
-        <div className='workspaces-header text-primary mt-2'>Workspaces</div>
+        <div className='page-header mt-2'>Workspaces</div>
         <div className='workspaces-content'>
           <Tab
             tabs={[
