@@ -86,12 +86,6 @@
     }
 
     // trigger events
-    &-on-hover {
-      &:hover,
-      &.open {
-        display: block;
-      }
-    }
     &-on-click {
       &:hover {
         display: none;
@@ -130,32 +124,6 @@
 
 @include create-slide('up');
 @include create-slide('down');
-
-// @keyframes slide-down {
-//   from {
-//     @include hide-tooltip;
-//     transform: translate(-50%, 0%);
-//   }
-//   to {
-//     @include show-tooltip();
-//     opacity: 1;
-//     display: block;
-//     transform: translate(-50%, 100%);
-//   }
-// }
-
-// @keyframes slide-up {
-//   from {
-//     @include hide-tooltip;
-//     transform: translate(-50%, 0%);
-//   }
-//   to {
-//     @include show-tooltip();
-//     opacity: 1;
-//     display: block;
-//     transform: translate(-50%, -100%);
-//   }
-// }
 
 @keyframes slide-x {
   from {
