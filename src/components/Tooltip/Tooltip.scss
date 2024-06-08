@@ -1,13 +1,64 @@
+@mixin hide-tooltip {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+@mixin show-tooltip {
+  opacity: 1;
+  width: max-content;
+  height: max-content;
+  padding: 0.5rem;
+}
+
+@mixin slide($dir: 'up', $delay: 0.25s) {
+  animation: slide-#{$dir} 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) 0.25s forwards;
+}
+
 .tooltip {
   --default-distance: 0.25rem;
   position: relative;
   cursor: pointer;
-  // overflow: none !important;
   height: max-content;
 
   .tooltip-agent {
-    &:hover + .tooltip-content.tooltip-content-on-hover {
+    &:hover + .tooltip-content-on-hover {
       display: block;
+      @include hide-tooltip;
+
+      &.tooltip-content {
+        &-top,
+        &-bottom {
+          left: 50%;
+        }
+
+        &-top {
+          top: calc(0px - var(--default-distance));
+          @include slide('up');
+        }
+
+        &-bottom {
+          @include slide('down');
+          bottom: calc(0px - var(--default-distance));
+        }
+
+        &-left,
+        &-right {
+          top: 50%;
+          transform: translate(100%, -50%);
+          animation: slide-x 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        &-left {
+          left: calc(0% - var(--default-distance));
+          transform: translate(-100%, -50%);
+        }
+
+        &-right {
+          right: calc(0% - var(--default-distance));
+        }
+      }
     }
   }
 
@@ -15,43 +66,40 @@
     position: absolute;
     border-radius: var(--primary-radius);
     width: max-content;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
+    padding: 0.5rem;
+    font-size: 0.9rem;
     display: none;
 
     // position
-    &-top,
-    &-bottom {
-      left: 50%;
-      transform: translate(-50%, 100%);
-      animation: slide-y 0.25s ease-in-out;
-      // transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
+    // &-top,
+    // &-bottom {
+    //   left: 50%;
+    // }
 
-    &-top {
-      top: calc(0px - var(--default-distance));
-      transform: translate(-50%, -100%);
-    }
+    // &-top {
+    //   top: calc(0px - var(--default-distance));
+    //   animation: slide-up 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) 0.25s;
+    // }
 
-    &-bottom {
-      bottom: calc(0px - var(--default-distance));
-    }
+    // &-bottom {
+    //   animation: slide-down 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) 0.25s;
+    //   bottom: calc(0px - var(--default-distance));
+    // }
 
-    &-left,
-    &-right {
-      top: 50%;
-      transform: translate(100%, -50%);
-      animation: slide-x 0.25s ease-in-out;
-      // transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-    &-left {
-      left: calc(0% - var(--default-distance));
-      transform: translate(-100%, -50%);
-    }
+    // &-left,
+    // &-right {
+    //   top: 50%;
+    //   transform: translate(100%, -50%);
+    //   animation: slide-x 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    // }
+    // &-left {
+    //   left: calc(0% - var(--default-distance));
+    //   transform: translate(-100%, -50%);
+    // }
 
-    &-right {
-      right: calc(0% - var(--default-distance));
-    }
+    // &-right {
+    //   right: calc(0% - var(--default-distance));
+    // }
 
     // tooltip's background color
     &-light {
@@ -69,10 +117,7 @@
 
     // trigger events
     &-on-hover {
-      &:hover {
-        display: block;
-      }
-      &.open {
+      &:hover, &.open {
         display: block;
       }
     }
@@ -87,32 +132,39 @@
   }
 }
 
-@keyframes slide-y {
+@keyframes slide-down {
   from {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    padding: 0;
+    @include hide-tooltip;
     transform: translate(-50%, 0%);
-    overflow: hidden;
   }
   to {
+    @include show-tooltip();
     opacity: 1;
-    transform: translateY(-50%, -100%);
+    display: block;
+    transform: translate(-50%, 100%);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    @include hide-tooltip;
+    transform: translate(-50%, 0%);
+  }
+  to {
+    @include show-tooltip();
+    opacity: 1;
+    display: block;
+    transform: translate(-50%, -100%);
   }
 }
 
 @keyframes slide-x {
   from {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    padding: 0;
+    @include hide-tooltip;
     transform: translate(0%, -50%);
-    overflow: hidden;
   }
   to {
     opacity: 1;
-    transform: translateY(-100%, 50%);
+    transform: translate(-100%, 50%);
   }
 }

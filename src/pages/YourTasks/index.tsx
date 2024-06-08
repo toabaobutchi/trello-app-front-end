@@ -85,31 +85,26 @@ function YourTasks() {
       <div className='task-list'>
         <div className='task-list-filters'>
           <Flex $gap='1rem' $flexWrap='wrap' $alignItem='center'>
-            <Tooltip content='This is a tooltip 1' theme='dark' position='bottom'>
-              <Button
-                onClick={handleToggleFilterModal}
-                variant='outlined'
-                theme={filters.criteria.taskName || filters.criteria.priority.length ? 'primary' : 'secondary'}
-              >
-                <i className='fa-solid fa-filter'></i> Filters
-              </Button>
-            </Tooltip>
+            <Button
+              onClick={handleToggleFilterModal}
+              variant='outlined'
+              theme={filters.criteria.taskName || filters.criteria.priority.length ? 'primary' : 'secondary'}
+            >
+              <i className='fa-solid fa-filter'></i> Filters
+            </Button>
 
             {Boolean(filters.criteria.taskName || filters.criteria.priority.length) && (
               <>
-                <Tooltip content='This is a tooltip 2' theme='dark' position='top'>
+                <Tooltip
+                  content='<i class="fa-regular fa-trash-can text-danger"></i> &nbsp;Clear all filter conditions'
+                  theme='dark'
+                >
                   <Button onClick={clearAllFilters} variant='outlined' theme='danger'>
                     <i className='fa-solid fa-xmark'></i> Clear filters
                   </Button>
                 </Tooltip>
               </>
             )}
-            <Tooltip content='This is left tooltip' position='left'>
-              Left tooltip
-            </Tooltip>
-            <Tooltip content='This is right tooltip' position='right'>
-              Right tooltip
-            </Tooltip>
           </Flex>
           <Modal
             style={{ width: '30%', minWidth: '400px', maxWidth: '100%' }}
