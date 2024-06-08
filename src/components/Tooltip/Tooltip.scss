@@ -1,21 +1,4 @@
-@mixin hide-tooltip {
-  opacity: 0;
-  width: 0;
-  height: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-@mixin show-tooltip {
-  opacity: 1;
-  width: max-content;
-  height: max-content;
-  padding: 0.5rem;
-}
-
-@mixin slide($dir: 'up', $delay: 0.25s) {
-  animation: slide-#{$dir} 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) $delay forwards;
-}
+@import './mixins';
 
 .tooltip {
   --tooltip-distance: 0.25rem;
@@ -48,16 +31,15 @@
         &-left,
         &-right {
           top: 50%;
-          transform: translate(100%, -50%);
-          animation: slide-x 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         &-left {
           left: calc(0% - var(--tooltip-distance));
-          transform: translate(-100%, -50%);
+          @include slide('left', var(--tooltip-delay));
         }
 
         &-right {
           right: calc(0% - var(--tooltip-distance));
+          @include slide('right', var(--tooltip-delay));
         }
       }
     }
@@ -73,15 +55,15 @@
 
     // tooltip's background color
     &-light {
-      background-color: var(--light-color);
+      background-color: var(--tooltip-light-color);
       color: inherit;
     }
     &-dark {
-      background-color: var(--dark-color);
+      background-color: var(--tooltip-dark-color);
       color: #fff;
     }
     &-gray {
-      background-color: var(--secondary-color);
+      background-color: var(--tooltip-gray-color);
       color: inherit;
     }
 
@@ -97,41 +79,7 @@
   }
 }
 
-@mixin create-slide($dir) {
-  @keyframes slide-#{$dir} {
-    from {
-      @include hide-tooltip;
-      @if ($dir == 'up' or $dir == 'down') {
-        transform: translate(-50%, 0%);
-      } @else {
-        transform: translate(0%, -50%);
-      }
-    }
-    to {
-      @include show-tooltip();
-      opacity: 1;
-      display: block;
-      @if ($dir == 'up') {
-        transform: translate(-50%, -100%);
-      } @else if($dir == 'down') {
-        transform: translate(-50%, 100%);
-      } @else {
-        transform: translate(-100%, 50%);
-      }
-    }
-  }
-}
-
 @include create-slide('up');
 @include create-slide('down');
-
-@keyframes slide-x {
-  from {
-    @include hide-tooltip;
-    transform: translate(0%, -50%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-100%, 50%);
-  }
-}
+@include create-slide('left');
+@include create-slide('right');
