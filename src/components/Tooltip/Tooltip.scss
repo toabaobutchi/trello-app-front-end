@@ -14,11 +14,12 @@
 }
 
 @mixin slide($dir: 'up', $delay: 0.25s) {
-  animation: slide-#{$dir} 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) 0.25s forwards;
+  animation: slide-#{$dir} 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) $delay forwards;
 }
 
 .tooltip {
-  --default-distance: 0.25rem;
+  --tooltip-distance: 0.25rem;
+  --tooltip-delay: 0.25s;
   position: relative;
   cursor: pointer;
   height: max-content;
@@ -35,13 +36,13 @@
         }
 
         &-top {
-          top: calc(0px - var(--default-distance));
-          @include slide('up');
+          top: calc(0px - var(--tooltip-distance));
+          @include slide('up', var(--tooltip-delay));
         }
 
         &-bottom {
-          @include slide('down');
-          bottom: calc(0px - var(--default-distance));
+          @include slide('down', var(--tooltip-delay));
+          bottom: calc(0px - var(--tooltip-distance));
         }
 
         &-left,
@@ -51,12 +52,12 @@
           animation: slide-x 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         &-left {
-          left: calc(0% - var(--default-distance));
+          left: calc(0% - var(--tooltip-distance));
           transform: translate(-100%, -50%);
         }
 
         &-right {
-          right: calc(0% - var(--default-distance));
+          right: calc(0% - var(--tooltip-distance));
         }
       }
     }
@@ -69,37 +70,6 @@
     padding: 0.5rem;
     font-size: 0.9rem;
     display: none;
-
-    // position
-    // &-top,
-    // &-bottom {
-    //   left: 50%;
-    // }
-
-    // &-top {
-    //   top: calc(0px - var(--default-distance));
-    //   animation: slide-up 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) 0.25s;
-    // }
-
-    // &-bottom {
-    //   animation: slide-down 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) 0.25s;
-    //   bottom: calc(0px - var(--default-distance));
-    // }
-
-    // &-left,
-    // &-right {
-    //   top: 50%;
-    //   transform: translate(100%, -50%);
-    //   animation: slide-x 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-    // }
-    // &-left {
-    //   left: calc(0% - var(--default-distance));
-    //   transform: translate(-100%, -50%);
-    // }
-
-    // &-right {
-    //   right: calc(0% - var(--default-distance));
-    // }
 
     // tooltip's background color
     &-light {
@@ -117,7 +87,8 @@
 
     // trigger events
     &-on-hover {
-      &:hover, &.open {
+      &:hover,
+      &.open {
         display: block;
       }
     }
@@ -132,31 +103,59 @@
   }
 }
 
-@keyframes slide-down {
-  from {
-    @include hide-tooltip;
-    transform: translate(-50%, 0%);
-  }
-  to {
-    @include show-tooltip();
-    opacity: 1;
-    display: block;
-    transform: translate(-50%, 100%);
+@mixin create-slide($dir) {
+  @keyframes slide-#{$dir} {
+    from {
+      @include hide-tooltip;
+      @if ($dir == 'up' or $dir == 'down') {
+        transform: translate(-50%, 0%);
+      } @else {
+        transform: translate(0%, -50%);
+      }
+    }
+    to {
+      @include show-tooltip();
+      opacity: 1;
+      display: block;
+      @if ($dir == 'up') {
+        transform: translate(-50%, -100%);
+      } @else if($dir == 'down') {
+        transform: translate(-50%, 100%);
+      } @else {
+        transform: translate(-100%, 50%);
+      }
+    }
   }
 }
 
-@keyframes slide-up {
-  from {
-    @include hide-tooltip;
-    transform: translate(-50%, 0%);
-  }
-  to {
-    @include show-tooltip();
-    opacity: 1;
-    display: block;
-    transform: translate(-50%, -100%);
-  }
-}
+@include create-slide('up');
+@include create-slide('down');
+
+// @keyframes slide-down {
+//   from {
+//     @include hide-tooltip;
+//     transform: translate(-50%, 0%);
+//   }
+//   to {
+//     @include show-tooltip();
+//     opacity: 1;
+//     display: block;
+//     transform: translate(-50%, 100%);
+//   }
+// }
+
+// @keyframes slide-up {
+//   from {
+//     @include hide-tooltip;
+//     transform: translate(-50%, 0%);
+//   }
+//   to {
+//     @include show-tooltip();
+//     opacity: 1;
+//     display: block;
+//     transform: translate(-50%, -100%);
+//   }
+// }
 
 @keyframes slide-x {
   from {

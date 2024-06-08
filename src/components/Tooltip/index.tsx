@@ -10,6 +10,7 @@ interface TooltipProps extends React.ComponentProps<'div'> {
   arrow?: boolean
   theme?: 'light' | 'dark' | 'gray' | string
   distance?: string
+  delay?: number
   events?: {
     triggerOnHover?: boolean
     onOpen?: () => void
@@ -26,13 +27,17 @@ function Tooltip({
   arrow = false,
   theme = 'dark',
   distance,
+  delay,
   events,
   ...props
 }: TooltipProps) {
   const tooltipAgentRef = useRef<HTMLDivElement | null>(null)
   const [eventState] = useState<typeof events>(events)
+
   let style = { ...props?.style }
-  if (distance) style = { ['--tooltip-gap']: distance, ...props?.style } as React.CSSProperties
+  if (distance) style = { ['--tooltip-distance']: distance, ...style } as React.CSSProperties
+  if (delay) style = { ['--tooltip-delay']: delay + 's', ...style } as React.CSSProperties
+
   useEffect(() => {
     const handle = {
       toggleTooltip: (e: MouseEvent) => {
