@@ -83,7 +83,7 @@ function YourTasks() {
       </p>
       <div className='task-list'>
         <div className='task-list-filters'>
-          <Flex $gap='1rem' $flexWrap='wrap'>
+          <Flex $gap='1rem' $flexWrap='wrap' $alignItem='center'>
             <Button
               onClick={handleToggleFilterModal}
               variant='outlined'
@@ -91,10 +91,13 @@ function YourTasks() {
             >
               <i className='fa-solid fa-filter'></i> Filters
             </Button>
+
             {Boolean(filters.criteria.taskName || filters.criteria.priority.length) && (
-              <Button onClick={clearAllFilters} variant='outlined' theme='danger'>
-                <i className="fa-solid fa-xmark"></i> Clear filters
-              </Button>
+              <>
+                <Button onClick={clearAllFilters} variant='outlined' theme='danger'>
+                  <i className='fa-solid fa-xmark'></i> Clear filters
+                </Button>
+              </>
             )}
           </Flex>
           <Modal
@@ -114,13 +117,14 @@ function YourTasks() {
             onClose={handleToggleFilterModal}
           >
             <Input.TextBox
+              className='input-focus-shadow'
               label={{ content: 'Search tasks' }}
               value={filters.criteria.taskName}
               id='search-task-input'
               onChange={handleChangeTempFilters.searchName}
             />
             <p style={{ margin: '0.5rem 0' }}>Priority:</p>
-            <Flex $gap='0.5rem'>
+            <Flex $alignItem='center' $gap='0.5rem'>
               {priorities.displays.map((item, index) => {
                 return (
                   <Input.CheckBox

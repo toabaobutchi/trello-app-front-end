@@ -35,27 +35,27 @@
 }
 
 .text-primary {
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 .text-secondary {
-  color: var(--secondary-color);
+  color: var(--secondary-color) !important;;
 }
 
 .text-danger {
-  color: var(--danger-color);
+  color: var(--danger-color) !important;
 }
 
 .text-info {
-  color: var(--info-color);
+  color: var(--info-color) !important;
 }
 
 .text-success {
-  color: var(--success-color);
+  color: var(--success-color) !important;
 }
 
 .text-warning {
-  color: var(--warning-color);
+  color: var(--warning-color) !important;
 }
 
 .text-light {
@@ -101,3 +101,8 @@
     --input-padding: 1rem;
   }
 }
+
+.posr {
+  position: relative;
+}
+
