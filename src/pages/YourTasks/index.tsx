@@ -4,6 +4,7 @@ import Modal from '@comps/Modal'
 import { useState } from 'react'
 import Input from '@comps/Input'
 import Flex from '@comps/StyledComponents'
+import Tooltip from '@comps/Tooltip'
 
 // type PriorityType = {
 //   value: string | number
@@ -84,21 +85,31 @@ function YourTasks() {
       <div className='task-list'>
         <div className='task-list-filters'>
           <Flex $gap='1rem' $flexWrap='wrap' $alignItem='center'>
-            <Button
-              onClick={handleToggleFilterModal}
-              variant='outlined'
-              theme={filters.criteria.taskName || filters.criteria.priority.length ? 'primary' : 'secondary'}
-            >
-              <i className='fa-solid fa-filter'></i> Filters
-            </Button>
+            <Tooltip content='This is a tooltip 1' theme='dark' position='bottom'>
+              <Button
+                onClick={handleToggleFilterModal}
+                variant='outlined'
+                theme={filters.criteria.taskName || filters.criteria.priority.length ? 'primary' : 'secondary'}
+              >
+                <i className='fa-solid fa-filter'></i> Filters
+              </Button>
+            </Tooltip>
 
             {Boolean(filters.criteria.taskName || filters.criteria.priority.length) && (
               <>
-                <Button onClick={clearAllFilters} variant='outlined' theme='danger'>
-                  <i className='fa-solid fa-xmark'></i> Clear filters
-                </Button>
+                <Tooltip content='This is a tooltip 2' theme='dark' position='top'>
+                  <Button onClick={clearAllFilters} variant='outlined' theme='danger'>
+                    <i className='fa-solid fa-xmark'></i> Clear filters
+                  </Button>
+                </Tooltip>
               </>
             )}
+            <Tooltip content='This is left tooltip' position='left'>
+              Left tooltip
+            </Tooltip>
+            <Tooltip content='This is right tooltip' position='right'>
+              Right tooltip
+            </Tooltip>
           </Flex>
           <Modal
             style={{ width: '30%', minWidth: '400px', maxWidth: '100%' }}

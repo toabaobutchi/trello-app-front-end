@@ -1,0 +1,118 @@
+.tooltip {
+  --default-distance: 0.25rem;
+  position: relative;
+  cursor: pointer;
+  // overflow: none !important;
+  height: max-content;
+
+  .tooltip-agent {
+    &:hover + .tooltip-content.tooltip-content-on-hover {
+      display: block;
+    }
+  }
+
+  &-content {
+    position: absolute;
+    border-radius: var(--primary-radius);
+    width: max-content;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    display: none;
+
+    // position
+    &-top,
+    &-bottom {
+      left: 50%;
+      transform: translate(-50%, 100%);
+      animation: slide-y 0.25s ease-in-out;
+      // transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    &-top {
+      top: calc(0px - var(--default-distance));
+      transform: translate(-50%, -100%);
+    }
+
+    &-bottom {
+      bottom: calc(0px - var(--default-distance));
+    }
+
+    &-left,
+    &-right {
+      top: 50%;
+      transform: translate(100%, -50%);
+      animation: slide-x 0.25s ease-in-out;
+      // transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    &-left {
+      left: calc(0% - var(--default-distance));
+      transform: translate(-100%, -50%);
+    }
+
+    &-right {
+      right: calc(0% - var(--default-distance));
+    }
+
+    // tooltip's background color
+    &-light {
+      background-color: var(--light-color);
+      color: inherit;
+    }
+    &-dark {
+      background-color: var(--dark-color);
+      color: #fff;
+    }
+    &-gray {
+      background-color: var(--secondary-color);
+      color: inherit;
+    }
+
+    // trigger events
+    &-on-hover {
+      &:hover {
+        display: block;
+      }
+      &.open {
+        display: block;
+      }
+    }
+    &-on-click {
+      &:hover {
+        display: none;
+      }
+      &.open {
+        display: block;
+      }
+    }
+  }
+}
+
+@keyframes slide-y {
+  from {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    padding: 0;
+    transform: translate(-50%, 0%);
+    overflow: hidden;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%, -100%);
+  }
+}
+
+@keyframes slide-x {
+  from {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    padding: 0;
+    transform: translate(0%, -50%);
+    overflow: hidden;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-100%, 50%);
+  }
+}
