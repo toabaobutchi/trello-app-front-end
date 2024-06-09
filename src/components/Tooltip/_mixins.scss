@@ -11,6 +11,7 @@
   width: max-content;
   height: max-content;
   padding: 0.5rem;
+  display: block;
 }
 
 @mixin slide($dir: 'up', $delay: 0.25s) {
@@ -20,7 +21,7 @@
 @mixin create-slide($dir) {
   @keyframes slide-#{$dir} {
     from {
-      @include hide-tooltip;
+      display: none;
       @if ($dir == 'up' or $dir == 'down') {
         transform: translate(-50%, 0%);
       } @else {

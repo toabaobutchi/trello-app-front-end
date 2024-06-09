@@ -3,9 +3,12 @@
 .tooltip {
   --tooltip-distance: 0.25rem;
   --tooltip-delay: 0.25s;
+  --tooltip-container-z-index: 1;
+  --tooltip-content-z-index: -1;
   position: relative;
   cursor: pointer;
   height: max-content;
+  z-index: var(--tooltip-container-z-index);
 
   .tooltip-agent {
     &:hover + .tooltip-content-on-hover {
@@ -52,6 +55,7 @@
     padding: 0.5rem;
     font-size: 0.9rem;
     display: none;
+    z-index: var(--tooltip-content-z-index);
 
     // tooltip's background color
     &-light {
@@ -65,6 +69,10 @@
     &-gray {
       background-color: var(--tooltip-gray-color);
       color: inherit;
+    }
+
+    &-on-hover {
+      user-select: none;
     }
 
     // trigger events
