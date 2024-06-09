@@ -19,22 +19,40 @@
         transition: var(--tooltip-transition-duration) cubic-bezier(0.165, 0.84, 0.44, 1) var(--tooltip-delay),
           z-index var(--tooltip-transition-duration) ease-in
             calc(var(--tooltip-transition-duration) / 2 + var(--tooltip-delay));
-        
+
         &-top,
         &-bottom {
           left: 50%;
+
+          &.arrow-tooltip {
+            &::before {
+              left: 50%;
+            }
+          }
         }
 
         &-top {
           top: calc(0px - var(--tooltip-distance));
           @include show-tooltip();
           @include get-transform('up');
+          @include get-arrow(
+            'top',
+            var(--tooltip-distance),
+            var(--tooltip-ratio-distance-when-has-arrow),
+            var(--arrow-color)
+          );
         }
 
         &-bottom {
+          bottom: calc(0px - var(--tooltip-distance));
           @include show-tooltip();
           @include get-transform('down');
-          bottom: calc(0px - var(--tooltip-distance));
+          @include get-arrow(
+            'bottom',
+            var(--tooltip-distance),
+            var(--tooltip-ratio-distance-when-has-arrow),
+            var(--arrow-color)
+          );
         }
 
         &-left,
@@ -61,7 +79,6 @@
 
         &-right {
           right: calc(0% - var(--tooltip-distance));
-          // @include slide('right', var(--tooltip-delay));
           @include show-tooltip();
           @include get-transform('right');
           @include get-arrow(
