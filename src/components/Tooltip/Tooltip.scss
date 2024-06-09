@@ -4,13 +4,15 @@
   --tooltip-distance: 0.25rem;
   --tooltip-delay: 0.25s;
   --tooltip-container-z-index: 1;
-  --tooltip-content-z-index: -1;
+  --tooltip-content-z-index: 1;
+  --tooltip-ratio-distance-when-has-arrow: 3;
+
   position: relative;
   cursor: pointer;
   height: max-content;
-  z-index: var(--tooltip-container-z-index);
 
   .tooltip-agent {
+    z-index: var(--tooltip-container-z-index);
     &:hover + .tooltip-content-on-hover {
       display: block;
       @include hide-tooltip;
@@ -34,15 +36,23 @@
         &-left,
         &-right {
           top: 50%;
+
+          &.arrow-tooltip {
+            &::before {
+              top: 50%;
+            }
+          }
         }
         &-left {
           left: calc(0% - var(--tooltip-distance));
           @include slide('left', var(--tooltip-delay));
+          @include get-arrow('left', var(--tooltip-distance), var(--tooltip-ratio-distance-when-has-arrow), var(--arrow-color));
         }
 
         &-right {
           right: calc(0% - var(--tooltip-distance));
           @include slide('right', var(--tooltip-delay));
+          @include get-arrow('right', var(--tooltip-distance), var(--tooltip-ratio-distance-when-has-arrow), var(--arrow-color));
         }
       }
     }
@@ -59,14 +69,17 @@
 
     // tooltip's background color
     &-light {
+      --arrow-color: var(--tooltip-light-color);
       background-color: var(--tooltip-light-color);
       color: inherit;
     }
     &-dark {
+      --arrow-color: var(--tooltip-dark-color);
       background-color: var(--tooltip-dark-color);
       color: #fff;
     }
     &-gray {
+      --arrow-color: var(--tooltip-gray-color);
       background-color: var(--tooltip-gray-color);
       color: inherit;
     }
@@ -82,6 +95,18 @@
       }
       &.open {
         display: block;
+      }
+    }
+
+    &.arrow-tooltip {
+      &::before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: calc(2 * var(--tooltip-distance));
+        border-color: transparent;
       }
     }
   }

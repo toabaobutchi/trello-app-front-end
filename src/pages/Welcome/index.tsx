@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import logo from '@assets/trello_pic.png'
 import googleImage from '@assets/gg_icon.png'
 import rightSideImage from '@assets/img_welcome.webp'
+import config from '@confs/app.config'
 
 const Container = styled.div`
   display: flex;
@@ -96,14 +97,14 @@ function Welcome() {
         <WelcomePageHeader>
           <Wrapper>
             <Logo src={logo} alt='trello_logo' />
-            <p>Welcome to Trello</p>
+            <p>{config.appName}</p>
           </Wrapper>
         </WelcomePageHeader>
         <WelcomePageBody>
           <Wrapper>
             <CenterVertical>
               <div>
-                <Title>Trello</Title>
+                <Title>{config.appName}</Title>
                 <SubTitle>Powerful tool to manage your projects</SubTitle>
                 <IntroContent>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit obcaecati nostrum minima quasi. Eos,

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './Tooltip.scss'
+import styled from 'styled-components'
 
 interface TooltipProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
@@ -11,6 +12,7 @@ interface TooltipProps extends React.ComponentProps<'div'> {
   theme?: 'light' | 'dark' | 'gray' | string
   distance?: string
   delay?: number
+  maintainWhenHoverOn?: boolean
   events?: {
     triggerOnHover?: boolean
     onOpen?: () => void
@@ -29,6 +31,7 @@ function Tooltip({
   distance,
   delay,
   events,
+  maintainWhenHoverOn,
   ...props
 }: TooltipProps) {
   const tooltipAgentRef = useRef<HTMLDivElement | null>(null)
@@ -91,12 +94,17 @@ function Tooltip({
             arrow ? ' arrow-tooltip' : ''
           } tooltip-content-${position} tooltip-content-${theme} tooltip-content-on-${trigger}${
             props?.className ? ' ' + props?.className : ''
-          }`}
+          }${maintainWhenHoverOn ? ' maintain-on-hover' : ''}`}
           style={style}
         ></div>
       </div>
     </>
   )
 }
+
+Tooltip.Text = styled.p<{ $textDecoration?: string }>`
+  text-decoration: ${props =>
+    props.$textDecoration ? props.$textDecoration : 'underline dotted var(--secondary-color)'};
+`
 
 export default Tooltip
