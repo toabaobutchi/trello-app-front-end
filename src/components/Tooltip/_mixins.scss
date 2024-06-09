@@ -3,6 +3,7 @@
   width: 0;
   height: 0;
   padding: 0;
+  z-index: -1;
 }
 
 @mixin show-tooltip {
@@ -10,11 +11,23 @@
   width: max-content;
   height: max-content;
   padding: 0.5rem;
-  // display: block;
+  z-index: var(--tooltip-z-index);
 }
 
 @mixin slide($dir: 'up', $delay: 0.25s) {
   animation: slide-#{$dir} 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) $delay forwards;
+}
+
+@mixin get-transform($dir) {
+  @if ($dir == 'up') {
+    transform: translate(-50%, -100%);
+  } @else if($dir == 'down') {
+    transform: translate(-50%, 100%);
+  } @else if($dir == 'left') {
+    transform: translate(-100%, -50%);
+  } @else {
+    transform: translate(100%, -50%);
+  }
 }
 
 @mixin create-slide($dir) {
@@ -28,17 +41,7 @@
     }
     to {
       @include show-tooltip();
-      opacity: 1;
-      display: block;
-      @if ($dir == 'up') {
-        transform: translate(-50%, -100%);
-      } @else if($dir == 'down') {
-        transform: translate(-50%, 100%);
-      } @else if($dir == 'left') {
-        transform: translate(-100%, -50%);
-      } @else {
-        transform: translate(100%, -50%);
-      }
+      @include get-transform($dir);
     }
   }
 }
