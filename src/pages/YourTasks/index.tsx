@@ -95,7 +95,7 @@ function YourTasks() {
 
             {Boolean(filters.criteria.taskName || filters.criteria.priority.length) && (
               <>
-                <Tooltip
+                <Tooltip arrow
                   content='<i class="fa-regular fa-trash-can text-danger"></i> &nbsp;Clear all filter conditions'
                   theme='dark'
                 >
@@ -105,18 +105,6 @@ function YourTasks() {
                 </Tooltip>
               </>
             )}
-            <Tooltip arrow content='Left tooltip' position='left'>
-              <Tooltip.Text>Left tooltip</Tooltip.Text>
-            </Tooltip>
-            <Tooltip arrow content='Right tooltip' position='right'>
-              <Tooltip.Text>Right tooltip</Tooltip.Text>
-            </Tooltip>
-            <Tooltip arrow content='Top tooltip' position='top'>
-              <Tooltip.Text>Top tooltip</Tooltip.Text>
-            </Tooltip>
-            <Tooltip arrow content='Bottom tooltip' position='bottom'>
-              <Tooltip.Text>Bottom tooltip</Tooltip.Text>
-            </Tooltip>
           </Flex>
           <Modal
             style={{ width: '30%', minWidth: '400px', maxWidth: '100%' }}

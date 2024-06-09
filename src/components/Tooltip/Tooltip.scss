@@ -2,11 +2,11 @@
 
 .tooltip {
   --tooltip-distance: 0.25rem;
-  --tooltip-delay: 0.25s;
+  --tooltip-delay: 0.5s;
   --tooltip-transition-duration: 0.25s;
   --tooltip-container-z-index: 1;
   --tooltip-content-z-index: -1;
-  --tooltip-ratio-distance-when-has-arrow: 3;
+  --tooltip-ratio-distance-when-has-arrow: 2.3;
 
   position: relative;
   cursor: pointer;
@@ -16,9 +16,12 @@
     z-index: var(--tooltip-container-z-index);
     &:hover + .tooltip-content-on-hover {
       &.tooltip-content {
+        top: auto;
+        left: auto;
         transition: var(--tooltip-transition-duration) cubic-bezier(0.165, 0.84, 0.44, 1) var(--tooltip-delay),
           z-index var(--tooltip-transition-duration) ease-in
-            calc(var(--tooltip-transition-duration) / 2 + var(--tooltip-delay));
+            calc(var(--tooltip-transition-duration) / 2 + var(--tooltip-delay)),
+          width var(--tooltip-transition-duration) ease-in calc(var(--tooltip-transition-duration) / 2);
 
         &-top,
         &-bottom {
@@ -96,7 +99,11 @@
     position: absolute;
     border-radius: var(--primary-radius);
     @include hide-tooltip();
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     // tooltip's background color
     &-light {
