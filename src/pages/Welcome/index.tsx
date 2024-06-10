@@ -3,6 +3,7 @@ import logo from '@assets/trello_pic.png'
 import googleImage from '@assets/gg_icon.png'
 import rightSideImage from '@assets/img_welcome.webp'
 import config from '@confs/app.config'
+import { NavLink } from 'react-router-dom'
 
 const Container = styled.div`
   display: flex;
@@ -71,7 +72,7 @@ const RightSideImage = styled.img`
   height: auto;
 `
 
-const LoginButton = styled.button`
+const LoginButton = styled(NavLink)`
   border: none;
   background-color: #fff;
   color: var(--text-primary-color);
@@ -111,7 +112,7 @@ function Welcome() {
                   recusandae! Sequi ratione inventore ab maxime adipisci dolorem reprehenderit iusto ut, temporibus
                   nulla vel sunt minima!
                 </IntroContent>
-                <LoginButton>
+                <LoginButton to='/home'>
                   <img src={googleImage} alt='google image' width='20px' />
                   <p>Quick start only with Google</p>
                 </LoginButton>

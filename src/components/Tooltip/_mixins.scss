@@ -3,12 +3,12 @@
   width: 0;
   height: 0;
   padding: 0;
-  z-index: -1;
+  z-index: var(--tooltip-content-z-index);
 }
 
 @mixin show-tooltip {
   opacity: 1;
-  width: max-content;
+  width: var(--tooltip-width);
   height: max-content;
   padding: 0.5rem;
   z-index: var(--tooltip-z-index);

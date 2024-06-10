@@ -35,7 +35,7 @@ function FixedMenu({
     <>
       <div ref={menuRef} className={`menu fixed-menu ${side}-menu h-${height}`}>
         <div
-          className={`fixed-menu-title ${clicked && 'open'} ${title?.className ?? ''}`}
+          className={`fixed-menu-title${clicked ? ' open': ''} ${title?.className ?? ''}`}
           onClick={handleToggleMenu}
           style={title?.style}
           {...title?.customHtmlAttributes}

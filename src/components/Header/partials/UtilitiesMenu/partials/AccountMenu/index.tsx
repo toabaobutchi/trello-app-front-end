@@ -11,8 +11,7 @@ function AccountMenu() {
         side='right'
         title={{
           content: 'AH',
-          className: 'utils-menu-user tooltip',
-          customHtmlAttributes: { 'tooltip-content': 'Account' },
+          className: 'utils-menu-user',
           style: { padding: 0 }
         }}
         style={{ top: config.header.height, right: '0.3%' }}

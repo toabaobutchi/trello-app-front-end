@@ -1,6 +1,7 @@
 import FixedMenu from '@comps/FixedMenu'
 import ImageBox from '@comps/ImageBox'
 import MenuFooter from '@comps/MenuFooter'
+import Tooltip from '@comps/Tooltip'
 import config from '@confs/app.config'
 
 function InformationMenu() {
@@ -8,9 +9,12 @@ function InformationMenu() {
     <>
       <FixedMenu
         title={{
-          content: <i className="fa-solid fa-screwdriver-wrench"></i>,
-          className: 'utils-menu__hover utils-menu-help tooltip',
-          customHtmlAttributes: { 'tooltip-content': 'Settings' }
+          content: (
+            <Tooltip content='Settings' style={{ lineHeight: 'normal' }}>
+              <i className='fa-solid fa-screwdriver-wrench'></i>
+            </Tooltip>
+          ),
+          className: 'utils-menu__hover utils-menu-help'
         }}
         style={{ top: config.header.height, right: '0.5%' }}
         width='350px'

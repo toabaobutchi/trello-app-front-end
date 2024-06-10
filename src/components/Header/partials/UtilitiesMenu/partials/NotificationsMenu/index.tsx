@@ -3,17 +3,21 @@ import MenuHeader from '@comps/MenuHeader'
 import NotificationHeader from '../NotificationHeader'
 import ImageBox from '@comps/ImageBox'
 import config from '@confs/app.config'
+import Tooltip from '@comps/Tooltip'
 
 function NotificationMenu() {
   return (
     <>
       <FixedMenu
         title={{
-          content: <i className='fa-regular fa-bell'></i>,
-          className: 'utils-menu__hover utils-menu-notification tooltip',
-          customHtmlAttributes: { 'tooltip-content': 'Notifications' }
+          content: (
+            <Tooltip content='Notifications' style={{ lineHeight: 'normal' }}>
+              <i className='fa-regular fa-bell'></i>
+            </Tooltip>
+          ),
+          className: 'utils-menu__hover utils-menu-notification'
         }}
-        style={{ top: config.header.height, right: '0.5%', paddingTop: '0', minWidth: 'min(450px, 100%)'}}
+        style={{ top: config.header.height, right: '0.5%', paddingTop: '0', minWidth: 'min(450px, 100%)' }}
         width='15%'
         side='right'
         layout={{

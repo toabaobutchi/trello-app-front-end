@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 
 /**
- * @deprecated Use {@link useClickTracker} instead. `DropdownMenu` still uses this function to detect outside clicks, but if you want to detect click events out of your component, please use `useClickTracker` instead.
+ * @deprecated Use {@link useClickTracker} instead. `DropdownMenu` and `FixedMenu` still use this hook to detect outside clicking, but if you want to detect click events out of your component, please use `useClickTracker` instead.
  */
 function useOutClick(
   element: Element,

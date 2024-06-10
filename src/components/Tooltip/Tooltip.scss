@@ -2,108 +2,99 @@
 
 .tooltip {
   --tooltip-distance: 0.25rem;
-  --tooltip-delay: 0.5s;
+  --tooltip-delay: 0.4s;
   --tooltip-transition-duration: 0.25s;
-  --tooltip-container-z-index: 1;
-  --tooltip-content-z-index: -1;
+  --tooltip-container-z-index: 10;
+  --tooltip-content-z-index: 2;
   --tooltip-ratio-distance-when-has-arrow: 2.3;
-
+  --tooltip-width: max-content;
   position: relative;
   cursor: pointer;
-  height: max-content;
 
-  .tooltip-agent {
-    z-index: var(--tooltip-container-z-index);
-    &:hover + .tooltip-content-on-hover {
-      &.tooltip-content {
-        top: auto;
-        left: auto;
-        transition: var(--tooltip-transition-duration) cubic-bezier(0.165, 0.84, 0.44, 1) var(--tooltip-delay),
-          z-index var(--tooltip-transition-duration) ease-in
-            calc(var(--tooltip-transition-duration) / 2 + var(--tooltip-delay)),
-          width var(--tooltip-transition-duration) ease-in calc(var(--tooltip-transition-duration) / 2);
+  &:hover > .tooltip-content-on-hover {
+    &.tooltip-content {
+      @include show-tooltip();
+      transition: var(--tooltip-transition-duration) cubic-bezier(0.165, 0.84, 0.44, 1) var(--tooltip-delay),
+        z-index var(--tooltip-transition-duration) ease
+          calc(var(--tooltip-transition-duration) / 2 + var(--tooltip-delay));
 
-        &-top,
-        &-bottom {
-          left: 50%;
+      &-top,
+      &-bottom {
+        left: 50%;
 
-          &.arrow-tooltip {
-            &::before {
-              left: 50%;
-            }
+        &.arrow-tooltip {
+          &::before {
+            left: 50%;
           }
         }
+      }
 
-        &-top {
-          top: calc(0px - var(--tooltip-distance));
-          @include show-tooltip();
-          @include get-transform('up');
-          @include get-arrow(
-            'top',
-            var(--tooltip-distance),
-            var(--tooltip-ratio-distance-when-has-arrow),
-            var(--arrow-color)
-          );
-        }
+      &-top {
+        top: calc(0px - var(--tooltip-distance));
 
-        &-bottom {
-          bottom: calc(0px - var(--tooltip-distance));
-          @include show-tooltip();
-          @include get-transform('down');
-          @include get-arrow(
-            'bottom',
-            var(--tooltip-distance),
-            var(--tooltip-ratio-distance-when-has-arrow),
-            var(--arrow-color)
-          );
-        }
+        @include get-transform('up');
+        @include get-arrow(
+          'top',
+          var(--tooltip-distance),
+          var(--tooltip-ratio-distance-when-has-arrow),
+          var(--arrow-color)
+        );
+      }
 
-        &-left,
-        &-right {
-          top: 50%;
+      &-bottom {
+        bottom: calc(0px - var(--tooltip-distance));
 
-          &.arrow-tooltip {
-            &::before {
-              top: 50%;
-            }
+        @include get-transform('down');
+        @include get-arrow(
+          'bottom',
+          var(--tooltip-distance),
+          var(--tooltip-ratio-distance-when-has-arrow),
+          var(--arrow-color)
+        );
+      }
+
+      &-left,
+      &-right {
+        top: 50%;
+
+        &.arrow-tooltip {
+          &::before {
+            top: 50%;
           }
         }
-        &-left {
-          left: calc(0% - var(--tooltip-distance));
-          @include show-tooltip();
-          @include get-transform('left');
-          @include get-arrow(
-            'left',
-            var(--tooltip-distance),
-            var(--tooltip-ratio-distance-when-has-arrow),
-            var(--arrow-color)
-          );
-        }
+      }
+      &-left {
+        left: calc(0% - var(--tooltip-distance));
 
-        &-right {
-          right: calc(0% - var(--tooltip-distance));
-          @include show-tooltip();
-          @include get-transform('right');
-          @include get-arrow(
-            'right',
-            var(--tooltip-distance),
-            var(--tooltip-ratio-distance-when-has-arrow),
-            var(--arrow-color)
-          );
-        }
+        @include get-transform('left');
+        @include get-arrow(
+          'left',
+          var(--tooltip-distance),
+          var(--tooltip-ratio-distance-when-has-arrow),
+          var(--arrow-color)
+        );
+      }
+
+      &-right {
+        right: calc(0% - var(--tooltip-distance));
+
+        @include get-transform('right');
+        @include get-arrow(
+          'right',
+          var(--tooltip-distance),
+          var(--tooltip-ratio-distance-when-has-arrow),
+          var(--arrow-color)
+        );
       }
     }
   }
+  // }
 
   &-content {
     position: absolute;
     border-radius: var(--primary-radius);
     @include hide-tooltip();
     font-size: 0.8rem;
-
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     // tooltip's background color
     &-light {

@@ -95,9 +95,12 @@ function YourTasks() {
 
             {Boolean(filters.criteria.taskName || filters.criteria.priority.length) && (
               <>
-                <Tooltip arrow
+                <Tooltip
+                  arrow
+                  position='right'
                   content='<i class="fa-regular fa-trash-can text-danger"></i> &nbsp;Clear all filter conditions'
                   theme='dark'
+                  delay={1}
                 >
                   <Button onClick={clearAllFilters} variant='outlined' theme='danger'>
                     <i className='fa-solid fa-xmark'></i> Clear filters
