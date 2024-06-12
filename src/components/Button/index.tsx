@@ -1,10 +1,11 @@
+import { ThemeType } from '@utils/types'
 import './Button.scss'
 
 interface ButtonProps extends React.ComponentProps<'button'> {
   variant?: 'text' | 'filled' | 'outlined'
   disabled?: boolean
   children?: React.ReactNode
-  theme?: 'primary' | 'secondary' | 'info' | 'danger' | 'warning' | 'light' | 'dark' | 'default' | 'success' | string
+  theme?: ThemeType
   size?: 'small' | 'medium' | 'large'
 }
 

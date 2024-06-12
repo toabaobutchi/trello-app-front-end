@@ -5,10 +5,12 @@ import { useState } from 'react'
 import Input from '@comps/Input'
 import Flex from '@comps/StyledComponents'
 import Tooltip from '@comps/Tooltip'
+import { ThemeType } from '@utils/types'
 
-// type PriorityType = {
-//   value: string | number
-// }
+type PriorityType = {
+  text: string,
+  theme: ThemeType
+}
 
 const priorities = {
   values: { low: 0, medium: 1, high: 2 },
@@ -16,7 +18,7 @@ const priorities = {
     { text: 'Low', theme: 'primary' },
     { text: 'Medium', theme: 'warning' },
     { text: 'High', theme: 'danger' }
-  ]
+  ] as PriorityType[]
 }
 
 interface FilterState {
