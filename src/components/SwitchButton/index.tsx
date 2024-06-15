@@ -7,9 +7,8 @@ interface SwitchInputType extends React.ComponentProps<'input'> {
 
 interface SwitchButtonProps {
   inputAttributes?: SwitchInputType
-  label?: { content: React.ReactNode; style: React.CSSProperties }
+  label?: { content: React.ReactNode; style?: React.CSSProperties }
   size?: 'tiny' | 'small' | 'normal' | 'medium' | 'large'
-  // eslint-disable-next-line no-unused-vars
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   icon?: { checked?: React.ReactNode; unchecked?: React.ReactNode }
 }

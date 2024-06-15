@@ -1,0 +1,26 @@
+.text-area {
+  width: 100%;
+  height: max-content;
+
+  label {
+    margin: 0.5rem;
+    display: block;
+  }
+  textarea {
+    width: 100%;
+    height: max-content;
+    padding: 0.5rem 1rem;
+    border: var(--thin-border-width) solid var(--light-color);
+    border-radius: 0.5rem;
+    outline: none;
+    resize: none;
+    font: inherit;
+    color: inherit;
+    background-color: #fff;
+    transition: border-color 0.2s ease-in-out;
+
+    &:focus {
+      border-color: var(--primary-color);
+    }
+  }
+}

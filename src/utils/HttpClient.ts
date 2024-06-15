@@ -18,9 +18,29 @@ class HttpClient {
     }
   }
 
+  async getAuth(url: string, accessToken: string, options: AxiosRequestConfig<object> = {}) {
+    try {
+      const response = await this.axios.get(url, { headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }, ...options })
+      return { data: response.data, status: response.status }
+    } catch (err) {
+      console.log(err)
+      return null
+    }
+  }
+
   async post(url: string, data: object = {}, options: AxiosRequestConfig<object> = {}) {
     try {
       const response = await this.axios.post(url, data, options)
+      return { data: response.data, status: response.status }
+    } catch (err) {
+      console.log(err)
+      return null
+    }
+  }
+
+  async postAuth(url: string, data: object, accessToken: string, options: AxiosRequestConfig<object> = {}) {
+    try {
+      const response = await this.axios.post(url, data, { headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }, ...options })
       return { data: response.data, status: response.status }
     } catch (err) {
       console.log(err)
@@ -41,7 +61,7 @@ class HttpClient {
   // async delete(url: string, data: object = {}, options: object = {}) {
   //   try {
   //     const response = await this.axios.delete(url, data, options)
-  //     return { data: response.data, status: response.status }
+  //     return { data: response.data.data, status: response.status }
   //   } catch (err) {
   // console.log(err)
   //     console.table(err) // log error

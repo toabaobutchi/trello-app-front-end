@@ -9,7 +9,7 @@ function closeMenu() {
 }
 
 function mobileOpenMenu(openMenu: string) {
-  return { type: ActionType.MOBILE_OPEN_MENU, payload: { data: openMenu } }
+  return { type: ActionType.MOBILE_MAIN_MENU, payload: { data: openMenu } }
 }
 
 export { toggleMenu, closeMenu, mobileOpenMenu }

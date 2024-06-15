@@ -13,9 +13,9 @@ export default function reducer(state: State, action: Action) {
         ...state,
         openMenu: ''
       }
-    case ActionType.MOBILE_OPEN_MENU:
+    case ActionType.MOBILE_MAIN_MENU:
       return {
-       ...state,
+        ...state,
         openMenu: action.payload?.data
       }
     default:

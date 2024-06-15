@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './SelectList.scss'
 import useClickTracker from '@hooks/useClickTracker'
-import CustomizablePropType from '@utils/CustomizablePropType'
+import { CustomizablePropType } from '@utils/types'
 
 interface SelectListItem {
   value: string

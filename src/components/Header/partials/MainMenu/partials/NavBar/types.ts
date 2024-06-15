@@ -1,7 +1,7 @@
 enum ActionType {
   TOGGLE_MENU,
   CLOSE_MENU,
-  MOBILE_OPEN_MENU
+  MOBILE_MAIN_MENU
 }
 
 type Action = {
