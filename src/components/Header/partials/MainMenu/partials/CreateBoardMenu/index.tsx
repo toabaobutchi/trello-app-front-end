@@ -116,7 +116,7 @@ function CreateBoardMenu() {
         onClick={toggleMainMenu}
         className='main-menu-create-button'
         variant='filled'
-        style={{ padding: '0.6rem 0.7rem' }}
+        // style={{ padding: '0.6rem 0.7rem' }}
       >
         <span className='main-menu-create-button-desktop'>Add</span>
         <span className='main-menu-create-button-mobile'>

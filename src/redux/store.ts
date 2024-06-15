@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { defaultLayoutSlice } from '@layouts/DefaultLayout/DefaultLayoutSlice'
+import { loginSlice } from '@pages/Welcome/LoginSlice'
 const store = configureStore({
   reducer: {
-    sideBar: defaultLayoutSlice.reducer
+    sideBar: defaultLayoutSlice.reducer,
+    login: loginSlice.reducer
   }
 })
 

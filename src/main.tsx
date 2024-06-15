@@ -1,13 +1,16 @@
 import ReactDOM from 'react-dom/client'
-import GlobalStyles from '@comps/GlobalStyles'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Provider } from 'react-redux'
-import store from './redux/store'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import DefaultLayout from '@layouts/DefaultLayout/index.tsx'
-import Home from '@pages/Home/index.tsx'
+import GlobalStyles from '@comps/GlobalStyles'
+import store from './redux/store'
+import DefaultLayout from '@layouts/DefaultLayout'
+import Home from '@pages/Home'
 import Welcome from '@pages/Welcome'
 import routeLinks from '@routes/router'
 import YourTasks from '@pages/YourTasks'
+import config from '@confs/app.config'
+import Error from '@pages/Error'
 
 const router = createBrowserRouter([
   {
@@ -29,13 +32,19 @@ const router = createBrowserRouter([
         <YourTasks />
       </DefaultLayout>
     )
+  },
+  {
+    path: '*',
+    errorElement: <Error />
   }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
     <GlobalStyles>
-      <RouterProvider router={router} />
+      <GoogleOAuthProvider clientId={config.googleClientId}>
+        <RouterProvider router={router} />
+      </GoogleOAuthProvider>
     </GlobalStyles>
   </Provider>
 )

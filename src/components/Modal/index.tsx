@@ -1,6 +1,6 @@
 import Button from '@comps/Button'
 import './Modal.scss'
-import CustomizablePropType from '@utils/CustomizablePropType'
+import { CustomizablePropType } from '@utils/types'
 
 interface ModalProps extends React.ComponentProps<'div'> {
   open?: boolean
@@ -14,7 +14,6 @@ interface ModalProps extends React.ComponentProps<'div'> {
     overlay?: CustomizablePropType
   }
   children?: React.ReactNode
-  // eslint-disable-next-line no-unused-vars
   onClose?: () => void
 }
 
@@ -30,7 +29,7 @@ function Modal({ open = false, layout = undefined, children = '', onClose = () =
                 <p className='modal-header-text'>{layout?.header?.title}</p>
                 {layout?.header?.closeIcon && (
                   <Button
-                    style={{ fontSize: '1.4rem' }}
+                    style={{ fontSize: '1.4rem', paddingLeft: '0.8rem', paddingRight: '0.8rem' }}
                     className='modal-header-close-button'
                     variant='text'
                     theme='default'

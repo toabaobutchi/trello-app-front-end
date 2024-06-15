@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import './FixedMenu.scss'
 import useOutClick from '@hooks/useOutClick'
-import CustomizablePropType from '@utils/CustomizablePropType'
+import { CustomizablePropType } from '@utils/types'
 
 interface FixedMenuProps {
   children?: React.ReactNode
@@ -35,7 +35,7 @@ function FixedMenu({
     <>
       <div ref={menuRef} className={`menu fixed-menu ${side}-menu h-${height}`}>
         <div
-          className={`fixed-menu-title${clicked ? ' open': ''} ${title?.className ?? ''}`}
+          className={`fixed-menu-title${clicked ? ' open' : ''} ${title?.className ?? ''}`}
           onClick={handleToggleMenu}
           style={title?.style}
           {...title?.customHtmlAttributes}
