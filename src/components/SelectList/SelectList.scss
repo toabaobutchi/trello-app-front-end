@@ -25,6 +25,7 @@
     border: var(--thin-border-width) solid var(--light-color);
     border-radius: var(--primary-radius);
     background-color: #fff;
+    z-index: var(--select-list-z-index);
 
     &-item {
       padding: 0.5rem;

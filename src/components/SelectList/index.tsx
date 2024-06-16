@@ -43,9 +43,9 @@ function SelectList({ items, selectedValue, onChoose = () => {}, label, ...props
       </p>
       <div ref={selectListRef} className={`select-list ${props?.className ?? ''}`} style={props?.style}>
         <div className='selected-item' onClick={handleToggleSelect}>
-          {selectedItem?.display}
+          {selectedItem?.display ?? 'No data to select'}
         </div>
-        {expand && (
+        {expand && items && (
           <div className='select-list-data-context'>
             {items?.map(item => {
               return (

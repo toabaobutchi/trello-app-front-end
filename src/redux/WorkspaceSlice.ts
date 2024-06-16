@@ -11,14 +11,24 @@ export const workspaceSlice = createSlice({
     sharedWorkspaceList: [] as Workspace[]
   },
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder.addCase(fetchWorkspaces.fulfilled, (state, action) => {
       state.workspaceList = action.payload?.data.data
+    }).addCase(addWorkspace.fulfilled, (state, action) => {
+      state.workspaceList.push(action.payload?.data.data)
     })
   }
 })
 
 export const fetchWorkspaces = createAsyncThunk('workspaces/fetchWorkspaces', async (loginInfo: LoginInfo) => {
-  const res = await http.getAuth(`/u/${loginInfo.accountInfo.id}/workspaces`, loginInfo.accessToken);
+  const res = await http.getAuth(`/u/${loginInfo.accountInfo.id}/workspaces`, loginInfo.accessToken)
   return res
 })
+
+export const addWorkspace = createAsyncThunk(
+  'workspaces/addWorkspace',
+  async ({ data, loginInfo }: { data: Workspace; loginInfo: LoginInfo }) => {
+    const res = await http.postAuth(`/u/${loginInfo.accountInfo.id}/workspaces`, data, loginInfo.accessToken)
+    return res
+  }
+)

@@ -1,4 +1,5 @@
 const config = {
+  env: 'Development',
   header: {
     height: '3.43rem'
   },
