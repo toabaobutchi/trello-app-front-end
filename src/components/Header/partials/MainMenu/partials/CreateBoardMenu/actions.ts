@@ -51,6 +51,5 @@ const joinBoardMenu = {
   }
 }
 
-const setError = (data: string) => ({ type: EActionType.SET_ERROR, data })
 
-export { mainMenu, boardMenu, workspaceMenu, joinBoardMenu, setError }
+export { mainMenu, boardMenu, workspaceMenu, joinBoardMenu }

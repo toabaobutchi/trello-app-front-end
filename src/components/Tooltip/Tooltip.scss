@@ -10,6 +10,7 @@
   --tooltip-width: max-content;
   position: relative;
   cursor: pointer;
+  width: max-content;
 
   &:hover > .tooltip-content-on-hover {
     &.tooltip-content {

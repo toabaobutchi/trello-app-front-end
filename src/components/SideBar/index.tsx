@@ -11,6 +11,7 @@ import config from '@confs/app.config'
 
 function SideBar() {
   const sideBarStatus = useSelector((state: RootState) => state.sideBar.expand)
+  const workspaces = useSelector((state: RootState) => state.workspaces)
   const dispatch = useDispatch()
   const toggleSidebar = () => {
     dispatch(defaultLayoutSlice.actions.toggleSidebar())
@@ -43,13 +44,37 @@ function SideBar() {
             defaultExpand
           >
             <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
-              <Expander header={{ content: 'Luận văn tốt nghiệp' }} useArrow={false}>
-                <SideBarItem>Project 1</SideBarItem>
-                <SideBarItem>Project 2</SideBarItem>
+              <Expander header={{ content: 'Your workspaces' }} defaultExpand>
+                {workspaces.workspaceList?.map(workspace => {
+                  return <SideBarItem key={workspace.id}>{workspace.name}</SideBarItem>
+                })}
+                {(!workspaces.workspaceList || workspaces.workspaceList?.length <= 0) && (
+                  <>
+                    <div className='note-text'>
+                      <p>You currently have no workspace</p>
+                      <div className='quick-input-action'>
+                        <label htmlFor='quick-create-workspace-input'>
+                          <i className='fa-solid fa-bolt-lightning'></i> Create your first workspace
+                        </label>
+                        <div className='input-button-group'>
+                          <input type='text' id='quick-create-workspace-input' placeholder=' ' />
+                          <button>
+                            <i className='fa-solid fa-plus'></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </Expander>
             </SideBarItem>
-            <SideBarItem>Phát triển ứng dụng</SideBarItem>
-            <SideBarItem>Classroom</SideBarItem>
+            <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
+              <Expander header={{ content: 'Shared workspaces' }} defaultExpand useArrow={false}>
+                {workspaces.sharedWorkspaceList?.map(workspace => {
+                  return <SideBarItem key={workspace.id}>{workspace.name}</SideBarItem>
+                })}
+              </Expander>
+            </SideBarItem>
           </Expander>
         </SideBarItem>
         <SideBarItem>

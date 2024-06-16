@@ -11,6 +11,7 @@ import routeLinks from '@routes/router'
 import YourTasks from '@pages/YourTasks'
 import config from '@confs/app.config'
 import Error from '@pages/Error'
+import 'react-toastify/dist/ReactToastify.css'
 
 const router = createBrowserRouter([
   {

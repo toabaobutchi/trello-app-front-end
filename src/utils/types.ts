@@ -14,3 +14,32 @@ export interface AccountType {
   email: string
   exp?: number
 }
+
+export interface ToastOptionsType {
+  delay?: number
+  floatDuration?: number
+  fadeOutDuration?: number
+  removeAfterDelay?: number
+}
+
+export interface ToastType {
+  icon?: React.ReactNode
+  closeIcon?: React.ReactNode
+  title?: React.ReactNode
+  content?: React.ReactNode
+  type?: 'success' | 'error' | 'warning' | 'info'
+  options?: ToastOptionsType
+}
+
+export type Workspace = {
+  id: number,
+  name: string,
+  createAt: number,
+  slug: string,
+  description: string
+}
+
+export type LoginInfo = {
+  accessToken: string
+  accountInfo: AccountType
+}
