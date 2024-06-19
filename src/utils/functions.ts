@@ -25,4 +25,4 @@ export const isOutOfScreen = (element: HTMLElement) => {
     diff: right - innerWidth
   }
   return overFlowResult;
-} 
+}

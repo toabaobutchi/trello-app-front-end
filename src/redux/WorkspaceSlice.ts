@@ -21,14 +21,19 @@ export const workspaceSlice = createSlice({
 })
 
 export const fetchWorkspaces = createAsyncThunk('workspaces/fetchWorkspaces', async (loginInfo: LoginInfo) => {
-  const res = await http.getAuth(`/u/${loginInfo.accountInfo.id}/workspaces`, loginInfo.accessToken)
+  const res = await http.getAuth(`/workspaces`, loginInfo.accessToken)
   return res
 })
 
 export const addWorkspace = createAsyncThunk(
   'workspaces/addWorkspace',
   async ({ data, loginInfo }: { data: Workspace; loginInfo: LoginInfo }) => {
-    const res = await http.postAuth(`/u/${loginInfo.accountInfo.id}/workspaces`, data, loginInfo.accessToken)
+    const res = await http.postAuth(`/workspaces`, data, loginInfo.accessToken)
     return res
   }
 )
+
+export const fetchSharedWorkspaces = createAsyncThunk('workspaces/fetchSharedWorkspaces', async (loginInfo: LoginInfo) => {
+  const res = await http.getAuth(`/shared-workspace`, loginInfo.accessToken)
+  return res
+})

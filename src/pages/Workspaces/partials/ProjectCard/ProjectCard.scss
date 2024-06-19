@@ -1,0 +1,44 @@
+.project-card {
+  padding: 1rem;
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--card-radius);
+  cursor: pointer;
+  box-shadow: 0 0 1rem 0 #ccc;
+  // position: relative;
+
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   width: 0.5rem;
+  //   height: 80%;
+  //   background-color: red;
+  //   left: 0;
+  //   top: 50%;
+  //   transform: translate(-50%, -50%);
+  // }
+
+  &-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-clr);
+    margin-bottom: 0.5rem;
+  }
+
+  &-sub-text {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+  }
+
+  &-description {
+    font-size: 1rem;
+    color: inherit;
+    margin-top: 0.7rem;
+  }
+
+  .project-update-btn:hover  {
+    color: var(--primary-color);
+  }
+  .project-delete-btn:hover {
+    color: var(--danger-color);
+  }
+}

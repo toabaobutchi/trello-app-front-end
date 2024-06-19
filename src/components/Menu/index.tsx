@@ -13,7 +13,7 @@ type MenuProps = {
 function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: MenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   const position = {
-    left: `${anchorElement?.offsetLeft}px`,
+    left: `${anchorElement?.offsetLeft ?? 0}px`,
     top: `${(anchorElement?.offsetTop ?? 0) + (anchorElement?.offsetHeight ?? 0)}px`
   }
   const handleClose = () => {

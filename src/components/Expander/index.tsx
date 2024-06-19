@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './Expander.scss'
-import CustomizablePropType from '@utils/CustomizablePropType'
+import { CustomizablePropType } from '@utils/types'
 
 interface ExpanderProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode

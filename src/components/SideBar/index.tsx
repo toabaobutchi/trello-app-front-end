@@ -42,11 +42,16 @@ function SideBar() {
               style: { flex: 1 }
             }}
             defaultExpand
+            style={{ fontSize: '1rem' }}
           >
             <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
               <Expander header={{ content: 'Your workspaces' }} defaultExpand>
                 {workspaces.workspaceList?.map(workspace => {
-                  return <SideBarItem key={workspace.id}>{workspace.name}</SideBarItem>
+                  return (
+                    <SideBarItem.Link to={`/workspaces/yours/${workspace.slug}/${workspace.id}`} key={workspace.id}>
+                      {workspace.name}
+                    </SideBarItem.Link>
+                  )
                 })}
                 {(!workspaces.workspaceList || workspaces.workspaceList?.length <= 0) && (
                   <>
@@ -69,7 +74,7 @@ function SideBar() {
               </Expander>
             </SideBarItem>
             <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
-              <Expander header={{ content: 'Shared workspaces' }} defaultExpand useArrow={false}>
+              <Expander header={{ content: 'Shared projects' }} defaultExpand useArrow={false}>
                 {workspaces.sharedWorkspaceList?.map(workspace => {
                   return <SideBarItem key={workspace.id}>{workspace.name}</SideBarItem>
                 })}
@@ -80,6 +85,9 @@ function SideBar() {
         <SideBarItem>
           <i className='fa-solid fa-calendar-days'></i> Schedule
         </SideBarItem>
+        <SideBarItem.Link to={routeLinks.project}>
+          <i className='fa-brands fa-flipboard'></i> Project (Test)
+        </SideBarItem.Link>
         <Button
           onClick={toggleSidebar}
           className='sidebar-close-button-on-mobile'

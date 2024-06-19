@@ -11,6 +11,11 @@ import routeLinks from '@routes/router'
 import YourTasks from '@pages/YourTasks'
 import config from '@confs/app.config'
 import Error from '@pages/Error'
+import Workspaces from '@pages/Workspaces'
+import HttpClient from '@utils/HttpClient'
+import Project from '@pages/Project'
+
+const http = new HttpClient()
 
 const router = createBrowserRouter([
   {
@@ -34,7 +39,27 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '*',
+    path: routeLinks.workspaces,
+    element: (
+      <DefaultLayout>
+        <Workspaces />
+      </DefaultLayout>
+    ),
+    loader: async ({params}) => {
+      const res = await http.getAuth(`w/${params.workspaceId}/projects`, localStorage.getItem('access_token') ?? "")
+      return res
+    }
+  },
+  {
+    path: routeLinks.project,
+    element: (
+      <DefaultLayout>
+        <Project />
+      </DefaultLayout>
+    )
+  },
+  {
+    path: '/*',
     errorElement: <Error />
   }
 ])

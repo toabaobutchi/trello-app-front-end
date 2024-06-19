@@ -1,0 +1,26 @@
+.column {
+  box-shadow: 0 0 1rem 0 #c1c1c1;
+  border: var(--thin-border-width) solid var(--bright-color);
+  border-radius: var(--card-radius);
+  padding: 0 0.5rem 0 1rem;
+  min-width: 300px;
+  max-width: 400px;
+  min-height: 300px; // phòng trường hợp column không có task nào
+
+  &-header {
+    padding: 0.7rem 0 1rem;
+    &-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    &-more-button {
+      padding: 0.5rem 0.7rem !important;
+      border-radius: calc(var(--card-radius) / 2);
+    }
+  }
+
+  &-footer {
+    padding: 0.5rem 0;
+  }
+}

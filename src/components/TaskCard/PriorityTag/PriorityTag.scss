@@ -1,0 +1,35 @@
+.priority-tag {
+  --secondary-bg-color: #77777720;
+  --danger-bg-color: #e9067820;
+  --warning-bg-color: #d89e0020;
+  --primary-bg-color: #007bc220;
+  --success-bg-color: #02a43020;
+
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--secondary-radius);
+
+  &__default {
+    color: var(--secondary-color);
+    background-color: var(--secondary-bg-color);
+  }
+
+  &__high {
+    color: var(--danger-color);
+    background-color: var(--danger-bg-color);
+  }
+  &__medium {
+    color: var(--warning-color);
+    background-color: var(--warning-bg-color);
+  }
+  &__normal {
+    color: var(--primary-color);
+    background-color: var(--primary-bg-color);
+  }
+  &__low {
+    color: var(--success-color);
+    background-color: var(--success-bg-color);
+  }
+}

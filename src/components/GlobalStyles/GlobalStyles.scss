@@ -23,10 +23,12 @@
   --primary-color: #007bc2;
   --success-color: #02a430;
   --dark-color: #333;
+  --bright-color: #f1f1f1;
+  --card-radius: 15px;
 
   // component colors
   --overlay-color: #0000001f;
-  --clicked-menu-color: #0c66e421;
+  --clicked-menu-color: #0c66e417;
   --side-bar-item-hover-color: #0c66e421;
 
   // tooltip colors
@@ -46,10 +48,10 @@
   --switch-width: 35px;
 
   // z-index
-  --tooltip-z-index: 100;
+  --tooltip-z-index: 1000;
   --modal-z-index: 101;
   --sidebar-z-index: 101;
-  --menu-z-index: 102;
+  --menu-z-index: 999;
   --select-list-z-index: 103;
 }
 
@@ -75,38 +77,38 @@ html {
   height: 100vh;
 }
 
-.tooltip[tooltip-content] {
-  position: relative;
+// .tooltip[tooltip-content] {
+//   position: relative;
 
-  &::after {
-    position: absolute;
-    content: attr(tooltip-content);
-    top: 110%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--text-primary-color);
-    transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-    width: max-content;
-    height: 0;
-    opacity: 0;
-    visibility: hidden;
-    color: #fff;
-    font-size: 0.8rem;
-    border-radius: var(--primary-radius);
-    z-index: var(--tooltip-z-index);
-  }
+//   &::after {
+//     position: absolute;
+//     content: attr(tooltip-content);
+//     top: 110%;
+//     left: 50%;
+//     transform: translateX(-50%);
+//     background-color: var(--text-primary-color);
+//     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+//     width: max-content;
+//     height: 0;
+//     opacity: 0;
+//     visibility: hidden;
+//     color: #fff;
+//     font-size: 0.8rem;
+//     border-radius: var(--primary-radius);
+//     z-index: var(--tooltip-z-index);
+//   }
 
-  &:hover::after {
-    height: max-content;
-    opacity: 1;
-    visibility: visible;
-    padding: 0.2rem 0.5rem;
-  }
-}
+//   &:hover::after {
+//     height: max-content;
+//     opacity: 1;
+//     visibility: visible;
+//     padding: 0.2rem 0.5rem;
+//   }
+// }
 
-::-webkit-scrollbar {
-  width: 5px;
-}
+// ::-webkit-scrollbar {
+//   display: none;
+// }
 
 ::-webkit-scrollbar-track {
   border-radius: 2rem;
@@ -132,4 +134,9 @@ html {
   &:not(:placeholder-shown) {
     box-shadow: inset 0 0 2px 0 var(--primary-color);
   }
+}
+
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }

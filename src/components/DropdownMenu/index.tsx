@@ -1,4 +1,4 @@
-import CustomizablePropType from '@utils/CustomizablePropType'
+import { CustomizablePropType } from '@utils/types'
 import useOutClick from '@hooks/useOutClick'
 import { useRef, useState } from 'react'
 import './DropdownMenu.scss'

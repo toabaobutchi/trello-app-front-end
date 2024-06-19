@@ -12,7 +12,7 @@ function MenuItem({ children = '', onClick = () => {}, size = 'medium', ...props
   }
   return (
     <>
-      <div className={`menu-item menu-item-${size}`} onClick={handleClick} {...props}>
+      <div {...props} className={`menu-item menu-item-${size} ${props.className ?? ''}`.trimEnd()} onClick={handleClick}>
         {children}
       </div>
     </>

@@ -88,6 +88,16 @@ function CreateBoardMenu() {
     async board() {
       if (!workspaceList) {
         toast.error('You have no workspace')
+      } else {
+        // eslint-disable-next-line prefer-const
+        let { title, color, selectedWorkspace } = state.board as { title: string; color: string; selectedWorkspace: string }
+        selectedWorkspace ??= workspaceList[0].id + '';
+        const result = await http.postAuth(
+          `/projects`,
+          { name: title, color, workspaceId: selectedWorkspace },
+          account.accessToken
+        )
+        console.log(result)
       }
     },
     async workspace() {
@@ -96,15 +106,8 @@ function CreateBoardMenu() {
       } else {
         // call API to add workspace
         const { title, description } = state.workspace as { title: string; description: string }
-        const result = await http.postAuth(
-          `/u/${account.accountInfo.id}/workspaces`,
-          { name: title, description },
-          account.accessToken
-        )
-        if (result?.status === 200 && result?.data?.status === true) {
-          reduxDispatch(addWorkspace({ data: result?.data?.data as Workspace, loginInfo: account }))
-          dispatch(mainMenu.close())
-        }
+        reduxDispatch(addWorkspace({ data: { name: title, description } as Workspace, loginInfo: account }))
+        dispatch(mainMenu.close()) // đóng menu
       }
     },
     joinBoard() {}

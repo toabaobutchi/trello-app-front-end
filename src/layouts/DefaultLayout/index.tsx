@@ -1,5 +1,6 @@
 import Header from '@comps/Header'
 import SideBar from '@comps/SideBar'
+import Flex from '@comps/StyledComponents/Flex'
 import { fetchWorkspaces } from '@redux/WorkspaceSlice'
 import { AppDispatch, RootState } from '@redux/store'
 import { useEffect } from 'react'
@@ -10,11 +11,13 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  flex: 1;
 `
 
 const MainContent = styled.div`
   padding: 1rem;
-  width: 100%;
+  width: 70%;
+  flex: 1;
 `
 
 function DefaultLayout({ children = '' }: { children?: React.ReactNode }) {
@@ -22,15 +25,16 @@ function DefaultLayout({ children = '' }: { children?: React.ReactNode }) {
   const loginInfo = useSelector((state: RootState) => state.login)
   useEffect(() => {
     dispatch(fetchWorkspaces(loginInfo))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
     <>
-      <Header />
-      <Container>
-        <SideBar />
-        <MainContent>{children}</MainContent>
-      </Container>
+      <Flex $flexDirection='column' style={{ width: '100%', overflow: 'hidden' }}>
+        <Header />
+        <Container>
+          <SideBar />
+          <MainContent>{children}</MainContent>
+        </Container>
+      </Flex>
     </>
   )
 }

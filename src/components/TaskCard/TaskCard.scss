@@ -1,0 +1,47 @@
+.task-card {
+  border-radius: calc(var(--card-radius) / 2);
+  // box-shadow: 0 0 1rem 0 #ccc;
+  padding: 1rem;
+  border: var(--thin-border-width) solid var(--light-color);
+  cursor: pointer;
+  max-width: 100%;
+
+  &-body {
+    &-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+
+    &-description {
+      font-size: 1rem;
+      font-weight: 400;
+      margin: 0.5rem 0;
+      color: var(--text-secondary-color);
+    }
+  }
+  &-footer {
+    color: var(--text-secondary-color);
+    margin-top: 1rem;
+
+    &-members {
+      &-image-container {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: #fff;
+
+        > img {
+          max-width: 100%;
+          object-fit: cover;
+          max-height: 100%;
+          clip-path: circle();
+        }
+      }
+    }
+  }
+}
+
+.task-card + .task-card {
+  margin-top: 1rem;
+}

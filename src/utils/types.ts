@@ -37,6 +37,18 @@ export type Workspace = {
   createAt: number,
   slug: string,
   description: string
+  projects?: Project[],
+}
+
+export type Project = {
+  id: string,
+  description?: string,
+  name: string,
+  createdAt: number,
+  slug: string,
+  workspaceId: number
+  color?: string
+  dueDate?: number
 }
 
 export type LoginInfo = {
