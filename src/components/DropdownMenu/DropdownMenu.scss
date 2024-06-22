@@ -28,6 +28,7 @@
     // max-height: 50vh;
     padding: 1rem; // tuỳ chọn cho header và footer
     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: var(--menu-z-index);
 
     &.header-menu,
     &.footer-menu {

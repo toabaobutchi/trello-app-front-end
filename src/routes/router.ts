@@ -1,10 +1,23 @@
+import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
+
 const routeLinks = {
   welcome: '/',
   home: '/home',
   yourTasks: '/your-tasks',
-  workspaces: '/workspaces/:ownership/:slug/:workspaceId',
-  // for ui design purposes, add route param later
-  project: '/project'
+  workspaces: '/workspaces/:ownerShip/:slug/:workspaceId',
+  // project: '/projects/:ownerShip/:slug/:projectId/v/:viewMode'
+  project: '/projects'
+}
+
+export const linkCreator = {
+  workspaces(routeParams: WorkspacePageParams) {
+    const { ownerShip, slug, workspaceId } = routeParams
+    return `/workspaces/${ownerShip}/${slug}/${workspaceId}`
+  },
+  project(routeParams: ProjectPageParams) {
+    const { ownerShip, projectId, slug, viewMode } = routeParams
+    return `/projects/${ownerShip}/${slug}/${projectId}/v/${viewMode}`
+  }
 }
 
 export default routeLinks

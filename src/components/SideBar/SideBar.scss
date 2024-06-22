@@ -1,5 +1,5 @@
 .sidebar {
-  padding: 1rem;
+  padding: 1rem 1rem 3.7rem 1rem;
   color: var(--text-primary-color);
   height: 100%;
   max-width: 100%;
@@ -9,7 +9,7 @@
   border-right: var(--thin-border-width) solid var(--light-color);
   transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
   white-space: nowrap;
-  overflow: hidden;
+  overflow-x: hidden;
 
   &.collapsed {
     width: 0;

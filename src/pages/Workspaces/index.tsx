@@ -1,28 +1,39 @@
 import Flex from '@comps/StyledComponents/Flex'
-import { Workspace } from '@utils/types'
-import { AxiosResponse } from 'axios'
-import { useState } from 'react'
-import { useLoaderData, useParams } from 'react-router-dom'
+import { Workspace, WorkspaceResponseWithRelatedProjects } from '@utils/types'
+import { AxiosResponse, HttpStatusCode } from 'axios'
+import { useEffect, useState } from 'react'
+import { useLoaderData } from 'react-router-dom'
 import './Workspaces.scss'
-import Button from '@comps/Button'
 import ProjectCard from './partials/ProjectCard'
+import { useDispatch } from 'react-redux'
+import { workspaceSlice } from '@redux/WorkspaceSlice'
+import HttpClient from '@utils/HttpClient'
 
-type WorkspaceParams = {
-  ownership: string
-  slug: string
-  workspaceId: string
-}
+// type WorkspaceParams = {
+//   ownership: string
+//   slug: string
+//   workspaceId: string
+// }
+
+const http = new HttpClient()
 
 function Workspaces() {
   // const routeParams = useParams<WorkspaceParams>()
+  const dispatch = useDispatch()
+
   const res = useLoaderData() as AxiosResponse
-  const workspace = res?.data?.data as Workspace
+  const workspace = res?.data as WorkspaceResponseWithRelatedProjects
+
+  // đặt activeWorkspace (workspace đang thao tác)
+  useEffect(() => {
+    dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))
+  }, [dispatch, workspace])
+
   const [workspaceNameState, setWorkspaceNameState] = useState({
     name: workspace?.name,
     isEditing: false,
     tempName: workspace?.name
   })
-  // if (!res || res.status !== 200 || !res.data.data.status) console.log(res)
   const handleChangeWorkspaceName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWorkspaceNameState({ ...workspaceNameState, tempName: e.currentTarget.value, isEditing: true })
   }
@@ -32,6 +43,21 @@ function Workspaces() {
       isEditing: !workspaceNameState.isEditing,
       tempName: workspaceNameState.name
     })
+  }
+  const handleChangeWorkspaceNameSubmit = async () => {
+    if (!workspaceNameState.tempName) {
+      console.error('Workspace name is empty')
+    } else {
+      const res = await http.putAuth(`/workspaces/${workspace.id}`, { name: workspaceNameState.tempName })
+      if (res?.status === HttpStatusCode.Ok) {
+        // thanh cong
+        const updatedWorkspace = res.data as Workspace
+        setWorkspaceNameState({ ...workspaceNameState, name: updatedWorkspace.name, isEditing: false })
+        // tam thoi khong update ten workspace cua active workspace
+      } else if (res?.status === HttpStatusCode.NotModified) {
+        console.log('Nothing to update')
+      }
+    }
   }
   return (
     <>
@@ -55,7 +81,11 @@ function Workspaces() {
             </button>
           ) : (
             <Flex $alignItem='center' className='action-button-group'>
-              <button className='edit-workspace-name-buton save-button'>
+              <button
+                onClick={handleChangeWorkspaceNameSubmit}
+                disabled={!workspaceNameState.tempName}
+                className='edit-workspace-name-buton save-button'
+              >
                 <i className='fa-regular fa-floppy-disk'></i>
               </button>
               <button className='edit-workspace-name-buton cancel-button' onClick={handleToggleWorkspaceEditor}>

@@ -47,6 +47,11 @@
     &.save-button {
       background-color: var(--bright-color);
       color: var(--primary-color);
+
+      &:disabled {
+        background-color: var(--light-color);
+        color: var(--secondary-color);
+      }
     }
     &.cancel-button {
       background-color: var(--bright-color);
@@ -57,4 +62,5 @@
 
 .project-list {
   padding: 1rem;
+  gap: 1rem;
 }

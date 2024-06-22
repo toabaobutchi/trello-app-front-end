@@ -1,27 +1,29 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { LoginInfo, Project, Workspace } from '@utils/types'
 import HttpClient from '@utils/HttpClient'
+import { ProjectForBoard } from '@utils/types'
 
 const http = new HttpClient()
 
 export const workspaceSlice = createSlice({
   name: 'project',
   initialState: {
-    selectedWorkspace: {} as Workspace,
-    selectedProject: ''
+    activeProject: {
+      board: {} as ProjectForBoard
+      // table, chart and calendar
+    }
   },
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(fetchProjects.fulfilled, (state, action) => {
-      state.selectedWorkspace = action.payload?.data.data
+    builder.addCase(fetchProjectsForBoard.fulfilled, (state, action) => {
+      state.activeProject.board = action.payload?.data
     })
   }
 })
 
-export const fetchProjects = createAsyncThunk(
-  'projects/fetchProjects',
-  async ({ workspaceId, accessToken }: { workspaceId: string; accessToken: string }) => {
-    const res = await http.getAuth(`/w/${workspaceId}/projects`, accessToken)
+export const fetchProjectsForBoard = createAsyncThunk(
+  'projects/fetchProjectsForBoard',
+  async (projectId: string) => {
+    const res = await http.getAuth(`/projects/${projectId}v/board`)
     return res
   }
 )

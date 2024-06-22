@@ -14,6 +14,7 @@ import Error from '@pages/Error'
 import Workspaces from '@pages/Workspaces'
 import HttpClient from '@utils/HttpClient'
 import Project from '@pages/Project'
+import { ProjectPageParams } from '@utils/types'
 
 const http = new HttpClient()
 
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
       </DefaultLayout>
     ),
     loader: async ({params}) => {
-      const res = await http.getAuth(`w/${params.workspaceId}/projects`, localStorage.getItem('access_token') ?? "")
+      const res = await http.getAuth(`/w/${params.workspaceId}/projects`)
       return res
     }
   },
@@ -56,7 +57,13 @@ const router = createBrowserRouter([
       <DefaultLayout>
         <Project />
       </DefaultLayout>
-    )
+    ),
+    // loader: async ({params}) => {
+    //   const p = params as ProjectPageParams
+    //   console.log(p)
+    //   const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}/c/${p.ownerShip}`)
+    //   return res
+    // }
   },
   {
     path: '/*',

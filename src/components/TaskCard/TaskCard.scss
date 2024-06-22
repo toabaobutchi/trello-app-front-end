@@ -1,10 +1,10 @@
 .task-card {
   border-radius: calc(var(--card-radius) / 2);
-  // box-shadow: 0 0 1rem 0 #ccc;
   padding: 1rem;
-  border: var(--thin-border-width) solid var(--light-color);
   cursor: pointer;
   max-width: 100%;
+  background-color: var(--task-card-bg-color);
+  box-shadow: var(--task-card-box-shadow);
 
   &-body {
     &-name {

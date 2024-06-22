@@ -1,6 +1,6 @@
 import config from '@confs/app.config'
 import './MainMenu.scss'
-import CreateBoardMenu from './partials/CreateBoardMenu'
+import AddItemMenu from './partials/AddItemMenu'
 import NavBar from './partials/NavBar'
 import Button from '@comps/Button'
 import { useDispatch } from 'react-redux'
@@ -22,7 +22,7 @@ function MainMenu() {
         </div>
 
         <NavBar />
-        <CreateBoardMenu />
+        <AddItemMenu />
       </div>
     </>
   )

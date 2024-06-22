@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './ColorPicker.scss'
-import CustomizablePropType from '@utils/CustomizablePropType'
+import { CustomizablePropType } from '@utils/types'
 
 interface ColorPickerProps extends React.ComponentProps<'div'> {
   input?: React.ComponentProps<'input'>

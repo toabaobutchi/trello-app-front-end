@@ -113,7 +113,7 @@ function Welcome() {
     const response = await httpClient.post('/account/signin', data, { withCredentials: true })
     if (response?.status === 200) {
       // thành công
-      dispatch(loginSlice.actions.setAccessToken(response?.data?.data))
+      dispatch(loginSlice.actions.setAccessToken(response?.data))
       navigate('home')
     } else {
       console.log('Login Failed')

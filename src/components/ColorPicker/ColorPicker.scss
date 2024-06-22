@@ -11,5 +11,7 @@
 
   > input[type=color] {
     cursor: pointer;
+    outline: none;
+    border: var(--thin-border-width) solid var(--bright-color);
   }
 }

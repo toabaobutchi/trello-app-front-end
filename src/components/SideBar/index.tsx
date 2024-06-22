@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { defaultLayoutSlice } from '@layouts/DefaultLayout/DefaultLayoutSlice'
 import Button from '@comps/Button'
-import routeLinks from '@routes/router'
+import routeLinks, { linkCreator } from '@routes/router'
 import config from '@confs/app.config'
 
 function SideBar() {
@@ -31,6 +31,9 @@ function SideBar() {
         <SideBarItem.Link to={routeLinks.yourTasks} onClick={closeSidebarWhenRedirectInMobileMode}>
           <i className='fa-solid fa-list-check'></i> Your tasks
         </SideBarItem.Link>
+        <SideBarItem.Link to={'/projects'}>
+                      Project (Test)
+                    </SideBarItem.Link>
         <SideBarItem style={{ paddingTop: 0, paddingBottom: 0 }}>
           <Expander
             header={{
@@ -47,8 +50,13 @@ function SideBar() {
             <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
               <Expander header={{ content: 'Your workspaces' }} defaultExpand>
                 {workspaces.workspaceList?.map(workspace => {
+                  const path = linkCreator.workspaces({
+                    slug: workspace.slug,
+                    workspaceId: workspace.id + '',
+                    ownerShip: workspace.context
+                  })
                   return (
-                    <SideBarItem.Link to={`/workspaces/yours/${workspace.slug}/${workspace.id}`} key={workspace.id}>
+                    <SideBarItem.Link to={path} key={workspace?.id}>
                       {workspace.name}
                     </SideBarItem.Link>
                   )
@@ -85,9 +93,7 @@ function SideBar() {
         <SideBarItem>
           <i className='fa-solid fa-calendar-days'></i> Schedule
         </SideBarItem>
-        <SideBarItem.Link to={routeLinks.project}>
-          <i className='fa-brands fa-flipboard'></i> Project (Test)
-        </SideBarItem.Link>
+        
         <Button
           onClick={toggleSidebar}
           className='sidebar-close-button-on-mobile'

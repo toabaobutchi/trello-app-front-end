@@ -38,7 +38,7 @@ function DropdownMenu({
   // dành cho việc ấn nút đóng menu
   const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation() // trường hợp menu lồng nhau thì chỉ tắt menu hiện tại
-    handleToggleMenu()
+    setClicked(false)
   }
 
   useOutClick(menuRef.current as Element, setClicked)

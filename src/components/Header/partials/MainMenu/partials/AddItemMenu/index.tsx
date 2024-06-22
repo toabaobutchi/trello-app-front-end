@@ -3,29 +3,23 @@ import MenuHeaderWithAction from '@comps/MenuHeaderWithAction'
 import { EActionType, State, reducer } from './reducer'
 import { ToastContainer, toast } from 'react-toastify'
 import FloatLabelInput from '@comps/FloatLabelInput'
-import Flex from '@comps/StyledComponents/Flex'
-import SwitchButton from '@comps/SwitchButton'
 import 'react-toastify/dist/ReactToastify.css'
-import ColorPicker from '@comps/ColorPicker'
-import SelectList from '@comps/SelectList'
 import useAccount from '@hooks/useAccount'
 import HttpClient from '@utils/HttpClient'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
-import MenuItem from '@comps/MenuItem'
 import TextArea from '@comps/TextArea'
 import config from '@confs/app.config'
-import Tooltip from '@comps/Tooltip'
 import { useReducer } from 'react'
 import Button from '@comps/Button'
 import Menu from '@comps/Menu'
 import { addWorkspace } from '@redux/WorkspaceSlice'
-import { Workspace } from '@utils/types'
+import CreateBoardModal from './partials/CreateBoardModal'
+import MainMenu from './partials/MainMenu'
 
-const itemMarginTop = '0.5rem'
 const http = new HttpClient()
 
-function CreateBoardMenu() {
+function AddItemMenu() {
   const [state, dispatch] = useReducer(reducer, { anchorEl: null } as State)
   const workspaceList = useSelector((state: RootState) => state.workspaces.workspaceList)
   const reduxDispatch = useDispatch<AppDispatch>()
@@ -90,14 +84,17 @@ function CreateBoardMenu() {
         toast.error('You have no workspace')
       } else {
         // eslint-disable-next-line prefer-const
-        let { title, color, selectedWorkspace } = state.board as { title: string; color: string; selectedWorkspace: string }
-        selectedWorkspace ??= workspaceList[0].id + '';
+        let { title, color, selectedWorkspace } = state.board as {
+          title: string
+          color: string
+          selectedWorkspace: string
+        }
+        selectedWorkspace ??= workspaceList[0].id + ''
         const result = await http.postAuth(
           `/projects`,
           { name: title, color, workspaceId: selectedWorkspace },
           account.accessToken
         )
-        console.log(result)
       }
     },
     async workspace() {
@@ -105,8 +102,8 @@ function CreateBoardMenu() {
         toast.error('Please enter a workspace title')
       } else {
         // call API to add workspace
-        const { title, description } = state.workspace as { title: string; description: string }
-        reduxDispatch(addWorkspace({ data: { name: title, description } as Workspace, loginInfo: account }))
+        const { title, description } = state.workspace
+        reduxDispatch(addWorkspace({ name: title, description }))
         dispatch(mainMenu.close()) // đóng menu
       }
     },
@@ -142,96 +139,29 @@ function CreateBoardMenu() {
   return (
     <>
       <Button onClick={handleChangeMainMenu.toggle} className='main-menu-create-button' variant='filled'>
-        <span className='main-menu-create-button-desktop'>Add</span>
+        <span className='main-menu-create-button-desktop'>
+          Add&nbsp; <i className='fa-solid fa-caret-down'></i>
+        </span>
         <span className='main-menu-create-button-mobile'>
           <i className='fa-solid fa-plus'></i>
         </span>
       </Button>
       {/* Main menu */}
-      <Menu
-        anchorElement={state.anchorEl}
+      <MainMenu
         open={state.anchorEl !== null && state.openMenu === EActionType.MAIN_MENU}
-        style={{ width: config.mainMenu.width, top: config.header.height }}
-        onClose={handleChangeMainMenu.close}
-      >
-        <MenuItem size='small' onClick={handleChangeBoard.open}>
-          <div className='row jcsb'>
-            <p>Add new board</p>
-            <i className='fa-solid fa-chevron-right'></i>
-          </div>
-        </MenuItem>
-        <MenuItem size='small' onClick={handleChangeWorkspace.open}>
-          <div className='row jcsb'>
-            <p>Add workspace</p>
-            <i className='fa-solid fa-chevron-right'></i>
-          </div>
-        </MenuItem>
-        <MenuItem size='small' onClick={handleChangeJoinBoard.open}>
-          <div className='row jcsb'>
-            <p>Join a board</p>
-            <i className='fa-solid fa-chevron-right'></i>
-          </div>
-        </MenuItem>
-      </Menu>
-
+        anchorElement={state.anchorEl as HTMLElement}
+        handleCloseMenu={handleChangeMainMenu.close}
+        handleOpenSubMenu={{
+          openBoard: handleChangeBoard.open,
+          openWorkspace: handleChangeWorkspace.open,
+          openJoinBoard: handleChangeJoinBoard.open
+        }}
+      />
       {/* Board menu */}
-      <Menu
-        anchorElement={state.anchorEl}
+      <CreateBoardModal
         open={state.anchorEl !== null && state.openMenu === EActionType.ADD_BOARD_MENU}
-        style={{ width: config.mainMenu.width, top: config.header.height }}
         onClose={handleChangeMainMenu.close}
-        header={
-          <>
-            <MenuHeaderWithAction beforeButton={BackButton} afterButton={CloseButton}>
-              Add new board
-            </MenuHeaderWithAction>
-          </>
-        }
-      >
-        <FloatLabelInput
-          onChange={handleChangeBoard.title}
-          label='Board title'
-          input={{ id: 'create-board', autoFocus: true, value: state.board?.title ?? '' }}
-        />
-
-        <Flex className='mt-1' $gap='0.5rem' $alignItem='center'>
-          <SwitchButton
-            inputAttributes={{ type: 'checkbox', id: 'use-color' }}
-            size='small'
-            onChange={handleChangeBoard.toggleColor}
-          />
-          <label style={{ cursor: 'pointer' }} htmlFor='use-color'>
-            Use background color
-          </label>
-        </Flex>
-        {state.board?.color !== undefined && (
-          <ColorPicker
-            style={{ marginTop: itemMarginTop }}
-            label={{ content: 'Choose background color:' }}
-            input={{ id: 'project-color' }}
-            onChange={handleChangeBoard.color}
-          />
-        )}
-        <SelectList
-          label={{ content: 'Select workspace:', style: { marginTop: itemMarginTop } }}
-          onChoose={handleChangeBoard.selectedWorkspace}
-          items={workspaceList?.map(workspace => ({ value: workspace.id.toString(), display: workspace.name }))}
-        />
-        <Tooltip
-          content={!state.board?.title?.trim() ? '<p style="color: #ff0048;">Please enter board title</p>' : ''}
-          arrow
-          position='right'
-          theme='gray'
-        >
-          <Button
-            onClick={handleSubmit.board}
-            disabled={!state.board?.title?.trim()}
-            style={{ marginTop: '1rem', fontSize: '0.9rem' }}
-          >
-            Add board
-          </Button>
-        </Tooltip>
-      </Menu>
+      />
 
       {/* Workspace menu */}
       <Menu
@@ -297,4 +227,4 @@ function CreateBoardMenu() {
   )
 }
 
-export default CreateBoardMenu
+export default AddItemMenu
