@@ -1,0 +1,28 @@
+.button-group {
+  --button-group-radius: 10px;
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--button-group-radius);
+  display: flex;
+  align-items: center;
+
+  &.open-action {
+    .button-group__main-button {
+      position: relative;
+
+      > button {
+        border-radius: var(--button-group-radius) 0 0 var(--button-group-radius);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        height: 80%;
+        width: var(--thin-border-width);
+        background-color: var(--light-color);
+      }
+    }
+  }
+}

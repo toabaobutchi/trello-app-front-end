@@ -158,3 +158,8 @@ export type CreateProjectModel = {
   description?: string
   dueDate?: number
 }
+
+export type SelectListItem = {
+  value: string
+  display?: string
+}

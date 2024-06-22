@@ -2,6 +2,7 @@ import Button from '@comps/Button'
 import SearchInput from '@comps/SearchInput'
 import Flex from '@comps/StyledComponents/Flex'
 import ProjectViewModeNavBar from './ProjectViewModeNavBar'
+import ProjectFilterMenu from './ProjectFilterMenu'
 
 function ProjectHeader({ boardName }: { boardName: string }) {
   return (
@@ -14,9 +15,7 @@ function ProjectHeader({ boardName }: { boardName: string }) {
           <ProjectViewModeNavBar />
         </Flex>
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
-          <Button variant='text' theme='default'>
-            <i className='fa-solid fa-filter'></i> Filters <i className='fa-solid fa-caret-down'></i>
-          </Button>
+          <ProjectFilterMenu />
           <SearchInput attributes={{ id: 'search-card-input', placeholder: 'Search in project' }}></SearchInput>
           <Button variant='filled'>
             <i className='fa-regular fa-share-from-square'></i> Invite
