@@ -13,9 +13,10 @@ interface SelectListProps extends React.ComponentProps<'div'> {
   selectedValue?: string
   label?: CustomizablePropType
   onChoose?: (selectedItem: SelectListItem) => void
+  size?: 'small' | 'medium' | 'large'
 }
 
-function SelectList({ items, selectedValue, onChoose = () => {}, label, ...props }: SelectListProps) {
+function SelectList({ items, selectedValue, onChoose = () => {}, label, size = 'medium', ...props }: SelectListProps) {
   const [expand, setExpand] = useState(false)
   const selectListRef = useRef<HTMLDivElement>(null)
   const [selectedItem, setSelectedItem] = useState<SelectListItem | undefined>(() => {
@@ -41,9 +42,9 @@ function SelectList({ items, selectedValue, onChoose = () => {}, label, ...props
       <p className={`select-list-label ${label?.className ?? ''}`.trimEnd()} style={label?.style}>
         {label?.content}
       </p>
-      <div ref={selectListRef} className={`select-list ${props?.className ?? ''}`} style={props?.style}>
+      <div ref={selectListRef} className={`select-list ${size}-list ${props?.className ?? ''}`.trimEnd()} style={props?.style}>
         <div className='selected-item' onClick={handleToggleSelect}>
-          {selectedItem?.display ?? 'No data to select'}
+          {selectedItem?.display} <i className="fa-solid fa-caret-down"></i>
         </div>
         {expand && items && (
           <div className='select-list-data-context'>

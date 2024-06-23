@@ -86,35 +86,6 @@ html {
   height: 100vh;
 }
 
-// .tooltip[tooltip-content] {
-//   position: relative;
-
-//   &::after {
-//     position: absolute;
-//     content: attr(tooltip-content);
-//     top: 110%;
-//     left: 50%;
-//     transform: translateX(-50%);
-//     background-color: var(--text-primary-color);
-//     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-//     width: max-content;
-//     height: 0;
-//     opacity: 0;
-//     visibility: hidden;
-//     color: #fff;
-//     font-size: 0.8rem;
-//     border-radius: var(--primary-radius);
-//     z-index: var(--tooltip-z-index);
-//   }
-
-//   &:hover::after {
-//     height: max-content;
-//     opacity: 1;
-//     visibility: visible;
-//     padding: 0.2rem 0.5rem;
-//   }
-// }
-
 ::-webkit-scrollbar {
   display: none;
 }

@@ -5,13 +5,25 @@
   color: var(--primary-color);
   border-radius: var(--primary-radius);
 
+  &.small-list {
+    .selected-item {
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  &.medium-list {
+    .selected-item {
+      padding: 1rem 0.5rem;
+    }
+  }
+
   .selected-item {
-    padding: 1rem 0.5rem;
     cursor: pointer;
+    min-width: max-content;
   }
 
   &-label {
-    padding: 0 0 0.25rem;
+    // padding: 0 0 0.25rem;
     color: inherit;
   }
 
@@ -20,6 +32,7 @@
     top: calc(100% + 0.3rem);
     left: 0;
     width: 100%;
+    min-width: max-content;
     padding: 1rem 0.5rem;
     color: var(--text-secondary-color);
     border: var(--thin-border-width) solid var(--light-color);

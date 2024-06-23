@@ -10,7 +10,7 @@ interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
   size?: 'small' | 'medium' | 'large'
 }
 
-function Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) {
+const Button = forwardRef((props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
   const {
     variant = 'outlined',
     disabled = false,
@@ -35,6 +35,6 @@ function Button(props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) 
       </button>
     </>
   )
-}
+})
 
-export default forwardRef(Button)
+export default Button

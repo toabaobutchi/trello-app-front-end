@@ -46,7 +46,7 @@ function MultipleSelectList({ items, selectedItems, label = '', onSelect = () =>
       onSelect(currentSelectList.selectedItems)
     }
   }
-  const handleDelelectItem = (item: SelectListItem) => {
+  const handleDeleteItem = (item: SelectListItem) => {
     const currentSelectList = {
       selectedItems: selectList.selectedItems.filter(i => i.value !== item.value),
       restSelectList: [...selectList.restSelectList, item],
@@ -66,17 +66,17 @@ function MultipleSelectList({ items, selectedItems, label = '', onSelect = () =>
   return (
     <>
       <p className='multiple-select-list-label'>{label}</p>
-      <div className={`multiple-select-list row gap-2${selectList.selectedItems?.length && ' has-selected-items'}`}>
+      <div className='multiple-select-list row gap-2'>
         {selectList.selectedItems?.map(item => {
           return (
             <div
-              onDoubleClick={() => handleDelelectItem(item)}
+              onDoubleClick={() => handleDeleteItem(item)}
               key={item.value}
               className='multiple-select-list__selected-list-item'
             >
               <p style={{ flex: 1 }}>{item.display}</p>
               <button
-                onClick={() => handleDelelectItem(item)}
+                onClick={() => handleDeleteItem(item)}
                 className='multiple-select-list__selected-list-item-clearBtn'
               >
                 <i className='fa-solid fa-xmark'></i>

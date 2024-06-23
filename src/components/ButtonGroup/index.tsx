@@ -9,7 +9,7 @@ type ButtonGroupProps = {
 function ButtonGroup({ children, actionButton, openAction = false }: ButtonGroupProps) {
   return (
     <>
-      <div className={`button-group${openAction && ' open-action'}`}>
+      <div className={`button-group${openAction ? ' open-action' : ''}`}>
         <div className='button-group__main-button'>{children}</div>
         {openAction && <div className='button-group__action-button'>{actionButton}</div>}
       </div>

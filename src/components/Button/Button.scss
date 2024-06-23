@@ -75,9 +75,17 @@
     &.text-btn,
     &.outlined-btn {
       color: var(--danger-color);
+
+      &:hover {
+        background-color: var(--danger-button-hover-color);
+      }
     }
     &.filled-btn {
       background-color: var(--danger-color);
+
+      &:hover {
+        background-color: var(--danger-filled-button-hover-color);
+      }
     }
     &.outlined-btn {
       border: var(--thin-border-width) solid var(--danger-color);

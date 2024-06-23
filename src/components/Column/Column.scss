@@ -6,7 +6,7 @@
   min-width: 300px;
   max-width: 400px;
   min-height: max-content; // phòng trường hợp column không có task nào
-  background-color: var(--list-background-color);
+  background-color: var(--list-bg-color);
 
   &-header {
     padding: 0.7rem 0 1rem;

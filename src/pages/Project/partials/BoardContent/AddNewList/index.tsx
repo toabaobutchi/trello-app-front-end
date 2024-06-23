@@ -49,7 +49,7 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
           <FloatLabelInput
             onChange={handleChangeListName}
             label='List name'
-            input={{ id: 'add-new-list-input', value: listName }}
+            input={{ id: 'add-new-list-input', value: listName, autoFocus: true }}
             style={{ width: '100%', fontSize: '1.1rem' }}
           />
           <Flex $alignItem='center' $gap='0.5rem'>

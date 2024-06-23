@@ -8,9 +8,8 @@
   color: inherit;
   font: inherit;
   width: 100%;
-  // width: max-content;
   flex-wrap: wrap;
-  border: var(--thin-border-width) solid var(--light-color);
+  border: var(--thin-border-width) solid var(--bright-color);
   padding: 0.25rem 0.5rem;
   border-radius: var(--primary-radius);
 
@@ -19,21 +18,20 @@
   }
 
   &__selected-list-item {
-    padding: 0.35rem 0.35rem 0.35rem 1rem;
+    padding: 0.25rem 0.25rem 0.25rem 1rem;
     border-radius: var(--primary-radius);
     border: var(--thin-border-width) solid var(--light-color);
-    // color: var(--primary-color);
     cursor: pointer;
     display: flex;
     width: max-content;
     align-items: center;
     gap: 0.25rem;
-    // justify-content: space-between;
 
     &-clearBtn {
       width: 20px;
       aspect-ratio: 1/1;
       border-radius: 50%;
+      color: var(--light-color);
       border: none;
       outline: none;
       background: #fff;
@@ -48,16 +46,29 @@
   }
 
   &-options {
+    --options-button-z-index: 1;
+    --options-menu-z-index: 10;
     position: relative;
 
     &-toggleBtn {
+      position: relative;
+      z-index: var(--options-button-z-index);
       border: var(--thin-border-width) solid var(--light-color);
+      background-color: var(--bright-color);
       border-radius: var(--primary-radius);
       padding: 0.5rem 0.7rem;
+      color: var(--primary-color);
       cursor: pointer;
+
+      &:disabled {
+        background-color: var(--light-color);
+        color: var(--text-secondary-color);
+        cursor: not-allowed;
+      }
     }
 
     &-menu {
+      z-index: var(--options-menu-z-index);
       padding: 0.5rem 1rem;
       position: absolute;
       top: 100%;
