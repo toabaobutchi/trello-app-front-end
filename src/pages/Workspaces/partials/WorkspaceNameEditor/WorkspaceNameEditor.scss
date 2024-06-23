@@ -1,0 +1,57 @@
+input#workspace-name-edit-input {
+  padding: 0.5rem 1rem;
+  border: var(--thin-border-width) solid var(--light-color);
+  outline: none;
+  border-radius: var(--primary-radius);
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  color: inherit;
+}
+
+.action-button-group {
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+
+  > button:nth-child(2n + 1) {
+    border-right: var(--thin-border-width) solid var(--light-color) !important;
+  }
+  > button:first-child {
+    border-radius: var(--primary-radius) 0 0 var(--primary-radius);
+  }
+  > button:last-child {
+    border-radius: 0 var(--primary-radius) var(--primary-radius) 0;
+  }
+}
+
+.edit-workspace-name-buton {
+  padding: 0.5rem 1rem;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: var(--primary-color);
+  cursor: pointer;
+  border-radius: var(--primary-radius);
+
+  i {
+    font-size: 0.9rem;
+  }
+
+  &:hover {
+    background-color: var(--bright-color);
+  }
+
+  &.save-button {
+    background-color: var(--bright-color);
+    color: var(--primary-color);
+
+    &:disabled {
+      background-color: var(--light-color);
+      color: var(--secondary-color);
+    }
+  }
+  &.cancel-button {
+    background-color: var(--bright-color);
+    color: var(--danger-color);
+  }
+}

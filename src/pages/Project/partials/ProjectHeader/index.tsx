@@ -11,10 +11,12 @@ function ProjectHeader({ boardName }: { boardName: string }) {
       <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' className='project-header'>
         <Flex $alignItem='center' $gap='2rem'>
           <Flex $alignItem='center' $gap='1rem'>
-            {/* <Button variant='outlined'><i className="fa-solid fa-folder-tree"></i></Button> */}
             <WorkspaceTreeMenu />
             <div className='page-header' style={{ marginBottom: '0' }}>
-              <i className='fa-brands fa-flipboard'></i> {boardName}
+              <p>
+                <i className='fa-brands fa-flipboard'></i> {boardName}
+              </p>
+              <p className='text-secondary' style={{ fontSize: '0.85rem'}}>34 members</p>
             </div>
           </Flex>
           <ProjectViewModeNavBar />

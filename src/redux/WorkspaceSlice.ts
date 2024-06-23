@@ -14,6 +14,23 @@ export const workspaceSlice = createSlice({
   reducers: {
     setActiveWorkspace: (state, action) => {
       state.activeWorkspace = action.payload as WorkspaceResponseWithRelatedProjects
+    },
+    // payload: { workspaceId, workspaceName }
+    renameWorkspace: (state, action) => {
+      const {workspaceId, workspaceName} = action.payload as {workspaceId: number, workspaceName: string}
+      // vì chỉ owner mới cập nhật lại được workspace name nên chỉ tìm trong `workspaceList`
+      const workspace = state.workspaceList.find(workspace => workspace.id === workspaceId)
+      if (workspace) {
+        workspace.name = workspaceName
+      }
+    },
+    // payload: { workspaceId, workspaceName }
+    renameActiveWorkspace: (state, action) => {
+      const {workspaceId, workspaceName} = action.payload as {workspaceId: number, workspaceName: string}
+      const workspace = state.workspaceList.find(workspace => workspace.id === workspaceId)
+      if (workspace) {
+        workspace.name = workspaceName
+      }
     }
   },
   extraReducers: builder => {

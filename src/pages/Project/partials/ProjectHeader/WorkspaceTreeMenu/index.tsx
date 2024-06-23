@@ -15,6 +15,7 @@ function WorkspaceTreeMenu() {
         className={`${menu.open ? 'click-button__open' : ''}`}
         variant='text'
         theme={`${menu.open ? 'primary' : 'default'}`}
+        size='large'
       >
         <i className='fa-solid fa-folder-tree'></i>
       </Button>

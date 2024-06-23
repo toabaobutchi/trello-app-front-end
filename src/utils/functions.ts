@@ -1,5 +1,11 @@
+import { TaskResponseForBoard } from './types'
+
 export const isOutClick = (parent: HTMLElement, child: HTMLElement | null) => {
-  return (parent && !parent.contains(child as Node));
+  return parent && !parent.contains(child as Node)
+}
+
+export function createCardId(task: TaskResponseForBoard) {
+  return task.id
 }
 
 type OverflowInfo = {
@@ -14,8 +20,8 @@ type OverflowResult = {
 
 export const isOutOfScreen = (element: HTMLElement) => {
   const overFlowResult: OverflowResult = {}
-  const {bottom, right} = element.getBoundingClientRect()
-  const {innerHeight, innerWidth} = window
+  const { bottom, right } = element.getBoundingClientRect()
+  const { innerHeight, innerWidth } = window
   overFlowResult.vertical = {
     isOverflow: bottom > innerHeight,
     diff: bottom - innerHeight
@@ -24,5 +30,5 @@ export const isOutOfScreen = (element: HTMLElement) => {
     isOverflow: right > innerWidth,
     diff: right - innerWidth
   }
-  return overFlowResult;
+  return overFlowResult
 }

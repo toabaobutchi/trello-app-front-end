@@ -120,35 +120,38 @@ export type WorkspacePageParams = {
 export type OwnerShipType = 'owner' | 'admin' | 'member' | 'observer'
 export type ProjectViewMode = 'board' | 'table' | 'chart' | 'calendar'
 
-export type TaskForBoard = {
-  id: number
+export type TaskResponseForBoard = {
+  id: string
   name: string
   description?: string
+  isCompleted?: boolean
   dueDate?: number
   priority?: string
+  listId: number
   assigneeCount: number
-  subTaskStatus: {
-    finished: number
-    unfinished: number
-  }
+  completedSubTaskCount?: number
+  subTaskCount?: number
 }
 
-export type ListForBoard = {
+export type ListResponseForBoard = {
   id: number
   name: string
   index: number
   updatedAt?: number
-  tasks?: TaskForBoard[]
+  projectId: string
+  tasks?: TaskResponseForBoard[]
 }
 
-export type ProjectForBoard = {
+export type ProjectResponseForBoard = {
   id: string
   name: string
   color?: string
   createdAt: number
   dueDate?: number
+  workspaceId: string
   context: string
-  lists?: ListForBoard[]
+  memberCount?: number
+  lists?: ListResponseForBoard[]
 }
 
 export type CreateProjectModel = {

@@ -1,16 +1,21 @@
 import Flex from '@comps/StyledComponents/Flex'
-import { ListForBoard } from '@utils/types'
+import { ListResponseForBoard } from '@utils/types'
 import { DndContext, DragEndEvent, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 import SortableColumn from './SortableColumn'
 import { useEffect, useState } from 'react'
 import AddNewList from './AddNewList'
 
-function BoardContent({ lists }: { lists: ListForBoard[] }) {
-  const [listState, setListState] = useState([] as ListForBoard[])
+function BoardContent({ lists }: { lists: ListResponseForBoard[] }) {
+  const [listState, setListState] = useState([] as ListResponseForBoard[])
   useEffect(() => {
     setListState(lists)
   }, [lists])
+
+  const handleDragStart = (e: DragEndEvent) => {
+    console.log('handleDragStart', e)
+  }
+
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e
     if (active.id !== over?.id) {
@@ -31,7 +36,7 @@ function BoardContent({ lists }: { lists: ListForBoard[] }) {
 
   return (
     <>
-      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
         <SortableContext items={listState?.map(l => l.id)} strategy={horizontalListSortingStrategy}>
           <Flex $gap='1.5rem' className='column-list'>
             {listState?.map(column => (

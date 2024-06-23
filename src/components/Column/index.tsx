@@ -3,11 +3,11 @@ import './Column.scss'
 import Button from '@comps/Button'
 import { forwardRef } from 'react'
 import AddTask from './partials/AddTask'
-import { ListForBoard } from '@utils/types'
+import { ListResponseForBoard } from '@utils/types'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
-  column?: ListForBoard
+  column?: ListResponseForBoard
 }
 
 function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {

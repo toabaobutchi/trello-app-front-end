@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
-import { ProjectForBoard } from '@utils/types'
+import { ProjectResponseForBoard } from '@utils/types'
 
 const http = new HttpClient()
 
@@ -8,7 +8,7 @@ export const workspaceSlice = createSlice({
   name: 'project',
   initialState: {
     activeProject: {
-      board: {} as ProjectForBoard
+      board: {} as ProjectResponseForBoard
       // table, chart and calendar
     }
   },
@@ -20,10 +20,7 @@ export const workspaceSlice = createSlice({
   }
 })
 
-export const fetchProjectsForBoard = createAsyncThunk(
-  'projects/fetchProjectsForBoard',
-  async (projectId: string) => {
-    const res = await http.getAuth(`/projects/${projectId}v/board`)
-    return res
-  }
-)
+export const fetchProjectsForBoard = createAsyncThunk('projects/fetchProjectsForBoard', async (projectId: string) => {
+  const res = await http.getAuth(`/projects/${projectId}v/board`)
+  return res
+})

@@ -4,12 +4,24 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { TaskForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types'
+import { CSS } from '@dnd-kit/utilities'
+import { useSortable } from '@dnd-kit/sortable'
+import { createCardId } from '@utils/functions'
+function TaskCard({ task }: { task: TaskResponseForBoard }) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: createCardId(task),
+    data: { ...task }
+  })
 
-function TaskCard({ task }: { task: TaskForBoard }) {
+  const style = {
+    // touchAction: 'none',
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
   return (
     <>
-      <div className='task-card'>
+      <div {...attributes} {...listeners} ref={setNodeRef} style={style} className='task-card'>
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-header'>
           <PriorityTag priority={task.priority} />
           <DropdownMenu
@@ -37,7 +49,7 @@ function TaskCard({ task }: { task: TaskForBoard }) {
         <div className='task-card-body'>
           <div className='task-card-body-name'>{task.name}</div>
           <div className='task-card-body-description'>{task.description}</div>
-          <div className="task-card-body-subtasks">
+          <div className='task-card-body-subtasks'>
             Subtask: {task.subTaskStatus.finished}/{task.subTaskStatus.finished + task.subTaskStatus.unfinished}
           </div>
         </div>
