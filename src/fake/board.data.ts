@@ -55,8 +55,8 @@ const boardData: ProjectResponseForBoard = {
       tasks: [
         {
           id: '4',
-          name: 'Test 1',
-          description: 'Test 1 description',
+          name: 'Test 4',
+          description: 'Test 4 description',
           dueDate: 123456789,
           priority: 'Medium',
           listId: 2,
@@ -65,8 +65,8 @@ const boardData: ProjectResponseForBoard = {
         },
         {
           id: '5',
-          name: 'Test 2',
-          description: 'Test 2 description',
+          name: 'Test 5',
+          description: 'Test 5 description',
           dueDate: 123456789,
           priority: 'Low',
           listId: 2,
@@ -75,8 +75,8 @@ const boardData: ProjectResponseForBoard = {
         },
         {
           id: '6',
-          name: 'Test 3',
-          description: 'Test 3 description',
+          name: 'Test 6',
+          description: 'Test 6 description',
           dueDate: 123456789,
           priority: 'High',
           listId: 2,
@@ -85,7 +85,7 @@ const boardData: ProjectResponseForBoard = {
         },
         {
           id: '7',
-          name: 'Test 4',
+          name: 'Test 7',
           description: '',
           dueDate: 123456789,
           listId: 2,
@@ -95,8 +95,8 @@ const boardData: ProjectResponseForBoard = {
         },
         {
           id: '8',
-          name: 'test 5',
-          description: 'test 5 description',
+          name: 'Test 8',
+          description: 'Test 8 description',
           dueDate: 123456789,
           listId: 2,
           priority: undefined,
@@ -113,8 +113,8 @@ const boardData: ProjectResponseForBoard = {
       tasks: [
         {
           id: '9',
-          name: 'Test 1',
-          description: 'Test 1 description',
+          name: 'Test 9',
+          description: 'Test 9 description',
           dueDate: 123456789,
           listId: 3,
           priority: 'Low',
@@ -123,7 +123,7 @@ const boardData: ProjectResponseForBoard = {
         },
         {
           id: '10',
-          name: 'Test 2',
+          name: 'Test 10',
           description: '',
           dueDate: 123456789,
           listId: 3,

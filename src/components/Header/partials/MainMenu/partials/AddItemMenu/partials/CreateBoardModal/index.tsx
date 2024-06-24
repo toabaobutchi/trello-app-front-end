@@ -4,7 +4,6 @@ import Modal from '@comps/Modal'
 import SelectList from '@comps/SelectList'
 import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
-import Tooltip from '@comps/Tooltip'
 import './CreateBoardModal.scss'
 import { useState } from 'react'
 import ColorPicker from '@comps/ColorPicker'
@@ -78,6 +77,7 @@ function CreateBoardModal({ open, onClose = () => {} }: CreateBoardModalProps) {
     const res = await http.postAuth('/projects', data)
     if (res?.status === HttpStatusCode.Ok) {
       console.log(res.data)
+      // navigation to new project page
       // handleClose()
     }
   }

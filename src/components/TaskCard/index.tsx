@@ -9,15 +9,16 @@ import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId } from '@utils/functions'
 function TaskCard({ task }: { task: TaskResponseForBoard }) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: createCardId(task),
-    data: { ...task }
+    data: { ...task, dragObject: 'Card' }
   })
 
   const style = {
     // touchAction: 'none',
     transform: CSS.Translate.toString(transform),
-    transition
+    transition,
+    opacity: isDragging ? 0.5 : 1
   }
   return (
     <>
@@ -50,7 +51,7 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
           <div className='task-card-body-name'>{task.name}</div>
           <div className='task-card-body-description'>{task.description}</div>
           <div className='task-card-body-subtasks'>
-            Subtask: {task.subTaskStatus.finished}/{task.subTaskStatus.finished + task.subTaskStatus.unfinished}
+            Subtask: {task.completedSubTaskCount}/{task.subTaskCount}
           </div>
         </div>
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>

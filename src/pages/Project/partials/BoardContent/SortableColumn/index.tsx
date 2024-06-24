@@ -8,7 +8,7 @@ import { ListResponseForBoard } from '@utils/types'
 function SortableColumn({ column }: { column: ListResponseForBoard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column.id,
-    data: { ...column }
+    data: { ...column, dragObject: 'Column' }
   })
 
   const style = {
