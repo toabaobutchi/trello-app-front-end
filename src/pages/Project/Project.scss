@@ -10,6 +10,8 @@
     --active-border-bottom-width: 2px;
     padding: 0.5rem 1rem;
     transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    text-decoration: none;
+    color: inherit;
 
     &::after {
       content: '';

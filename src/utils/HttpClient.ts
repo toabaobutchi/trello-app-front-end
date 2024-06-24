@@ -5,7 +5,8 @@ class HttpClient {
   constructor() {
     this.axios = axios.create({
       baseURL: 'https://localhost:7207/api',
-      timeout: 5000
+      timeout: 5000,
+      withCredentials: true
     })
   }
   async get(url: string, options: object = {}) {

@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import { defaultLayoutSlice } from '@layouts/DefaultLayout/DefaultLayoutSlice'
 import { loginSlice } from '@pages/Welcome/LoginSlice'
 import { workspaceSlice } from './WorkspaceSlice'
+import { projectSlice } from './ProjectSlice'
 const store = configureStore({
   reducer: {
     sideBar: defaultLayoutSlice.reducer,
     login: loginSlice.reducer,
-    workspaces: workspaceSlice.reducer
+    workspaces: workspaceSlice.reducer,
+    project: projectSlice.reducer
   }
 })
 

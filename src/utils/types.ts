@@ -138,6 +138,7 @@ export type ListResponseForBoard = {
   name: string
   index: number
   updatedAt?: number
+  createdAt: number
   projectId: string
   tasks?: TaskResponseForBoard[]
 }
@@ -148,6 +149,7 @@ export type ProjectResponseForBoard = {
   color?: string
   createdAt: number
   dueDate?: number
+  slug?: string
   workspaceId: string
   context: string
   memberCount?: number

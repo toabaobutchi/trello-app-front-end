@@ -2,22 +2,27 @@ import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
 import ProjectHeader from './partials/ProjectHeader'
 import BoardContent from './partials/BoardContent'
-import { ListResponseForBoard, ProjectResponseForBoard } from '@utils/types'
-import projectData from '@fake/board.data'
-import { useEffect, useState } from 'react'
+import { ProjectResponseForBoard } from '@utils/types'
+import { useEffect } from 'react'
+import { useLoaderData } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { projectSlice } from '@redux/ProjectSlice'
+import { AxiosResponse } from 'axios'
 
 function Project() {
-  // const boardData = useLoaderData() as ProjectResponseForBoard
-  const [boardData, setBoardData] = useState<ProjectResponseForBoard>()
+  const loader = useLoaderData() as AxiosResponse
+  const boardData = loader.data as ProjectResponseForBoard
+  const dispatch = useDispatch()
   useEffect(() => {
-    projectData.then(data => setBoardData(data))
-  })
+    dispatch(projectSlice.actions.setActiveProjectBoard(boardData))
+  }, [boardData, dispatch])
+
   return (
     <>
       {boardData && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
-          <ProjectHeader boardName={boardData.name} />
-          <BoardContent lists={boardData.lists as ListResponseForBoard[]} />
+          <ProjectHeader />
+          <BoardContent />
         </Flex>
       )}
     </>

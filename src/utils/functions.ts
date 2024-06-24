@@ -8,6 +8,31 @@ export function createCardId(task: TaskResponseForBoard) {
   return task.id
 }
 
+export function indexComparer(
+  {
+    index: aIndex,
+    createdAt: aCreatedAt,
+    updatedAt: aUpdatedAt
+  }: { index: number; createdAt: number; updatedAt?: number },
+  {
+    index: bIndex,
+    createdAt: bCreatedAt,
+    updatedAt: bUpdatedAt
+  }: { index: number; createdAt: number; updatedAt?: number }
+) {
+  if (aIndex !== bIndex) {
+    return aIndex - bIndex
+  } else {
+    // ai cập nhật sau thì có thời gian kéo vào lớn hơn, sẽ được đặt phía trước (được xem là nhỏ hơn)
+    return (bUpdatedAt ?? bCreatedAt) - (aUpdatedAt ?? aCreatedAt)
+  }
+}
+
+export function getSlug(slug: string) {
+  const lastHyphenIndex = slug.lastIndexOf('-')
+  return lastHyphenIndex === -1? slug : slug.slice(0, lastHyphenIndex)
+}
+
 type OverflowInfo = {
   isOverflow: boolean
   diff: number

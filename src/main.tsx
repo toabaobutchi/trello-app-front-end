@@ -46,7 +46,7 @@ const router = createBrowserRouter([
         <Workspaces />
       </DefaultLayout>
     ),
-    loader: async ({params}) => {
+    loader: async ({ params }) => {
       const res = await http.getAuth(`/w/${params.workspaceId}/projects`)
       return res
     }
@@ -58,12 +58,11 @@ const router = createBrowserRouter([
         <Project />
       </DefaultLayout>
     ),
-    // loader: async ({params}) => {
-    //   const p = params as ProjectPageParams
-    //   console.log(p)
-    //   const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}/c/${p.ownerShip}`)
-    //   return res
-    // }
+    loader: async ({ params }) => {
+      const p = params as ProjectPageParams
+      const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}`)
+      return res
+    }
   },
   {
     path: '/*',
