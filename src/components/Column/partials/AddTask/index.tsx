@@ -2,8 +2,11 @@ import Button from '@comps/Button'
 import FloatLabelInput from '@comps/FloatLabelInput'
 import Flex from '@comps/StyledComponents/Flex'
 import useClickTracker from '@hooks/useClickTracker'
+import HttpClient from '@utils/HttpClient'
 import { InputChange } from '@utils/types'
 import { useEffect, useRef, useState } from 'react'
+
+const http = new HttpClient()
 
 function AddTask() {
   const [isAddingTask, setIsAddingTask] = useState(false)
@@ -29,13 +32,20 @@ function AddTaskInput({ onCancelAddTask }: { onCancelAddTask: () => void }) {
     setAddTask(e.target.value)
   }
   const addTaskInputContainerRef = useRef<HTMLDivElement>(null)
-  const {outClick} = useClickTracker(addTaskInputContainerRef.current as HTMLElement)
+  const { outClick } = useClickTracker(addTaskInputContainerRef.current as HTMLElement)
   useEffect(() => {
-    if(outClick.isOutClick) {
+    if (outClick.isOutClick) {
       onCancelAddTask()
     }
   }, [onCancelAddTask, outClick])
-   return (
+  const handleAddTask = async () => {
+    if (!addTask) {
+      console.log('Please enter a task name')
+    } else {
+      const res = await http.postAuth('/tasks', {})
+    }
+  }
+  return (
     <>
       <Flex ref={addTaskInputContainerRef} $flexDirection='column' $gap='1rem'>
         <FloatLabelInput
@@ -45,7 +55,9 @@ function AddTaskInput({ onCancelAddTask }: { onCancelAddTask: () => void }) {
           onChange={handleChangeTaskName}
         />
         <Flex $alignItem='center' $gap='0.5rem'>
-          <Button variant='filled'>Add task</Button>
+          <Button onClick={handleAddTask} variant='filled'>
+            Add task
+          </Button>
           <Button variant='text' theme='default' onClick={onCancelAddTask}>
             <i className='fa-solid fa-xmark'></i>
           </Button>

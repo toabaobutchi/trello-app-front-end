@@ -87,6 +87,17 @@ export type CreateWorkspaceModel = {
   description?: string
 }
 
+export type CreateListModel = {
+  name: string
+  projectId: string
+  index: number
+}
+
+export type CreateTaskModel = {
+  name: string
+  listId: number
+}
+
 export type Project = {
   id: string
   description?: string
@@ -96,6 +107,18 @@ export type Project = {
   workspaceId: number
   color?: string
   dueDate?: number
+}
+
+export type ProjectContextResponse = {
+  id: string
+  description?: string
+  name: string
+  createdAt: number
+  slug: string
+  workspaceId: number
+  color?: string
+  dueDate?: number
+  context: string
 }
 
 export type LoginInfo = {

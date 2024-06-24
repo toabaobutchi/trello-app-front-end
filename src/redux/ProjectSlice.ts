@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
 import { indexComparer } from '@utils/functions'
-import { ProjectResponseForBoard } from '@utils/types'
+import { ListResponseForBoard, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
 
 const http = new HttpClient()
 
@@ -16,7 +16,19 @@ export const projectSlice = createSlice({
   reducers: {
     setActiveProjectBoard: (state, action) => {
       state.activeProject.board = action.payload as ProjectResponseForBoard
+    },
+    addNewList: (state, action) => {
+      const list = action.payload as ListResponseForBoard
+      state.activeProject.board.lists?.push(list)
+    },
+    addNewTask: (state, action) => {
+      const task = action.payload as TaskResponseForBoard
+      const list = state.activeProject.board.lists?.find(l => l.id === task.listId)
+      if(list) {
+        list.tasks?.push(task)
+      }
     }
+    
     //TODO - thêm action cập nhật lại list khi kéo thả
     //TODO - Thêm action cập nhật lại task khi kéo thả
   },

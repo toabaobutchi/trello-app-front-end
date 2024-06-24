@@ -10,7 +10,7 @@ import ColorPicker from '@comps/ColorPicker'
 import TextArea from '@comps/TextArea'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
-import { CreateProjectModel, Project } from '@utils/types'
+import { CreateProjectModel, Project, ProjectContextResponse } from '@utils/types'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -81,13 +81,13 @@ function CreateBoardModal({ open, onClose = () => {} }: CreateBoardModalProps) {
     const res = await http.postAuth('/projects', data)
     if (res?.status === HttpStatusCode.Ok) {
       handleClose()
-      const createdProject = res.data as Project
+      const createdProject = res.data as ProjectContextResponse
       navigate(
         linkCreator.project({
           viewMode: 'board',
           projectId: createdProject?.id ?? '',
           slug: createdProject?.slug ?? '',
-          ownerShip: 'owner'
+          ownerShip: createdProject.context
         })
       )
     }
