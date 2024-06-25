@@ -3,7 +3,7 @@ import './PriorityTag.scss'
 function PriorityTag({ priority }: { priority?: string | null }) {
   return (
     <>
-      <span className={`priority-tag priority-tag__${priority?.toLowerCase() ?? 'default'}`}>
+      <span className={`priority-tag priority-tag__${priority ? priority?.toLowerCase() : 'default'}`}>
         {priority ? priority + ' Priority' : 'Priority not set'}
       </span>
     </>

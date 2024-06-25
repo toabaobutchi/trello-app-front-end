@@ -23,7 +23,7 @@ function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {
         </Flex>
         <div className='column-body'>{children}</div>
         <div className='column-footer'>
-          <AddTask />
+          <AddTask column={props?.column} />
         </div>
       </div>
     </>

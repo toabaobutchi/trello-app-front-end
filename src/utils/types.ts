@@ -24,6 +24,11 @@ export interface AccountType {
   exp?: number
 }
 
+export type CreateListResponse = {
+  createdList: ListResponseForBoard
+  listOrder?: string
+}
+
 export interface ToastOptionsType {
   delay?: number
   floatDuration?: number
@@ -90,12 +95,12 @@ export type CreateWorkspaceModel = {
 export type CreateListModel = {
   name: string
   projectId: string
-  index: number
 }
 
 export type CreateTaskModel = {
   name: string
-  listId: number
+  listId: string
+  index: number
 }
 
 export type Project = {
@@ -143,26 +148,28 @@ export type WorkspacePageParams = {
 export type OwnerShipType = 'owner' | 'admin' | 'member' | 'observer'
 export type ProjectViewMode = 'board' | 'table' | 'chart' | 'calendar'
 
-export type TaskResponseForBoard = {
+export interface ResponseForBoard {
   id: string
+}
+
+export interface TaskResponseForBoard extends ResponseForBoard {
   name: string
   description?: string
   isCompleted?: boolean
+  createdAt: number
   dueDate?: number
   priority?: string
-  listId: number
+  listId: string
   assigneeCount: number
   completedSubTaskCount?: number
   subTaskCount?: number
 }
 
-export type ListResponseForBoard = {
-  id: number
+export interface ListResponseForBoard extends ResponseForBoard {
   name: string
-  index: number
-  updatedAt?: number
   createdAt: number
   projectId: string
+  taskOrder?: string
   tasks?: TaskResponseForBoard[]
 }
 
@@ -176,6 +183,7 @@ export type ProjectResponseForBoard = {
   workspaceId: string
   context: string
   memberCount?: number
+  listOrder?: string
   lists?: ListResponseForBoard[]
 }
 
@@ -185,9 +193,16 @@ export type CreateProjectModel = {
   workspaceId: number | string // xử lý convert
   description?: string
   dueDate?: number
+  listOrder?: string // JSON string
 }
 
 export type SelectListItem = {
   value: string
   display?: string
+}
+
+export type ListChangeResponse = {
+  listId: string
+  updatedIndex: number
+  updatedAt: number
 }

@@ -57,7 +57,6 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
     }
     const postData: CreateListModel = {
       name: listName,
-      index: activeProject.lists?.length ?? 0,
       projectId: activeProject.id
     }
     const res = await http.postAuth('/lists', postData)

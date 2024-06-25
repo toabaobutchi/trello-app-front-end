@@ -2,13 +2,15 @@ import Button from '@comps/Button'
 import FloatLabelInput from '@comps/FloatLabelInput'
 import Flex from '@comps/StyledComponents/Flex'
 import useClickTracker from '@hooks/useClickTracker'
+import { projectSlice } from '@redux/ProjectSlice'
 import HttpClient from '@utils/HttpClient'
-import { InputChange } from '@utils/types'
+import { CreateTaskModel, InputChange, ListResponseForBoard } from '@utils/types'
 import { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 const http = new HttpClient()
 
-function AddTask() {
+function AddTask({ column }: { column?: ListResponseForBoard }) {
   const [isAddingTask, setIsAddingTask] = useState(false)
   const handleToggleAddTask = () => {
     setIsAddingTask(!isAddingTask)
@@ -20,14 +22,15 @@ function AddTask() {
           <i className='fa-solid fa-plus'></i> Add a task ...
         </Button>
       ) : (
-        <AddTaskInput onCancelAddTask={handleToggleAddTask} />
+        <AddTaskInput onCancelAddTask={handleToggleAddTask} column={column} />
       )}
     </>
   )
 }
 
-function AddTaskInput({ onCancelAddTask }: { onCancelAddTask: () => void }) {
+function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void; column?: ListResponseForBoard }) {
   const [addTask, setAddTask] = useState<string>('')
+  const dispatch = useDispatch()
   const handleChangeTaskName = (e: InputChange) => {
     setAddTask(e.target.value)
   }
@@ -42,7 +45,20 @@ function AddTaskInput({ onCancelAddTask }: { onCancelAddTask: () => void }) {
     if (!addTask) {
       console.log('Please enter a task name')
     } else {
-      const res = await http.postAuth('/tasks', {})
+      if (!column?.id) {
+        console.log('Can not create when list id is not provided')
+        return
+      }
+      const newTask: CreateTaskModel = {
+        index: column?.tasks?.length ?? 0,
+        listId: column?.id,
+        name: addTask
+      }
+      const res = await http.postAuth('/tasks', newTask)
+      if (res?.status === 200) {
+        onCancelAddTask()
+        dispatch(projectSlice.actions.addNewTask(res.data))
+      }
     }
   }
   return (
