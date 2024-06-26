@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
-import { ChangeTaskOrderResponse, CreateListResponse, CreateTaskResponse, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
+import { ChangeTaskOrderResponse, CreateListResponse, CreateTaskResponse, DragOverResult, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
 
 const http = new HttpClient()
 
@@ -37,12 +37,19 @@ export const projectSlice = createSlice({
     changeListOrder: (state, action) => {
       const newListOrder = action?.payload?.data as string
       state.activeProject.board.listOrder = newListOrder
-      const updatedListOrder = newListOrder.split(',')
+      const updatedListOrder = newListOrder?.split(',')
       state.activeProject.board!.lists = state.activeProject.board?.lists?.sort((a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0))
     },
     changeTaskOrder: (state, action) => {
-      const data = action?.payload?.data as ChangeTaskOrderResponse
-      console.log(data)
+      const data = action?.payload
+      const resData = data.resData as ChangeTaskOrderResponse
+      const dragOverResult = data.dragOverResult as DragOverResult
+      const oldList = state.activeProject.board.lists?.find(l => l.id === resData.updatedOldListId)
+      const newList = state.activeProject.board.lists?.find(l => l.id === resData.updatedNewListId)
+      oldList!.tasks = dragOverResult.activeList.tasks
+      oldList!.taskOrder = resData.updatedOldTaskOrder
+      newList!.tasks = dragOverResult.overList.tasks
+      newList!.taskOrder = resData.updatedNewTaskOrder
     }
   },
   extraReducers: builder => {

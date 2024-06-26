@@ -1,5 +1,5 @@
 import Flex from '@comps/StyledComponents/Flex'
-import { ChangeTaskOrderModel, ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
+import { ChangeTaskOrderModel, DragOverResult, ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
 import {
   DndContext,
   DragEndEvent,
@@ -45,11 +45,6 @@ const dropAnimation: DropAnimation = {
 
 type BoardContentProps = {
   lists?: ListResponseForBoard[]
-}
-
-type DragOverResult = {
-  overList: ListResponseForBoard
-  activeList: ListResponseForBoard
 }
 
 function BoardContent({ lists = [] }: BoardContentProps) {
@@ -120,14 +115,6 @@ function BoardContent({ lists = [] }: BoardContentProps) {
       // nếu cột được kéo qua đã tồn tại một card như vậy thì xoá trước rồi đặt lại vô sau
       nextOverList.tasks = nextOverList.tasks?.filter(t => t.id !== activeId)
       nextOverList.tasks = nextOverList.tasks?.toSpliced(newCardIndex, 0, activeData as TaskResponseForBoard)
-
-      // thay đổi `listId` của card được kéo qua
-      // ở đoạn trên có sử dụng `listId` để tìm kiếm `activeColumn` và `overList`
-      // nên phải cập nhật lại, nếu không lần tìm kiếm sau sẽ gặp vấn đề
-      // const newTask = nextOverList.tasks?.[newCardIndex]
-      // if (newTask) {
-      //   newTask.listId = overList.id
-      // }
     }
     setDragOverResult({
       activeList: nextActiveList as ListResponseForBoard,
@@ -136,7 +123,7 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     // setListState(newListState)
     //TODO lưu lại `nextActiveList` và `nextOverList`, sau đó trích xuất lấy `change_task_order` của 2 task đó
     listStateWhenDraggingTask.current = newListState // dùng cho thằng `handleDragEnd`
-    setListState(newListState) // tạm thời set state để không bị giật UI
+    // setListState(newListState) // tạm thời set state để không bị giật UI
   }
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -158,7 +145,7 @@ function BoardContent({ lists = [] }: BoardContentProps) {
         http.putAuth(`/tasks/${activeDragItem?.id}/change-order`, updateData).then(res => {
           if (res?.status === HttpStatusCode.Ok) {
             // thay đổi store (dispatch)
-            dispatch(projectSlice.actions.changeTaskOrder(res.data))
+            dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res.data }))
           } else {
             console.log('Không thể cập nhật')
             setListState(listState) // reset lại list state như ban đầu, huỷ cập nhật

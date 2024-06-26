@@ -107,6 +107,11 @@ export type ChangeTaskOrderResponse = {
   updatedOldTaskOrder: string
 }
 
+export type DragOverResult = {
+  overList: ListResponseForBoard
+  activeList: ListResponseForBoard
+}
+
 export type Project = {
   id: string
   description?: string
