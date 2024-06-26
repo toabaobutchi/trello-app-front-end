@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
+import { sortList, sortProject, sortTask } from '@utils/functions'
 import { ChangeTaskOrderResponse, CreateListResponse, CreateTaskResponse, DragOverResult, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
 
 const http = new HttpClient()
@@ -15,10 +16,10 @@ export const projectSlice = createSlice({
   reducers: {
     setActiveProjectBoard: (state, action) => {
       const project = action.payload as ProjectResponseForBoard
-      const listOrder = project?.listOrder?.split(',')
-      project!.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
-      // TODO: sắp xếp lại danh sách task
-      state.activeProject.board = project
+      // const listOrder = project?.listOrder?.split(',')
+      // project!.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
+      // // TODO: sắp xếp lại danh sách task
+      state.activeProject.board = sortProject(project) as ProjectResponseForBoard
     },
     addNewList: (state, action) => {
       const res = action.payload as CreateListResponse
@@ -37,19 +38,24 @@ export const projectSlice = createSlice({
     changeListOrder: (state, action) => {
       const newListOrder = action?.payload?.data as string
       state.activeProject.board.listOrder = newListOrder
-      const updatedListOrder = newListOrder?.split(',')
-      state.activeProject.board!.lists = state.activeProject.board?.lists?.sort((a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0))
+      state.activeProject.board!.lists = sortList(state.activeProject.board?.lists, newListOrder)
     },
     changeTaskOrder: (state, action) => {
       const data = action?.payload
       const resData = data.resData as ChangeTaskOrderResponse
       const dragOverResult = data.dragOverResult as DragOverResult
-      const oldList = state.activeProject.board.lists?.find(l => l.id === resData.updatedOldListId)
+      // cập nhật trên cùng 1 cột
       const newList = state.activeProject.board.lists?.find(l => l.id === resData.updatedNewListId)
-      oldList!.tasks = dragOverResult.activeList.tasks
-      oldList!.taskOrder = resData.updatedOldTaskOrder
-      newList!.tasks = dragOverResult.overList.tasks
+      // cập nhật trên 1 cột
+      newList!.tasks = sortTask(dragOverResult.overList.tasks, resData.updatedNewTaskOrder)
       newList!.taskOrder = resData.updatedNewTaskOrder
+
+      // trường hợp thay đổi trên 2 cột khác nhau
+      if (resData.updatedNewListId !== resData.updatedOldListId) {
+        const oldList = state.activeProject.board.lists?.find(l => l.id === resData.updatedOldListId)
+        oldList!.tasks = sortTask(dragOverResult.activeList.tasks, resData.updatedOldTaskOrder)
+        oldList!.taskOrder = resData.updatedOldTaskOrder
+      }
     }
   },
   extraReducers: builder => {

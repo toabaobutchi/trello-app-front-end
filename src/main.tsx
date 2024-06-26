@@ -15,6 +15,7 @@ import Workspaces from '@pages/Workspaces'
 import HttpClient from '@utils/HttpClient'
 import Project from '@pages/Project'
 import { ProjectPageParams } from '@utils/types'
+import ProjectInvitation from '@pages/ProjectInvitation'
 
 const http = new HttpClient()
 
@@ -64,6 +65,12 @@ const router = createBrowserRouter([
       const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}`)
       return res
     }
+  },
+  {
+    path: routeLinks.projectInvitation,
+    element: <>
+    <ProjectInvitation />
+    </>
   }
 ])
 

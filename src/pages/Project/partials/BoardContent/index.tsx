@@ -20,7 +20,7 @@ import AddNewList from './AddNewList'
 import TaskCard from '@comps/TaskCard'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@redux/store'
-import { changeListOrder, projectSlice } from '@redux/ProjectSlice'
+import { projectSlice } from '@redux/ProjectSlice'
 import HttpClient from '@utils/HttpClient'
 import { cloneDeep } from 'lodash'
 import { HttpStatusCode } from 'axios'
@@ -85,7 +85,13 @@ function BoardContent({ lists = [] }: BoardContentProps) {
 
     // tìm column của 2 card đang tương tác
     const activeList = listState?.find(l => l.id === activeData?.listId)
-    const overList = listState?.find(l => l.id === overData?.listId)
+    let overList = listState?.find(l => l.id === overData?.listId)
+
+    // trường hợp kéo sang 1 list/column rỗng
+    // nếu list không rỗng thì sẽ không có trường hợp này, sẽ bắt thành card
+    if (overData?.dragObject === 'Column') {
+      overList = listState?.find(l => l.id === overData?.id)
+    }
 
     if (!activeList || !overList) return
 
@@ -120,10 +126,8 @@ function BoardContent({ lists = [] }: BoardContentProps) {
       activeList: nextActiveList as ListResponseForBoard,
       overList: nextOverList as ListResponseForBoard
     })
-    // setListState(newListState)
-    //TODO lưu lại `nextActiveList` và `nextOverList`, sau đó trích xuất lấy `change_task_order` của 2 task đó
-    listStateWhenDraggingTask.current = newListState // dùng cho thằng `handleDragEnd`
-    // setListState(newListState) // tạm thời set state để không bị giật UI
+    listStateWhenDraggingTask.current = listState // dùng cho thằng `handleDragEnd`
+    setListState(newListState)
   }
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -134,8 +138,9 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     if (activeDragItem?.dragObject === 'Card') {
       // setListState(listStateWhenDraggingTask.current as ListResponseForBoard[])
       if (listStateWhenDraggingTask.current) {
+        console.log('dragOverResult: ', dragOverResult)
         // có kéo thả ca(rd thì sẽ có giá trị
-        setListState(listStateWhenDraggingTask.current)
+        console.log(dragOverResult)
         const updateData: ChangeTaskOrderModel = {
           oldTaskOrder: dragOverResult?.activeList.tasks?.map(t => t.id)?.join(',') as string,
           newTaskOrder: dragOverResult?.overList.tasks?.map(t => t.id)?.join(',') as string,
@@ -148,7 +153,7 @@ function BoardContent({ lists = [] }: BoardContentProps) {
             dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res.data }))
           } else {
             console.log('Không thể cập nhật')
-            setListState(listState) // reset lại list state như ban đầu, huỷ cập nhật
+            setListState(listStateWhenDraggingTask.current as ListResponseForBoard[]) // reset lại list state như ban đầu, huỷ cập nhật
           }
         })
       }

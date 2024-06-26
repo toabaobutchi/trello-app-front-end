@@ -6,8 +6,9 @@ const routeLinks = {
   home: '/home',
   yourTasks: '/your-tasks',
   workspaces: '/workspaces/:ownerShip/:slug/:workspaceId',
-  project: '/projects/:ownerShip/:slug/:projectId/v/:viewMode'
-  // project: '/projects'
+  project: '/projects/:ownerShip/:slug/:projectId/v/:viewMode',
+  // projectInvitation: '/projects/:pid/invitation'
+  projectInvitation: '/projects/invitation'
 }
 
 export const linkCreator = {

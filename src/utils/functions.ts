@@ -1,4 +1,4 @@
-import { ResponseForBoard, TaskResponseForBoard } from './types'
+import { ListResponseForBoard, ProjectResponseForBoard, ResponseForBoard, TaskResponseForBoard } from './types'
 
 export const isOutClick = (parent: HTMLElement, child: HTMLElement | null) => {
   return parent && !parent.contains(child as Node)
@@ -51,6 +51,26 @@ export const isOutOfScreen = (element: HTMLElement) => {
   return overFlowResult
 }
 
-export function sortOrder<T extends ResponseForBoard>(orders: string[], list: T[]) {
-  return orders.map(order => list.find(item => item.id === order)) as T[]
+export function sortProject(project?: ProjectResponseForBoard) {
+  if (!project) return project
+  const listOrder = project?.listOrder?.split(',')
+  project.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
+  project.lists?.forEach(list => {
+    const taskOrder = list.taskOrder?.split(',')
+    list.tasks = list?.tasks?.sort((a, b) => (taskOrder?.indexOf(a.id) ?? 0) - (taskOrder?.indexOf(b.id) ?? 0))
+  })
+  return project
+}
+
+export function sortList(list?: ListResponseForBoard[], order?: string) {
+  if (!list) return list
+  const updatedListOrder = order?.split(',')
+  list = list?.sort((a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0))
+  return list
+}
+export const sortTask = (tasks?: TaskResponseForBoard[], order?: string) => {
+  if (!tasks) return tasks
+  const updatedTaskOrder = order?.split(',')
+  tasks = tasks?.sort((a, b) => (updatedTaskOrder?.indexOf(a.id) ?? 0) - (updatedTaskOrder?.indexOf(b.id) ?? 0))
+  return tasks
 }
