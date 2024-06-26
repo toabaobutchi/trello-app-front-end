@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
-import { CreateListResponse, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
+import { ChangeTaskOrderResponse, CreateListResponse, CreateTaskResponse, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
 
 const http = new HttpClient()
 
@@ -17,6 +17,7 @@ export const projectSlice = createSlice({
       const project = action.payload as ProjectResponseForBoard
       const listOrder = project?.listOrder?.split(',')
       project!.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
+      // TODO: sắp xếp lại danh sách task
       state.activeProject.board = project
     },
     addNewList: (state, action) => {
@@ -25,10 +26,12 @@ export const projectSlice = createSlice({
       state.activeProject.board.listOrder = res.listOrder
     },
     addNewTask: (state, action) => {
-      const task = action.payload as TaskResponseForBoard
+      const res = action.payload as CreateTaskResponse
+      const task = res.createdTask as TaskResponseForBoard
       const list = state.activeProject.board.lists?.find(l => l.id === task.listId)
       if (list) {
         list.tasks?.push(task)
+        list.taskOrder = res.taskOrder
       }
     },
     changeListOrder: (state, action) => {
@@ -36,9 +39,11 @@ export const projectSlice = createSlice({
       state.activeProject.board.listOrder = newListOrder
       const updatedListOrder = newListOrder.split(',')
       state.activeProject.board!.lists = state.activeProject.board?.lists?.sort((a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0))
+    },
+    changeTaskOrder: (state, action) => {
+      const data = action?.payload?.data as ChangeTaskOrderResponse
+      console.log(data)
     }
-
-    //TODO - Thêm action cập nhật lại task khi kéo thả
   },
   extraReducers: builder => {
     builder.addCase(changeListOrder.fulfilled, (state, action) => {

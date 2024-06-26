@@ -5,16 +5,7 @@ export interface CustomizablePropType {
   customHtmlAttributes?: object
 }
 
-export type ThemeType =
-  | 'success'
-  | 'warning'
-  | 'danger'
-  | 'primary'
-  | 'info'
-  | 'light'
-  | 'secondary'
-  | 'dark'
-  | 'default'
+export type ThemeType = 'success' | 'warning' | 'danger' | 'primary' | 'info' | 'light' | 'secondary' | 'dark' | 'default'
 
 export interface AccountType {
   id: string
@@ -100,7 +91,20 @@ export type CreateListModel = {
 export type CreateTaskModel = {
   name: string
   listId: string
-  index: number
+}
+
+export type ChangeTaskOrderModel = {
+  oldListId: string
+  newListId: string
+  newTaskOrder: string
+  oldTaskOrder: string
+}
+
+export type ChangeTaskOrderResponse = {
+  updatedOldListId: string
+  updatedNewListId: string
+  updatedNewTaskOrder: string
+  updatedOldTaskOrder: string
 }
 
 export type Project = {
@@ -171,6 +175,11 @@ export interface ListResponseForBoard extends ResponseForBoard {
   projectId: string
   taskOrder?: string
   tasks?: TaskResponseForBoard[]
+}
+
+export type CreateTaskResponse = {
+  createdTask: TaskResponseForBoard
+  taskOrder?: string
 }
 
 export type ProjectResponseForBoard = {

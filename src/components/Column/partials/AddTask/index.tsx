@@ -4,7 +4,7 @@ import Flex from '@comps/StyledComponents/Flex'
 import useClickTracker from '@hooks/useClickTracker'
 import { projectSlice } from '@redux/ProjectSlice'
 import HttpClient from '@utils/HttpClient'
-import { CreateTaskModel, InputChange, ListResponseForBoard } from '@utils/types'
+import { CreateTaskModel, CreateTaskResponse, InputChange, ListResponseForBoard } from '@utils/types'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -50,7 +50,6 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
         return
       }
       const newTask: CreateTaskModel = {
-        index: column?.tasks?.length ?? 0,
         listId: column?.id,
         name: addTask
       }

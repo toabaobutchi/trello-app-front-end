@@ -29,7 +29,8 @@ const router = createBrowserRouter([
       <DefaultLayout>
         <Home />
       </DefaultLayout>
-    )
+    ),
+    errorElement: <Error />
   },
   {
     path: routeLinks.yourTasks,
@@ -63,10 +64,6 @@ const router = createBrowserRouter([
       const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}`)
       return res
     }
-  },
-  {
-    path: '/*',
-    errorElement: <Error />
   }
 ])
 

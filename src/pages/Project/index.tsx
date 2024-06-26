@@ -18,14 +18,12 @@ function Project() {
   useEffect(() => {
     dispatch(projectSlice.actions.setActiveProjectBoard(boardData))
   }, [boardData, dispatch])
-  console.log('project: ', project)
-  console.log('boardData: ', boardData)
   return (
     <>
       {boardData && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
-          {project && <BoardContent lists={project.lists} />}
+          {project && <BoardContent lists={project?.lists} />}
         </Flex>
       )}
     </>
