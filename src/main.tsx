@@ -70,7 +70,12 @@ const router = createBrowserRouter([
     path: routeLinks.projectInvitation,
     element: <>
     <ProjectInvitation />
-    </>
+    </>,
+    loader: async ({params}) => {
+      const projectId = params.pid
+      const res = await http.get(`/projects/${projectId}`)
+      return res
+    }
   }
 ])
 

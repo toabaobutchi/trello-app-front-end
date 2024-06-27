@@ -52,6 +52,7 @@ export const isOutOfScreen = (element: HTMLElement) => {
 }
 
 export function sortProject(project?: ProjectResponseForBoard) {
+  console.log('sortProject >>> ', project)
   if (!project) return project
   const listOrder = project?.listOrder?.split(',')
   project.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))

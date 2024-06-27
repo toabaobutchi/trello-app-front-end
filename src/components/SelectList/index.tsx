@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import './SelectList.scss'
 import useClickTracker from '@hooks/useClickTracker'
 import { CustomizablePropType } from '@utils/types'
@@ -19,6 +19,7 @@ interface SelectListProps extends React.ComponentProps<'div'> {
 function SelectList({ items, selectedValue, onChoose = () => {}, label, size = 'medium', ...props }: SelectListProps) {
   const [expand, setExpand] = useState(false)
   const selectListRef = useRef<HTMLDivElement>(null)
+  const selectListId = useId()
   const [selectedItem, setSelectedItem] = useState<SelectListItem | undefined>(() => {
     return items?.find(item => item.value === selectedValue) ?? items?.[0]
   })
@@ -42,7 +43,7 @@ function SelectList({ items, selectedValue, onChoose = () => {}, label, size = '
       <p className={`select-list-label ${label?.className ?? ''}`.trimEnd()} style={label?.style}>
         {label?.content}
       </p>
-      <div ref={selectListRef} className={`select-list ${size}-list ${props?.className ?? ''}`.trimEnd()} style={props?.style}>
+      <div ref={selectListRef} id={selectListId} className={`select-list ${size}-list ${props?.className ?? ''}`.trimEnd()} style={props?.style}>
         <div className='selected-item' onClick={handleToggleSelect}>
           {selectedItem?.display} <i className="fa-solid fa-caret-down"></i>
         </div>

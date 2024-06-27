@@ -92,16 +92,7 @@ const ProjectFilterMenu = memo(() => {
         </Button>
       </ButtonGroup>
       <Modal
-        style={{
-          width: '25%',
-          top: '0',
-          bottom: 0,
-          right: 0,
-          left: 'auto',
-          transform: 'none',
-          height: '100%',
-          minWidth: '300px'
-        }}
+        style={{ width: '30%' }}
         onClose={handleToggleModal}
         open={modalOpen}
         layout={{
