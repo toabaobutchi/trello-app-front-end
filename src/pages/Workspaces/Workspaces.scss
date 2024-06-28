@@ -1,6 +1,12 @@
 
-
 .project-list {
   padding: 1rem;
   gap: 1rem;
+}
+
+.empty-workspace-image {
+  max-width: 100%;
+  width: 25%;
+  height: auto;
+  object-fit: cover;
 }

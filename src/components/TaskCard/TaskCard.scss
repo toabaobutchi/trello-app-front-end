@@ -6,6 +6,10 @@
   background-color: var(--task-card-bg-color);
   box-shadow: var(--task-card-box-shadow);
 
+  &:hover {
+    box-shadow: var(--task-card-hover-box-shadow);
+  }
+
   &-body {
     &-name {
       font-size: 1.2rem;

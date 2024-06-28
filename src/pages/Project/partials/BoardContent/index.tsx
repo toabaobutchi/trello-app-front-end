@@ -67,6 +67,7 @@ function BoardContent({ lists = [] }: BoardContentProps) {
       dragObject: e?.active?.data?.current?.dragObject // `dragObject` được đặt trong mỗi TaskCard hoặc SortableColumn
     })
   }
+  console.log('listState: ', listState)
 
   const handleDragOver = (e: DragOverEvent) => {
     if (activeDragItem?.dragObject === 'Column') return
@@ -84,13 +85,15 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     } = over
 
     // tìm column của 2 card đang tương tác
-    const activeList = listState?.find(l => l.id === activeData?.listId)
-    let overList = listState?.find(l => l.id === overData?.listId)
+    const activeList = listState?.find(l => l.tasks?.map(t => t.id).includes(activeId as string))
+    let overList = null
 
     // trường hợp kéo sang 1 list/column rỗng
     // nếu list không rỗng thì sẽ không có trường hợp này, sẽ bắt thành card
     if (overData?.dragObject === 'Column') {
       overList = listState?.find(l => l.id === overData?.id)
+    } else {
+      overList = listState?.find(l => l.tasks?.map(t => t.id).includes(overId as string))
     }
 
     if (!activeList || !overList) return
@@ -100,7 +103,8 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     // tìm card bị active card kéo đến /ngang qua
     const overCardIndex = overList.tasks?.findIndex(t => t.id === overId) ?? -1
 
-    const isBelowOverItem = active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
+    const isBelowOverItem =
+      active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
 
     const modifier = isBelowOverItem ? 1 : 0
 
@@ -138,9 +142,6 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     if (activeDragItem?.dragObject === 'Card') {
       // setListState(listStateWhenDraggingTask.current as ListResponseForBoard[])
       if (listStateWhenDraggingTask.current) {
-        console.log('dragOverResult: ', dragOverResult)
-        // có kéo thả ca(rd thì sẽ có giá trị
-        console.log(dragOverResult)
         const updateData: ChangeTaskOrderModel = {
           oldTaskOrder: dragOverResult?.activeList.tasks?.map(t => t.id)?.join(',') as string,
           newTaskOrder: dragOverResult?.overList.tasks?.map(t => t.id)?.join(',') as string,
@@ -214,7 +215,11 @@ function BoardContent({ lists = [] }: BoardContentProps) {
         </SortableContext>
         <DragOverlay dropAnimation={dropAnimation}>
           {activeDragItem &&
-            (activeDragItem.dragObject === 'Card' ? <TaskCard task={activeDragItem.data as TaskResponseForBoard} /> : <SortableColumn column={activeDragItem.data as ListResponseForBoard} />)}
+            (activeDragItem.dragObject === 'Card' ? (
+              <TaskCard task={activeDragItem.data as TaskResponseForBoard} />
+            ) : (
+              <SortableColumn column={activeDragItem.data as ListResponseForBoard} />
+            ))}
         </DragOverlay>
       </DndContext>
     </>

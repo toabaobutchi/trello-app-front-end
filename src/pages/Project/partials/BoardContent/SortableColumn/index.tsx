@@ -10,7 +10,7 @@ function SortableColumn({ column }: { column: ListResponseForBoard }) {
     id: column.id,
     data: { ...column, dragObject: 'Column' }
   })
-
+  
   const style = {
     // touchAction: 'none',
     transform: CSS.Translate.toString(transform),

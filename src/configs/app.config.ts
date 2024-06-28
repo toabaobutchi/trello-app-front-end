@@ -15,6 +15,9 @@ const config = {
   },
   appName: 'Trello',
   googleClientId: '642590641125-36p2odk1qkskt97ge5jii76ukgb8gtbn.apps.googleusercontent.com',
-  baseUrl: 'https://localhost:7207'
+  baseUrl: 'https://localhost:7207',
+  priorities: [
+    "High", "Medium", "Normal", "Low"
+  ]
 }
 export default config

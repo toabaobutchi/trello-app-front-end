@@ -8,6 +8,7 @@ import { TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId } from '@utils/functions'
+
 function TaskCard({ task }: { task: TaskResponseForBoard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: createCardId(task),
@@ -50,9 +51,11 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
         <div className='task-card-body'>
           <div className='task-card-body-name'>{task.name}</div>
           <div className='task-card-body-description'>{task.description}</div>
-          <div className='task-card-body-subtasks'>
-            Subtask: {task.completedSubTaskCount}/{task.subTaskCount}
-          </div>
+          {task.subTaskCount && task.subTaskCount > 0 && (
+            <div className='task-card-body-subtasks'>
+              Subtask: {task.completedSubTaskCount}/{task.subTaskCount}
+            </div>
+          )}
         </div>
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>
           <div className='task-card-footer-members'>{task.assigneeCount} member(s)</div>
