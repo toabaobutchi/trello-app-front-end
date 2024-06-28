@@ -7,6 +7,32 @@ export interface CustomizablePropType {
 
 export type ThemeType = 'success' | 'warning' | 'danger' | 'primary' | 'info' | 'light' | 'secondary' | 'dark' | 'default'
 
+export type DependencyTaskForBoard = {
+  id: string
+  name: string
+  dueDate?: number
+  taskId: string
+}
+
+export type TaskAssignmentForBoard = {
+  assignment_id: string
+  permission: string
+  avatar?: string
+  displayName: string
+}
+
+export type TaskDetailForBoard = {
+  id: string
+  name: string
+  priority: string
+  description: string
+  listId: string
+  listName: string
+  dueDate?: number
+  dependencyTasks?: DependencyTaskForBoard[]
+  attachmentsCount: number
+}
+
 export interface AccountType {
   id: string
   displayName: string

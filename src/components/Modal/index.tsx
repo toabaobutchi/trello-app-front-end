@@ -28,13 +28,7 @@ function Modal({ open = false, layout = undefined, children = '', onClose = () =
               <div className='modal-header'>
                 <p className='modal-header-text'>{layout?.header?.title}</p>
                 {layout?.header?.closeIcon && (
-                  <Button
-                    style={{ fontSize: '1.4rem', paddingLeft: '0.8rem', paddingRight: '0.8rem' }}
-                    className='modal-header-close-button'
-                    variant='text'
-                    theme='default'
-                    onClick={onClose}
-                  >
+                  <Button style={{ fontSize: '1.4rem', paddingLeft: '0.8rem', paddingRight: '0.8rem' }} className='modal-header-close-button' variant='text' theme='default' onClick={onClose}>
                     <i className='fa-solid fa-xmark'></i>
                   </Button>
                 )}

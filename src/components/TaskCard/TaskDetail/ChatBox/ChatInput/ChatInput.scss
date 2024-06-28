@@ -1,0 +1,40 @@
+.chat-input {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin-top: 1rem;
+
+  input {
+    padding: 0.7rem 1.3rem;
+    outline: none;
+    border: var(--thin-border-width) solid var(--light-color);
+    border-radius: var(--chat-input-radius);
+    font: inherit;
+    color: inherit;
+    flex: 1;
+
+    &:focus,
+    :not(:placeholder-shown) {
+      border-color: var(--primary-color);
+    }
+  }
+
+  button {
+    padding: 0.7rem 1rem;
+    outline: none;
+    border: none;
+    // border: var(--thin-border-width) solid var(--light-color);
+    border-radius: var(--chat-input-radius);
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #fff;
+
+    &:hover {
+      box-shadow: var(--button-hover-shadow);
+    }
+  }
+}

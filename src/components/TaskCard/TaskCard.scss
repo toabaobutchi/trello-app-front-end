@@ -3,6 +3,7 @@
   padding: 1rem;
   cursor: pointer;
   max-width: 100%;
+  width: 100%;
   background-color: var(--task-card-bg-color);
   box-shadow: var(--task-card-box-shadow);
 
@@ -46,6 +47,6 @@
   }
 }
 
-.task-card + .task-card {
-  margin-top: 1rem;
-}
+// .task-card + .task-card {
+//   margin-top: 1rem;
+// }

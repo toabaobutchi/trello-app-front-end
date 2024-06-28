@@ -21,7 +21,7 @@ function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {
             <i className='fa-solid fa-ellipsis'></i>
           </Button>
         </Flex>
-        <div className='column-body'>{children}</div>
+        <div onPointerDown={e => e.stopPropagation()} className='column-body'>{children}</div>
         <div className='column-footer'>
           <AddTask column={props?.column} />
         </div>

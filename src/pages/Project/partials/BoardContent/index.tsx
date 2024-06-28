@@ -3,7 +3,7 @@ import { ChangeTaskOrderModel, DragOverResult, ListResponseForBoard, TaskRespons
 import {
   DndContext,
   DragEndEvent,
-  MouseSensor,
+  // MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -24,6 +24,7 @@ import { projectSlice } from '@redux/ProjectSlice'
 import HttpClient from '@utils/HttpClient'
 import { cloneDeep } from 'lodash'
 import { HttpStatusCode } from 'axios'
+import { MyCustomSensor } from '@utils/MyCustomSensor'
 
 const http = new HttpClient()
 
@@ -67,7 +68,6 @@ function BoardContent({ lists = [] }: BoardContentProps) {
       dragObject: e?.active?.data?.current?.dragObject // `dragObject` được đặt trong mỗi TaskCard hoặc SortableColumn
     })
   }
-  console.log('listState: ', listState)
 
   const handleDragOver = (e: DragOverEvent) => {
     if (activeDragItem?.dragObject === 'Column') return
@@ -103,8 +103,7 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     // tìm card bị active card kéo đến /ngang qua
     const overCardIndex = overList.tasks?.findIndex(t => t.id === overId) ?? -1
 
-    const isBelowOverItem =
-      active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
+    const isBelowOverItem = active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
 
     const modifier = isBelowOverItem ? 1 : 0
 
@@ -192,10 +191,11 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     setDragOverResult(undefined)
   }
 
-  const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
+  // const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
+  const customMouseSensor = useSensor(MyCustomSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
 
-  const sensors = useSensors(mouseSensor, touchSensor)
+  const sensors = useSensors(customMouseSensor, touchSensor)
   return (
     <>
       <DndContext
@@ -215,11 +215,7 @@ function BoardContent({ lists = [] }: BoardContentProps) {
         </SortableContext>
         <DragOverlay dropAnimation={dropAnimation}>
           {activeDragItem &&
-            (activeDragItem.dragObject === 'Card' ? (
-              <TaskCard task={activeDragItem.data as TaskResponseForBoard} />
-            ) : (
-              <SortableColumn column={activeDragItem.data as ListResponseForBoard} />
-            ))}
+            (activeDragItem.dragObject === 'Card' ? <TaskCard task={activeDragItem.data as TaskResponseForBoard} /> : <SortableColumn column={activeDragItem.data as ListResponseForBoard} />)}
         </DragOverlay>
       </DndContext>
     </>

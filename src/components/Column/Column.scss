@@ -1,6 +1,6 @@
 .column {
-  box-shadow: var(--list-box-shadow);
-  border: var(--thin-border-width) solid var(--bright-color);
+  // box-shadow: var(--list-box-shadow);
+  border: var(--thin-border-width) solid var(--light-color);
   border-radius: var(--card-radius);
   padding: var(--list-padding);
   min-width: 300px;
@@ -19,6 +19,14 @@
       padding: 0.5rem 0.7rem !important;
       border-radius: calc(var(--card-radius) / 2);
     }
+  }
+
+  &-body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
   }
 
   &-footer {

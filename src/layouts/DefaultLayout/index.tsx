@@ -22,13 +22,12 @@ const MainContent = styled.div`
 
 function DefaultLayout({ children = '' }: { children?: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>()
-  const loginInfo = useSelector((state: RootState) => state.login)
   useEffect(() => {
-    dispatch(fetchWorkspaces(loginInfo))
-  }, [])
+    dispatch(fetchWorkspaces())
+  }, [dispatch])
   return (
     <>
-      <Flex $flexDirection='column' style={{ width: '100%', overflow: 'hidden' }}>
+      <Flex $flexDirection='column' style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
         <Header />
         <Container>
           <SideBar />

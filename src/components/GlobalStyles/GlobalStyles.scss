@@ -10,8 +10,6 @@
   --normal-border-width: 1px;
   --bold-border-width: 2px;
   --hover-menu-color: #9d9d9d25;
-  --primary-radius: 5px;
-  --secondary-radius: 3px;
   --light-color: #ccc;
   --secondary-color: #777;
   --danger-color: #e90678;
@@ -22,7 +20,10 @@
   --dark-color: #333;
   --bright-color: #f1f1f1;
   --card-radius: 15px;
-
+  
+  --primary-radius: 5px;
+  --secondary-radius: 3px;
+  --chat-input-radius: 1.3rem;
   // component colors
   --overlay-color: #0000001f;
   --clicked-menu-color: #0c66e417;
@@ -34,6 +35,7 @@
   --tooltip-dark-color: #172b4d;
   --task-card-bg-color: #fff;
   --list-bg-color: #fff;
+  
   // --task-card-box-shadow: 0px 1px 1px #091e4240, 0px 0px 1px #091e424f;
   --task-card-box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
   --task-card-hover-box-shadow: rgba(51, 111, 214, 0.671) 0px 4px 8px -2px;
@@ -53,7 +55,7 @@
 
   // z-index
   --tooltip-z-index: 1000;
-  --modal-z-index: 101;
+  --modal-z-index: 1001;
   --sidebar-z-index: 101;
   --menu-z-index: 999;
   --select-list-z-index: 103;

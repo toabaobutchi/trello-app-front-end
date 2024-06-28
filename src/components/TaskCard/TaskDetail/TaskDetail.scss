@@ -1,0 +1,51 @@
+.task-details {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  // align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1.05rem;
+  color: var(--text-secondary-color);
+
+  &-name {
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+  }
+  &-basic-info {
+    padding: 0.5rem 1rem;
+    width: 50%;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 0.5px;
+      height: 96%;
+      background-color: var(--bright-color);
+      transform: translateY(-50%);
+    }
+  }
+
+  &-basic-info-item {
+    margin-bottom: 1rem;
+
+    label {
+      margin-left: 0;
+    }
+  }
+
+  &-creator-avatar {
+    width: 25px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+  }
+
+  &-additional-info {
+    width: 50%;
+  }
+}

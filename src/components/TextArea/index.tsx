@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './TextArea.scss'
 
 interface TextAreaProps extends React.ComponentProps<'textarea'> {
-  label?: string
+  label?: React.ReactNode
 }
 
 function TextArea({ label = '', ...props }: TextAreaProps) {
