@@ -1,6 +1,7 @@
 import Flex from '@comps/StyledComponents/Flex'
 import PriorityTag from '@comps/TaskCard/PriorityTag'
 import TextArea from '@comps/TextArea'
+import Subtasks from './Subtasks'
 
 function TaskDetailInfo() {
   return (
@@ -44,6 +45,7 @@ function TaskDetailInfo() {
             rows={5}
           />
         </div>
+        <Subtasks />
       </div>
     </>
   )
