@@ -1,7 +1,6 @@
 import './Subtasks.scss'
 import { useState } from 'react'
 import AddSubtask from './AddSubtask'
-import Flex from '@comps/StyledComponents/Flex'
 import SubtaskItem from './SubtaskItem'
 
 export type SubtaskType = {

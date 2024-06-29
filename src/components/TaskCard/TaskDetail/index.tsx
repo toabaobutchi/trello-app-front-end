@@ -4,6 +4,7 @@ import { useState } from 'react'
 import ChatBox from './ChatBox'
 import TaskDetailInfo from './TaskDetailInfo'
 import MemberTable from './MemberTable'
+import Attachment from './Attachment'
 
 const tabs = [
   {
@@ -52,7 +53,7 @@ function TaskDetail() {
               <MemberTable />
             </Tab.Content>
             <Tab.Content show={activeTab === 'attachments'}>
-              <div>Attachments</div>
+              <Attachment />
             </Tab.Content>
           </Tab>
         </div>

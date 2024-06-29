@@ -1,0 +1,32 @@
+.member-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: var(--primary-radius);
+
+  &:hover {
+    background-color: var(--bright-color);
+    cursor: pointer;
+  }
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &-title {
+    color: var(--text-primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  &-role {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+}
