@@ -1,5 +1,6 @@
 import Flex from '@comps/StyledComponents/Flex'
 import { SubtaskType } from '..'
+import SubtaskMemberSelector from './SubtaskMemberSelector'
 
 type SubtaskItemProps = {
   subTask: SubtaskType
@@ -18,9 +19,10 @@ function SubtaskItem({ subTask, onCheckTask = () => {} }: SubtaskItemProps) {
           <span className='subtasks-item-icon'>
             <i className='fa-regular fa-clock'></i>
           </span>
-          <span className='subtasks-item-icon'>
+          {/* <span className='subtasks-item-icon'>
             <i className='fa-regular fa-user'></i>
-          </span>
+          </span> */}
+          <SubtaskMemberSelector />
           <span className='subtasks-item-icon'>
             <i className='fa-regular fa-trash-can'></i>
           </span>

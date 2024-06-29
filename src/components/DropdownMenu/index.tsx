@@ -31,7 +31,8 @@ function DropdownMenu({
   const [clicked, setClicked] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const handleToggleMenu = () => {
+  const handleToggleMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
     setClicked(!clicked)
   }
 

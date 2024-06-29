@@ -3,6 +3,7 @@ import Tab from '@comps/Tab'
 import { useState } from 'react'
 import ChatBox from './ChatBox'
 import TaskDetailInfo from './TaskDetailInfo'
+import MemberTable from './MemberTable'
 
 const tabs = [
   {
@@ -48,7 +49,7 @@ function TaskDetail() {
               <ChatBox />
             </Tab.Content>
             <Tab.Content show={activeTab === 'members'}>
-              <div>Members</div>
+              <MemberTable />
             </Tab.Content>
             <Tab.Content show={activeTab === 'attachments'}>
               <div>Attachments</div>
