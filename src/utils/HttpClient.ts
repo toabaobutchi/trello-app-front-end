@@ -70,6 +70,16 @@ class HttpClient {
       return null
     }
   }
+  async deleteAuth(url: string, accessToken: string = '', options: AxiosRequestConfig<object> = {}) {
+    try {
+      if(!accessToken) accessToken = localStorage.getItem('access_token') ?? ""
+      const response = await this.axios.delete(url, { headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }, ...options })
+      return { data: response.data.data, status: response.data.status, message: response.data.message }
+    } catch (err) {
+      console.log(err)
+      return null
+    }
+  }
 
   // async delete(url: string, data: object = {}, options: object = {}) {
   //   try {

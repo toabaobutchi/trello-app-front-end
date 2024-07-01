@@ -32,13 +32,23 @@ function Subtasks({ subtasks, taskId }: { subtasks: SubtaskForBoard[]; taskId: s
     const res = await http.putAuth(`/subtasks/${updatedSubtask?.id}/change-status`, { isCompleted: e.target.checked })
     if (res?.status === HttpStatusCode.Ok) {
       // update lại trạng thái subtask
-      if (res?.data) {
-        updatedSubtask!.isCompleted = res?.data
-        setSubtasks(newSubtasks)
-      } else {
-        alert('No permission to change subtask status')
-      }
+      updatedSubtask!.isCompleted = res?.data
+      setSubtasks(newSubtasks)
     }
+  }
+  const handleDeleteSubtask = async (subtaskId: number) => {
+    const res = await http.deleteAuth(`/subtasks/${subtaskId}`)
+    if (res?.status === HttpStatusCode.Ok) {
+      const newSubtasks = _subtasks.filter(subtask => subtask.id !== subtaskId)
+      setSubtasks(newSubtasks)
+    }
+  }
+  const handleChangeSubtaskName = (sid: number, name: string) => {
+    const newSubtasks = [...subtasks]
+    const updatedSubtask = newSubtasks.find(subtask => subtask.id === sid)
+    if (!updatedSubtask) return
+    updatedSubtask.title = name
+    setSubtasks(newSubtasks)
   }
   return (
     <>
@@ -47,7 +57,13 @@ function Subtasks({ subtasks, taskId }: { subtasks: SubtaskForBoard[]; taskId: s
           <i className='fa-solid fa-list-check'></i> Subtasks {_subtasks.length > 0 ? `(${_subtasks.length})` : ''}
         </p>
         {_subtasks?.map(subTask => (
-          <SubtaskItem key={subTask.id} subTask={subTask} onCheckTask={handleCheckSubtask} />
+          <SubtaskItem
+            key={subTask.id}
+            subTask={subTask}
+            onCheckSubTask={handleCheckSubtask}
+            onDeleteSubtask={handleDeleteSubtask}
+            onChangeSubTaskName={handleChangeSubtaskName}
+          />
         ))}
         <div>
           <AddSubtask onAddTask={handleAddTask} />

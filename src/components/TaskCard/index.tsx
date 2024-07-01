@@ -36,13 +36,10 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
     opacity: isDragging ? 0.5 : 1
   }
   const [modalState, setModalState] = useState<TaskDetailModelState>({ open: false })
-  // const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
+
   const handleCloseTaskDetailModal = () => {
     setModalState({ ...modalState, open: false })
   }
-  // const handleToggleTaskDetailModal = () => {
-  //   setModalState({ ...modalState, open: !modalState.open })
-  // }
   const handleLoadTaskDetail = async () => {
     // setModalState(prev => ({ ...prev, open: true })) // mở modal ra trước
     const res = await http.getAuth(`/tasks/${task.id}/v/board`)
@@ -108,9 +105,6 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
               title: (
                 <>
                   <Flex $alignItem='center' $gap='1rem'>
-                    <Button variant='text' theme='default'>
-                      <i className='fa-solid fa-link'></i> Copy
-                    </Button>
                     <Button variant='text' theme='default'>
                       <i className='fa-regular fa-clone'></i> Duplicate
                     </Button>

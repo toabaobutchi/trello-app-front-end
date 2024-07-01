@@ -1,7 +1,7 @@
+import './Attachment.scss'
+
 function Attachment() {
-  return <>
-    Attachment
-  </>
+  return <>Attachment</>
 }
 
-export default Attachment;
+export default Attachment

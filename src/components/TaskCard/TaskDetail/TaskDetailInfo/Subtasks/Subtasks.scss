@@ -22,6 +22,19 @@
       flex: 1;
       display: block;
     }
+
+    input {
+      outline: none;
+      border: var(--thin-border-width) solid var(--light-color);
+      font: inherit;
+      color: inherit;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--primary-radius);
+
+      &:focus {
+        border-color: var(--primary-color);
+      }
+    }
   }
   &-icon {
     width: 25px;
