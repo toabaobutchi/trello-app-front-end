@@ -103,14 +103,7 @@ function Welcome() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogin = async (token?: string) => {
-    const googleData = jwtDecode(token as string) as GoogleDataType
-    const data = {
-      email: googleData.email,
-      name: googleData.name,
-      avatar: googleData.picture,
-      id: googleData.sub
-    }
-    const response = await httpClient.post('/account/signin', data, { withCredentials: true })
+    const response = await httpClient.post('/account/signin', { credentials: token })
     if (response?.status === 200) {
       // thành công
       dispatch(loginSlice.actions.setAccessToken(response?.data))
