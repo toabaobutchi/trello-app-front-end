@@ -27,7 +27,6 @@ function Project() {
     // tải thành viên của project
     http.getAuth(`/assignments/in-project/${boardData.id}`).then(res => {
       if (res?.status === HttpStatusCode.Ok) {
-        console.log(res?.data ?? 'Success but nothing')
         dispatch(projectSlice.actions.setProjectMembers(res.data))
       } else {
         console.log('Can not get project members', res?.data)

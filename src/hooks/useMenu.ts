@@ -4,7 +4,7 @@ function useMenu<AnchorType = HTMLElement>() {
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<AnchorType | null>(null)
   const handleToggleMenu = (e: React.MouseEvent<AnchorType>) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     setOpen(!open)
   }
   const handleCloseMenu = () => {

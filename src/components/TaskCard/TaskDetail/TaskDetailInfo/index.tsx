@@ -46,7 +46,7 @@ function TaskDetailInfo() {
           <p>
             <i className='fa-regular fa-clock'></i> Due date:
           </p>
-          <p>{taskDetail?.dueDate ?? <p className='text-light'>[Not set]</p>}</p>
+          <p>{taskDetail?.dueDate ?? <span className='text-light'>[Not set]</span>}</p>
         </Flex>
         <div className='task-details-basic-info-item'>
           <TextArea
@@ -60,7 +60,7 @@ function TaskDetailInfo() {
             value={taskDetail?.description}
           />
         </div>
-        <Subtasks subtasks={taskDetail?.subTasks as SubtaskForBoard[]} />
+        <Subtasks subtasks={taskDetail?.subTasks as SubtaskForBoard[]} taskId={taskDetail?.id ?? ""} />
       </div>
     </>
   )

@@ -1,31 +1,43 @@
 import Button from '@comps/Button'
-import FloatLabelInput from '@comps/FloatLabelInput'
+import MultipleInput from '@comps/MultipleInput'
 import Flex from '@comps/StyledComponents/Flex'
 import { useState } from 'react'
 
-function AddSubtask({ onAddTask }: { onAddTask: (value: string) => void }) {
-  const [text, setText] = useState<string>()
+function AddSubtask({ onAddTask }: { onAddTask: (values: string[]) => void }) {
+  const [texts, setTexts] = useState<string[]>([])
+  const [openInput, setOpenInput] = useState(false)
   const handleToggle = () => {
-    setText(text == undefined ? '' : undefined)
+    setOpenInput(!openInput)
+    setTexts([])
+  }
+  const handleDelele = (index: number) => {
+    setTexts(texts.filter((_, i) => i !== index))
   }
   const handleAddTask = () => {
-    if (text) {
-      onAddTask(text)
+    if (texts.length) {
+      onAddTask(texts)
     }
     handleToggle()
   }
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value)
+  const handleTrigger = (value: string) => {
+    setTexts([...texts, value])
   }
   return (
     <>
-      {text === undefined ? (
+      {!openInput ? (
         <Button onClick={handleToggle} variant='filled' className='mt-1'>
           Add new subtask
         </Button>
       ) : (
         <>
-          <FloatLabelInput onChange={handleInputChange} label='Subtask name' className='mt-1' input={{ autoFocus: true, value: text, id: 'add-new-subtask' }} />
+          <MultipleInput
+            label='Subtask name'
+            values={texts}
+            valueBoxVariant='outlined'
+            onTrigger={handleTrigger}
+            onDelete={handleDelele}
+            input={{ autoFocus: true, id: 'add-new-subtasks-input' }}
+          />
           <Flex $alignItem='center' $gap='0.5rem' className='mt-1'>
             <Button onClick={handleAddTask}>
               <i className='fa-solid fa-plus'></i> Add
