@@ -10,7 +10,8 @@ import {
   DragOverlay,
   DropAnimation,
   defaultDropAnimationSideEffects,
-  DragOverEvent
+  DragOverEvent,
+  MouseSensor
   // closestCorners
 } from '@dnd-kit/core'
 import { SortableContext, arrayMove, horizontalListSortingStrategy } from '@dnd-kit/sortable'
@@ -85,7 +86,8 @@ function BoardContent({ lists = [] }: BoardContentProps) {
     } = over
 
     // tìm column của 2 card đang tương tác
-    const activeList = listState?.find(l => l.tasks?.map(t => t.id).includes(activeId as string))
+    const activeSource = listStateWhenDraggingTask.current ?? listState
+    const activeList = activeSource?.find(l => l.tasks?.map(t => t.id).includes(activeDragItem?.id as string))
     let overList = null
 
     // trường hợp kéo sang 1 list/column rỗng
@@ -129,17 +131,21 @@ function BoardContent({ lists = [] }: BoardContentProps) {
       activeList: nextActiveList as ListResponseForBoard,
       overList: nextOverList as ListResponseForBoard
     })
-    listStateWhenDraggingTask.current = listState // dùng cho thằng `handleDragEnd`
+    listStateWhenDraggingTask.current = listStateWhenDraggingTask.current ?? listState // dùng cho thằng `handleDragEnd`
+    // listStateWhenDraggingTask.current = newListState // dùng cho thằng `handleDragEnd`
     setListState(newListState)
   }
 
   const handleDragEnd = (e: DragEndEvent) => {
+    console.log('handleDragEnd >> ')
+    console.table(e)
     const { active, over } = e
     if (!active || !over) return
 
     // trường hợp kéo thả card/task
     if (activeDragItem?.dragObject === 'Card') {
       // setListState(listStateWhenDraggingTask.current as ListResponseForBoard[])
+      // listStateWhenDraggingTask.current = listState // ghi lai
       if (listStateWhenDraggingTask.current) {
         const updateData: ChangeTaskOrderModel = {
           oldTaskOrder: dragOverResult?.activeList.tasks?.map(t => t.id)?.join(',') as string,

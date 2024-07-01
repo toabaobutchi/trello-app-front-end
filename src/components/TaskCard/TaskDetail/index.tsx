@@ -1,6 +1,6 @@
 import './TaskDetail.scss'
 import Tab from '@comps/Tab'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import ChatBox from './ChatBox'
 import TaskDetailInfo from './TaskDetailInfo'
 import MemberTable from './MemberTable'
@@ -35,11 +35,12 @@ const tabs = [
 
 const initTab = 'comments'
 
-function TaskDetail() {
+const TaskDetail = memo(() => {
   const [activeTab, setActiveTab] = useState(initTab)
   const handleTabClick = (value: string) => {
     setActiveTab(value)
   }
+  
   return (
     <>
       <div className='task-details'>
@@ -60,6 +61,6 @@ function TaskDetail() {
       </div>
     </>
   )
-}
+})
 
 export default TaskDetail

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
 import ProjectHeader from './partials/ProjectHeader'
@@ -7,8 +8,11 @@ import { useEffect } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
-import { AxiosResponse } from 'axios'
+import { AxiosResponse, HttpStatusCode } from 'axios'
 import { RootState } from '@redux/store'
+import HttpClient from '@utils/HttpClient'
+
+const http = new HttpClient()
 
 function Project() {
   const loader = useLoaderData() as AxiosResponse
@@ -18,12 +22,25 @@ function Project() {
   useEffect(() => {
     dispatch(projectSlice.actions.setActiveProjectBoard(boardData))
   }, [boardData, dispatch])
+
+  useEffect(() => {
+    // tải thành viên của project
+    http.getAuth(`/assignments/in-project/${boardData.id}`).then(res => {
+      if (res?.status === HttpStatusCode.Ok) {
+        console.log(res?.data ?? 'Success but nothing')
+        dispatch(projectSlice.actions.setProjectMembers(res.data))
+      } else {
+        console.log('Can not get project members', res?.data)
+      }
+    })
+  }, [])
+
   return (
     <>
       {boardData && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
-          {project && <BoardContent lists={project?.lists} />}
+          {project && project.lists?.length && <BoardContent lists={project?.lists} />}
         </Flex>
       )}
     </>

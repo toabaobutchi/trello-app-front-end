@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
-import { sortList, sortProject, sortTask } from '@utils/functions'
-import { ChangeTaskOrderResponse, CreateListResponse, CreateTaskResponse, DragOverResult, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
+import { sortList } from '@utils/functions'
+import { AssignmentResponse, ChangeTaskOrderResponse, CreateListResponse, CreateTaskResponse, DragOverResult, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
 
 const http = new HttpClient()
 
@@ -9,7 +9,8 @@ export const projectSlice = createSlice({
   name: 'project',
   initialState: {
     activeProject: {
-      board: {} as ProjectResponseForBoard
+      board: {} as ProjectResponseForBoard,
+      members: [] as AssignmentResponse[]
       // table, chart and calendar
     }
   },
@@ -56,6 +57,10 @@ export const projectSlice = createSlice({
         oldList = dragOverResult.activeList
         oldList!.taskOrder = resData.updatedOldTaskOrder
       }
+    },
+    setProjectMembers: (state, action) => {
+      const members = action.payload as AssignmentResponse[]
+      state.activeProject.members = members
     }
   },
   extraReducers: builder => {

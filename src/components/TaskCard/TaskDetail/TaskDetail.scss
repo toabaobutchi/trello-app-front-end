@@ -37,6 +37,12 @@
     label {
       margin-left: 0;
     }
+    &-creator {
+      background-color: var(--bright-color);
+      height: max-content;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--primary-radius);
+    }
   }
 
   &-creator-avatar {
