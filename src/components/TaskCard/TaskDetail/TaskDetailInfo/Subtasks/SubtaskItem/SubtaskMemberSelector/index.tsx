@@ -1,6 +1,4 @@
-import Menu from '@comps/Menu'
-import MenuItem from '@comps/MenuItem'
-import Tooltip from '@comps/Tooltip'
+import Tooltip from '@comps/Tooltip-v2'
 import useMenu from '@hooks/useMenu'
 import { RootState } from '@redux/store'
 import { AssignmentResponse } from '@utils/types'
@@ -16,23 +14,25 @@ function SubtaskMemberSelector({ assignmentId }: { assignmentId?: string }) {
     setAssignment(projectMembers.find(m => m.id === assignmentId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignmentId])
-  console.log({ data: menu.anchorRef.current })
+  const tooltipContent = !assignment
+    ? 'No member has assigned this subtask yet!'
+    : `${assignment?.email} (${assignment?.displayName})`
   return (
     <>
-      <div ref={menu.anchorRef} onClick={menu.toggleMenu}>
-        <div className='subtasks-item-icon'>
-          {!assignment ? (
-            <i className='fa-regular fa-user'></i>
-          ) : (
-            <>
-              <Tooltip arrow position='top' content={`${assignment?.email} (${assignment?.displayName})`}>
+      <Tooltip arrow delay='0.25s' content={tooltipContent}>
+        <div ref={menu.anchorRef} onClick={menu.toggleMenu}>
+          <div className='subtasks-item-icon'>
+            {!assignment ? (
+              <i className='fa-regular fa-user'></i>
+            ) : (
+              <>
                 <img className='' src={assignment?.avatar} />
-              </Tooltip>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      <Menu open={menu.open} anchorElement={menu.anchorRef.current} onClose={menu.closeMenu}>
+      </Tooltip>
+      {/* <Menu open={menu.open} anchorElement={menu.anchorRef.current} onClose={menu.closeMenu}>
         {projectMembers.map(ta => {
           return (
             <MenuItem size='small' style={{ fontSize: '0.9rem' }} key={ta.id} className='row gap-1'>
@@ -41,7 +41,7 @@ function SubtaskMemberSelector({ assignmentId }: { assignmentId?: string }) {
             </MenuItem>
           )
         })}
-      </Menu>
+      </Menu> */}
     </>
   )
 }
