@@ -53,10 +53,10 @@ const dropAnimation: DropAnimation = {
   })
 }
 
-type BoardContentProps = {
-  lists?: ListResponseForBoard[]
-  boardColor?: string
-}
+// type BoardContentProps = {
+//   lists?: ListResponseForBoard[]
+//   boardColor?: string
+// }
 
 export type RemoteDraggingType = {
   isDragging?: boolean
@@ -65,7 +65,7 @@ export type RemoteDraggingType = {
   dragObject?: 'Column' | 'Card'
 }
 
-function BoardContent({ boardColor = '#007bc2' }: BoardContentProps) {
+function BoardContent() {
   const dispatch = useDispatch<AppDispatch>()
   const project = useSelector((state: RootState) => state.project.activeProject.board)
   const account = useSelector((state: RootState) => state.login.accountInfo)
@@ -383,7 +383,7 @@ function BoardContent({ boardColor = '#007bc2' }: BoardContentProps) {
           items={listState?.map(l => l?.id) ?? []}
           strategy={horizontalListSortingStrategy}
         >
-          <Flex $gap='1.5rem' style={{ '--board-bg-color': boardColor } as React.CSSProperties} className='column-list'>
+          <Flex $gap='1.5rem' className='column-list'>
             {listState?.map(column => (
               <SortableColumn remoteDragging={remoteDragging} key={column.id} column={column} />
             ))}

@@ -16,7 +16,6 @@ import { HttpStatusCode } from 'axios'
 import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
-// import { RootState } from '@reduxjs/toolkit/query'
 
 const http = new HttpClient()
 
@@ -25,7 +24,7 @@ type TaskDetailModelState = {
   taskDetail?: TaskDetailForBoard
 }
 
-export const TaskDetailContext = createContext<TaskDetailForBoard | undefined>(undefined)
+export const TaskDetailContext = createContext<TaskDetailModelState | undefined>(undefined)
 
 function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remoteDragging?: RemoteDraggingType }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -41,10 +40,23 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   }
   const [modalState, setModalState] = useState<TaskDetailModelState>({ open: false })
   const members = useSelector((state: RootState) => state.project.activeProject.members)
+  // const account = useSelector((state: RootState) => state.login.accountInfo)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
+
+  // useEffect(() => {
+  //   const assignment = members?.find(m => m.id === account.id)
+  //   const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/taskHub`).build()
+  //   connection
+  //     .start()
+  //     .then(() => {
+  //       setModalState({ ...modalState, taskConnection: connection })
+  //       connection.invoke('SubscribeTaskGroup', task.id, assignment?.id)
+  //     })
+  //     .catch(err => console.log(err))
+  // }, [account.id, task.id])
 
   const handleCloseTaskDetailModal = () => {
     setModalState({ ...modalState, open: false })
@@ -58,7 +70,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   }
   return (
     <>
-      <TaskDetailContext.Provider value={modalState.taskDetail}>
+      <TaskDetailContext.Provider value={modalState}>
         <div
           onClick={handleLoadTaskDetail}
           {...attributes}

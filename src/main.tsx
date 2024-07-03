@@ -49,6 +49,7 @@ const router = createBrowserRouter([
       </DefaultLayout>
     ),
     loader: async ({ params }) => {
+      console.log(params)
       const res = await http.getAuth(`/w/${params.workspaceId}/projects`)
       return res
     }
@@ -68,10 +69,12 @@ const router = createBrowserRouter([
   },
   {
     path: routeLinks.projectInvitation,
-    element: <>
-    <ProjectInvitation />
-    </>,
-    loader: async ({params}) => {
+    element: (
+      <>
+        <ProjectInvitation />
+      </>
+    ),
+    loader: async ({ params }) => {
       const projectId = params.pid
       const res = await http.get(`/projects/${projectId}`)
       return res

@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 
 function TaskDetailInfo() {
-  const taskDetail = useContext(TaskDetailContext)
+  const taskDetail = useContext(TaskDetailContext)?.taskDetail
   const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
 
   // lấy thông tin creator

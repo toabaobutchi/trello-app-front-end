@@ -23,7 +23,7 @@ function AddNewList() {
         <Button
           onClick={handleToggleAddNewList}
           variant='text'
-          theme='light'
+          theme='default'
           size='large'
           style={{ fontSize: '1.1rem' }}
         >

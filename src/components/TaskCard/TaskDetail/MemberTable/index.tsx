@@ -7,11 +7,9 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 
 function MemberTable() {
-  const taskDetail = useContext(TaskDetailContext)
+  const taskDetail = useContext(TaskDetailContext)?.taskDetail
   const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
   const [taskMembers] = useState(() => projectMembers.filter(m => taskDetail?.taskAssignmentIds?.includes(m.id)))
-  console.log('projectMembers: ', projectMembers)
-  console.log('taskMembers: ', taskMembers)
   return (
     <>
       <p className='mb-1 text-primary'>Task member</p>

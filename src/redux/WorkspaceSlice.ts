@@ -13,7 +13,7 @@ export const workspaceSlice = createSlice({
   },
   reducers: {
     setActiveWorkspace: (state, action) => {
-      state.activeWorkspace = action.payload as WorkspaceResponseWithRelatedProjects
+      state.activeWorkspace = action?.payload?.data as WorkspaceResponseWithRelatedProjects
     },
     // payload: { workspaceId, workspaceName }
     renameWorkspace: (state, action) => {

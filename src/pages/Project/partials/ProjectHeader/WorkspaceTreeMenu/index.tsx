@@ -18,7 +18,6 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
   const menu = useMenu<HTMLButtonElement>()
   const dispatch = useDispatch()
   const activeWorkspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
-
   useEffect(() => {
     if (!activeWorkspace) {
       // fetch workspace
@@ -33,7 +32,7 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [workspaceId])
   return (
     <>
       <Button
