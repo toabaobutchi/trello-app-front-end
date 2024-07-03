@@ -20,18 +20,18 @@ function ChatBox() {
   const connection = useHub(
     '/taskHub',
     'SubscribeTaskGroup',
-    task?.taskDetail?.id as unknown as object,
+    task?.state?.taskDetail?.id as unknown as object,
     assignment?.id as unknown as object
   )
 
   useEffect(() => {
     // Fetch comments from API
-    http.getAuth(`/comments/in-task/${task?.taskDetail?.id}`).then(res => {
+    http.getAuth(`/comments/in-task/${task?.state?.taskDetail?.id}`).then(res => {
       if (res?.status === 200) {
         setComments(res.data)
       } else console.log('Fail: ', res?.message)
     })
-  }, [task?.taskDetail?.id])
+  }, [task?.state?.taskDetail?.id])
 
   useEffect(() => {
     if (connection) {
@@ -44,7 +44,7 @@ function ChatBox() {
   const handleComment = async (comment: string) => {
     const commentModel: CreateCommentModel = {
       content: comment,
-      taskId: task?.taskDetail?.id as string,
+      taskId: task?.state?.taskDetail?.id as string,
       assignmentId: assignment?.id as string
     }
     const res = await http.postAuth('/comments', commentModel)
@@ -59,11 +59,13 @@ function ChatBox() {
   return (
     <>
       <div className='chat-box'>
-        <div className='chat-box-content'>
-          {comments.map(comment => (
-            <ChatBoxItem key={comment.id} comment={comment} />
-          ))}
-        </div>
+        {comments.length > 0 && (
+          <div className='chat-box-content'>
+            {comments.map(comment => (
+              <ChatBoxItem key={comment.id} comment={comment} />
+            ))}
+          </div>
+        )}
         <ChatInput onComment={handleComment} />
       </div>
     </>

@@ -24,7 +24,12 @@ type TaskDetailModelState = {
   taskDetail?: TaskDetailForBoard
 }
 
-export const TaskDetailContext = createContext<TaskDetailModelState | undefined>(undefined)
+type TaskDetailContextType = {
+  state?: TaskDetailModelState
+  setState?: React.Dispatch<React.SetStateAction<TaskDetailModelState>>
+}
+
+export const TaskDetailContext = createContext<TaskDetailContextType | undefined>(undefined)
 
 function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remoteDragging?: RemoteDraggingType }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -46,18 +51,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
 
-  // useEffect(() => {
-  //   const assignment = members?.find(m => m.id === account.id)
-  //   const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/taskHub`).build()
-  //   connection
-  //     .start()
-  //     .then(() => {
-  //       setModalState({ ...modalState, taskConnection: connection })
-  //       connection.invoke('SubscribeTaskGroup', task.id, assignment?.id)
-  //     })
-  //     .catch(err => console.log(err))
-  // }, [account.id, task.id])
-
   const handleCloseTaskDetailModal = () => {
     setModalState({ ...modalState, open: false })
   }
@@ -70,7 +63,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   }
   return (
     <>
-      <TaskDetailContext.Provider value={modalState}>
+      <TaskDetailContext.Provider value={{ state: modalState, setState: setModalState }}>
         <div
           onClick={handleLoadTaskDetail}
           {...attributes}

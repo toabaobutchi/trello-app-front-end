@@ -1,0 +1,14 @@
+.input-change-task-name {
+  outline: none;
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+  font: inherit;
+  color: var(--primary-color);
+  padding: 0.5rem 0.75rem;
+  max-width: 80%;
+  font-size: 1.2rem;
+
+  &:focus {
+    border-color: var(--primary-color);
+  }
+}

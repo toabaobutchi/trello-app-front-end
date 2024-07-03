@@ -19,7 +19,7 @@ export type AttachmentInputs = {
 }
 
 function Attachment() {
-  const taskDetail = useContext(TaskDetailContext)?.taskDetail
+  const taskDetail = useContext(TaskDetailContext)?.state?.taskDetail
   const members = useSelector((state: RootState) => state?.project?.activeProject?.members)
   const account = useSelector((state: RootState) => state?.login?.accountInfo)
   const [attachments, setAttatchments] = useState<AttachmentResponse[]>([])

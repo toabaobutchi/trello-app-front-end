@@ -7,18 +7,32 @@ import { TaskDetailContext } from '@comps/TaskCard'
 import { AssignmentResponse, SubtaskForBoard } from '@utils/types'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import UpdateTaskNameEditor from './UpdateTaskNameEditor'
+import HttpClient from '@utils/HttpClient'
+import { HttpStatusCode } from 'axios'
+
+const http = new HttpClient()
 
 function TaskDetailInfo() {
-  const taskDetail = useContext(TaskDetailContext)?.taskDetail
+  const task = useContext(TaskDetailContext)
+  const taskDetail = task?.state?.taskDetail
   const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
 
   // lấy thông tin creator
-  const [creator] = useState<AssignmentResponse | undefined>(() => projectMembers.find(p => p.id === taskDetail?.creatorId))
-
+  const [creator] = useState<AssignmentResponse | undefined>(() =>
+    projectMembers.find(p => p.id === taskDetail?.creatorId)
+  )
+  const handleUpdateName = async (name: string) => {
+    const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { name })
+    if (res?.status === HttpStatusCode.Ok) {
+      task?.setState?.(prev => ({ ...prev, taskDetail: { ...taskDetail, name: res?.data?.name } } as typeof prev))
+    }
+  }
   return (
     <>
       <div className='task-details-basic-info'>
-        <h2 className='task-details-name'>{taskDetail?.name}</h2>
+        {/* <h2 className='task-details-name'>{taskDetail?.name}</h2> */}
+        <UpdateTaskNameEditor taskName={taskDetail?.name} onUpdateTaskName={handleUpdateName} />
         <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
           <p>
             <i className='fa-solid fa-user-pen'></i> Created by:
@@ -60,7 +74,7 @@ function TaskDetailInfo() {
             value={taskDetail?.description}
           />
         </div>
-        <Subtasks subtasks={taskDetail?.subTasks as SubtaskForBoard[]} taskId={taskDetail?.id ?? ""} />
+        <Subtasks subtasks={taskDetail?.subTasks as SubtaskForBoard[]} taskId={taskDetail?.id ?? ''} />
       </div>
     </>
   )
