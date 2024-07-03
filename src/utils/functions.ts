@@ -1,4 +1,4 @@
-import { ListResponseForBoard, ProjectResponseForBoard, ResponseForBoard, TaskResponseForBoard } from './types'
+import { ListResponseForBoard, ProjectResponseForBoard, TaskResponseForBoard } from './types'
 
 export const isOutClick = (parent: HTMLElement, child: HTMLElement | null) => {
   return parent && !parent.contains(child as Node)
@@ -9,8 +9,16 @@ export function createCardId(task: TaskResponseForBoard) {
 }
 
 export function indexComparer(
-  { index: aIndex, createdAt: aCreatedAt, updatedAt: aUpdatedAt }: { index: number; createdAt: number; updatedAt?: number },
-  { index: bIndex, createdAt: bCreatedAt, updatedAt: bUpdatedAt }: { index: number; createdAt: number; updatedAt?: number }
+  {
+    index: aIndex,
+    createdAt: aCreatedAt,
+    updatedAt: aUpdatedAt
+  }: { index: number; createdAt: number; updatedAt?: number },
+  {
+    index: bIndex,
+    createdAt: bCreatedAt,
+    updatedAt: bUpdatedAt
+  }: { index: number; createdAt: number; updatedAt?: number }
 ) {
   // nếu khác thì so sánh index thôi, không cần xét đến updated time / created time
   if (aIndex !== bIndex) {
@@ -74,4 +82,13 @@ export const sortTask = (tasks?: TaskResponseForBoard[], order?: string) => {
   const updatedTaskOrder = order?.split(',')
   tasks = tasks?.sort((a, b) => (updatedTaskOrder?.indexOf(a.id) ?? 0) - (updatedTaskOrder?.indexOf(b.id) ?? 0))
   return tasks
+}
+
+export const mapOrder = <T>(originalArray?: T[], orderArray?: string[], key?: string) => {
+  if (!originalArray || !orderArray || !key) return []
+  const clonedArray = [...originalArray]
+  const orderedArray = clonedArray.sort((a, b) => {
+    return orderArray.indexOf(a[key]) - orderArray.indexOf(b[key])
+  })
+  return orderedArray
 }

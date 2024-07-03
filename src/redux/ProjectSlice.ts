@@ -1,7 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
-import { sortList } from '@utils/functions'
-import { AssignmentResponse, ChangeTaskOrderResponse, CreateListResponse, CreateTaskResponse, DragOverResult, ProjectResponseForBoard, TaskResponseForBoard } from '@utils/types'
+import { mapOrder, sortList } from '@utils/functions'
+import {
+  AssignmentResponse,
+  ChangeTaskOrderResponse,
+  CreateListResponse,
+  CreateTaskResponse,
+  DragOverResult,
+  ListResponseForBoard,
+  ProjectResponseForBoard,
+  TaskResponseForBoard
+} from '@utils/types'
 
 const http = new HttpClient()
 
@@ -10,7 +19,8 @@ export const projectSlice = createSlice({
   initialState: {
     activeProject: {
       board: {} as ProjectResponseForBoard,
-      members: [] as AssignmentResponse[]
+      members: [] as AssignmentResponse[],
+      onlineMembers: [] as string[]
       // table, chart and calendar
     }
   },
@@ -18,7 +28,8 @@ export const projectSlice = createSlice({
     setActiveProjectBoard: (state, action) => {
       const project = action.payload as ProjectResponseForBoard
       const listOrder = project?.listOrder?.split(',')
-      project!.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
+      // project!.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
+      project!.lists = mapOrder(project?.lists as ListResponseForBoard[], project?.listOrder?.split(',') as string[], 'id')
       // // TODO: sắp xếp lại danh sách task
       state.activeProject.board = project
     },
@@ -61,6 +72,10 @@ export const projectSlice = createSlice({
     setProjectMembers: (state, action) => {
       const members = action.payload as AssignmentResponse[]
       state.activeProject.members = members
+    },
+    setOnlineMembers: (state, action) => {
+      const onlineMembers = action.payload as string[]
+      state.activeProject.onlineMembers = onlineMembers
     }
   },
   extraReducers: builder => {
@@ -68,7 +83,9 @@ export const projectSlice = createSlice({
       const newListOrder = action?.payload?.data as string
       state.activeProject.board.listOrder = newListOrder
       const updatedListOrder = newListOrder.split(',')
-      state.activeProject.board!.lists = state.activeProject.board?.lists?.sort((a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0))
+      state.activeProject.board!.lists = state.activeProject.board?.lists?.sort(
+        (a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0)
+      )
     })
   }
 })

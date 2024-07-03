@@ -26,7 +26,7 @@ function Modal({ open = false, layout = undefined, children = '', onClose = () =
           <div className={`modal-main menu-content-box-shadow ${props?.className ?? ''}`.trim()} style={props?.style}>
             {layout?.header && (
               <div className='modal-header'>
-                <p className='modal-header-text'>{layout?.header?.title}</p>
+                <div className='modal-header-text'>{layout?.header?.title}</div>
                 {layout?.header?.closeIcon && (
                   <Button style={{ fontSize: '1.4rem', paddingLeft: '0.8rem', paddingRight: '0.8rem' }} className='modal-header-close-button' variant='text' theme='default' onClick={onClose}>
                     <i className='fa-solid fa-xmark'></i>

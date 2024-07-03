@@ -8,6 +8,7 @@ import { defaultLayoutSlice } from '@layouts/DefaultLayout/DefaultLayoutSlice'
 import Button from '@comps/Button'
 import routeLinks, { linkCreator } from '@routes/router'
 import config from '@confs/app.config'
+import SharedWorkspaces from './partials/SharedWorkspaces'
 
 function SideBar() {
   const sideBarStatus = useSelector((state: RootState) => state.sideBar.expand)
@@ -31,9 +32,7 @@ function SideBar() {
         <SideBarItem.Link to={routeLinks.yourTasks} onClick={closeSidebarWhenRedirectInMobileMode}>
           <i className='fa-solid fa-list-check'></i> Your tasks
         </SideBarItem.Link>
-        <SideBarItem.Link to={'/projects'}>
-                      Project (Test)
-                    </SideBarItem.Link>
+        <SideBarItem.Link to={'/projects'}>Project (Test)</SideBarItem.Link>
         <SideBarItem style={{ paddingTop: 0, paddingBottom: 0 }}>
           <Expander
             header={{
@@ -81,19 +80,20 @@ function SideBar() {
                 )}
               </Expander>
             </SideBarItem>
-            <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
+            {/* <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
               <Expander header={{ content: 'Shared projects' }} defaultExpand useArrow={false}>
                 {workspaces.sharedWorkspaceList?.map(workspace => {
                   return <SideBarItem key={workspace.id}>{workspace.name}</SideBarItem>
                 })}
               </Expander>
-            </SideBarItem>
+            </SideBarItem> */}
+            <SharedWorkspaces />
           </Expander>
         </SideBarItem>
         <SideBarItem>
           <i className='fa-solid fa-calendar-days'></i> Schedule
         </SideBarItem>
-        
+
         <Button
           onClick={toggleSidebar}
           className='sidebar-close-button-on-mobile'

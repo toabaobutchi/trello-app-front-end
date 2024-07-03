@@ -8,27 +8,28 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 
 function ProjectHeader() {
-  const project = useSelector((state: RootState) => state.project.activeProject.board)
+  const project = useSelector((state: RootState) => state.project.activeProject)
   return (
     <>
       <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' className='project-header'>
         <Flex $alignItem='center' $gap='2rem'>
           <Flex $alignItem='center' $gap='1rem'>
-            <WorkspaceTreeMenu workspaceId={project?.workspaceId} />
+            <WorkspaceTreeMenu workspaceId={project?.board?.workspaceId} />
             <div className='page-header' style={{ marginBottom: '0' }}>
               <p>
-                <i className='fa-brands fa-flipboard'></i> {project?.name}
+                <i className='fa-brands fa-flipboard'></i> {project?.board?.name}
               </p>
               <p className='text-secondary' style={{ fontSize: '0.85rem' }}>
-                {project?.memberCount ?? 0} members
+                {project?.board?.memberCount ?? 0} members
               </p>
             </div>
           </Flex>
           <ProjectViewModeNavBar
-            projectId={project?.id}
-            ownerShip={project?.context?.toLowerCase()}
-            slug={project?.slug ?? ''}
+            projectId={project?.board?.id}
+            ownerShip={project?.board?.context?.toLowerCase()}
+            slug={project?.board?.slug ?? ''}
           />
+          <p>Online: {project.onlineMembers.length}</p>
         </Flex>
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
           <ProjectFilterMenu />

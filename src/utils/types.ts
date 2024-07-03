@@ -141,7 +141,7 @@ export type ChangeTaskOrderResponse = {
 }
 
 export type DragOverResult = {
-  overList: ListResponseForBoard
+  overList?: ListResponseForBoard
   activeList: ListResponseForBoard
 }
 

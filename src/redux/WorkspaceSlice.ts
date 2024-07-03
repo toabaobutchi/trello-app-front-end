@@ -17,7 +17,7 @@ export const workspaceSlice = createSlice({
     },
     // payload: { workspaceId, workspaceName }
     renameWorkspace: (state, action) => {
-      const {workspaceId, workspaceName} = action.payload as {workspaceId: number, workspaceName: string}
+      const { workspaceId, workspaceName } = action.payload as { workspaceId: number; workspaceName: string }
       // vì chỉ owner mới cập nhật lại được workspace name nên chỉ tìm trong `workspaceList`
       const workspace = state.workspaceList.find(workspace => workspace.id === workspaceId)
       if (workspace) {
@@ -26,7 +26,7 @@ export const workspaceSlice = createSlice({
     },
     // payload: { workspaceId, workspaceName }
     renameActiveWorkspace: (state, action) => {
-      const {workspaceId, workspaceName} = action.payload as {workspaceId: number, workspaceName: string}
+      const { workspaceId, workspaceName } = action.payload as { workspaceId: number; workspaceName: string }
       const workspace = state.workspaceList.find(workspace => workspace.id === workspaceId)
       if (workspace) {
         workspace.name = workspaceName
@@ -41,6 +41,9 @@ export const workspaceSlice = createSlice({
       .addCase(addWorkspace.fulfilled, (state, action) => {
         state.workspaceList.push(action.payload?.data)
       })
+      .addCase(fetchSharedWorkspaces.fulfilled, (state, action) => {
+        state.sharedWorkspaceList = action.payload?.data
+      })
   }
 })
 
@@ -54,10 +57,7 @@ export const addWorkspace = createAsyncThunk('workspaces/addWorkspace', async (d
   return res
 })
 
-export const fetchSharedWorkspaces = createAsyncThunk(
-  'workspaces/fetchSharedWorkspaces',
-  async (loginInfo: LoginInfo) => {
-    const res = await http.getAuth(`/shared-workspace`, loginInfo.accessToken)
-    return res
-  }
-)
+export const fetchSharedWorkspaces = createAsyncThunk('workspaces/fetchSharedWorkspaces', async () => {
+  const res = await http.getAuth(`/shared-workspaces`)
+  return res
+})
