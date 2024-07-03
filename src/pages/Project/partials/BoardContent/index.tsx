@@ -1,5 +1,11 @@
 import Flex from '@comps/StyledComponents/Flex'
-import { ChangeTaskOrderModel, DragOverResult, ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
+import {
+  ChangeTaskOrderModel,
+  ChangeTaskOrderResponse,
+  DragOverResult,
+  ListResponseForBoard,
+  TaskResponseForBoard
+} from '@utils/types'
 import {
   DndContext,
   DragEndEvent,
@@ -17,7 +23,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, arrayMove, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import SortableColumn from './SortableColumn'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AddNewList from './AddNewList'
 import TaskCard from '@comps/TaskCard'
 import { useDispatch, useSelector } from 'react-redux'
@@ -25,7 +31,6 @@ import { AppDispatch, RootState } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
 import HttpClient from '@utils/HttpClient'
 import { cloneDeep } from 'lodash'
-import { HttpStatusCode } from 'axios'
 import { MyCustomSensor } from '@utils/MyCustomSensor'
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import config from '@confs/app.config'
@@ -60,7 +65,7 @@ export type RemoteDraggingType = {
   dragObject?: 'Column' | 'Card'
 }
 
-function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps) {
+function BoardContent({ boardColor = '#007bc2' }: BoardContentProps) {
   const dispatch = useDispatch<AppDispatch>()
   const project = useSelector((state: RootState) => state.project.activeProject.board)
   const account = useSelector((state: RootState) => state.login.accountInfo)
@@ -73,24 +78,26 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
   const [dragConnection, setDragConnection] = useState<HubConnection>()
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
 
+  const listJson = JSON.stringify(project?.lists)
   useEffect(() => {
-    const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/dragHub`).build()
-    connection
-      .start()
-      .then(() => {
+    setListState(project?.lists as ListResponseForBoard[])
+  }, [project?.lists, listJson, dispatch])
+
+  useEffect(() => {
+    if (project?.id) {
+      if (dragConnection) dragConnection.stop()
+      const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/dragHub`).build()
+      connection.start().then(() => {
         setDragConnection(connection)
+        connection.invoke('SendAddToDragGroup', project.id, account.id)
       })
-      .catch(err => console.log(err))
-  }, [])
+    }
+  }, [account.id, project.id])
 
   useEffect(() => {
-    setListState(lists)
-  }, [lists])
-
-  useEffect(() => {
-    if (dragConnection) {
+    if (dragConnection && project) {
       dragConnection.on('ReceiveStartDragList', (assignmentId: string, listId: string) => {
-        console.log(assignmentId, listId)
+        // console.log(assignmentId, listId)
         setRemoteDragging({
           isDragging: true,
           subId: assignmentId,
@@ -98,8 +105,31 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
           dragObject: 'Column'
         })
       })
+
+      dragConnection.on('ReceiveEndDragList', (assignmentId: string, updatedListOrder: string) => {
+        // console.log('updatedListOrder: ', updatedListOrder)
+        dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
+        setRemoteDragging(undefined)
+      })
+
+      dragConnection.on('ReceiveStartDragTask', (assignmentId: string, updatedListOrder: string, taskId: string) => {
+        setRemoteDragging({
+          isDragging: true,
+          subId: assignmentId,
+          dragObjectId: taskId,
+          dragObject: 'Card'
+        })
+      })
+
+      dragConnection.on(
+        'ReceiveEndDragTask',
+        (assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
+          dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
+          setRemoteDragging(undefined)
+        }
+      )
     }
-  }, [dragConnection])
+  }, [dragConnection, dispatch])
 
   const findColumnByCardId = (cardId: string) => {
     return listState?.find(list => list?.tasks?.map(task => task.id).includes(cardId))
@@ -133,13 +163,11 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
     if (nextActiveColumn) {
       nextActiveColumn.tasks = nextActiveColumn.tasks?.filter(t => t.id !== activeId)
       nextActiveColumn.taskOrder = nextActiveColumn.tasks?.map(t => t.id).join(',')
-      console.log('nextActiveColumn.id : ', nextActiveColumn.id)
     }
 
     if (nextOverColumn) {
       // kiểm tra - xoá trước
       nextOverColumn.tasks = nextOverColumn.tasks?.filter(t => t.id !== activeId)
-      console.log('nextOverColumn.id : ', nextOverColumn.id)
       // thay doi listId
       const rebuildActiveData: TaskResponseForBoard = {
         ...(activeData as TaskResponseForBoard),
@@ -156,15 +184,25 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
     }
     setListState(prev => nextColumns) // set truoc, cho response de quyet dinh sau
     if (callApi) {
-      console.log(changeTaskOrderModel)
       http
         .putAuth(`/tasks/${activeId}/change-order`, changeTaskOrderModel)
         .then(res => {
           if (res?.status !== 200) {
-            setListState(prev => lists)
+            console.log('Update task order failed')
+            setListState(prev => project.lists as ListResponseForBoard[])
+          } else {
+            const dragOverResult: DragOverResult = {
+              activeList: nextActiveColumn as ListResponseForBoard,
+              overList: nextOverColumn
+            }
+            dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
+            // call hub
+            if (dragConnection) {
+              dragConnection?.send('SendEndDragTask', project?.id, account?.id, res?.data, dragOverResult)
+            }
           }
         })
-        .catch(() => setListState(prev => lists))
+        .catch(() => setListState(prev => project.lists as ListResponseForBoard[]))
     }
   }
 
@@ -176,13 +214,21 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
     })
     if (e?.active?.data?.current?.dragObject === 'Card') {
       setOldColumn(findColumnByCardId(e?.active?.id as string))
+      if (dragConnection) {
+        dragConnection?.send(
+          'SendStartDragTask',
+          project?.id,
+          account?.id,
+          e?.active?.data?.current?.listId,
+          e?.active?.id
+        )
+      }
     } else {
       if (dragConnection) dragConnection?.send('SendStartDragList', project?.id, account?.id, e?.active?.id)
     }
   }
 
   const handleDragOver = (e: DragOverEvent) => {
-    // console.log('handleDragOver: ', e)
     if (activeDragItem?.dragObject === 'Column') return
 
     const { active, over } = e
@@ -230,6 +276,7 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
       if (!activeList || !overList) return
 
       if (oldColumn?.id !== overList.id) {
+        // thay doi card tren 2 column
         moveCardsInDifferentColumns(
           overList,
           active,
@@ -240,7 +287,9 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
           overId as string,
           true
         )
-      } else {
+      }
+      // thay doi card tren 1 column
+      else {
         const oldCardIndex = oldColumn?.tasks?.findIndex(t => t.id === activeDragItem.id)
         const newCardIndex = overList?.tasks?.findIndex(t => t.id === overId)
 
@@ -261,10 +310,21 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
           newTaskOrder: targetColumn?.taskOrder as string,
           oldTaskOrder: targetColumn?.taskOrder as string
         }
-        setListState(nextColumns)
+        setListState(prev => nextColumns)
         http.putAuth(`/tasks/${activeDragItem.id}/change-order`, changeTaskOrderModel).then(res => {
           if (res?.status !== 200) {
-            setListState(lists)
+            console.log('Update task order failed')
+            setListState(prev => project.lists as ListResponseForBoard[])
+          } else {
+            const dragOverResult: DragOverResult = {
+              activeList: targetColumn as ListResponseForBoard,
+              overList: targetColumn
+            }
+            dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
+            // call hub
+            if (dragConnection) {
+              dragConnection?.send('SendEndDragTask', project?.id, account?.id, res?.data, dragOverResult)
+            }
           }
         })
       }
@@ -290,6 +350,9 @@ function BoardContent({ lists = [], boardColor = '#007bc2' }: BoardContentProps)
               // cập nhật lại thành công
               const updatedListOrder = res.data as string
               dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
+              if (dragConnection) {
+                dragConnection?.send('SendEndDragList', project?.id, account?.id, updatedListOrder)
+              }
             } else {
               setListState(listState) // reset lại list state như ban đầu, huỷ cập nhật
             }

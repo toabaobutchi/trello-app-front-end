@@ -4,15 +4,19 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { TaskDetailForBoard, TaskResponseForBoard } from '@utils/types'
+import { AssignmentResponse, TaskDetailForBoard, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId } from '@utils/functions'
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import Modal from '@comps/Modal'
 import HttpClient from '@utils/HttpClient'
 import TaskDetail from './TaskDetail'
 import { HttpStatusCode } from 'axios'
+import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
+import { useSelector } from 'react-redux'
+import { RootState } from '@redux/store'
+// import { RootState } from '@reduxjs/toolkit/query'
 
 const http = new HttpClient()
 
@@ -23,7 +27,7 @@ type TaskDetailModelState = {
 
 export const TaskDetailContext = createContext<TaskDetailForBoard | undefined>(undefined)
 
-function TaskCard({ task }: { task: TaskResponseForBoard }) {
+function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remoteDragging?: RemoteDraggingType }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: createCardId(task),
     data: { ...task, dragObject: 'Card' }
@@ -36,6 +40,11 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
     opacity: isDragging ? 0.5 : 1
   }
   const [modalState, setModalState] = useState<TaskDetailModelState>({ open: false })
+  const members = useSelector((state: RootState) => state.project.activeProject.members)
+  const [dragSub, setDragSub] = useState<AssignmentResponse>()
+  useEffect(() => {
+    setDragSub(members.find(m => m.id === remoteDragging?.subId))
+  }, [remoteDragging, members])
 
   const handleCloseTaskDetailModal = () => {
     setModalState({ ...modalState, open: false })
@@ -50,7 +59,21 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
   return (
     <>
       <TaskDetailContext.Provider value={modalState.taskDetail}>
-        <div onClick={handleLoadTaskDetail} {...attributes} {...listeners} ref={setNodeRef} style={style} className='task-card'>
+        <div
+          onClick={handleLoadTaskDetail}
+          {...attributes}
+          {...listeners}
+          ref={setNodeRef}
+          style={style}
+          drag-subject={`${dragSub?.email} is dragging this`}
+          className={`task-card ${
+            remoteDragging?.dragObject === 'Card' &&
+            remoteDragging?.isDragging &&
+            remoteDragging?.dragObjectId === task.id
+              ? 'remote-dragging-object'
+              : ''
+          } `}
+        >
           <Flex $alignItem='center' $justifyContent='space-between' className='task-card-header'>
             <PriorityTag priority={task.priority} />
             <DropdownMenu
@@ -93,7 +116,12 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
               <></>
             )}
             <div className='task-card-footer-due-date'>
-              <i className='fa-regular fa-clock'></i> {task?.dueDate ? new Date(task.dueDate * 1000).toLocaleDateString() : <span className='text-light'>Not set</span>}
+              <i className='fa-regular fa-clock'></i>{' '}
+              {task?.dueDate ? (
+                new Date(task.dueDate * 1000).toLocaleDateString()
+              ) : (
+                <span className='text-light'>Not set</span>
+              )}
             </div>
           </Flex>
         </div>

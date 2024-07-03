@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
-import { mapOrder, sortList } from '@utils/functions'
+import { mapOrder } from '@utils/functions'
 import {
   AssignmentResponse,
   ChangeTaskOrderResponse,
@@ -28,9 +28,7 @@ export const projectSlice = createSlice({
     setActiveProjectBoard: (state, action) => {
       const project = action.payload as ProjectResponseForBoard
       const listOrder = project?.listOrder?.split(',')
-      // project!.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
-      project!.lists = mapOrder(project?.lists as ListResponseForBoard[], project?.listOrder?.split(',') as string[], 'id')
-      // // TODO: sắp xếp lại danh sách task
+      project!.lists = mapOrder(project?.lists as ListResponseForBoard[], listOrder as string[], 'id')
       state.activeProject.board = project
     },
     addNewList: (state, action) => {
@@ -48,25 +46,36 @@ export const projectSlice = createSlice({
       }
     },
     changeListOrder: (state, action) => {
-      const newListOrder = action?.payload?.data as string
+      const newListOrder = action?.payload as string
       state.activeProject.board.listOrder = newListOrder
-      state.activeProject.board!.lists = sortList(state.activeProject.board?.lists, newListOrder)
+      state.activeProject.board!.lists = mapOrder(state.activeProject.board?.lists, newListOrder?.split(','), 'id')
     },
     changeTaskOrder: (state, action) => {
       const data = action?.payload
       const resData = data.resData as ChangeTaskOrderResponse
       const dragOverResult = data.dragOverResult as DragOverResult
+
+      if (!resData || !dragOverResult) return
+
       // cập nhật trên cùng 1 cột
-      let newList = state.activeProject.board.lists?.find(l => l.id === resData.updatedNewListId)
+      const newListIndex = state.activeProject.board.lists?.findIndex(l => l.id === resData.updatedNewListId)
+      // không xét `!nextIndex` vì `nextIndex` vẫn có thể dùng giá trị `0`
+      if (newListIndex === undefined || newListIndex < 0) return // nếu list không tồn tại thì bỏ qua
       // cập nhật trên 1 cột
-      newList = dragOverResult.overList
-      newList!.taskOrder = resData.updatedNewTaskOrder
+      const newList = dragOverResult.overList
+      newList!.taskOrder = dragOverResult.overList?.taskOrder
+
+      state.activeProject.board.lists?.splice(newListIndex, 1, newList as ListResponseForBoard)
 
       // trường hợp thay đổi trên 2 cột khác nhau
       if (resData.updatedNewListId !== resData.updatedOldListId) {
-        let oldList = state.activeProject.board.lists?.find(l => l.id === resData.updatedOldListId)
-        oldList = dragOverResult.activeList
-        oldList!.taskOrder = resData.updatedOldTaskOrder
+        const oldListIndex = state.activeProject.board.lists?.findIndex(l => l.id === resData.updatedOldListId)
+        if (oldListIndex === undefined || oldListIndex < 0) {
+          return
+        }
+        const oldList = dragOverResult.activeList
+        oldList!.taskOrder = dragOverResult.activeList.taskOrder
+        state.activeProject.board.lists?.splice(oldListIndex, 1, oldList as ListResponseForBoard)
       }
     },
     setProjectMembers: (state, action) => {

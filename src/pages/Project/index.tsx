@@ -27,7 +27,7 @@ function Project() {
 
   useEffect(() => {
     dispatch(projectSlice.actions.setActiveProjectBoard(boardData))
-  }, [boardData, dispatch])
+  }, [boardData])
 
   useEffect(() => {
     if (boardData) {
@@ -36,6 +36,7 @@ function Project() {
         .start()
         .then(() => {
           setProjectConnection(connection)
+          // dispatch(hubConnectionSlice.actions.setHubConnection(connection))
           connection.invoke('SubscribeProject', boardData.id, account.id)
         })
         .catch(err => console.log(err))
@@ -66,7 +67,7 @@ function Project() {
       {boardData && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
-          {project && project.lists?.length && <BoardContent lists={project?.lists} />}
+          {project && <BoardContent />}
         </Flex>
       )}
     </>

@@ -6,7 +6,13 @@ import { createCardId, mapOrder } from '@utils/functions'
 import { ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
 import { RemoteDraggingType } from '..'
 
-function SortableColumn({ column, remoteDragging }: { column: ListResponseForBoard, remoteDragging?: RemoteDraggingType }) {
+function SortableColumn({
+  column,
+  remoteDragging
+}: {
+  column: ListResponseForBoard
+  remoteDragging?: RemoteDraggingType
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column.id,
     data: { ...column, dragObject: 'Column' }
@@ -28,10 +34,18 @@ function SortableColumn({ column, remoteDragging }: { column: ListResponseForBoa
   }
   return (
     <>
-      <Column {...attributes} {...listeners} ref={setNodeRef} style={style} key={column.id} column={column}>
+      <Column
+        remoteDragging={remoteDragging}
+        {...attributes}
+        {...listeners}
+        ref={setNodeRef}
+        style={style}
+        key={column.id}
+        column={column}
+      >
         <SortableContext items={tasks?.map(t => createCardId(t)) as string[]} strategy={verticalListSortingStrategy}>
           {tasks?.map(task => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard remoteDragging={remoteDragging} key={task.id} task={task} />
           ))}
         </SortableContext>
       </Column>

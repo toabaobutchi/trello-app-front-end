@@ -8,11 +8,6 @@
   min-height: max-content; // phòng trường hợp column không có task nào
   background-color: var(--list-bg-color);
 
-  &.remote-dragging-object {
-    opacity: 0.8;
-    box-shadow: 0 0 5px rgba(255, 0, 0, 0.432);
-  }
-
   &-header {
     padding: 0.7rem 0 1rem;
     &-name {

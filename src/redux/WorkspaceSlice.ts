@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { CreateWorkspaceModel, LoginInfo, WorkspaceResponse, WorkspaceResponseWithRelatedProjects } from '@utils/types'
+import { CreateWorkspaceModel, WorkspaceResponse, WorkspaceResponseWithRelatedProjects } from '@utils/types'
 import HttpClient from '@utils/HttpClient'
 
 const http = new HttpClient()

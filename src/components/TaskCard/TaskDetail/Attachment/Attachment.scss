@@ -1,0 +1,13 @@
+.attachments-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .empty-attachment-img {
+    width: 50%;
+    height: auto;
+    max-width: 100%;
+    object-fit: cover;
+  }
+}

@@ -133,6 +133,15 @@ export type ChangeTaskOrderModel = {
   oldTaskOrder: string
 }
 
+export type AttachmentResponse = {
+  id: number
+  displayText?: string
+  link: string
+  createdAt: string
+  taskId: string
+  assignmentId: string
+}
+
 export type ChangeTaskOrderResponse = {
   updatedOldListId: string
   updatedNewListId: string
