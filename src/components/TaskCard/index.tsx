@@ -16,6 +16,7 @@ import { HttpStatusCode } from 'axios'
 import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import DuplicateTask from './TaskDetail/DuplicateTask'
 
 const http = new HttpClient()
 
@@ -47,6 +48,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   // const account = useSelector((state: RootState) => state.login.accountInfo)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
+  const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
@@ -60,6 +62,9 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     if (res?.status === HttpStatusCode.Ok) {
       setModalState({ open: true, taskDetail: res.data }) // lưu chi tiết task vào state
     } else console.log('Fail: ', res?.message)
+  }
+  const handleToggleDuplicateTaskModal = () => {
+    setDuplicateTaskModal(!duplicateTaskModal)
   }
   return (
     <>
@@ -138,7 +143,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               title: (
                 <>
                   <Flex $alignItem='center' $gap='1rem'>
-                    <Button variant='text' theme='default'>
+                    <Button onClick={handleToggleDuplicateTaskModal} variant='text' theme='default'>
                       <i className='fa-regular fa-clone'></i> Duplicate
                     </Button>
                     <Button variant='text' theme='default'>
@@ -159,6 +164,14 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           onClose={handleCloseTaskDetailModal}
         >
           <TaskDetail />
+        </Modal>
+        <Modal
+          layout={{ header: { title: 'Duplicate task', closeIcon: true } }}
+          style={{ width: '30%' }}
+          open={duplicateTaskModal}
+          onClose={handleToggleDuplicateTaskModal}
+        >
+          <DuplicateTask task={task} onCloseModal={handleToggleDuplicateTaskModal} />
         </Modal>
       </TaskDetailContext.Provider>
     </>

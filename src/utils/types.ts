@@ -283,3 +283,13 @@ export type ListChangeResponse = {
   updatedIndex: number
   updatedAt: number
 }
+
+
+export type FilterType = {
+  isFiltering?: boolean
+  priorities?: SelectListItem[]
+  members?: SelectListItem[]
+  noAssigneesFilter?: boolean
+  dueDate?: Date
+  overDueFilter?: boolean
+}

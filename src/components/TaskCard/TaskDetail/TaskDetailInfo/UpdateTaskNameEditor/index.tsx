@@ -38,7 +38,7 @@ function UpdateTaskNameEditor({ taskName, onUpdateTaskName = () => {} }: UpdateT
               value={name}
               onChange={handleChangeName}
             />
-            <Button>
+            <Button onClick={handleUpdate}>
               <i className='fa-solid fa-pen-to-square'></i> Update
             </Button>
             <Button onClick={handleToggle} theme='danger'>

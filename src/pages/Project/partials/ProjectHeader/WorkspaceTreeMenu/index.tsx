@@ -19,9 +19,9 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
   const dispatch = useDispatch()
   const activeWorkspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
   useEffect(() => {
+    console.log(activeWorkspace)
     if (!activeWorkspace) {
       // fetch workspace
-      // trường hợp này xảy ra khi người dùng tạo project và navigate đến đây mà không thông qua project
       http
         .getAuth(`/w/${workspaceId}/projects`)
         .then(workspace => {

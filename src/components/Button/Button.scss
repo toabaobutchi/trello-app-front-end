@@ -8,6 +8,7 @@
   --default-button-hover-color: #44546F22;
   --default-filled-button-hover-color: #77777746;
   --default-filled-button-color: #77777728;
+  --success-button-hover-color: #02a4302a;
 
   border: none;
   outline: none;
@@ -163,6 +164,10 @@
     &.text-btn,
     &.outlined-btn {
       color: var(--success-color);
+
+      &:hover {
+        background-color: var(--success-button-hover-color);
+      }
     }
     &.filled-btn {
       background-color: var(--success-color);

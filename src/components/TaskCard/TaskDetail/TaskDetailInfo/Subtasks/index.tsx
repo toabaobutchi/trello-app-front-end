@@ -53,7 +53,7 @@ function Subtasks({ subtasks, taskId }: { subtasks: SubtaskForBoard[]; taskId: s
   return (
     <>
       <div className='subtasks'>
-        <p>
+        <p className='bold'>
           <i className='fa-solid fa-list-check'></i> Subtasks {_subtasks.length > 0 ? `(${_subtasks.length})` : ''}
         </p>
         {_subtasks?.map(subTask => (

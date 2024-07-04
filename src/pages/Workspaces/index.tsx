@@ -20,7 +20,6 @@ function Workspaces() {
 
   // đặt activeWorkspace (workspace đang thao tác)
   useEffect(() => {
-    console.log(workspace)
     dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))
   }, [dispatch, workspace])
 

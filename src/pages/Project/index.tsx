@@ -20,7 +20,7 @@ function Project() {
   const loader = useLoaderData() as AxiosResponse
   const project = useSelector((state: RootState) => state.project.activeProject.board)
   const account = useSelector((state: RootState) => state.login.accountInfo)
-  const boardData = loader.data as ProjectResponseForBoard
+  const boardData = loader?.data as ProjectResponseForBoard
   const dispatch = useDispatch()
 
   const [projectConnection, setProjectConnection] = useState<HubConnection>()

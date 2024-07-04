@@ -1,0 +1,16 @@
+.change-due-date-button {
+  border: var(--thin-border-width) solid var(--light-color);
+  outline: none;
+  border-radius: var(--primary-radius);
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: var(--primary-color);
+  display: inline-block;
+}
+
+#due-date-picker {
+  visibility: hidden;
+  width: 0;
+  position: absolute;
+}

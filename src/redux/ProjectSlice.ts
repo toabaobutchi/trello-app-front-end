@@ -26,10 +26,15 @@ export const projectSlice = createSlice({
   },
   reducers: {
     setActiveProjectBoard: (state, action) => {
-      const project = action.payload as ProjectResponseForBoard
-      const listOrder = project?.listOrder?.split(',')
-      project!.lists = mapOrder(project?.lists as ListResponseForBoard[], listOrder as string[], 'id')
-      state.activeProject.board = project
+      try {
+        const project = action.payload as ProjectResponseForBoard
+        const listOrder = project?.listOrder?.split(',')
+        console.log('project: ', project)
+        project!.lists = [...mapOrder(project?.lists as ListResponseForBoard[], listOrder as string[], 'id')]
+        state.activeProject.board = project
+      } catch {
+        console.error('Error setting active project board')
+      }
     },
     addNewList: (state, action) => {
       const res = action.payload as CreateListResponse
@@ -85,6 +90,18 @@ export const projectSlice = createSlice({
     setOnlineMembers: (state, action) => {
       const onlineMembers = action.payload as string[]
       state.activeProject.onlineMembers = onlineMembers
+    },
+    setDuplicateTasks: (state, action) => {
+      const tasks = action.payload as TaskResponseForBoard[]
+      if (!tasks || tasks.length <= 0) {
+        return
+      }
+      const listId = tasks[0].listId
+      const appendedList = state.activeProject.board.lists?.find(l => l.id === listId)
+      if (appendedList) {
+        appendedList.tasks = [...(appendedList.tasks as TaskResponseForBoard[]), ...tasks]
+        appendedList.taskOrder = appendedList.tasks?.map(t => t.id).join(',') || ''
+      }
     }
   },
   extraReducers: builder => {

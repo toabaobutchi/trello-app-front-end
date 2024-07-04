@@ -1,0 +1,28 @@
+.duplicate-task-name {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.duplicate-options {
+  padding: 0.5rem 1rem;
+
+  &-item {
+    margin-bottom: 1rem;
+
+    label {
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+  }
+}
+
+.duplicate-description-preview {
+  padding: 0.5rem 1rem;
+  // width: 50%;
+  background-color: var(--bright-color);
+  border-radius: var(--primary-radius);
+  font-family: monospace;
+  border-left: 5px solid var(--primary-color);
+  font-size: 1.1rem;
+}

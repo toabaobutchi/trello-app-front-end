@@ -1,0 +1,27 @@
+.editor-tools {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  opacity: 0.5;
+  // padding: 0.25rem 0.5rem;
+  border-radius: var(--primary-radius);
+  background-color: #ebebeb;
+
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+#task-details-description-input {
+  outline: none;
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+  font: inherit;
+  color: inherit;
+  resize: none;
+
+  &:focus {
+    border-color: var(--primary-color);
+  }
+}
