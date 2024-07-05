@@ -3,6 +3,22 @@
   color: var(--primary-color) !important;
 }
 
+.due-date-filter-input {
+  width: max-content;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--primary-radius);
+  font: inherit;
+  color: var(--primary-color);
+  border: var(--thin-border-width) solid var(--primary-color);
+  outline: none;
+  cursor: pointer;
+
+  &:disabled {
+    border-color: var(--light-color);
+    color: var(--light-color);
+  }
+}
+
 // .modal-header-text {
 //   font-size: 1.5rem;
 // }

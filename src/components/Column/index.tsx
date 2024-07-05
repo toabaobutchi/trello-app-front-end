@@ -7,6 +7,7 @@ import { AssignmentResponse, ListResponseForBoard } from '@utils/types'
 import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import AddTaskAbove from './partials/AddTaskAbove'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
@@ -18,9 +19,11 @@ function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {
   const { children, column, style, className, remoteDragging, ...restProps } = props
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
+
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
+
   return (
     <>
       <div
@@ -37,10 +40,15 @@ function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {
         drag-subject={`${dragSub?.email} is dragging`}
       >
         <Flex $alignItem='center' $justifyContent='space-between' className='column-header'>
-          <div className='column-header-name'>{column?.name}</div>
-          <Button variant='text' theme='default' className='column-header-more-button'>
-            <i className='fa-solid fa-ellipsis'></i>
-          </Button>
+          <div className='column-header-name'>
+            {column?.name} ({column?.tasks?.length})
+          </div>
+          <Flex $alignItem='center' $gap='0.25rem'>
+            <AddTaskAbove column={column} />
+            <Button variant='text' theme='default' className='column-header-more-button'>
+              <i className='fa-solid fa-ellipsis'></i>
+            </Button>
+          </Flex>
         </Flex>
         <div onPointerDown={e => e.stopPropagation()} className='column-body'>
           {children}

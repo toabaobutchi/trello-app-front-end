@@ -1,5 +1,5 @@
 import Button from '@comps/Button'
-import { memo, useEffect, useState } from 'react'
+import { memo, useState } from 'react'
 import './ProjectFilterMenu.scss'
 import Modal from '@comps/Modal'
 import MultipleSelectList from '@comps/MultipleSelectList'
@@ -8,30 +8,32 @@ import ButtonGroup from '@comps/ButtonGroup'
 import Tooltip from '@comps/Tooltip'
 import Input from '@comps/Input'
 import Flex from '@comps/StyledComponents/Flex'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
+import { useDispatch } from 'react-redux'
+// import { RootState } from '@redux/store'
 import SwitchButton from '@comps/SwitchButton'
+import { getDateTimeString } from '@utils/functions'
+import { projectSlice } from '@redux/ProjectSlice'
 
 // co the hard code nhu the nay
 const items = [
   {
-    value: 'high',
+    value: 'High',
     display: 'High'
   },
   {
-    value: 'medium',
+    value: 'Medium',
     display: 'Medium'
   },
   {
-    value: 'normal',
+    value: 'Normal',
     display: 'Normal'
   },
   {
-    value: 'low',
+    value: 'Low',
     display: 'Low'
   },
   {
-    value: 'not set',
+    value: '',
     display: 'Not set'
   }
 ]
@@ -39,7 +41,6 @@ const items = [
 const initValue: FilterType = {
   isFiltering: false,
   priorities: [],
-  members: [],
   dueDate: undefined,
   overDueFilter: false,
   noAssigneesFilter: false
@@ -47,33 +48,35 @@ const initValue: FilterType = {
 const ProjectFilterMenu = memo(() => {
   const [filter, setFilter] = useState<FilterType>(initValue)
   const [modalOpen, setModalOpen] = useState(false)
+  const dispatch = useDispatch()
   const handleToggleModal = () => setModalOpen(!modalOpen)
 
   const handleSelectPriority = (items: SelectListItem[]) => {
     setFilter(prev => ({ ...prev, isFiltering: true, priorities: items }))
   }
-  const handleSelectMember = (items: SelectListItem[]) => {
-    setFilter(prev => ({ ...prev, isFiltering: true, members: items }))
-  }
   const handleSelectNoAssigneeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(prev => ({ ...prev, isFiltering: true, noAssigneesFilter: e.target.checked }))
   }
   const handleToggleDueDateFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(prev => ({ ...prev, isFiltering: true, dueDate: e.target.checked ? new Date() : undefined }))
+    setFilter(prev => ({ ...prev, isFiltering: true, dueDate: e.target.checked ? new Date().getTime() : undefined }))
   }
   const handleToggleOverdueFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(prev => ({ ...prev, isFiltering: true, overDueFilter: e.target.checked }))
   }
+  const handleChangeDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(prev => ({ ...prev, isFiltering: true, dueDate: new Date(e.target.value).getTime() }))
+  }
 
-  const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
+  // const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
   const handleClearFilter = () => {
     setFilter(initValue)
+    dispatch(projectSlice.actions.setFilters(initValue))
   }
   const handleFilter = () => {
     // dispatch cho store
+    dispatch(projectSlice.actions.setFilters(filter))
     handleToggleModal()
   }
-  console.log(filter)
   return (
     <>
       <ButtonGroup
@@ -105,13 +108,12 @@ const ProjectFilterMenu = memo(() => {
           onSelect={handleSelectPriority}
         />
         <p style={{ marginTop: '0.5rem' }}>Assignees</p>
-        <MultipleSelectList
+        {/* <MultipleSelectList
           items={projectMembers?.map(pm => ({ value: pm.email, display: pm.email }))}
           selectedItems={filter?.members}
           onSelect={handleSelectMember}
-        />
+        /> */}
         <Flex $alignItem='center' $gap='0.5rem' style={{ margin: '0.5rem 0' }}>
-          <span>or</span>
           <Input.CheckBox
             id='filter-no-assignee'
             checked={filter?.noAssigneesFilter}
@@ -122,6 +124,7 @@ const ProjectFilterMenu = memo(() => {
             No assignees <i className='fa-solid fa-user-slash'></i>
           </Input.CheckBox>
         </Flex>
+
         <Flex
           className='w-full'
           $alignItem='center'
@@ -130,29 +133,46 @@ const ProjectFilterMenu = memo(() => {
           $justifyContent='space-between'
         >
           <p className='w-full mt-1'>Due date</p>
-          <Flex className='w-full' $alignItem='center' $gap='0.5rem'>
-            <SwitchButton
-              inputAttributes={{
-                type: 'radio',
-                name: 'dueDateFilter',
-                id: 'choose-due-date-option',
-                checked: filter.dueDate !== undefined
-              }}
-              onChange={handleToggleDueDateFilter}
-            />
-            <label htmlFor="'choose-due-date-option'">Due date by</label>
-          </Flex>
-          <Flex className='w-full' $alignItem='center' $gap='0.5rem'>
-            <SwitchButton
-              inputAttributes={{
-                type: 'radio',
-                name: 'dueDateFilter',
-                id: 'choose-over-due-option',
-                checked: filter.overDueFilter
-              }}
-              onChange={handleToggleOverdueFilter}
-            />
-            <label htmlFor='choose-over-due-option'>Overdue</label>
+          <Flex
+            className='w-full mb-1'
+            $alignItem='center'
+            $justifyContent='space-between'
+            $flexWrap='wrap'
+            $gap='0.5rem'
+          >
+            <Flex $alignItem='center' $gap='0.5rem'>
+              <SwitchButton
+                inputAttributes={{
+                  type: 'checkbox',
+                  name: 'dueDateFilter',
+                  id: 'choose-due-date-option',
+                  checked: filter.dueDate !== undefined
+                }}
+                onChange={handleToggleDueDateFilter}
+              />
+              <label htmlFor="'choose-due-date-option'">Due date by</label>
+              <input
+                className='due-date-filter-input'
+                type='datetime-local'
+                name='dueDate'
+                value={filter.dueDate ? getDateTimeString(new Date(filter?.dueDate)) : ''}
+                id='due-date-selector'
+                disabled={!filter.dueDate}
+                onChange={handleChangeDueDate}
+              />
+            </Flex>
+            <Flex $alignItem='center' $gap='0.5rem'>
+              <SwitchButton
+                inputAttributes={{
+                  type: 'checkbox',
+                  name: 'dueDateFilter',
+                  id: 'choose-over-due-option',
+                  checked: filter.overDueFilter
+                }}
+                onChange={handleToggleOverdueFilter}
+              />
+              <label htmlFor='choose-over-due-option'>Overdue</label>
+            </Flex>
           </Flex>
         </Flex>
         <Flex $alignItem='center' $justifyContent='end'>

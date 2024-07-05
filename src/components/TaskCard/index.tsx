@@ -82,7 +82,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             remoteDragging?.dragObjectId === task.id
               ? 'remote-dragging-object'
               : ''
-          } `}
+          } ${task?.priority ? task?.priority?.toLowerCase() : 'default'}-task-card`}
         >
           <Flex $alignItem='center' $justifyContent='space-between' className='task-card-header'>
             <PriorityTag priority={task.priority} />
@@ -115,16 +115,18 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             <div className='task-card-body-name'>{task.name}</div>
           </div>
           <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>
-            <div className='task-card-footer-members'>
-              <i className='fa-regular fa-user'></i> {task.assigneeCount}
-            </div>
-            {task.subTaskCount ? (
-              <div className='task-card-body-subtasks'>
-                <i className='fa-solid fa-list-check'></i> {task.completedSubTaskCount}/{task.subTaskCount}
+            <Flex $alignItem='center' $gap='0.5rem'>
+              <div className='task-card-footer-members'>
+                <i className='fa-solid fa-users'></i> {task.assigneeCount}
               </div>
-            ) : (
-              <></>
-            )}
+              {task.subTaskCount ? (
+                <div className='task-card-body-subtasks'>
+                  <i className='fa-solid fa-list-check'></i> {task.completedSubTaskCount}/{task.subTaskCount}
+                </div>
+              ) : (
+                <></>
+              )}
+            </Flex>
             <div className='task-card-footer-due-date'>
               <i className='fa-regular fa-clock'></i>{' '}
               {task?.dueDate ? (
@@ -151,6 +153,9 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                     </Button>
                     <Button variant='text' theme='default'>
                       <i className='fa-solid fa-right-to-bracket'></i> Join
+                    </Button>
+                    <Button variant='text' theme='default'>
+                    <i className="fa-regular fa-envelope"></i> Invite member
                     </Button>
                     <Button variant='text' theme='default'>
                       <i className='fa-solid fa-thumbtack'></i> Need help!

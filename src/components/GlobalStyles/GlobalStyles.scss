@@ -35,7 +35,7 @@
   --tooltip-light-color: #ededed;
   --tooltip-dark-color: #172b4d;
   --task-card-bg-color: #fff;
-  --list-bg-color: #f1f2f4;
+  --list-bg-color: #f8f8f8;
 
   // --task-card-box-shadow: 0px 1px 1px #091e4240, 0px 0px 1px #091e424f;
   --task-card-box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
@@ -131,7 +131,7 @@ html {
   box-shadow: 0 0 20px 4px var(--warning-color) !important;
   position: relative;
 
-  &::before {
+  &::after {
     content: attr(drag-subject);
     position: absolute;
     text-align: center;
@@ -160,4 +160,9 @@ html {
       scale: 1;
     }
   }
+}
+
+.open-button {
+  background-color: var(--clicked-menu-color) !important;
+  color: var(--primary-color) !important;
 }

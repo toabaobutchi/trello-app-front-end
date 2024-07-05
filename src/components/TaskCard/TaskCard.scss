@@ -1,14 +1,81 @@
 .task-card {
   border-radius: calc(var(--card-radius) / 2);
-  padding: 1rem;
+  padding: 1rem 0.5rem 1rem 1.2rem;
   cursor: pointer;
   max-width: 100%;
   width: 100%;
   background-color: var(--task-card-bg-color);
   box-shadow: var(--task-card-box-shadow);
+  position: relative;
 
   &:hover {
     box-shadow: var(--task-card-hover-shadow);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 5px;
+    border-radius: var(--primary-radius);
+    height: 85%;
+    top: 50%;
+    left: 3px;
+    transform: translate(0%, -50%);
+  }
+
+  &.high-task-card {
+    &::before {
+      background: var(--danger-color);
+    }
+    .task-card-body {
+      &-name {
+        color: var(--danger-color);
+      }
+    }
+  }
+
+  &.medium-task-card {
+    &::before {
+      background: var(--warning-color);
+    }
+    .task-card-body {
+      &-name {
+        color: var(--warning-color);
+      }
+    }
+  }
+
+  &.normal-task-card {
+    &::before {
+      background: var(--primary-color);
+    }
+    .task-card-body {
+      &-name {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  &.low-task-card {
+    &::before {
+      background: var(--success-color);
+    }
+    .task-card-body {
+      &-name {
+        color: var(--success-color);
+      }
+    }
+  }
+
+  &.default-task-card {
+    &::before {
+      background: var(--light-color);
+    }
+    .task-card-body {
+      &-name {
+        color: var(--text-secondary-color);
+      }
+    }
   }
 
   &-body {

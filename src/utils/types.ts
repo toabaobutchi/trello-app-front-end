@@ -5,7 +5,16 @@ export interface CustomizablePropType {
   customHtmlAttributes?: object
 }
 
-export type ThemeType = 'success' | 'warning' | 'danger' | 'primary' | 'info' | 'light' | 'secondary' | 'dark' | 'default'
+export type ThemeType =
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'primary'
+  | 'info'
+  | 'light'
+  | 'secondary'
+  | 'dark'
+  | 'default'
 
 export type SubtaskForBoard = {
   id: number
@@ -284,12 +293,35 @@ export type ListChangeResponse = {
   updatedAt: number
 }
 
-
 export type FilterType = {
   isFiltering?: boolean
   priorities?: SelectListItem[]
   members?: SelectListItem[]
   noAssigneesFilter?: boolean
-  dueDate?: Date
+  dueDate?: number
   overDueFilter?: boolean
+}
+
+export type TaskResponseForTable = {
+  id: string
+  name: string
+  description?: string
+  dueDate?: number
+  priority?: string
+  listId: string
+  listName: string
+  createdAt: number
+  taskAssignmentIds: string[]
+  isMarkedNeedHelp?: boolean
+  creatorId?: string
+}
+
+export type ProjectResponseForTable = {
+  id: string
+  name: string
+  color?: string
+  createdAt: number
+  dueDate?: number
+  context: string
+  tasks?: TaskResponseForTable[]
 }

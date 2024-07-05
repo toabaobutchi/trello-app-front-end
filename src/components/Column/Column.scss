@@ -1,5 +1,4 @@
 .column {
-  // box-shadow: var(--list-box-shadow);
   border: var(--thin-border-width) solid var(--light-color);
   border-radius: var(--card-radius);
   padding: var(--list-padding);
@@ -13,6 +12,7 @@
     &-name {
       font-size: 1.2rem;
       font-weight: 600;
+      color: var(--text-primary-color);
     }
 
     &-more-button {

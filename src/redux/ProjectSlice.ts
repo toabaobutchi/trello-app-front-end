@@ -7,6 +7,7 @@ import {
   CreateListResponse,
   CreateTaskResponse,
   DragOverResult,
+  FilterType,
   ListResponseForBoard,
   ProjectResponseForBoard,
   TaskResponseForBoard
@@ -20,11 +21,16 @@ export const projectSlice = createSlice({
     activeProject: {
       board: {} as ProjectResponseForBoard,
       members: [] as AssignmentResponse[],
-      onlineMembers: [] as string[]
+      onlineMembers: [] as string[],
+      currentFilters: {} as FilterType,
+      table: {} 
       // table, chart and calendar
     }
   },
   reducers: {
+    setActiveProjectTable: (state, action) => {
+
+    },
     setActiveProjectBoard: (state, action) => {
       try {
         const project = action.payload as ProjectResponseForBoard
@@ -102,6 +108,10 @@ export const projectSlice = createSlice({
         appendedList.tasks = [...(appendedList.tasks as TaskResponseForBoard[]), ...tasks]
         appendedList.taskOrder = appendedList.tasks?.map(t => t.id).join(',') || ''
       }
+    },
+    setFilters: (state, action) => {
+      const filters = action.payload as FilterType
+      state.activeProject.currentFilters = filters
     }
   },
   extraReducers: builder => {

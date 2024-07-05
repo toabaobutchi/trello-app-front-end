@@ -1,4 +1,5 @@
-import { ListResponseForBoard, ProjectResponseForBoard, TaskResponseForBoard } from './types'
+import { cloneDeep } from 'lodash'
+import { FilterType, ListResponseForBoard, ProjectResponseForBoard, TaskResponseForBoard } from './types'
 
 export const isOutClick = (parent: HTMLElement, child: HTMLElement | null) => {
   return parent && !parent.contains(child as Node)
@@ -91,4 +92,35 @@ export const mapOrder = <T>(originalArray?: T[], orderArray?: string[], key?: st
     return orderArray.indexOf(a[key]) - orderArray.indexOf(b[key])
   })
   return orderedArray
+}
+
+export const getDateTimeString = (date: Date) => {
+  if (!date) return ''
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(
+    2,
+    '0'
+  )} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`.replace(' ', 'T')
+}
+
+export const filterLists = (lists?: ListResponseForBoard[], filters?: FilterType) => {
+  if (!lists) return []
+  if (!filters?.isFiltering) return lists
+  const { priorities, noAssigneesFilter, dueDate, overDueFilter } = filters
+  const newList = cloneDeep(lists)
+  newList?.forEach(list => {
+    list!.tasks = list?.tasks?.filter(task => {
+      if (
+        priorities &&
+        priorities.length > 0 &&
+        priorities.findIndex(priority => priority.value === (task.priority ?? '')) === -1
+      )
+        return false
+      // if (members && members.findIndex(member => member.value === task.) === -1) return false
+      if (noAssigneesFilter && task.assigneeCount !== 0) return false
+      if (dueDate && task.dueDate && task.dueDate * 1000 > dueDate) return false
+      if (overDueFilter && task.dueDate && new Date(task.dueDate) > new Date()) return false
+      return true
+    })
+  })
+  return newList
 }

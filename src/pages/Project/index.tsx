@@ -3,9 +3,9 @@ import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
 import ProjectHeader from './partials/ProjectHeader'
 import BoardContent from './partials/BoardContent'
-import { ProjectResponseForBoard } from '@utils/types'
+import { ProjectPageParams, ProjectResponseForBoard } from '@utils/types'
 import { useEffect, useState } from 'react'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { AxiosResponse, HttpStatusCode } from 'axios'
@@ -13,11 +13,14 @@ import { RootState } from '@redux/store'
 import HttpClient from '@utils/HttpClient'
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import config from '@confs/app.config'
+import TableContent from './partials/TableContent'
 
 const http = new HttpClient()
 
 function Project() {
   const loader = useLoaderData() as AxiosResponse
+  const params = useParams() as ProjectPageParams
+  //TODO Tuy vao viewmode ma lay ra du lieu can thiet
   const project = useSelector((state: RootState) => state.project.activeProject.board)
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const boardData = loader?.data as ProjectResponseForBoard
@@ -37,7 +40,7 @@ function Project() {
         .then(() => {
           setProjectConnection(connection)
           // dispatch(hubConnectionSlice.actions.setHubConnection(connection))
-          connection.invoke('SubscribeProject', boardData.id, account.id)
+          connection.invoke('SubscribeProject', boardData?.id, account?.id)
         })
         .catch(err => console.log(err))
     }
@@ -53,7 +56,7 @@ function Project() {
 
   useEffect(() => {
     // tải thành viên của project
-    http.getAuth(`/assignments/in-project/${boardData.id}`).then(res => {
+    http.getAuth(`/assignments/in-project/${boardData?.id}`).then(res => {
       if (res?.status === HttpStatusCode.Ok) {
         dispatch(projectSlice.actions.setProjectMembers(res.data))
       } else {
@@ -61,13 +64,13 @@ function Project() {
       }
     })
   }, [])
-
   return (
     <>
       {boardData && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
-          {project && <BoardContent />}
+          {project && params.viewMode === 'board' && <BoardContent />}
+          {project && params.viewMode === 'table' && <TableContent />}
         </Flex>
       )}
     </>

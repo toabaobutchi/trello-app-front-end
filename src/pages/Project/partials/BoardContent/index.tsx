@@ -9,7 +9,6 @@ import {
 import {
   DndContext,
   DragEndEvent,
-  // MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -19,7 +18,6 @@ import {
   DragOverEvent,
   Active,
   Over
-  // closestCorners
 } from '@dnd-kit/core'
 import { SortableContext, arrayMove, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import SortableColumn from './SortableColumn'
@@ -34,6 +32,7 @@ import { cloneDeep } from 'lodash'
 import { MyCustomSensor } from '@utils/MyCustomSensor'
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import config from '@confs/app.config'
+import { filterLists } from '@utils/functions'
 
 const http = new HttpClient()
 
@@ -53,11 +52,6 @@ const dropAnimation: DropAnimation = {
   })
 }
 
-// type BoardContentProps = {
-//   lists?: ListResponseForBoard[]
-//   boardColor?: string
-// }
-
 export type RemoteDraggingType = {
   isDragging?: boolean
   subId?: string
@@ -67,7 +61,7 @@ export type RemoteDraggingType = {
 
 function BoardContent() {
   const dispatch = useDispatch<AppDispatch>()
-  const project = useSelector((state: RootState) => state.project.activeProject.board)
+  const project = useSelector((state: RootState) => state.project.activeProject)
   const account = useSelector((state: RootState) => state.login.accountInfo)
   // dùng để lưu trữ tạm thời để các kéo thả - sau đó cập nhật lại sau
   const [listState, setListState] = useState<ListResponseForBoard[]>([])
@@ -78,21 +72,23 @@ function BoardContent() {
   const [dragConnection, setDragConnection] = useState<HubConnection>()
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
 
-  const listJson = JSON.stringify(project?.lists)
+  const listJson = JSON.stringify(project?.board?.lists)
   useEffect(() => {
-    setListState(project?.lists as ListResponseForBoard[])
-  }, [project?.lists, listJson, dispatch])
+    const lists = filterLists(project?.board?.lists, project?.currentFilters)
+    // console.log('lists: ', lists)
+    setListState(lists as ListResponseForBoard[])
+  }, [project?.board?.lists, listJson, dispatch, project?.currentFilters])
 
   useEffect(() => {
-    if (project?.id) {
+    if (project?.board?.id) {
       if (dragConnection) dragConnection.stop()
       const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/dragHub`).build()
       connection.start().then(() => {
         setDragConnection(connection)
-        connection.invoke('SendAddToDragGroup', project.id, account.id)
+        connection.invoke('SendAddToDragGroup', project?.board?.id, account?.id)
       })
     }
-  }, [account.id, project.id])
+  }, [account.id, project?.board?.id])
 
   useEffect(() => {
     if (dragConnection && project) {
@@ -189,7 +185,7 @@ function BoardContent() {
         .then(res => {
           if (res?.status !== 200) {
             console.log('Update task order failed')
-            setListState(prev => project.lists as ListResponseForBoard[])
+            setListState(prev => project?.board?.lists as ListResponseForBoard[])
           } else {
             const dragOverResult: DragOverResult = {
               activeList: nextActiveColumn as ListResponseForBoard,
@@ -198,11 +194,11 @@ function BoardContent() {
             dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
             // call hub
             if (dragConnection) {
-              dragConnection?.send('SendEndDragTask', project?.id, account?.id, res?.data, dragOverResult)
+              dragConnection?.send('SendEndDragTask', project?.board?.id, account?.id, res?.data, dragOverResult)
             }
           }
         })
-        .catch(() => setListState(prev => project.lists as ListResponseForBoard[]))
+        .catch(() => setListState(prev => project?.board?.lists as ListResponseForBoard[]))
     }
   }
 
@@ -217,14 +213,14 @@ function BoardContent() {
       if (dragConnection) {
         dragConnection?.send(
           'SendStartDragTask',
-          project?.id,
+          project?.board?.id,
           account?.id,
           e?.active?.data?.current?.listId,
           e?.active?.id
         )
       }
     } else {
-      if (dragConnection) dragConnection?.send('SendStartDragList', project?.id, account?.id, e?.active?.id)
+      if (dragConnection) dragConnection?.send('SendStartDragList', project?.board?.id, account?.id, e?.active?.id)
     }
   }
 
@@ -314,7 +310,7 @@ function BoardContent() {
         http.putAuth(`/tasks/${activeDragItem.id}/change-order`, changeTaskOrderModel).then(res => {
           if (res?.status !== 200) {
             console.log('Update task order failed')
-            setListState(prev => project.lists as ListResponseForBoard[])
+            setListState(prev => project?.board?.lists as ListResponseForBoard[])
           } else {
             const dragOverResult: DragOverResult = {
               activeList: targetColumn as ListResponseForBoard,
@@ -323,7 +319,7 @@ function BoardContent() {
             dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
             // call hub
             if (dragConnection) {
-              dragConnection?.send('SendEndDragTask', project?.id, account?.id, res?.data, dragOverResult)
+              dragConnection?.send('SendEndDragTask', project?.board?.id, account?.id, res?.data, dragOverResult)
             }
           }
         })
@@ -351,7 +347,7 @@ function BoardContent() {
               const updatedListOrder = res.data as string
               dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
               if (dragConnection) {
-                dragConnection?.send('SendEndDragList', project?.id, account?.id, updatedListOrder)
+                dragConnection?.send('SendEndDragList', project?.board?.id, account?.id, updatedListOrder)
               }
             } else {
               setListState(listState) // reset lại list state như ban đầu, huỷ cập nhật
