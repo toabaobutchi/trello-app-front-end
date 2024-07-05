@@ -14,7 +14,7 @@ import Error from '@pages/Error'
 import Workspaces from '@pages/Workspaces'
 import HttpClient from '@utils/HttpClient'
 import Project from '@pages/Project'
-import { ProjectPageParams } from '@utils/types'
+import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
 import ProjectInvitation from '@pages/ProjectInvitation'
 
 const http = new HttpClient()
@@ -49,8 +49,9 @@ const router = createBrowserRouter([
       </DefaultLayout>
     ),
     loader: async ({ params }) => {
-      console.log(params)
-      const res = await http.getAuth(`/w/${params.workspaceId}/projects`)
+      const { ownerShip } = params as WorkspacePageParams
+      const prefixPath = ownerShip === 'owner' ? 'w' : 'sw'
+      const res = await http.getAuth(`/${prefixPath}/${params.workspaceId}/projects`)
       return res
     }
   },

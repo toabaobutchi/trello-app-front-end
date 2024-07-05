@@ -11,12 +11,26 @@ import { useParams } from 'react-router-dom'
 import { InputChange, ProjectPageParams } from '@utils/types'
 import { HttpStatusCode } from 'axios'
 import shareImage from '@assets/share-project.jpg'
+import Tab from '@comps/Tab'
 
 const roles = [
   { value: 'admin', display: 'Admin' },
   { value: 'member', display: 'Member' },
   { value: 'observer', display: 'Observer' }
 ]
+
+const tabs = [
+  {
+    value: 'share-by-email',
+    display: 'Share by Email'
+  },
+  {
+    value: 'share-by-friend',
+    display: 'Someone you know'
+  }
+]
+
+const initActiveTab = 'share-by-email'
 
 const http = new HttpClient()
 type InvitationType = {
@@ -25,6 +39,7 @@ type InvitationType = {
 }
 function ProjectShare() {
   const [modalOpen, setModalOpen] = useState(false)
+  const [shareActiveTab, setShareActiveTab] = useState(initActiveTab)
   const handleToggleModal = () => setModalOpen(!modalOpen)
   const [invitation, setInvitation] = useState<InvitationType>({
     email: '',
@@ -48,6 +63,9 @@ function ProjectShare() {
   const handleSelectPermission = ({ value }: { value: string }) => {
     setInvitation({ ...invitation, permission: value })
   }
+  const handleTabChange = (tab: string) => {
+    setShareActiveTab(tab)
+  }
   return (
     <>
       <Button onClick={handleToggleModal} variant='filled'>
@@ -59,42 +77,47 @@ function ProjectShare() {
         open={modalOpen}
         layout={{ header: { title: 'Share project', closeIcon: true } }}
       >
-        <Flex $alignItem='center' $justifyContent='center'>
-          <img className='share-project-image' src={shareImage} />
-        </Flex>
-        <Flex $alignItem='center' $gap='0.5rem' style={{ width: '100%' }}>
-          <Input.TextBox
-            onChange={handleChangeEmail}
-            inputSize='small'
-            label={{ content: 'Email address' }}
-            sameLine
-            style={{ flex: 1 }}
-            type='email'
-            autoFocus
-            className='input-focus-shadow'
-            id='invited-email-input'
-          />
-          <SelectList onChoose={handleSelectPermission} size='small' items={roles} selectedValue='member' />
-          <Button onClick={handleShareProject} variant='filled'>
-            <i className='fa-solid fa-paper-plane'></i> Share
-          </Button>
-        </Flex>
+        <Tab tabs={tabs} activeTab={shareActiveTab} onTabClick={handleTabChange}>
+          <Tab.Content show={shareActiveTab === 'share-by-email'}>
+            <Flex $alignItem='center' $justifyContent='center'>
+              <img className='share-project-image' src={shareImage} />
+            </Flex>
+            <Flex $alignItem='center' $gap='0.5rem' style={{ width: '100%' }}>
+              <Input.TextBox
+                onChange={handleChangeEmail}
+                inputSize='small'
+                label={{ content: 'Email address' }}
+                sameLine
+                style={{ flex: 1 }}
+                type='email'
+                autoFocus
+                className='input-focus-shadow'
+                id='invited-email-input'
+              />
+              <SelectList onChoose={handleSelectPermission} size='small' items={roles} selectedValue='member' />
+              <Button onClick={handleShareProject} variant='filled'>
+                <i className='fa-solid fa-paper-plane'></i> Share
+              </Button>
+            </Flex>
 
-        <Flex $alignItem='center' $gap='1rem' className='my-1'>
-          <p>Or</p>
-          <ButtonGroup
-            openAction
-            actionButton={
-              <>
-                <SelectList size='small' items={roles} selectedValue='member' />
-              </>
-            }
-          >
-            <Button variant='text' theme='default'>
-              <i className='fa-solid fa-feather'></i> Create a link for
-            </Button>
-          </ButtonGroup>
-        </Flex>
+            <Flex $alignItem='center' $gap='1rem' className='my-1'>
+              <p>Or</p>
+              <ButtonGroup
+                openAction
+                actionButton={
+                  <>
+                    <SelectList size='small' items={roles} selectedValue='member' />
+                  </>
+                }
+              >
+                <Button variant='text' theme='default'>
+                  <i className='fa-solid fa-feather'></i> Create a link for
+                </Button>
+              </ButtonGroup>
+            </Flex>
+          </Tab.Content>
+          <Tab.Content show={shareActiveTab === 'share-by-friend'}>Share by someone you know</Tab.Content>
+        </Tab>
       </Modal>
     </>
   )

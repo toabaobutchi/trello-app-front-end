@@ -9,6 +9,7 @@ import Button from '@comps/Button'
 import routeLinks, { linkCreator } from '@routes/router'
 import config from '@confs/app.config'
 import SharedWorkspaces from './partials/SharedWorkspaces'
+import { getSlug } from '@utils/functions'
 
 function SideBar() {
   const sideBarStatus = useSelector((state: RootState) => state.sideBar.expand)
@@ -32,7 +33,6 @@ function SideBar() {
         <SideBarItem.Link to={routeLinks.yourTasks} onClick={closeSidebarWhenRedirectInMobileMode}>
           <i className='fa-solid fa-list-check'></i> Your tasks
         </SideBarItem.Link>
-        <SideBarItem.Link to={'/projects'}>Project (Test)</SideBarItem.Link>
         <SideBarItem style={{ paddingTop: 0, paddingBottom: 0 }}>
           <Expander
             header={{
@@ -44,13 +44,12 @@ function SideBar() {
               style: { flex: 1 }
             }}
             defaultExpand
-            style={{ fontSize: '1rem' }}
           >
             <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
               <Expander header={{ content: 'Your workspaces' }} defaultExpand>
                 {workspaces.workspaceList?.map(workspace => {
                   const path = linkCreator.workspaces({
-                    slug: workspace.slug,
+                    slug: getSlug(workspace.slug),
                     workspaceId: workspace.id + '',
                     ownerShip: workspace.context
                   })
@@ -80,13 +79,6 @@ function SideBar() {
                 )}
               </Expander>
             </SideBarItem>
-            {/* <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
-              <Expander header={{ content: 'Shared projects' }} defaultExpand useArrow={false}>
-                {workspaces.sharedWorkspaceList?.map(workspace => {
-                  return <SideBarItem key={workspace.id}>{workspace.name}</SideBarItem>
-                })}
-              </Expander>
-            </SideBarItem> */}
             <SharedWorkspaces />
           </Expander>
         </SideBarItem>

@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+
 :root {
   // app config colors
   --text-primary-color: #172b4d;
@@ -70,11 +73,11 @@
 }
 
 html {
-  font-family: Inter, sans-serif;
+  font-family: 'Reddit Sans', Inter, sans-serif;
   font-optical-sizing: auto;
   color: var(--text-primary-color);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 768px) {

@@ -32,7 +32,7 @@ function ProjectCard({ project }: { project: LoadedProjectWithWorkspace }) {
         <p className='project-card-sub-text'>Create: {new Date(project.createdAt * 1000).toLocaleDateString()}</p>
         <div className='project-card-sub-text row gap-1'>
           Due date:
-          {project.dueDate ?? (
+          {new Date(project.dueDate ?? 1 * 1000).toLocaleDateString() ?? (
             <Tooltip content='No specified due date. Update at <code>More > Update</code>' position='right' arrow>
               <Tooltip.Text>[No data]</Tooltip.Text>
             </Tooltip>
