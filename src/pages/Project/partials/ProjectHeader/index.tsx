@@ -33,7 +33,7 @@ function ProjectHeader() {
           <Flex $alignItem='center' $gap='0.15rem'>
             {project?.members?.map((member, index) => {
               if (index > 7) {
-                return <>...</>
+                return
               }
               return (
                 <>

@@ -2,9 +2,9 @@
 import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
 import ProjectHeader from './partials/ProjectHeader'
-import BoardContent from './partials/BoardContent'
+// import BoardContent from './partials/BoardContent'
 import { ProjectPageParams, ProjectResponseForBoard } from '@utils/types'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useLoaderData, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
@@ -14,6 +14,9 @@ import HttpClient from '@utils/HttpClient'
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import config from '@confs/app.config'
 import TableContent from './partials/TableContent'
+import LoadingLayout from '@layouts/LoadingLayout'
+
+const BoardContent = lazy(() => import('./partials/BoardContent'))
 
 const http = new HttpClient()
 
@@ -44,6 +47,12 @@ function Project() {
         })
         .catch(err => console.log(err))
     }
+
+    return () => {
+      if (projectConnection) {
+        projectConnection.stop()
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -63,13 +72,22 @@ function Project() {
         console.log('Can not get project members', res?.data)
       }
     })
-  }, [])
+  }, [boardData?.id])
   return (
     <>
       {boardData && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
-          {project && params.viewMode === 'board' && <BoardContent />}
+          <Suspense
+            fallback={
+              <>
+                <LoadingLayout isLoading />
+              </>
+            }
+          >
+            {project && params.viewMode === 'board' && <BoardContent />}
+          </Suspense>
+
           {project && params.viewMode === 'table' && <TableContent />}
         </Flex>
       )}

@@ -90,6 +90,7 @@ function BoardContent() {
     }
   }, [account.id, project?.board?.id])
 
+  // signalr listeners
   useEffect(() => {
     if (dragConnection && project) {
       dragConnection.on('ReceiveStartDragList', (assignmentId: string, listId: string) => {
@@ -367,6 +368,7 @@ function BoardContent() {
   const sensors = useSensors(customMouseSensor, touchSensor)
   return (
     <>
+      {/* <LoadingLayout isLoading={listState && listState.length > 0}> */}
       <DndContext
         // collisionDetection={closestCorners}
         onDragStart={handleDragStart}
@@ -395,6 +397,7 @@ function BoardContent() {
             ))}
         </DragOverlay>
       </DndContext>
+      {/* </LoadingLayout> */}
     </>
   )
 }

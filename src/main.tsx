@@ -1,34 +1,49 @@
+/* eslint-disable react-refresh/only-export-components */
 import ReactDOM from 'react-dom/client'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Provider } from 'react-redux'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom'
 import GlobalStyles from '@comps/GlobalStyles'
 import store from './redux/store'
 import DefaultLayout from '@layouts/DefaultLayout'
-import Home from '@pages/Home'
-import Welcome from '@pages/Welcome'
 import routeLinks from '@routes/router'
-import YourTasks from '@pages/YourTasks'
 import config from '@confs/app.config'
 import Error from '@pages/Error'
-import Workspaces from '@pages/Workspaces'
 import HttpClient from '@utils/HttpClient'
-import Project from '@pages/Project'
 import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
-import ProjectInvitation from '@pages/ProjectInvitation'
-
+import React, { Suspense } from 'react'
+import LoadingLayout from '@layouts/LoadingLayout'
+import { HttpStatusCode } from 'axios'
+const Home = React.lazy(() => import('@pages/Home'))
+const Welcome = React.lazy(() => import('@pages/Welcome'))
+const YourTasks = React.lazy(() => import('@pages/YourTasks'))
+const Workspaces = React.lazy(() => import('@pages/Workspaces'))
+const Project = React.lazy(() => import('@pages/Project'))
+const ProjectInvitation = React.lazy(() => import('@pages/ProjectInvitation'))
 const http = new HttpClient()
 
 const router = createBrowserRouter([
   {
     path: routeLinks.welcome,
-    element: <Welcome />
+    element: (
+      <Suspense>
+        <Welcome />
+      </Suspense>
+    )
   },
   {
     path: routeLinks.home,
     element: (
       <DefaultLayout>
-        <Home />
+        <Suspense
+          fallback={
+            <>
+              <LoadingLayout isLoading />
+            </>
+          }
+        >
+          <Home />
+        </Suspense>
       </DefaultLayout>
     ),
     errorElement: <Error />
@@ -37,7 +52,15 @@ const router = createBrowserRouter([
     path: routeLinks.yourTasks,
     element: (
       <DefaultLayout>
-        <YourTasks />
+        <Suspense
+          fallback={
+            <>
+              <LoadingLayout isLoading />
+            </>
+          }
+        >
+          <YourTasks />
+        </Suspense>
       </DefaultLayout>
     )
   },
@@ -45,13 +68,24 @@ const router = createBrowserRouter([
     path: routeLinks.workspaces,
     element: (
       <DefaultLayout>
-        <Workspaces />
+        <Suspense
+          fallback={
+            <>
+              <LoadingLayout isLoading />
+            </>
+          }
+        >
+          <Workspaces />
+        </Suspense>
       </DefaultLayout>
     ),
     loader: async ({ params }) => {
       const { ownerShip } = params as WorkspacePageParams
-      const prefixPath = ownerShip === 'owner' ? 'w' : 'sw'
+      const prefixPath = ownerShip === 'owner' ? 'w' : 'w'
       const res = await http.getAuth(`/${prefixPath}/${params.workspaceId}/projects`)
+      if (res?.status !== HttpStatusCode.Ok) {
+        throw redirect('/')
+      }
       return res
     }
   },
@@ -59,12 +93,23 @@ const router = createBrowserRouter([
     path: routeLinks.project,
     element: (
       <DefaultLayout>
-        <Project />
+        <Suspense
+          fallback={
+            <>
+              <LoadingLayout isLoading />
+            </>
+          }
+        >
+          <Project />
+        </Suspense>
       </DefaultLayout>
     ),
     loader: async ({ params }) => {
       const p = params as ProjectPageParams
       const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}`)
+      if (res?.status !== HttpStatusCode.Ok) {
+        throw redirect('/')
+      }
       return res
     }
   },
@@ -72,12 +117,23 @@ const router = createBrowserRouter([
     path: routeLinks.projectInvitation,
     element: (
       <>
-        <ProjectInvitation />
+        <Suspense
+          fallback={
+            <>
+              <LoadingLayout isLoading />
+            </>
+          }
+        >
+          <ProjectInvitation />
+        </Suspense>
       </>
     ),
     loader: async ({ params }) => {
       const projectId = params.pid
       const res = await http.get(`/projects/${projectId}`)
+      if (res?.status !== HttpStatusCode.Ok) {
+        throw redirect('/')
+      }
       return res
     }
   }

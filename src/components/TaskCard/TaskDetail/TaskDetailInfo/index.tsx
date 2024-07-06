@@ -1,6 +1,4 @@
 import Flex from '@comps/StyledComponents/Flex'
-import PriorityTag from '@comps/TaskCard/PriorityTag'
-import TextArea from '@comps/TextArea'
 import Subtasks from './Subtasks'
 import { useContext, useState } from 'react'
 import { TaskDetailContext } from '@comps/TaskCard'

@@ -13,6 +13,10 @@ export function useHub(path: string, subscriber: string, ...args: object[]) {
         connect.invoke(subscriber, ...args)
       })
       .catch(err => console.log(err))
-  }, [path])
+
+    return () => {
+      connect.stop()
+    }
+  }, [path, subscriber])
   return connection
 }
