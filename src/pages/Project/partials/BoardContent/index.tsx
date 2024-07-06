@@ -68,7 +68,7 @@ function BoardContent() {
   const [activeDragItem, setActiveDragItem] = useState<ActiveDragItemType>()
   const [oldColumn, setOldColumn] = useState<ListResponseForBoard>()
 
-  //real-time
+  //signalR
   const [dragConnection, setDragConnection] = useState<HubConnection>()
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
 
@@ -104,9 +104,10 @@ function BoardContent() {
       })
 
       dragConnection.on('ReceiveEndDragList', (assignmentId: string, updatedListOrder: string) => {
-        // console.log('updatedListOrder: ', updatedListOrder)
         dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
-        setRemoteDragging(undefined)
+        setTimeout(() => {
+          if (remoteDragging) setRemoteDragging(undefined)
+        }, 500)
       })
 
       dragConnection.on('ReceiveStartDragTask', (assignmentId: string, updatedListOrder: string, taskId: string) => {
@@ -122,7 +123,10 @@ function BoardContent() {
         'ReceiveEndDragTask',
         (assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
           dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
-          setRemoteDragging(undefined)
+          // setRemoteDragging(undefined)
+          setTimeout(() => {
+            if (remoteDragging) setRemoteDragging(undefined)
+          }, 500)
         }
       )
     }

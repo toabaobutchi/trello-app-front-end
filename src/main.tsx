@@ -83,9 +83,9 @@ const router = createBrowserRouter([
       const { ownerShip } = params as WorkspacePageParams
       const prefixPath = ownerShip === 'owner' ? 'w' : 'w'
       const res = await http.getAuth(`/${prefixPath}/${params.workspaceId}/projects`)
-      if (res?.status !== HttpStatusCode.Ok) {
-        throw redirect('/')
-      }
+      // if (res?.status !== HttpStatusCode.Ok) {
+      //   throw redirect('/')
+      // }
       return res
     }
   },
@@ -107,9 +107,9 @@ const router = createBrowserRouter([
     loader: async ({ params }) => {
       const p = params as ProjectPageParams
       const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}`)
-      if (res?.status !== HttpStatusCode.Ok) {
-        throw redirect('/')
-      }
+      // if (res?.status !== HttpStatusCode.Ok) {
+      //   throw redirect('/')
+      // }
       return res
     }
   },
@@ -131,9 +131,9 @@ const router = createBrowserRouter([
     loader: async ({ params }) => {
       const projectId = params.pid
       const res = await http.get(`/projects/${projectId}`)
-      if (res?.status !== HttpStatusCode.Ok) {
-        throw redirect('/')
-      }
+      // if (res?.status !== HttpStatusCode.Ok) {
+      //   throw redirect('/')
+      // }
       return res
     }
   }

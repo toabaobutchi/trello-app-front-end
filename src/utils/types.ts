@@ -96,29 +96,28 @@ export type WorkspaceResponse = {
   ownerId: string
   context: string
 }
-// dùng cho load trang workspace
-export type WorkspaceResponseWithRelatedProjects = {
-  id: number
-  name: string
-  description?: string
-  slug: string
-  createdAt: number
-  ownerId: string
-  context: string
-  projects: LoadedProjectWithWorkspace[]
-}
+// export type WorkspaceResponseWithRelatedProjects = {
+//   id: number
+//   name: string
+//   description?: string
+//   slug: string
+//   createdAt: number
+//   ownerId: string
+//   context: string
+//   projects: LoadedProjectWithWorkspace[]
+// }
 
-export type LoadedProjectWithWorkspace = {
-  id: string
-  name: string
-  slug: string
-  color?: string
-  description?: string
-  createdAt: number
-  memberCount: number
-  dueDate?: number
-  context: string
-}
+// export type LoadedProjectWithWorkspace = {
+//   id: string
+//   name: string
+//   slug: string
+//   color?: string
+//   description?: string
+//   createdAt: number
+//   memberCount: number
+//   dueDate?: number
+//   context: string
+// }
 
 export type CreateWorkspaceModel = {
   name: string
@@ -324,4 +323,35 @@ export type ProjectResponseForTable = {
   dueDate?: number
   context: string
   tasks?: TaskResponseForTable[]
+}
+
+export type AssignmentConfig = {
+  assignmentId: string
+  isPinned?: boolean
+  lastViewAt?: number
+  permission?: string
+  projectId: string
+}
+export type ProjectCardType = {
+  id: string
+  name: string
+  slug: string
+  color?: string
+  description?: string
+  workspaceId: string
+  createdAt: number
+  memberCount: number
+  dueDate?: number
+  context: string
+  assignmentConfig: AssignmentConfig
+}
+export type WorkspaceResponseWithRelatedProjects = {
+  id: number
+  name: string
+  description?: string
+  slug: string
+  createdAt: number
+  ownerId: string
+  context: string
+  projects: ProjectCardType[]
 }

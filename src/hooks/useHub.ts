@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 export function useHub(path: string, subscriber: string, ...args: object[]) {
   const [connection, setConnection] = useState<HubConnection>()
   useEffect(() => {
-    const connect = new HubConnectionBuilder().withUrl(`${config.baseUrl}${path}`).build()
+    const connect = new HubConnectionBuilder().withUrl(`${config.baseUrl}${path}`).withAutomaticReconnect().build()
     connect
       .start()
       .then(() => {
@@ -15,7 +15,7 @@ export function useHub(path: string, subscriber: string, ...args: object[]) {
       .catch(err => console.log(err))
 
     return () => {
-      connect.stop()
+      if (connection) connection.stop()
     }
   }, [path, subscriber])
   return connection

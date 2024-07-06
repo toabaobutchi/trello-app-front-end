@@ -7,7 +7,6 @@ interface LoadingLayoutProps extends React.ComponentProps<'div'> {
 
 function LoadingLayout({ isLoading = false, children = '', ...props }: LoadingLayoutProps) {
   // const { style, className, ...restProps } = props
-  console.log('isLoading: ', isLoading)
   return (
     <>
       {isLoading ? (
