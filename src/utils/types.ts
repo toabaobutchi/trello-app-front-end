@@ -355,3 +355,29 @@ export type WorkspaceResponseWithRelatedProjects = {
   context: string
   projects: ProjectCardType[]
 }
+
+export type ProjectResponseForUpdating = {
+  name: string
+  description?: string
+  dueDate?: number
+  color?: string
+  minimunAllowedDueDate?: number
+}
+
+export type BoardDataInput = {
+  title: string
+  useColor: boolean
+  color: string
+  selectedWorkspace: string
+  description?: string
+  dueDate?: string
+}
+
+export type ProjectDataInput = {
+  name: string
+  useColor: boolean
+  color?: string
+  description?: string
+  dueDate?: number,
+  minimunAllowedDueDate?: number
+}

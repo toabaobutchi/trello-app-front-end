@@ -10,7 +10,7 @@ import ColorPicker from '@comps/ColorPicker'
 import TextArea from '@comps/TextArea'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
-import { CreateProjectModel, Project, ProjectContextResponse } from '@utils/types'
+import { BoardDataInput, CreateProjectModel, ProjectContextResponse } from '@utils/types'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -22,15 +22,6 @@ const http = new HttpClient()
 type CreateBoardModalProps = {
   open: boolean
   onClose?: () => void
-}
-
-type BoardDataInput = {
-  title: string
-  useColor: boolean
-  color: string
-  selectedWorkspace: string
-  description?: string
-  dueDate?: string
 }
 
 const initValue: BoardDataInput = {

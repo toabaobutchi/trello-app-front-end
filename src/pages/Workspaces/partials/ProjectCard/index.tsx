@@ -12,9 +12,12 @@ import { useEffect, useState } from 'react'
 import { getSlug } from '@utils/functions'
 import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
+import Modal from '@comps/Modal'
+import UpdateProjectEditor from './UpdateProjectEditor'
 
 function ProjectCard({ project }: { project: ProjectCardType }) {
   const { open, anchorRef, toggleMenu, closeMenu } = useMenu<HTMLButtonElement>()
+  const [updateModal, setUpdateModal] = useState(false)
   const dispatch = useDispatch()
   const [projectState, setProjectState] = useState<ProjectCardType>()
   useEffect(() => {
@@ -42,12 +45,17 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           }
         } as ProjectCardType)
     )
+    //TODO call api
     dispatch(
       workspaceSlice.actions.togglePinProject({
         projectId: projectState?.id,
         isPinned: Boolean(projectState?.assignmentConfig?.isPinned)
       })
     )
+  }
+  const handleToggleUpdateModal = () => {
+    setUpdateModal(!updateModal)
+    closeMenu()
   }
   return (
     <>
@@ -102,7 +110,7 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           anchorElement={anchorRef?.current}
           onClose={closeMenu}
         >
-          <MenuItem className='project-update-btn'>
+          <MenuItem onClick={handleToggleUpdateModal} className='project-update-btn'>
             <i className='fa-regular fa-pen-to-square'></i> Update
           </MenuItem>
           <MenuItem className='project-delete-btn'>
@@ -110,6 +118,18 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           </MenuItem>
         </Menu>
       </div>
+      <Modal
+        open={updateModal}
+        onClose={handleToggleUpdateModal}
+        layout={{
+          header: {
+            title: 'Update project',
+            closeIcon: true
+          }
+        }}
+      >
+        <UpdateProjectEditor projectId={project?.id} />
+      </Modal>
     </>
   )
 }
