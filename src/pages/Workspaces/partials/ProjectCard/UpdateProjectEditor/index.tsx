@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import './UpdateProjectEditor.scss'
 import {
-  CreateProjectModel,
   ProjectDataInput,
   ProjectResponseForUpdating,
   UpdateProjectModel,

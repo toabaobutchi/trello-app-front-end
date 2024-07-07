@@ -13,7 +13,6 @@ import HttpClient from '@utils/HttpClient'
 import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
 import React, { Suspense } from 'react'
 import LoadingLayout from '@layouts/LoadingLayout'
-import { HttpStatusCode } from 'axios'
 const Home = React.lazy(() => import('@pages/Home'))
 const Welcome = React.lazy(() => import('@pages/Welcome'))
 const YourTasks = React.lazy(() => import('@pages/YourTasks'))
@@ -81,7 +80,7 @@ const router = createBrowserRouter([
     ),
     loader: async ({ params }) => {
       const { ownerShip } = params as WorkspacePageParams
-      const prefixPath = ownerShip === 'owner' ? 'w' : 'w'
+      const prefixPath = ownerShip === 'owner' ? 'w' : 'sw'
       const res = await http.getAuth(`/${prefixPath}/${params.workspaceId}/projects`)
       // if (res?.status !== HttpStatusCode.Ok) {
       //   throw redirect('/')
