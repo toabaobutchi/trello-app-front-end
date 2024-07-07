@@ -8,7 +8,7 @@ import { AssignmentResponse, TaskDetailForBoard, TaskResponseForBoard } from '@u
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId } from '@utils/functions'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
 import Modal from '@comps/Modal'
 import HttpClient from '@utils/HttpClient'
 import TaskDetail from './TaskDetail'
@@ -46,9 +46,12 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   }
   const [modalState, setModalState] = useState<TaskDetailModelState>({ open: false })
   const members = useSelector((state: RootState) => state.project.activeProject.members)
-  // const account = useSelector((state: RootState) => state.login.accountInfo)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
+  const taskAssignments = useMemo(() => {
+    const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
+    return tAssignments
+  }, [members, task?.taskAssignmentIds])
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
@@ -57,7 +60,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     setModalState({ ...modalState, open: false })
   }
   const handleLoadTaskDetail = async () => {
-    // setModalState(prev => ({ ...prev, open: true })) // mở modal ra trước
     const res = await http.getAuth(`/tasks/${task.id}/v/board`)
     if (res?.status === HttpStatusCode.Ok) {
       setModalState({ open: true, taskDetail: res.data }) // lưu chi tiết task vào state
@@ -115,10 +117,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             <div className='task-card-body-name'>{task.name}</div>
           </div>
           <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>
-            <Flex $alignItem='center' $gap='0.5rem'>
-              <div className='task-card-footer-members'>
-                <i className='fa-solid fa-users'></i> {task.assigneeCount}
-              </div>
+            <Flex $alignItem='center' $gap='1rem'>
               {task.subTaskCount ? (
                 <div className='task-card-body-subtasks'>
                   <i className='fa-solid fa-list-check'></i> {task.completedSubTaskCount}/{task.subTaskCount}
@@ -126,6 +125,9 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               ) : (
                 <></>
               )}
+              <div className='task-card-body-comments'>
+                <i className='fa-regular fa-message'></i> {task?.commentCount ?? 0}
+              </div>
             </Flex>
             <div className='task-card-footer-due-date'>
               <i className='fa-regular fa-clock'></i>{' '}
@@ -134,6 +136,38 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               ) : (
                 <span className='text-light'>Not set</span>
               )}
+            </div>
+          </Flex>
+          <Flex
+            $alignItem='center'
+            $justifyContent='start'
+            $flexDirection='row-reverse'
+            className='posr task-card-footer-members'
+          >
+            <div className='task-card-footer-members-more'>+3 more</div>
+            <div className='task-card-footer-members-image-container'>
+              <img
+                src='https://play-lh.googleusercontent.com/hJGHtbYSQ0nCnoEsK6AGojonjELeAh_Huxg361mVrPmzdwm8Ots-JzEH5488IS2nojI'
+                alt='avatar'
+              />
+            </div>
+            <div className='task-card-footer-members-image-container'>
+              <img
+                src='https://makeover.imgix.net/data%2FWum4u3uPWFWmq0OOcldmZ7F1ZIx1%2Fstyles%2Fabc907637dcab5b86e04ee33fc9c79b2%2Fimages%2Fb877cb300f3aeb0ea0b1f13a44d39007?alt=media&token=c3783a66-4660-4819-98e2-f4c1e83e7752'
+                alt='avatar'
+              />
+            </div>
+            <div className='task-card-footer-members-image-container'>
+              <img
+                src='https://play-lh.googleusercontent.com/7Ak4Ye7wNUtheIvSKnVgGL_OIZWjGPZNV6TP_3XLxHC-sDHLSE45aDg41dFNmL5COA'
+                alt='avatar'
+              />
+            </div>
+            <div className='task-card-footer-members-image-container'>
+              <img
+                src='https://marketplace.canva.com/EAFltIh8PKg/1/0/1600w/canva-cute-anime-cartoon-illustration-girl-avatar-J7nVyTlhTAE.jpg'
+                alt='avatar'
+              />
             </div>
           </Flex>
         </div>
@@ -155,7 +189,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                       <i className='fa-solid fa-right-to-bracket'></i> Join
                     </Button>
                     <Button variant='text' theme='default'>
-                    <i className="fa-regular fa-envelope"></i> Invite member
+                      <i className='fa-regular fa-envelope'></i> Invite member
                     </Button>
                     <Button variant='text' theme='default'>
                       <i className='fa-solid fa-thumbtack'></i> Need help!

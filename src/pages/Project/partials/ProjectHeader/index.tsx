@@ -20,7 +20,7 @@ function ProjectHeader() {
                 <i className='fa-brands fa-flipboard'></i> {project?.board?.name}
               </p>
               <p className='text-secondary' style={{ fontSize: '0.85rem' }}>
-                {project?.board?.memberCount ?? 0} members
+                {project?.members?.length ?? 0} members
               </p>
             </div>
           </Flex>
@@ -29,24 +29,6 @@ function ProjectHeader() {
             ownerShip={project?.board?.context?.toLowerCase()}
             slug={project?.board?.slug ?? ''}
           />
-          {/* <Flex $alignItem='center' $gap='0.15rem'>
-            {project?.members?.map((member, index) => {
-              if (index > 7) {
-                return
-              }
-              return (
-                <>
-                  <Tooltip key={member.id} arrow position='top' content={member?.email}>
-                    <img
-                      src={member?.avatar}
-                      style={{ width: '25px', borderRadius: '50%', objectFit: 'cover' }}
-                      alt=''
-                    />
-                  </Tooltip>
-                </>
-              )
-            })}
-          </Flex> */}
         </Flex>
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
           <ProjectFilterMenu />

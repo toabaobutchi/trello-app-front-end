@@ -88,6 +88,7 @@ const router = createBrowserRouter([
       return res
     }
   },
+  // project route
   {
     path: routeLinks.project,
     element: (
@@ -105,7 +106,7 @@ const router = createBrowserRouter([
     ),
     loader: async ({ params }) => {
       const p = params as ProjectPageParams
-      const res = await http.getAuth(`/projects/${p.projectId}/v/${p.viewMode}`)
+      const res = await http.getAuth(`/v2/projects/${p.projectId}/v/${p.viewMode}`)
       // if (res?.status !== HttpStatusCode.Ok) {
       //   throw redirect('/')
       // }

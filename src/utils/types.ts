@@ -240,7 +240,9 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   dueDate?: number
   priority?: string
   listId: string
-  assigneeCount: number
+  // assigneeCount: number
+  taskAssignmentIds: string[]
+  commentCount: number
   completedSubTaskCount?: number
   subTaskCount?: number
 }
@@ -267,7 +269,7 @@ export type ProjectResponseForBoard = {
   slug?: string
   workspaceId: string
   context: string
-  memberCount?: number
+  // memberCount?: number
   listOrder?: string
   lists?: ListResponseForBoard[]
 }

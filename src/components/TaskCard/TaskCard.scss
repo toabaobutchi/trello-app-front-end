@@ -98,17 +98,28 @@
     margin-top: 1rem;
 
     &-members {
+      margin-top: 0.5rem;
+      margin-left: 0.5rem;
+
+      &-more {
+        font-size: 0.9rem;
+        // font-weight: 400;
+        color: var(--text-secondary-color);
+        text-decoration: none;
+      }
+
       &-image-container {
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        background-color: #fff;
+        border: 2.5px solid #fff;
+        overflow: hidden;
+        margin-left: -0.5rem;
 
         > img {
           max-width: 100%;
           object-fit: cover;
           max-height: 100%;
-          clip-path: circle();
         }
       }
     }

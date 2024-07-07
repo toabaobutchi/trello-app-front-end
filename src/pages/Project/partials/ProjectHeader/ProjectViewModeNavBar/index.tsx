@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 
 const ProjectViewModeNavBar = memo(
   ({ projectId, ownerShip, slug }: { projectId: string; ownerShip: string; slug: string }) => {
+    console.log('slug: ', slug)
     return (
       <>
         <Flex $gap='1rem' $alignItem='center' className='project-view-mode'>
