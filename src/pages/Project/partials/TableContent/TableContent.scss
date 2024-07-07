@@ -1,4 +1,9 @@
 .table-content {
+  --secondary-bg-color: #77777720;
+  --danger-bg-color: #e9067820;
+  --warning-bg-color: #d89e0020;
+  --primary-bg-color: #007bc220;
+  --success-bg-color: #02a43020;
   border-radius: var(--table-outside-radius);
   border: var(--thin-border-width) solid var(--light-color);
   font-size: 1.1rem;
@@ -9,6 +14,8 @@
   > table {
     width: 100%;
     border-collapse: collapse;
+    max-height: 100%;
+    overflow: auto;
 
     > thead > tr {
       background-color: var(--table-header-bg-color);
@@ -17,22 +24,58 @@
       > th {
         padding: 1rem;
         font-size: 1.2rem;
-
-        &:first-child {
-          width: max-content;
-        }
       }
     }
 
     > tbody > tr {
       color: var(--text-secondary-color);
       text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--table-header-bg-color);
+      }
+
       &:not(:last-child) {
         border-bottom: var(--thin-border-width) solid var(--bright-color);
       }
       td {
         padding: 1rem;
+
+        &.table-task-name {
+          font-weight: 600;
+          color: var(--primary-color);
+        }
       }
     }
+  }
+}
+
+.table-option-checkbox {
+  width: 20px;
+  cursor: pointer;
+}
+
+.task-row {
+  &__default {
+    color: var(--secondary-color) !important;
+    background-color: var(--secondary-bg-color) !important;
+  }
+
+  &__high {
+    color: var(--danger-color) !important;
+    background-color: var(--danger-bg-color) !important;
+  }
+  &__medium {
+    color: var(--warning-color) !important;
+    background-color: var(--warning-bg-color) !important;
+  }
+  &__normal {
+    color: var(--primary-color) !important;
+    background-color: var(--primary-bg-color) !important;
+  }
+  &__low {
+    color: var(--success-color) !important;
+    background-color: var(--success-bg-color) !important;
   }
 }

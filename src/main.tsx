@@ -96,7 +96,7 @@ const router = createBrowserRouter([
         <Suspense
           fallback={
             <>
-              <LoadingLayout isLoading />
+              <LoadingLayout className='row jcc w-full h-full' isLoading />
             </>
           }
         >

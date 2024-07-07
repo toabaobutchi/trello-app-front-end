@@ -4,6 +4,7 @@
   border-radius: var(--card-radius);
   cursor: pointer;
   box-shadow: 0 0 1rem 0 #ccc;
+  height: max-content;
 
   &-name {
     font-size: 1.5rem;
