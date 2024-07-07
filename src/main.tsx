@@ -2,7 +2,7 @@
 import ReactDOM from 'react-dom/client'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Provider } from 'react-redux'
-import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import GlobalStyles from '@comps/GlobalStyles'
 import store from './redux/store'
 import DefaultLayout from '@layouts/DefaultLayout'
