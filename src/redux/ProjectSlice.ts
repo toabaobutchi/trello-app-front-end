@@ -35,7 +35,6 @@ export const projectSlice = createSlice({
       try {
         const project = action.payload as ProjectResponseForBoard
         const listOrder = project?.listOrder?.split(',')
-        console.log('project: ', project)
         project!.lists = [...mapOrder(project?.lists as ListResponseForBoard[], listOrder as string[], 'id')]
         state.activeProject.board = project
       } catch {

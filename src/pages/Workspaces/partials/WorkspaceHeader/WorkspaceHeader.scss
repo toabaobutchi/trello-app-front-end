@@ -1,4 +1,18 @@
 .workspace-header {
   padding: 0 0 1rem;
   border-bottom: var(--thin-border-width) solid var(--divisor-line);
+
+  &-creator {
+    img {
+      width: 25px;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      object-fit: cover;
+      max-width: 100%;
+    }
+    p {
+      color: var(--text-primary-color);
+      font-size: 1rem;
+    }
+  }
 }

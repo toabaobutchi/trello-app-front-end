@@ -6,7 +6,6 @@ import ProjectShare from './ProjectShare'
 import WorkspaceTreeMenu from './WorkspaceTreeMenu'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
-import Tooltip from '@comps/Tooltip-v2'
 
 function ProjectHeader() {
   const project = useSelector((state: RootState) => state.project.activeProject)
@@ -30,7 +29,7 @@ function ProjectHeader() {
             ownerShip={project?.board?.context?.toLowerCase()}
             slug={project?.board?.slug ?? ''}
           />
-          <Flex $alignItem='center' $gap='0.15rem'>
+          {/* <Flex $alignItem='center' $gap='0.15rem'>
             {project?.members?.map((member, index) => {
               if (index > 7) {
                 return
@@ -47,7 +46,7 @@ function ProjectHeader() {
                 </>
               )
             })}
-          </Flex>
+          </Flex> */}
         </Flex>
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
           <ProjectFilterMenu />

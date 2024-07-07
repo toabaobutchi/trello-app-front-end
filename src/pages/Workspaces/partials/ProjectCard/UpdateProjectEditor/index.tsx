@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './UpdateProjectEditor.scss'
-import { ProjectDataInput, ProjectResponseForUpdating } from '@utils/types'
+import { CreateProjectModel, ProjectDataInput, ProjectResponseForUpdating, UpdateProjectModel } from '@utils/types'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import LoadingLayout from '@layouts/LoadingLayout'
@@ -10,16 +10,18 @@ import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
 import ColorPicker from '@comps/ColorPicker'
 import Button from '@comps/Button'
-import { getDateTimeString } from '@utils/functions'
+import { getDateTimeString, getDisplayDateString } from '@utils/functions'
 
 const http = new HttpClient()
 
 function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: string; onClose?: () => void }) {
   const [project, setProject] = useState<ProjectDataInput>()
+  const [originalData, setOriginalData] = useState<ProjectResponseForUpdating>()
   useEffect(() => {
     http.getAuth(`/projects/${projectId}/updating`).then(res => {
       if (res?.status === HttpStatusCode.Ok) {
         const data = res?.data as ProjectResponseForUpdating
+        setOriginalData(data)
         const inputData: ProjectDataInput = {
           ...data,
           useColor: Boolean(data?.color)
@@ -37,11 +39,28 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
     },
     toggleUseColor(e: React.ChangeEvent<HTMLInputElement>) {
       setProject({ ...project, useColor: e.currentTarget.checked } as ProjectDataInput)
+    },
+    setDueDate(e: React.ChangeEvent<HTMLInputElement>) {
+      setProject({ ...project, dueDate: new Date(e.target.value).getTime() } as ProjectDataInput)
     }
   }
-
+  const handleReset = () => {
+    setProject({ ...originalData, useColor: Boolean(originalData?.color) } as ProjectDataInput)
+  }
   const handleSubmit = async () => {
-    onClose()
+    const data: UpdateProjectModel = {
+      name: project?.name ?? '',
+      color: project?.useColor ? project?.color : undefined,
+      description: project?.description,
+      dueDate: project?.dueDate ? project?.dueDate : undefined
+    }
+    const res = await http.putAuth(`projects/${projectId}`, data)
+    if (res?.status === HttpStatusCode.Ok) {
+      console.log(res?.data)
+      onClose()
+    } else {
+      handleReset()
+    }
   }
   return (
     <>
@@ -93,7 +112,7 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
               value={getDateTimeString(new Date(project?.dueDate))}
               name='dueDate'
               id='due-date-selector'
-              onChange={handleChangeBoard.inputs}
+              onChange={handleChangeBoard.setDueDate}
               min={
                 project?.dueDate
                   ? getDateTimeString(new Date(project.dueDate))
@@ -104,7 +123,11 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
             />
           )}
         </Flex>
-
+        {project?.minimunAllowedDueDate && (
+          <p className='text-warning'>
+            The minimum due date you can set is: {getDisplayDateString(new Date(project.minimunAllowedDueDate))}
+          </p>
+        )}
         <TextArea
           label='Description (optional)'
           name='description'
@@ -113,9 +136,12 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
           rows={5}
         />
 
-        <Flex $justifyContent='end'>
-          <Button size='medium' onClick={handleSubmit} disabled={!project?.name.trim()} style={{ marginTop: '1rem' }}>
-            Save changes
+        <Flex $alignItem='center' $justifyContent='end' className='mt-1' $gap='1rem'>
+          <Button size='medium' theme='success' onClick={handleReset}>
+            <i className='fa-solid fa-rotate-left'></i> Reset
+          </Button>
+          <Button size='medium' onClick={handleSubmit} disabled={!project?.name.trim()}>
+            <i className='fa-regular fa-floppy-disk'></i> Save changes
           </Button>
         </Flex>
       </LoadingLayout>

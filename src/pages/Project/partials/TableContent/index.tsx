@@ -17,7 +17,6 @@ function TableContent() {
       return task
     })
   }, [project])
-  console.log(tasks)
   return (
     <>
       <div className='table-content'>

@@ -54,7 +54,6 @@ function ProjectShare() {
     if (res?.status === HttpStatusCode.Ok) {
       setModalOpen(false)
       setInvitation({ email: '', permission: 'member' })
-      console.log(res.data)
     }
   }
   const handleChangeEmail = (e: InputChange) => {

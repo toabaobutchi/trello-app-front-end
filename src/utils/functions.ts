@@ -61,7 +61,6 @@ export const isOutOfScreen = (element: HTMLElement) => {
 }
 
 export function sortProject(project?: ProjectResponseForBoard) {
-  console.log('sortProject >>> ', project)
   if (!project) return project
   const listOrder = project?.listOrder?.split(',')
   project.lists = project?.lists?.sort((a, b) => (listOrder?.indexOf(a.id) ?? 0) - (listOrder?.indexOf(b.id) ?? 0))
@@ -123,4 +122,15 @@ export const filterLists = (lists?: ListResponseForBoard[], filters?: FilterType
     })
   })
   return newList
+}
+
+export const getDisplayDateString = (date: Date) => {
+  if (!date) return ''
+  const today = new Date()
+  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
+  const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
+  if (date.getTime() === today.getTime()) return 'Today'
+  if (date.getTime() === yesterday.getTime()) return 'Yesterday'
+  if (date.getTime() === tomorrow.getTime()) return 'Tomorrow'
+  return date.toLocaleDateString()
 }

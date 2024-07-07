@@ -46,7 +46,7 @@ function SideBar() {
             defaultExpand
           >
             <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
-              <Expander header={{ content: 'Your workspaces' }} defaultExpand>
+              <Expander header={{ content: <p><i className="fa-solid fa-cloud"></i> Your workspaces</p> }} defaultExpand>
                 {workspaces.workspaceList?.map(workspace => {
                   const path = linkCreator.workspaces({
                     slug: getSlug(workspace.slug),
@@ -55,7 +55,7 @@ function SideBar() {
                   })
                   return (
                     <SideBarItem.Link to={path} key={workspace?.id}>
-                      {workspace.name}
+                      <i className='fa-solid fa-layer-group'></i> {workspace.name}
                     </SideBarItem.Link>
                   )
                 })}

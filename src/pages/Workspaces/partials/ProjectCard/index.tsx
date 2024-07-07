@@ -9,7 +9,6 @@ import useMenu from '@hooks/useMenu'
 import { useNavigate } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
 import { useEffect, useState } from 'react'
-import { getSlug } from '@utils/functions'
 import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
 import Modal from '@comps/Modal'
@@ -29,7 +28,7 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
       linkCreator.project({
         ownerShip: projectState?.context ?? '',
         projectId: projectState?.id ?? '',
-        slug: getSlug(projectState?.slug ?? ''),
+        slug: projectState?.slug as string,
         viewMode: 'board'
       })
     )
@@ -68,7 +67,7 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           } as React.CSSProperties
         }
       >
-        <Flex $alignItem='center' $justifyContent='space-between'>
+        <Flex className='my-1' $alignItem='center' $justifyContent='space-between'>
           <p className='project-card-name'>{projectState?.name}</p>
           <div className='pinned-project-button' onClick={handleTogglePinProject}>
             {projectState?.assignmentConfig?.isPinned ? (
@@ -79,11 +78,11 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           </div>
         </Flex>
         <p className='project-card-sub-text'>
-          <b>Create:</b>{' '}
+          <b className='text-primary'>Create:</b>{' '}
           {projectState?.createdAt ? new Date(projectState?.createdAt * 1000).toLocaleDateString() : '[ Not set ]'}
         </p>
         <div className='project-card-sub-text row gap-1'>
-          <b>Due date:</b>
+          <b className='text-primary'>Due date:</b>
           {projectState?.dueDate ? (
             new Date(projectState?.dueDate * 1000).toLocaleDateString()
           ) : (
@@ -93,7 +92,10 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           )}
         </div>
         <p className='project-card-sub-text'>
-          <b>Member:</b> {projectState?.memberCount}
+          <b className='text-primary'>Member:</b> {projectState?.memberCount}
+        </p>
+        <p className='project-card-sub-text'>
+          <b className='text-primary'>Your permission:</b> {projectState?.assignmentConfig.permission}
         </p>
         <p className='project-card-description'>{projectState?.description}</p>
         <Flex $alignItem='center' $justifyContent='end' $gap='0.5rem' style={{ marginTop: '0.5rem' }}>
@@ -104,12 +106,7 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
             More&nbsp;<i className='fa-solid fa-caret-down'></i>
           </Button>
         </Flex>
-        <Menu
-          // style={{ width: '150px' }}
-          open={open}
-          anchorElement={anchorRef?.current}
-          onClose={closeMenu}
-        >
+        <Menu open={open} anchorElement={anchorRef?.current} onClose={closeMenu}>
           <MenuItem onClick={handleToggleUpdateModal} className='project-update-btn'>
             <i className='fa-regular fa-pen-to-square'></i> Update
           </MenuItem>
@@ -128,7 +125,7 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           }
         }}
       >
-        <UpdateProjectEditor projectId={project?.id} />
+        <UpdateProjectEditor projectId={project?.id} onClose={handleToggleUpdateModal} />
       </Modal>
     </>
   )

@@ -345,6 +345,13 @@ export type ProjectCardType = {
   context: string
   assignmentConfig: AssignmentConfig
 }
+export type OwnerInfo = {
+  id: string
+  displayName?: string
+  email?: string
+  avatar?: string
+}
+
 export type WorkspaceResponseWithRelatedProjects = {
   id: number
   name: string
@@ -354,6 +361,7 @@ export type WorkspaceResponseWithRelatedProjects = {
   ownerId: string
   context: string
   projects: ProjectCardType[]
+  owner?: OwnerInfo
 }
 
 export type ProjectResponseForUpdating = {
@@ -378,6 +386,13 @@ export type ProjectDataInput = {
   useColor: boolean
   color?: string
   description?: string
-  dueDate?: number,
+  dueDate?: number
   minimunAllowedDueDate?: number
+}
+
+export type UpdateProjectModel = {
+  name: string,
+  description?: string,
+  dueDate?: number,
+  color?: string
 }

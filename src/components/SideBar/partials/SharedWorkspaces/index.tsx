@@ -17,7 +17,13 @@ function SharedWorkspaces() {
       <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
         <Expander
           onExpand={handleFetchSharedWorkspaces}
-          header={{ content: 'Shared projects' }}
+          header={{
+            content: (
+              <p>
+                <i className='fa-solid fa-share-nodes'></i> Shared projects
+              </p>
+            )
+          }}
           useArrow={true}
         >
           {sharedWorkspaces?.map(workspace => {

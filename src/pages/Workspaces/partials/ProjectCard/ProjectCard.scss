@@ -14,7 +14,7 @@
 
   .pinned-project-button {
     cursor: pointer;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     padding: 0.25rem 0.4rem;
     border-radius: var(--primary-radius);
 
@@ -31,8 +31,9 @@
   }
 
   &-sub-text {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--text-primary-color);
+    margin-bottom: 0.5rem;
   }
 
   &-description {
