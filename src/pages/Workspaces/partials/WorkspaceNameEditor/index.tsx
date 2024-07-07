@@ -86,9 +86,17 @@ function WorkspaceNameEditor({ workspace }: { workspace: WorkspaceResponseWithRe
         </button>
       ) : (
         <>
-          <Button onClick={handleToggleWorkspaceEditor} size='small' variant='outlined' theme='light' className='text-danger'>
-            <i className='fa-solid fa-arrow-rotate-left'></i>
-          </Button>
+          {workspace?.context.toLowerCase() === 'owner' && (
+            <Button
+              onClick={handleToggleWorkspaceEditor}
+              size='small'
+              variant='outlined'
+              theme='light'
+              className='text-danger'
+            >
+              <i className='fa-solid fa-arrow-rotate-left'></i>
+            </Button>
+          )}
         </>
       )}
     </>

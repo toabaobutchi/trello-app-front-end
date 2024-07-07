@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react'
 import './UpdateProjectEditor.scss'
-import { CreateProjectModel, ProjectDataInput, ProjectResponseForUpdating, UpdateProjectModel } from '@utils/types'
+import {
+  CreateProjectModel,
+  ProjectDataInput,
+  ProjectResponseForUpdating,
+  UpdateProjectModel,
+  UpdateProjectResponse
+} from '@utils/types'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import LoadingLayout from '@layouts/LoadingLayout'
@@ -11,10 +17,13 @@ import SwitchButton from '@comps/SwitchButton'
 import ColorPicker from '@comps/ColorPicker'
 import Button from '@comps/Button'
 import { getDateTimeString, getDisplayDateString } from '@utils/functions'
+import { useDispatch } from 'react-redux'
+import { workspaceSlice } from '@redux/WorkspaceSlice'
 
 const http = new HttpClient()
 
 function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: string; onClose?: () => void }) {
+  const dispatch = useDispatch()
   const [project, setProject] = useState<ProjectDataInput>()
   const [originalData, setOriginalData] = useState<ProjectResponseForUpdating>()
   useEffect(() => {
@@ -56,7 +65,9 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
     }
     const res = await http.putAuth(`projects/${projectId}`, data)
     if (res?.status === HttpStatusCode.Ok) {
-      console.log(res?.data)
+      // dispatch to change UI
+      const data = res?.status as UpdateProjectResponse
+      dispatch(workspaceSlice.actions.updateProject(data))
       onClose()
     } else {
       handleReset()
@@ -67,7 +78,7 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
       <LoadingLayout className='row jcc' style={{ minHeight: '300px' }} isLoading={!project}>
         <FloatLabelInput
           label='Board title'
-          input={{ id: 'create-board', name: 'title', autoFocus: true, value: project?.name }}
+          input={{ id: 'create-board', name: 'name', autoFocus: true, value: project?.name }}
           onChange={handleChangeBoard.inputs}
         />
 
@@ -99,14 +110,14 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
 
         <Flex className='mt-1' $gap='0.5rem' $alignItem='center'>
           <SwitchButton
-            inputAttributes={{ type: 'checkbox', id: 'set-dute-date', checked: project?.dueDate === undefined }}
+            inputAttributes={{ type: 'checkbox', id: 'set-dute-date', checked: !project?.dueDate }}
             size='small'
             onChange={handleChangeBoard.toggleSetDueDate}
           />
           <label style={{ cursor: 'pointer' }} htmlFor='set-dute-date'>
             I do not want to set due date
           </label>
-          {project?.dueDate !== undefined && (
+          {project?.dueDate && (
             <input
               type='datetime-local'
               value={getDateTimeString(new Date(project?.dueDate))}

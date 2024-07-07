@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { CreateWorkspaceModel, WorkspaceResponse, WorkspaceResponseWithRelatedProjects } from '@utils/types'
+import {
+  CreateWorkspaceModel,
+  UpdateProjectResponse,
+  WorkspaceResponse,
+  WorkspaceResponseWithRelatedProjects
+} from '@utils/types'
 import HttpClient from '@utils/HttpClient'
 
 const http = new HttpClient()
@@ -22,8 +27,20 @@ export const workspaceSlice = createSlice({
         }
       }
     },
+    // payload: UpdateProjectResponse
+    updateProject: (state, action) => {
+      const updatedProject = action.payload as UpdateProjectResponse
+      if (!updatedProject) return
+      const project = state.activeWorkspace?.projects?.find(project => project.id === updatedProject.id)
+      if (project) {
+        project.name = updatedProject.name
+        project.description = updatedProject.description
+        project.dueDate = updatedProject.dueDate
+        project.color = updatedProject.color
+      }
+    },
     setActiveWorkspace: (state, action) => {
-      state.activeWorkspace = action?.payload?.data as WorkspaceResponseWithRelatedProjects
+      state.activeWorkspace = action?.payload as WorkspaceResponseWithRelatedProjects
     },
     // payload: { workspaceId, workspaceName }
     renameWorkspace: (state, action) => {

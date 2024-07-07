@@ -8,7 +8,7 @@ import Tooltip from '@comps/Tooltip'
 import useMenu from '@hooks/useMenu'
 import { useNavigate } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
 import Modal from '@comps/Modal'
@@ -18,37 +18,24 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
   const { open, anchorRef, toggleMenu, closeMenu } = useMenu<HTMLButtonElement>()
   const [updateModal, setUpdateModal] = useState(false)
   const dispatch = useDispatch()
-  const [projectState, setProjectState] = useState<ProjectCardType>()
-  useEffect(() => {
-    setProjectState(project)
-  }, [project])
+  // const [projectState, setProjectState] = useState<ProjectCardType>()
   const navigate = useNavigate()
   const navigateToProjectDetail = () => {
     navigate(
       linkCreator.project({
-        ownerShip: projectState?.context ?? '',
-        projectId: projectState?.id ?? '',
-        slug: projectState?.slug as string,
+        ownerShip: project.context ?? '',
+        projectId: project.id ?? '',
+        slug: project.slug as string,
         viewMode: 'board'
       })
     )
   }
   const handleTogglePinProject = () => {
-    setProjectState(
-      prev =>
-        ({
-          ...prev,
-          assignmentConfig: {
-            ...prev?.assignmentConfig,
-            isPinned: !prev?.assignmentConfig?.isPinned
-          }
-        } as ProjectCardType)
-    )
     //TODO call api
     dispatch(
       workspaceSlice.actions.togglePinProject({
-        projectId: projectState?.id,
-        isPinned: Boolean(projectState?.assignmentConfig?.isPinned)
+        projectId: project.id,
+        isPinned: Boolean(project.assignmentConfig?.isPinned)
       })
     )
   }
@@ -62,15 +49,15 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
         className='project-card'
         style={
           {
-            ['--clr']: projectState?.color || 'transparent',
-            ['--text-clr']: projectState?.color || 'inherit'
+            ['--clr']: project.color || 'transparent',
+            ['--text-clr']: project.color || 'inherit'
           } as React.CSSProperties
         }
       >
         <Flex className='my-1' $alignItem='center' $justifyContent='space-between'>
-          <p className='project-card-name'>{projectState?.name}</p>
+          <p className='project-card-name'>{project.name}</p>
           <div className='pinned-project-button' onClick={handleTogglePinProject}>
-            {projectState?.assignmentConfig?.isPinned ? (
+            {project.assignmentConfig?.isPinned ? (
               <i className='fa-solid fa-star pinned-icon'></i>
             ) : (
               <i className='fa-regular fa-star no-pinned-icon'></i>
@@ -79,12 +66,12 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
         </Flex>
         <p className='project-card-sub-text'>
           <b className='text-primary'>Create:</b>{' '}
-          {projectState?.createdAt ? new Date(projectState?.createdAt * 1000).toLocaleDateString() : '[ Not set ]'}
+          {project.createdAt ? new Date(project.createdAt * 1000).toLocaleDateString() : '[ Not set ]'}
         </p>
         <div className='project-card-sub-text row gap-1'>
           <b className='text-primary'>Due date:</b>
-          {projectState?.dueDate ? (
-            new Date(projectState?.dueDate * 1000).toLocaleDateString()
+          {project.dueDate ? (
+            new Date(project.dueDate).toLocaleDateString()
           ) : (
             <Tooltip content='No specified due date. Update at <code>More > Update</code>' position='right' arrow>
               <Tooltip.Text>[No data]</Tooltip.Text>
@@ -92,28 +79,32 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           )}
         </div>
         <p className='project-card-sub-text'>
-          <b className='text-primary'>Member:</b> {projectState?.memberCount}
+          <b className='text-primary'>Member:</b> {project.memberCount}
         </p>
         <p className='project-card-sub-text'>
-          <b className='text-primary'>Your permission:</b> {projectState?.assignmentConfig.permission}
+          <b className='text-primary'>Your permission:</b> {project.assignmentConfig.permission}
         </p>
-        <p className='project-card-description'>{projectState?.description}</p>
+        <p className='project-card-description'>{project.description}</p>
         <Flex $alignItem='center' $justifyContent='end' $gap='0.5rem' style={{ marginTop: '0.5rem' }}>
           <Button onClick={navigateToProjectDetail} variant='filled'>
             Take a look
           </Button>
-          <Button ref={anchorRef} variant='text' theme='secondary' className='row' onClick={toggleMenu}>
-            More&nbsp;<i className='fa-solid fa-caret-down'></i>
-          </Button>
+          {project?.context?.toLowerCase() === 'owner' && (
+            <Button ref={anchorRef} variant='text' theme='secondary' className='row' onClick={toggleMenu}>
+              More&nbsp;<i className='fa-solid fa-caret-down'></i>
+            </Button>
+          )}
         </Flex>
-        <Menu open={open} anchorElement={anchorRef?.current} onClose={closeMenu}>
-          <MenuItem onClick={handleToggleUpdateModal} className='project-update-btn'>
-            <i className='fa-regular fa-pen-to-square'></i> Update
-          </MenuItem>
-          <MenuItem className='project-delete-btn'>
-            <i className='fa-regular fa-trash-can'></i> Delete
-          </MenuItem>
-        </Menu>
+        {project?.context?.toLowerCase() === 'owner' && (
+          <Menu open={open} anchorElement={anchorRef?.current} onClose={closeMenu}>
+            <MenuItem onClick={handleToggleUpdateModal} className='project-update-btn'>
+              <i className='fa-regular fa-pen-to-square'></i> Update
+            </MenuItem>
+            <MenuItem className='project-delete-btn'>
+              <i className='fa-regular fa-trash-can'></i> Delete
+            </MenuItem>
+          </Menu>
+        )}
       </div>
       <Modal
         open={updateModal}

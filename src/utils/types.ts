@@ -391,8 +391,16 @@ export type ProjectDataInput = {
 }
 
 export type UpdateProjectModel = {
-  name: string,
-  description?: string,
-  dueDate?: number,
+  name: string
+  description?: string
+  dueDate?: number
+  color?: string
+}
+
+export type UpdateProjectResponse = {
+  id: string
+  name: string
+  description?: string
+  dueDate?: number
   color?: string
 }

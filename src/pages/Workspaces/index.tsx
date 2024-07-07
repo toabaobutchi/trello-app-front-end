@@ -12,12 +12,10 @@ import Flex from '@comps/StyledComponents/Flex'
 import Button from '@comps/Button'
 
 function Workspaces() {
-  // const routeParams = useParams<WorkspaceParams>()
   const dispatch = useDispatch()
 
   const res = useLoaderData() as AxiosResponse
   const workspace = res?.data as WorkspaceResponseWithRelatedProjects
-
   // đặt activeWorkspace (workspace đang thao tác)
   useEffect(() => {
     dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))

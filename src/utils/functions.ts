@@ -134,3 +134,16 @@ export const getDisplayDateString = (date: Date) => {
   if (date.getTime() === tomorrow.getTime()) return 'Tomorrow'
   return date.toLocaleDateString()
 }
+
+export const handleTriggerKeyPress = <TElement = HTMLInputElement>(
+  callback: (e: React.KeyboardEvent<TElement>) => void,
+  ...triggerKeys: string[]
+) => {
+  return {
+    handler: (e: React.KeyboardEvent<TElement>) => {
+      if (triggerKeys.includes(e.key)) {
+        callback(e)
+      }
+    }
+  }
+}
