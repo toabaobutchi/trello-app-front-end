@@ -21,29 +21,32 @@ const BoardContent = lazy(() => import('./partials/BoardContent'))
 const http = new HttpClient()
 
 function Project() {
-  const loader = useLoaderData() as AxiosResponse
   const params = useParams() as ProjectPageParams
   //TODO Tuy vao viewmode ma lay ra du lieu can thiet
   const project = useSelector((state: RootState) => state.project.activeProject.board)
   const account = useSelector((state: RootState) => state.login.accountInfo)
-  const boardData = loader?.data as ProjectResponseForBoard
   const dispatch = useDispatch()
-
   const [projectConnection, setProjectConnection] = useState<HubConnection>()
 
   useEffect(() => {
-    dispatch(projectSlice.actions.setActiveProjectBoard(boardData))
-  }, [boardData])
+    if (!project || project?.id !== params.projectId) {
+      http.getAuth(`/v2/projects/${params.projectId}/v/${params.viewMode}`).then(res => {
+        if (res?.status === HttpStatusCode.Ok) {
+          dispatch(projectSlice.actions.setActiveProjectBoard(res?.data))
+        }
+      })
+    }
+  }, [params?.projectId])
 
   useEffect(() => {
-    if (boardData) {
+    if (project) {
       const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/projectHub`).build()
       connection
         .start()
         .then(() => {
           setProjectConnection(connection)
           // dispatch(hubConnectionSlice.actions.setHubConnection(connection))
-          connection.invoke('SubscribeProject', boardData?.id, account?.id)
+          connection.invoke('SubscribeProject', project?.id, account?.id)
         })
         .catch(err => console.log(err))
     }
@@ -65,23 +68,23 @@ function Project() {
 
   useEffect(() => {
     // tải thành viên của project
-    http.getAuth(`/assignments/in-project/${boardData?.id}`).then(res => {
+    http.getAuth(`/assignments/in-project/${project?.id}`).then(res => {
       if (res?.status === HttpStatusCode.Ok) {
         dispatch(projectSlice.actions.setProjectMembers(res.data))
       } else {
         console.log('Can not get project members', res?.data)
       }
     })
-  }, [boardData?.id])
+  }, [project?.id])
   return (
     <>
-      {boardData && (
+      {project && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
           <Suspense
             fallback={
               <>
-                <LoadingLayout isLoading />
+                <LoadingLayout className='row jcc' style={{ width: '100%', height: '100%' }} isLoading />
               </>
             }
           >

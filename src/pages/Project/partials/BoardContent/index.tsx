@@ -75,7 +75,6 @@ function BoardContent() {
   const listJson = JSON.stringify(project?.board?.lists)
   useEffect(() => {
     const lists = filterLists(project?.board?.lists, project?.currentFilters)
-    // console.log('lists: ', lists)
     setListState(lists as ListResponseForBoard[])
   }, [project?.board?.lists, listJson, dispatch, project?.currentFilters])
 

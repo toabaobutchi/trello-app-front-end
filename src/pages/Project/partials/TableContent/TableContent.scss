@@ -1,4 +1,38 @@
 .table-content {
-  border-radius: var(--primary-radius);
+  border-radius: var(--table-outside-radius);
   border: var(--thin-border-width) solid var(--light-color);
+  font-size: 1.1rem;
+  padding: 1rem;
+  width: 100%;
+  height: max-content;
+
+  > table {
+    width: 100%;
+    border-collapse: collapse;
+
+    > thead > tr {
+      background-color: var(--table-header-bg-color);
+      color: var(--primary-color);
+
+      > th {
+        padding: 1rem;
+        font-size: 1.2rem;
+
+        &:first-child {
+          width: max-content;
+        }
+      }
+    }
+
+    > tbody > tr {
+      color: var(--text-secondary-color);
+      text-align: center;
+      &:not(:last-child) {
+        border-bottom: var(--thin-border-width) solid var(--bright-color);
+      }
+      td {
+        padding: 1rem;
+      }
+    }
+  }
 }

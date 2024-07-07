@@ -103,15 +103,15 @@ const router = createBrowserRouter([
           <Project />
         </Suspense>
       </DefaultLayout>
-    ),
-    loader: async ({ params }) => {
-      const p = params as ProjectPageParams
-      const res = await http.getAuth(`/v2/projects/${p.projectId}/v/${p.viewMode}`)
-      // if (res?.status !== HttpStatusCode.Ok) {
-      //   throw redirect('/')
-      // }
-      return res
-    }
+    )
+    // loader: async ({ params }) => {
+    //   const p = params as ProjectPageParams
+    //   const res = await http.getAuth(`/v2/projects/${p.projectId}/v/${p.viewMode}`)
+    //   // if (res?.status !== HttpStatusCode.Ok) {
+    //   //   throw redirect('/')
+    //   // }
+    //   return res
+    // }
   },
   {
     path: routeLinks.projectInvitation,

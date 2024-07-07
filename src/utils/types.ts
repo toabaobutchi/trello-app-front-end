@@ -247,6 +247,10 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   subTaskCount?: number
 }
 
+export interface TaskResponseForTable extends TaskResponseForBoard {
+  listName: string
+}
+
 export interface ListResponseForBoard extends ResponseForBoard {
   name: string
   createdAt: number
@@ -303,19 +307,19 @@ export type FilterType = {
   overDueFilter?: boolean
 }
 
-export type TaskResponseForTable = {
-  id: string
-  name: string
-  description?: string
-  dueDate?: number
-  priority?: string
-  listId: string
-  listName: string
-  createdAt: number
-  taskAssignmentIds: string[]
-  isMarkedNeedHelp?: boolean
-  creatorId?: string
-}
+// export type TaskResponseForTable = {
+//   id: string
+//   name: string
+//   description?: string
+//   dueDate?: number
+//   priority?: string
+//   listId: string
+//   listName: string
+//   createdAt: number
+//   taskAssignmentIds: string[]
+//   isMarkedNeedHelp?: boolean
+//   creatorId?: string
+// }
 
 export type ProjectResponseForTable = {
   id: string
