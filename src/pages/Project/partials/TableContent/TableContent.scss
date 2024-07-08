@@ -9,17 +9,18 @@
   font-size: 1.1rem;
   padding: 1rem;
   width: 100%;
-  height: max-content;
-
+  max-height: 100%;
+  
   > table {
     width: 100%;
     border-collapse: collapse;
-    max-height: 100%;
-    overflow: auto;
+    max-height: 90%;
+    overflow-y: auto;
 
     > thead > tr {
       background-color: var(--table-header-bg-color);
       color: var(--primary-color);
+      border-bottom: var(--normal-border-width) solid var(--primary-color);
 
       > th {
         padding: 1rem;
@@ -65,17 +66,46 @@
   &__high {
     color: var(--danger-color) !important;
     background-color: var(--danger-bg-color) !important;
+
+    td {
+      color: var(--danger-color) !important;
+    }
   }
   &__medium {
     color: var(--warning-color) !important;
     background-color: var(--warning-bg-color) !important;
+    td {
+      color: var(--warning-color) !important;
+    }
   }
   &__normal {
     color: var(--primary-color) !important;
     background-color: var(--primary-bg-color) !important;
+    td {
+      color: var(--primary-color) !important;
+    }
   }
   &__low {
     color: var(--success-color) !important;
     background-color: var(--success-bg-color) !important;
+    td {
+      color: var(--success-color) !important;
+    }
+  }
+}
+.table-task-action-button {
+  outline: none;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  font-size: 1.1rem;
+  border-radius: var(--primary-radius);
+  background-color: var(--bright-color);
+  cursor: pointer;
+
+  &__delete {
+    color: var(--danger-color);
+  }
+  &__update {
+    color: var(--primary-color);
   }
 }

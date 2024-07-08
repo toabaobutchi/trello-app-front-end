@@ -38,7 +38,10 @@ function TableContent() {
             }}
             onChange={handleToggleHighLight}
           />
-          <label className={`cpointer ${highlightRow ? 'text-success' : 'text-light'}`} htmlFor='highlight-switch-button'>
+          <label
+            className={`cpointer ${highlightRow ? 'text-success' : 'text-light'}`}
+            htmlFor='highlight-switch-button'
+          >
             Highlight row by priority
           </label>
         </Flex>
@@ -76,7 +79,12 @@ function TableContent() {
                   <td>{task?.taskAssignmentIds?.length}</td>
                   <td>{task?.commentCount}</td>
                   <td>
-                    
+                    <button className='table-task-action-button table-task-action-button__delete'>
+                      <i className='fa-solid fa-trash-can'></i>
+                    </button>
+                    <button className='table-task-action-button table-task-action-button__update'>
+                      <i className='fa-solid fa-file-pen'></i>
+                    </button>
                   </td>
                 </tr>
               )
