@@ -4,7 +4,7 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { AssignmentResponse, TaskDetailForBoard, TaskResponseForBoard } from '@utils/types'
+import { AssignmentResponse, DeletedTaskResponse, TaskDetailForBoard, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId } from '@utils/functions'
@@ -14,9 +14,10 @@ import HttpClient from '@utils/HttpClient'
 import TaskDetail from './TaskDetail'
 import { HttpStatusCode } from 'axios'
 import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import DuplicateTask from './TaskDetail/DuplicateTask'
+import { projectSlice } from '@redux/ProjectSlice'
 
 const http = new HttpClient()
 
@@ -44,6 +45,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     transition,
     opacity: isDragging ? 0.5 : 1
   }
+  const dispatch = useDispatch()
   const [modalState, setModalState] = useState<TaskDetailModelState>({ open: false })
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
@@ -67,6 +69,13 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   }
   const handleToggleDuplicateTaskModal = () => {
     setDuplicateTaskModal(!duplicateTaskModal)
+  }
+  const handleDeleteTask = async () => {
+    const res = await http.deleteAuth(`/tasks/${task.id}`)
+    if (res?.status === HttpStatusCode.Ok) {
+      const data = res?.data as DeletedTaskResponse
+      dispatch(projectSlice.actions.deleteTask(data))
+    }
   }
   return (
     <>
@@ -105,11 +114,14 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                 }
               }}
             >
-              <MenuItem className='text-danger'>
+              <MenuItem onClick={handleDeleteTask} className='text-danger'>
                 <i className='fa-solid fa-trash-can'></i> Delete task
               </MenuItem>
               <MenuItem className='text-primary'>
                 <i className='fa-solid fa-up-down-left-right'></i> Move
+              </MenuItem>
+              <MenuItem>
+                <i className='fa-solid fa-right-to-bracket'></i> Join
               </MenuItem>
             </DropdownMenu>
           </Flex>

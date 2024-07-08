@@ -247,6 +247,11 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   subTaskCount?: number
 }
 
+export type DeletedTaskResponse = {
+  id: string
+  listId: string
+}
+
 export interface TaskResponseForTable extends TaskResponseForBoard {
   listName: string
 }

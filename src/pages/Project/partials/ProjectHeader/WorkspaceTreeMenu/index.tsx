@@ -19,8 +19,7 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
   const dispatch = useDispatch()
   const activeWorkspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
   useEffect(() => {
-    console.log('WorkspaceTreeMenu > useEffect > activeWorkspace: ', activeWorkspace)
-    if (!activeWorkspace && workspaceId) {
+    if (!activeWorkspace?.id && workspaceId) {
       http
         .getAuth(`/w/${workspaceId}/projects`)
         .then(workspace => {

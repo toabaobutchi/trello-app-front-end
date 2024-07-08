@@ -6,6 +6,7 @@ import {
   ChangeTaskOrderResponse,
   CreateListResponse,
   CreateTaskResponse,
+  DeletedTaskResponse,
   DragOverResult,
   FilterType,
   ListResponseForBoard,
@@ -23,13 +24,20 @@ export const projectSlice = createSlice({
       members: [] as AssignmentResponse[],
       onlineMembers: [] as string[],
       currentFilters: {} as FilterType,
-      table: {} 
+      table: {}
       // table, chart and calendar
     }
   },
   reducers: {
-    setActiveProjectTable: (state, action) => {
-
+    // payload: deletedTask: DeletedTaskResponse
+    deleteTask: (state, action) => {
+      const deletedTask = action.payload as DeletedTaskResponse
+      if (deletedTask) {
+        const list = state.activeProject.board.lists?.find(l => l.id === deletedTask.listId)
+        if (list) {
+          list.tasks = list.tasks?.filter(t => t.id !== deletedTask.id)
+        }
+      }
     },
     setActiveProjectBoard: (state, action) => {
       try {

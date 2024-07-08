@@ -39,13 +39,14 @@ function Project() {
   }, [params?.projectId])
 
   useEffect(() => {
-    if (project) {
+    if (project?.id) {
       const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/projectHub`).build()
       connection
         .start()
         .then(() => {
           setProjectConnection(connection)
           // dispatch(hubConnectionSlice.actions.setHubConnection(connection))
+          console.log('SubscribeProject', project?.id, account?.id)
           connection.invoke('SubscribeProject', project?.id, account?.id)
         })
         .catch(err => console.log(err))

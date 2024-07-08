@@ -4,8 +4,21 @@ import NotificationHeader from '../NotificationHeader'
 import ImageBox from '@comps/ImageBox'
 import config from '@confs/app.config'
 import Tooltip from '@comps/Tooltip'
+import { useHub } from '@hooks/useHub'
+import { useSelector } from 'react-redux'
+import { RootState } from '@redux/store'
+import { useEffect } from 'react'
 
 function NotificationMenu() {
+  const account = useSelector((state: RootState) => state.login.accountInfo)
+  const connection = useHub('/notificationHub', 'SubscribeNotification', account.id)
+  useEffect(() => {
+    if (connection) {
+      connection.on('ReceiveProjectNotification', notification => {
+        console.log('Received notification', notification)
+      })
+    }
+  }, [connection])
   return (
     <>
       <FixedMenu
