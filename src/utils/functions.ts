@@ -116,7 +116,7 @@ export const filterLists = (lists?: ListResponseForBoard[], filters?: FilterType
         return false
       // if (members && members.findIndex(member => member.value === task.) === -1) return false
       if (noAssigneesFilter && task.assigneeCount !== 0) return false
-      if (dueDate && task.dueDate && task.dueDate * 1000 > dueDate) return false
+      if (dueDate && task.dueDate && task.dueDate > dueDate) return false
       if (overDueFilter && task.dueDate && new Date(task.dueDate) > new Date()) return false
       return true
     })
@@ -127,8 +127,8 @@ export const filterLists = (lists?: ListResponseForBoard[], filters?: FilterType
 export const getDisplayDateString = (date: Date) => {
   if (!date) return ''
   const today = new Date()
-  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
-  const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
+  const yesterday = new Date(today.getTime() - 24 * 60 * 60)
+  const tomorrow = new Date(today.getTime() + 24 * 60 * 60)
   if (date.getTime() === today.getTime()) return 'Today'
   if (date.getTime() === yesterday.getTime()) return 'Yesterday'
   if (date.getTime() === tomorrow.getTime()) return 'Tomorrow'

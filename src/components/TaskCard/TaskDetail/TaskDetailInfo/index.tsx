@@ -40,7 +40,12 @@ function TaskDetailInfo() {
   const handleUpdateDueDate = async (dueDate: Date) => {
     const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { dueDate: dueDate.getTime() / 1000 })
     if (res?.status === HttpStatusCode.Ok) {
-      task?.setState?.(prev => ({ ...prev, taskDetail: { ...taskDetail, dueDate: res?.data?.dueDate } } as typeof prev))
+      if (res?.status === HttpStatusCode.ResetContent) {
+        console.log('Task due date is larger than project due date')
+      } else
+        task?.setState?.(
+          prev => ({ ...prev, taskDetail: { ...taskDetail, dueDate: res?.data?.dueDate } } as typeof prev)
+        )
     }
   }
   const handleUpdateDescription = async (description: string) => {

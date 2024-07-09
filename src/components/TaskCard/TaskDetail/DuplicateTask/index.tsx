@@ -84,7 +84,7 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskResponseF
             Inherit task due date{' '}
             <span>
               {task?.dueDate ? (
-                <>{new Date(task?.dueDate * 1000).toLocaleDateString()}</>
+                <>{new Date(task?.dueDate).toLocaleDateString()}</>
               ) : (
                 <span className='text-light'>[Not set]</span>
               )}

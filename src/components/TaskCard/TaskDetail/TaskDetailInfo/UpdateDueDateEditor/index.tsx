@@ -24,7 +24,7 @@ function UpdateDueDateEditor({ dueDate, onUpdate = () => {} }: UpdateDueDateEdit
   return (
     <>
       <Flex $alignItem='center' $gap='0.5rem'>
-        <p>{dueDate ? <>{new Date(dueDate * 1000).toLocaleDateString()}</> : <span className='text-light'>[Not set]</span>}</p>
+        <p>{dueDate ? <>{new Date(dueDate).toLocaleDateString()}</> : <span className='text-light'>[Not set]</span>}</p>
         <input
           ref={inputRef}
           onChange={handleDateChange}

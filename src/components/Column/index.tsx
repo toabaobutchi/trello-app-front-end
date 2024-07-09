@@ -1,6 +1,5 @@
 import Flex from '@comps/StyledComponents/Flex'
 import './Column.scss'
-import Button from '@comps/Button'
 import { forwardRef, useEffect, useState } from 'react'
 import AddTask from './partials/AddTask'
 import { AssignmentResponse, ListResponseForBoard } from '@utils/types'
@@ -8,6 +7,7 @@ import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import AddTaskAbove from './partials/AddTaskAbove'
+import ColumnOptionMenu from './partials/ColumnOptionMenu'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
@@ -15,11 +15,10 @@ interface ColumnProps extends React.ComponentProps<'div'> {
   remoteDragging?: RemoteDraggingType
 }
 
-function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {
+const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const { children, column, style, className, remoteDragging, ...restProps } = props
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
-
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
@@ -41,13 +40,14 @@ function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {
       >
         <Flex $alignItem='center' $justifyContent='space-between' className='column-header'>
           <div className='column-header-name'>
-            {column?.name} ({column?.tasks?.length})
+            <p>
+              {column?.name} ({column?.tasks?.length})
+            </p>
+            {Boolean(column?.wipLimit) && <p className='text-danger'>{column?.wipLimit}</p>}
           </div>
           <Flex $alignItem='center' $gap='0.25rem'>
             <AddTaskAbove column={column} />
-            <Button variant='text' theme='default' className='column-header-more-button'>
-              <i className='fa-solid fa-ellipsis'></i>
-            </Button>
+            <ColumnOptionMenu listId={column?.id} />
           </Flex>
         </Flex>
         <div onPointerDown={e => e.stopPropagation()} className='column-body'>
@@ -59,6 +59,6 @@ function Column(props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) {
       </div>
     </>
   )
-}
+})
 
-export default forwardRef(Column)
+export default Column

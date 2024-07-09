@@ -8,7 +8,7 @@ function ChatBoxItem({ comment }: { comment: CommentResponse }) {
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [commentor] = useState(() => members.find(m => m.id === comment?.assignmentId))
   const [commentTime] = useState(() => {
-    const commentDate = new Date(comment.commentAt * 1000)
+    const commentDate = new Date(comment.commentAt)
     const currentDate = new Date()
     const diffTime = currentDate.getTime() - commentDate.getTime()
     const diffMinutes = Math.floor(diffTime / (1000 * 60))

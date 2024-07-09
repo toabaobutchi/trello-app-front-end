@@ -261,6 +261,7 @@ export interface ListResponseForBoard extends ResponseForBoard {
   createdAt: number
   projectId: string
   taskOrder?: string
+  wipLimit?: number
   tasks?: TaskResponseForBoard[]
 }
 
@@ -414,4 +415,11 @@ export type UpdateProjectResponse = {
   description?: string
   dueDate?: number
   color?: string
+}
+
+export type UpdatedListResponse = {
+  id: string
+  name?: string
+  description?: string
+  wip?: number
 }

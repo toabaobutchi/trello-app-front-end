@@ -66,7 +66,7 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
         </Flex>
         <p className='project-card-sub-text'>
           <b className='text-primary'>Create:</b>{' '}
-          {project.createdAt ? new Date(project.createdAt * 1000).toLocaleDateString() : '[ Not set ]'}
+          {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : '[ Not set ]'}
         </p>
         <div className='project-card-sub-text row gap-1'>
           <b className='text-primary'>Due date:</b>

@@ -40,7 +40,10 @@ function Project() {
 
   useEffect(() => {
     if (project?.id) {
-      const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/projectHub`).build()
+      const connection = new HubConnectionBuilder()
+        .withUrl(`${config.baseUrl}/projectHub`)
+        .withAutomaticReconnect()
+        .build()
       connection
         .start()
         .then(() => {
@@ -57,12 +60,15 @@ function Project() {
         projectConnection.stop()
       }
     }
-  }, [])
+  }, [project?.id])
 
   useEffect(() => {
     if (projectConnection) {
       projectConnection.on('ReceiveSubscriber', (assignmentIds: string[]) => {
         dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
+      })
+      projectConnection.onclose(err => {
+        console.log(err?.message)
       })
     }
   }, [projectConnection])

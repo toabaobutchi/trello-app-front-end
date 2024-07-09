@@ -83,7 +83,7 @@ function Attachment() {
                       <p className='attachment-item-info-display-text'>{attachment.displayText}</p>
                       <p className='attachment-item-info-creation-time'>
                         <i className='fa-regular fa-calendar-check'></i>{' '}
-                        {new Date(attachment.createdAt * 1000).toLocaleDateString()}
+                        {new Date(attachment.createdAt).toLocaleDateString()}
                       </p>
                     </Flex>
                     <p className='attachment-item-info-link'>{attachment.link}</p>

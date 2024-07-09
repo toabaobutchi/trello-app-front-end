@@ -11,7 +11,8 @@ import {
   FilterType,
   ListResponseForBoard,
   ProjectResponseForBoard,
-  TaskResponseForBoard
+  TaskResponseForBoard,
+  UpdatedListResponse
 } from '@utils/types'
 
 const http = new HttpClient()
@@ -29,6 +30,16 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    updateListInfo: (state, action) => {
+      const updatedList = action?.payload as UpdatedListResponse
+      if(updatedList) {
+        const list = state.activeProject.board.lists?.find(l => l.id === updatedList.id)
+        if (list) {
+          list.name = updatedList.name || list.name
+          list.wipLimit = updatedList.wip || list.wipLimit
+        }
+      } 
+    },
     // payload: deletedTask: DeletedTaskResponse
     deleteTask: (state, action) => {
       const deletedTask = action.payload as DeletedTaskResponse

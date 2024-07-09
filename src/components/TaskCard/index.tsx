@@ -144,7 +144,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             <div className='task-card-footer-due-date'>
               <i className='fa-regular fa-clock'></i>{' '}
               {task?.dueDate ? (
-                new Date(task.dueDate * 1000).toLocaleDateString()
+                new Date(task.dueDate).toLocaleDateString()
               ) : (
                 <span className='text-light'>Not set</span>
               )}
@@ -205,6 +205,9 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                     </Button>
                     <Button variant='text' theme='default'>
                       <i className='fa-solid fa-thumbtack'></i> Need help!
+                    </Button>
+                    <Button variant='text' theme='default'>
+                      <i className='fa-solid fa-check'></i> Mark as completed
                     </Button>
                   </Flex>
                 </>

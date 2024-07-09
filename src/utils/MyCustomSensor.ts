@@ -6,7 +6,8 @@ export class MyCustomSensor extends PointerSensor {
     {
       eventName: 'onPointerDown' as const,
       handler: ({ nativeEvent: event }: PointerEvent) => {
-        if ((event.target as HTMLElement)?.classList.contains('modal')) {
+        const target = event.target as HTMLElement
+        if (target?.classList.contains('modal') || target?.classList.contains('menu')) {
           return false
         }
         return true
