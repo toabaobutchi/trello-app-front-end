@@ -22,7 +22,7 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
-
+  // console.log('Re-render >>> Column >>> ', column?.name, column?.wipLimit)
   return (
     <>
       <div
@@ -43,7 +43,7 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
             <p>
               {column?.name} ({column?.tasks?.length})
             </p>
-            {Boolean(column?.wipLimit) && <p className='text-danger'>{column?.wipLimit}</p>}
+            {Boolean(column?.wipLimit) && <p className='text-danger wip-limit'>WIP Limit: {column?.wipLimit}</p>}
           </div>
           <Flex $alignItem='center' $gap='0.25rem'>
             <AddTaskAbove column={column} />

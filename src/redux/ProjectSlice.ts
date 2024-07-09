@@ -12,7 +12,8 @@ import {
   ListResponseForBoard,
   ProjectResponseForBoard,
   TaskResponseForBoard,
-  UpdatedListResponse
+  UpdatedListResponse,
+  UpdatedTaskResponse
 } from '@utils/types'
 
 const http = new HttpClient()
@@ -21,6 +22,7 @@ export const projectSlice = createSlice({
   name: 'project',
   initialState: {
     activeProject: {
+      changeId: undefined as unknown as number,
       board: {} as ProjectResponseForBoard,
       members: [] as AssignmentResponse[],
       onlineMembers: [] as string[],
@@ -30,15 +32,29 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    updateTaskInfo: (state, action) => {
+      const data = action.payload as UpdatedTaskResponse
+      if(data) {
+        const task = state.activeProject.board.lists?.find(l => l.id === data.listId)?.tasks?.find(t => t.id === data.id)
+        if (task) {
+          task.name = data.name || task.name
+          task.description = data.description
+          task.dueDate = data.dueDate
+          task.priority = data.priority
+          state.activeProject.changeId = new Date().getTime()
+        }
+      }
+    },
     updateListInfo: (state, action) => {
       const updatedList = action?.payload as UpdatedListResponse
-      if(updatedList) {
+      if (updatedList) {
         const list = state.activeProject.board.lists?.find(l => l.id === updatedList.id)
         if (list) {
           list.name = updatedList.name || list.name
-          list.wipLimit = updatedList.wip || list.wipLimit
+          list.wipLimit = updatedList.wipLimit
+          state.activeProject.changeId = new Date().getTime()
         }
-      } 
+      }
     },
     // payload: deletedTask: DeletedTaskResponse
     deleteTask: (state, action) => {

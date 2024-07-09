@@ -47,6 +47,16 @@ export type TaskDetailForBoard = {
   creatorId?: string // assignment id
   taskAssignmentIds?: string[]
   subTasks?: SubtaskForBoard[]
+  isCompleted?: boolean
+  isReOpened?: boolean
+}
+
+export type MarkedTaskResponse = {
+  id: string
+  listId: string
+  isCompleted?: boolean
+  isReOpened?: boolean
+  isMarkedNeedHelp?: boolean
 }
 
 export interface AccountType {
@@ -240,6 +250,7 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   dueDate?: number
   priority?: string
   listId: string
+  isReOpened?: boolean
   // assigneeCount: number
   taskAssignmentIds: string[]
   commentCount: number
@@ -421,5 +432,14 @@ export type UpdatedListResponse = {
   id: string
   name?: string
   description?: string
-  wip?: number
+  wipLimit?: number
+}
+
+export type UpdatedTaskResponse = {
+  id: string
+  listId: string
+  name?: string
+  description?: string
+  dueDate?: number
+  priority?: string
 }

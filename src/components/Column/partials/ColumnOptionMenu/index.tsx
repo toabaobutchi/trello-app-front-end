@@ -70,6 +70,7 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
       <Button
         ref={buttonRef}
         onClick={handleToggleMenu}
+        onPointerDown={e => e.preventDefault()}
         variant='text'
         theme='default'
         className='column-header-more-button'
@@ -77,6 +78,7 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
         <i className='fa-solid fa-ellipsis'></i>
       </Button>
       <Menu
+        onPointerDown={e => e.stopPropagation()}
         open={state?.openMenu === EActionType.OPEN_MAINMENU}
         anchorElement={state?.anchorEl as HTMLElement}
         onClose={handleCloseMenu}
@@ -89,6 +91,8 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
         </MenuItem>
       </Menu>
       <Menu
+        onPointerDown={e => e.stopPropagation()}
+        style={{ width: 'max-content' }}
         open={state?.openMenu === EActionType.OPEN_WIPMENU}
         anchorElement={state?.anchorEl as HTMLElement}
         onClose={handleCloseMenu}
@@ -132,7 +136,7 @@ function WIPMenu({
           id: 'wip-limit-input',
           type: 'number',
           onKeyDown: triggerSubmit.handler,
-          value: parseInt(wip),
+          value: wip,
           min: 0
         }}
         onChange={handleChangeWIP}

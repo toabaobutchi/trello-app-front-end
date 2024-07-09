@@ -4,7 +4,8 @@ import {
   ChangeTaskOrderResponse,
   DragOverResult,
   ListResponseForBoard,
-  TaskResponseForBoard
+  TaskResponseForBoard,
+  UpdatedTaskResponse
 } from '@utils/types'
 import {
   DndContext,
@@ -74,9 +75,11 @@ function BoardContent() {
 
   const listJson = JSON.stringify(project?.board?.lists)
   useEffect(() => {
+    // console.log('store >>> ', project?.board?.lists)
     const lists = filterLists(project?.board?.lists, project?.currentFilters)
-    setListState(lists as ListResponseForBoard[])
-  }, [project?.board?.lists, listJson, dispatch, project?.currentFilters])
+    // console.log('lists: ', lists)
+    setListState(prev => lists as ListResponseForBoard[])
+  }, [project?.board?.lists, listJson, dispatch, project?.currentFilters, project?.changeId])
 
   useEffect(() => {
     if (project?.board?.id) {
@@ -128,6 +131,9 @@ function BoardContent() {
           }, 500)
         }
       )
+      dragConnection.on('ReceiveUpdateTaskInfo', (assignmentId: string, data: UpdatedTaskResponse) => {
+        dispatch(projectSlice.actions.updateTaskInfo(data))
+      })
     }
   }, [dragConnection, dispatch])
 
@@ -247,7 +253,7 @@ function BoardContent() {
 
     if (activeList.id !== overList.id) {
       // nếu có chỉ định wip limit và số lượng task trong list đã đủ thì ngừng lại
-      if (overList.wipLimit && overList.tasks?.length === overList.wipLimit) return
+      if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length > overList.wipLimit) return
       moveCardsInDifferentColumns(
         overList,
         active,
@@ -279,7 +285,7 @@ function BoardContent() {
 
       if (oldColumn?.id !== overList.id) {
         // thay doi card tren 2 column
-        if (overList.wipLimit && overList.tasks?.length === overList.wipLimit) return
+        if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length > overList.wipLimit) return
         moveCardsInDifferentColumns(
           overList,
           active,
@@ -366,7 +372,6 @@ function BoardContent() {
     setActiveDragItem(undefined) // xoá `activeDragItem` khi dừng kéo thả
     setOldColumn(undefined)
   }
-
   // const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const customMouseSensor = useSensor(MyCustomSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
@@ -375,13 +380,7 @@ function BoardContent() {
   return (
     <>
       {/* <LoadingLayout isLoading={listState && listState.length > 0}> */}
-      <DndContext
-        // collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-        sensors={sensors}
-      >
+      <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} sensors={sensors}>
         <SortableContext
           disabled={remoteDragging?.isDragging}
           items={listState?.map(l => l?.id) ?? []}

@@ -13,6 +13,7 @@ function SortableColumn({
   column: ListResponseForBoard
   remoteDragging?: RemoteDraggingType
 }) {
+  // console.log('Re-render >>> SortableColumn >>>', column.name, column.wipLimit)
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column.id,
     data: { ...column, dragObject: 'Column' }

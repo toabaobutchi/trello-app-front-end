@@ -84,6 +84,10 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
         <p className='project-card-sub-text'>
           <b className='text-primary'>Your permission:</b> {project.assignmentConfig.permission}
         </p>
+        <p className='project-card-sub-text'>
+          <b className='text-primary'>Last view:</b>{' '}
+          {project.assignmentConfig?.lastViewAt && new Date(project.assignmentConfig.lastViewAt).toLocaleDateString()}
+        </p>
         <p className='project-card-description'>{project.description}</p>
         <Flex $alignItem='center' $justifyContent='end' $gap='0.5rem' style={{ marginTop: '0.5rem' }}>
           <Button onClick={navigateToProjectDetail} variant='filled'>

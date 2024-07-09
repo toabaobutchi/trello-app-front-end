@@ -4,11 +4,17 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { AssignmentResponse, DeletedTaskResponse, TaskDetailForBoard, TaskResponseForBoard } from '@utils/types'
+import {
+  AssignmentResponse,
+  DeletedTaskResponse,
+  MarkedTaskResponse,
+  TaskDetailForBoard,
+  TaskResponseForBoard
+} from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId } from '@utils/functions'
-import { createContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import Modal from '@comps/Modal'
 import HttpClient from '@utils/HttpClient'
 import TaskDetail from './TaskDetail'
@@ -18,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import DuplicateTask from './TaskDetail/DuplicateTask'
 import { projectSlice } from '@redux/ProjectSlice'
+import SwitchButton from '@comps/SwitchButton'
 
 const http = new HttpClient()
 
@@ -75,6 +82,41 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     if (res?.status === HttpStatusCode.Ok) {
       const data = res?.data as DeletedTaskResponse
       dispatch(projectSlice.actions.deleteTask(data))
+    }
+  }
+  const timeOutId = useRef<number>()
+  const handleMarkNeedHelp = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // xoá đi vòng lặp cũ
+    if (timeOutId.current) {
+      clearTimeout(timeOutId.current)
+    }
+    timeOutId.current = setTimeout(async () => {
+      const res = await http.putAuth(`/tasks/${task.id}/mark`, { isMarkedNeedHelp: e.target.checked })
+      if (res?.status === HttpStatusCode.Ok) {
+        const data = res?.data as MarkedTaskResponse
+        setModalState(prev => ({
+          ...prev,
+          taskDetail: {
+            ...prev.taskDetail,
+            isMarkedNeedHelp: data?.isMarkedNeedHelp
+          } as typeof prev.taskDetail
+        }))
+        // dispatch to store
+      }
+    }, 500)
+  }
+  const handleMarkCompleteTask = async () => {
+    const res = await http.putAuth(`/tasks/${task.id}/mark`, { isCompleted: true })
+    if (res?.status === HttpStatusCode.Ok) {
+      const data = res?.data as MarkedTaskResponse
+      setModalState(prev => ({
+        ...prev,
+        taskDetail: {
+          ...prev.taskDetail,
+          isCompleted: data?.isCompleted
+        } as typeof prev.taskDetail
+      }))
+      // dispatch to store
     }
   }
   return (
@@ -203,12 +245,49 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                     <Button variant='text' theme='default'>
                       <i className='fa-regular fa-envelope'></i> Invite member
                     </Button>
-                    <Button variant='text' theme='default'>
+                    {/* <Button variant='text' theme='default'>
                       <i className='fa-solid fa-thumbtack'></i> Need help!
-                    </Button>
-                    <Button variant='text' theme='default'>
-                      <i className='fa-solid fa-check'></i> Mark as completed
-                    </Button>
+                    </Button> */}
+                    <Flex $alignItem='center' $gap='0.5rem'>
+                      <SwitchButton
+                        inputAttributes={{
+                          id: 'need-help-toggle',
+                          type: 'checkbox',
+                          name: 'need-help-toggle',
+                          checked: Boolean(modalState?.taskDetail?.isMarkedNeedHelp)
+                        }}
+                        onChange={handleMarkNeedHelp}
+                      />
+                      <label
+                        className={modalState?.taskDetail?.isMarkedNeedHelp ? 'text-success' : 'text-secondary'}
+                        style={{ fontSize: '1rem' }}
+                        htmlFor='need-help-toggle'
+                      >
+                        Need help!
+                      </label>
+                    </Flex>
+                    {!modalState?.taskDetail?.isCompleted ? (
+                      <Button onClick={handleMarkCompleteTask} variant='text' theme='default'>
+                        <i className='fa-solid fa-check'></i> Mark as completed
+                      </Button>
+                    ) : (
+                      <>
+                        <Button variant='text' theme='success'>
+                          Completed <i className='fa-solid fa-check'></i>
+                        </Button>
+                      </>
+                    )}
+                    {/* <Flex $alignItem='center' $gap='0.5rem'>
+                      <SwitchButton
+                        inputAttributes={{
+                          id: 'mark-complete-toggle',
+                          type: 'checkbox',
+                          name: 'mark-complete-toggle',
+                          checked: Boolean(modalState?.taskDetail?.isCompleted)
+                        }}
+                        onChange={handleMarkCompleteTask}
+                      />
+                    </Flex> */}
                   </Flex>
                 </>
               )
