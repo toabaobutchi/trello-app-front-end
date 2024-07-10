@@ -5,13 +5,16 @@ import { CSS } from '@dnd-kit/utilities'
 import { createCardId, mapOrder } from '@utils/functions'
 import { ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
 import { RemoteDraggingType } from '..'
+import { HubConnection } from '@microsoft/signalr'
 
 function SortableColumn({
   column,
-  remoteDragging
+  remoteDragging,
+  hubConnection
 }: {
   column: ListResponseForBoard
   remoteDragging?: RemoteDraggingType
+  hubConnection?: HubConnection
 }) {
   // console.log('Re-render >>> SortableColumn >>>', column.name, column.wipLimit)
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -24,9 +27,6 @@ function SortableColumn({
     'id'
   )
 
-  // let tasks = cloneDeep(column.tasks)
-  // const order = column.taskOrder?.split(',')
-  // tasks = tasks?.sort((a, b) => order?.indexOf(a.id) ?? 0 - (order?.indexOf(b.id) ?? 0))
   const style = {
     // touchAction: 'none',
     transform: CSS.Translate.toString(transform),
@@ -36,6 +36,7 @@ function SortableColumn({
   return (
     <>
       <Column
+      hubConnection={hubConnection}
         remoteDragging={remoteDragging}
         {...attributes}
         {...listeners}

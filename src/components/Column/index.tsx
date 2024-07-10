@@ -8,15 +8,17 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import AddTaskAbove from './partials/AddTaskAbove'
 import ColumnOptionMenu from './partials/ColumnOptionMenu'
+import { HubConnection } from '@microsoft/signalr'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
   column?: ListResponseForBoard
   remoteDragging?: RemoteDraggingType
+  hubConnection?: HubConnection
 }
 
 const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-  const { children, column, style, className, remoteDragging, ...restProps } = props
+  const { children, column, style, className, remoteDragging, hubConnection, ...restProps } = props
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   useEffect(() => {
@@ -54,7 +56,7 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
           {children}
         </div>
         <div className='column-footer'>
-          <AddTask column={props?.column} />
+          <AddTask hubConnection={hubConnection} column={props?.column} />
         </div>
       </div>
     </>

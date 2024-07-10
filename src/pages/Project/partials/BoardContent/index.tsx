@@ -2,6 +2,7 @@ import Flex from '@comps/StyledComponents/Flex'
 import {
   ChangeTaskOrderModel,
   ChangeTaskOrderResponse,
+  CreateTaskResponse,
   DragOverResult,
   ListResponseForBoard,
   SubtaskForBoard,
@@ -157,6 +158,10 @@ function BoardContent() {
           dispatch(projectSlice.actions.changeSubtaskStatus({ taskId: taskid, status }))
         }
       )
+      dragConnection.on('ReceiveAddNewTask', (assignmentId: string, data: CreateTaskResponse) => {
+        console.log('ReceiveAddNewTask')
+        dispatch(projectSlice.actions.addNewTask(data))
+      })
     }
   }, [dragConnection, dispatch])
 
@@ -411,7 +416,12 @@ function BoardContent() {
         >
           <Flex $gap='1.5rem' className='column-list'>
             {listState?.map(column => (
-              <SortableColumn remoteDragging={remoteDragging} key={column.id} column={column} />
+              <SortableColumn
+                hubConnection={dragConnection}
+                remoteDragging={remoteDragging}
+                key={column.id}
+                column={column}
+              />
             ))}
             <AddNewList />
           </Flex>
@@ -421,7 +431,7 @@ function BoardContent() {
             (activeDragItem.dragObject === 'Card' ? (
               <TaskCard task={activeDragItem.data as TaskResponseForBoard} />
             ) : (
-              <SortableColumn column={activeDragItem.data as ListResponseForBoard} />
+              <SortableColumn hubConnection={dragConnection} column={activeDragItem.data as ListResponseForBoard} />
             ))}
         </DragOverlay>
       </DndContext>
