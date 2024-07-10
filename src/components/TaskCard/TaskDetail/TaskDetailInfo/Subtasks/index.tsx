@@ -18,6 +18,7 @@ type SubtasksProps = {
 }
 
 function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
+  console.log('Subtasks > taskId: >> ', taskId)
   const [_subtasks, setSubtasks] = useState<SubtaskForBoard[]>([])
   const projectId = useSelector((state: RootState) => state.project.activeProject.board.id)
   const accountId = useSelector((state: RootState) => state.login.accountInfo.id)
@@ -133,7 +134,7 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
           />
         ))}
         <div>
-          <AddSubtask onAddTask={handleAddSubtasks} />
+          <AddSubtask taskId={taskId} hubConnection={hubConnection} onAddTask={handleAddSubtasks} />
         </div>
       </div>
     </>

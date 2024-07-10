@@ -32,6 +32,22 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    changeSubtaskStatus: (state, action) => {
+      const data = action.payload
+      const taskId = data?.taskId as string
+      const isCompleted = data?.status as boolean
+      if (taskId) {
+        const list = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(taskId))
+        if (list) {
+          const task = list.tasks?.find(t => t.id === taskId)
+          if (task) {
+            const count = isCompleted ? 1 : -1
+            task.completedSubTaskCount = (task.completedSubTaskCount ?? 0) + count
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     changeSubtaskCount: (state, action) => {
       const data = action.payload
       const taskId = data?.taskId as string

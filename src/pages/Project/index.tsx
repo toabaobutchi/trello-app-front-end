@@ -48,8 +48,6 @@ function Project() {
         .start()
         .then(() => {
           setProjectConnection(connection)
-          // dispatch(hubConnectionSlice.actions.setHubConnection(connection))
-          console.log('SubscribeProject', project?.id, account?.id)
           connection.invoke('SubscribeProject', project?.id, account?.id)
         })
         .catch(err => console.log(err))

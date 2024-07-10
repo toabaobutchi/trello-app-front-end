@@ -85,11 +85,18 @@ function BoardContent() {
   useEffect(() => {
     if (project?.board?.id) {
       if (dragConnection) dragConnection.stop()
-      const connection = new HubConnectionBuilder().withUrl(`${config.baseUrl}/dragHub`).build()
+      const connection = new HubConnectionBuilder()
+        .withUrl(`${config.baseUrl}/dragHub`)
+        .withAutomaticReconnect()
+        .build()
       connection.start().then(() => {
         setDragConnection(connection)
         connection.invoke('SendAddToDragGroup', project?.board?.id, account?.id)
       })
+    }
+
+    return () => {
+      if (dragConnection) dragConnection.stop()
     }
   }, [account.id, project?.board?.id])
 
@@ -144,6 +151,12 @@ function BoardContent() {
       dragConnection.on('ReceiveDeleteSubtask', (assignmentId: string, taskid: string, subtaskId: number) => {
         dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 }))
       })
+      dragConnection.on(
+        'ReceiveCheckSubtask',
+        (assignmentId: string, taskid: string, subtaskId: number, status: boolean) => {
+          dispatch(projectSlice.actions.changeSubtaskStatus({ taskId: taskid, status }))
+        }
+      )
     }
   }, [dragConnection, dispatch])
 

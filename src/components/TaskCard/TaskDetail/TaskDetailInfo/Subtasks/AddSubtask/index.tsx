@@ -31,8 +31,8 @@ function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
       hubConnection.on('ReceiveFinishAddSubtasks', (assignmentId: string, taskid: string) => {
         if (taskid !== taskId) return
         setRemoteActors(prev => {
-          const newRemoteActors = [...prev]
-          newRemoteActors.filter(a => a.id !== assignmentId)
+          let newRemoteActors = [...prev]
+          newRemoteActors = newRemoteActors.filter(a => a.id !== assignmentId)
           return newRemoteActors
         })
       })
@@ -59,10 +59,11 @@ function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
     handleToggle()
   }
   const handleTrigger = (value: string) => {
-    setTexts([...texts, value])
-    if (hubConnection) {
+    // gọi 1 lần, không cần gọi lần 2
+    if (hubConnection && texts.length === 0) {
       hubConnection.invoke('SendAddingSubtasks', project.board.id, accountId, taskId)
     }
+    setTexts([...texts, value])
   }
   return (
     <>
