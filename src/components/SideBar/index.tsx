@@ -10,6 +10,7 @@ import routeLinks, { linkCreator } from '@routes/router'
 import config from '@confs/app.config'
 import SharedWorkspaces from './partials/SharedWorkspaces'
 import { getSlug } from '@utils/functions'
+import AddWorkspace from './partials/AddWorkspace'
 
 function SideBar() {
   const sideBarStatus = useSelector((state: RootState) => state.sideBar.expand)
@@ -61,20 +62,7 @@ function SideBar() {
                 })}
                 {(!workspaces.workspaceList || workspaces.workspaceList?.length <= 0) && (
                   <>
-                    <div className='note-text'>
-                      <p>You currently have no workspace</p>
-                      <div className='quick-input-action'>
-                        <label htmlFor='quick-create-workspace-input'>
-                          <i className='fa-solid fa-bolt-lightning'></i> Create your first workspace
-                        </label>
-                        <div className='input-button-group'>
-                          <input type='text' id='quick-create-workspace-input' placeholder=' ' />
-                          <button>
-                            <i className='fa-solid fa-plus'></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <AddWorkspace />
                   </>
                 )}
               </Expander>
