@@ -453,3 +453,16 @@ export type SubtaskResponse = {
   completedAt?: number
   assignmentId: string
 }
+
+export type ProjectResponse = {
+  id: string
+  name: string
+  description?: string
+  createdAt: number
+  dueDate?: number
+  context?: string
+  color?: string
+  workspaceId: string
+  slug: string
+  listOrder?: string
+}

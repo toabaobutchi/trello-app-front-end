@@ -12,6 +12,7 @@ import { InputChange, ProjectPageParams } from '@utils/types'
 import { HttpStatusCode } from 'axios'
 import shareImage from '@assets/share-project.jpg'
 import Tab from '@comps/Tab'
+import ShareProjectByOtherProject from './ShareProjectByOtherProject'
 
 const roles = [
   { value: 'admin', display: 'Admin' },
@@ -115,7 +116,9 @@ function ProjectShare() {
               </ButtonGroup>
             </Flex>
           </Tab.Content>
-          <Tab.Content show={shareActiveTab === 'share-by-friend'}>Share by someone you know</Tab.Content>
+          <Tab.Content show={shareActiveTab === 'share-by-friend'}>
+            <ShareProjectByOtherProject />
+          </Tab.Content>
         </Tab>
       </Modal>
     </>

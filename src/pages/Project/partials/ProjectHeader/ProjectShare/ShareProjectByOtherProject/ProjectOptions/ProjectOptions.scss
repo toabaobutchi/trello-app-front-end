@@ -1,0 +1,16 @@
+.project-options-container {
+  margin-bottom: 1rem;
+  label {
+    cursor: pointer;
+  }
+  input {
+    &:checked ~ label {
+      color: var(--success-color);
+      font-weight: 700;
+    }
+  }
+}
+
+.project-options-select-item {
+  padding: 0.5rem 0 0.5rem 1rem;
+}
