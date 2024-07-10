@@ -2,17 +2,26 @@ import { useState } from 'react'
 import './UpdateTaskNameEditor.scss'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
+import { HubConnection } from '@microsoft/signalr'
+import { TaskDetailForBoard } from '@utils/types'
+import { useSelector } from 'react-redux'
+import { RootState } from '@redux/store'
 type UpdateTaskNameEditorProps = {
-  taskName?: string
+  task?: TaskDetailForBoard
+  hubConnection?: HubConnection
   onUpdateTaskName?: (taskName: string) => void
 }
-function UpdateTaskNameEditor({ taskName, onUpdateTaskName = () => {} }: UpdateTaskNameEditorProps) {
+function UpdateTaskNameEditor({ task, onUpdateTaskName = () => {}, hubConnection }: UpdateTaskNameEditorProps) {
+  const projectId = useSelector((state: RootState) => state.project.activeProject.board.id)
+  const accountId = useSelector((state: RootState) => state.login.accountInfo.id)
   const [name, setName] = useState<string>()
-  // useEffect(() => {
-  //   setName(taskName)
-  // }, [taskName])
   const handleToggle = () => {
-    setName(name !== undefined ? undefined : taskName)
+    setName(name !== undefined ? undefined : task?.name)
+    if (hubConnection) {
+      if (name === undefined) {
+        hubConnection.invoke('SendStartUpdateTaskInfo', projectId, accountId, task?.id)
+      } else hubConnection.invoke('SendCancelUpdateTaskInfo', projectId, accountId, task?.id)
+    }
   }
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value)
@@ -27,7 +36,7 @@ function UpdateTaskNameEditor({ taskName, onUpdateTaskName = () => {} }: UpdateT
     <>
       {name === undefined ? (
         <h2 onClick={handleToggle} className='task-details-name'>
-          {taskName}
+          {task?.name}
         </h2>
       ) : (
         <>

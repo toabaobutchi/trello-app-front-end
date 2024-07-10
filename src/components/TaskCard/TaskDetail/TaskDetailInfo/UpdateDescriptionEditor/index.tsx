@@ -1,19 +1,30 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
-import TextArea from '@comps/TextArea'
 import { useState } from 'react'
 import './UpdateDescriptionEditor.scss'
 import Tooltip from '@comps/Tooltip-v2'
+import { useSelector } from 'react-redux'
+import { RootState } from '@redux/store'
+import { TaskDetailForBoard } from '@utils/types'
+import { HubConnection } from '@microsoft/signalr'
 
 type UpdateDescriptionEditorProps = {
-  description?: string
+  task?: TaskDetailForBoard
+  hubConnection?: HubConnection
   onUpdate?: (desc: string) => void
 }
 
-function UpdateDescriptionEditor({ description, onUpdate = () => {} }: UpdateDescriptionEditorProps) {
+function UpdateDescriptionEditor({ hubConnection, task, onUpdate = () => {} }: UpdateDescriptionEditorProps) {
   const [updateDescription, setUpdateDescription] = useState<string>()
+  const projectId = useSelector((state: RootState) => state.project.activeProject.board.id)
+  const accountId = useSelector((state: RootState) => state.login.accountInfo.id)
   const handleToggle = () => {
-    setUpdateDescription(updateDescription !== undefined ? undefined : description ?? '')
+    setUpdateDescription(updateDescription !== undefined ? undefined : task?.description ?? '')
+    if (hubConnection) {
+      if (updateDescription === undefined) {
+        hubConnection.invoke('SendStartUpdateTaskInfo', projectId, accountId, task?.id)
+      } else hubConnection.invoke('SendCancelUpdateTaskInfo', projectId, accountId, task?.id)
+    }
   }
   const handleClear = () => {
     setUpdateDescription('')
@@ -31,9 +42,9 @@ function UpdateDescriptionEditor({ description, onUpdate = () => {} }: UpdateDes
     <>
       {updateDescription === undefined && (
         <Flex $alignItem='center' $gap='0.5rem'>
-          <p>{description}</p>
+          <p>{task?.description}</p>
           <Button size='small' onClick={handleToggle}>
-            <i className='fa-solid fa-pen-nib'></i> {description ? 'Change' : 'Add'}
+            <i className='fa-solid fa-pen-nib'></i> {task?.description ? 'Change' : 'Add'}
           </Button>
         </Flex>
       )}

@@ -12,8 +12,14 @@ import UpdatePriorityEditor from './UpdatePriorityEditor'
 import UpdateDueDateEditor from './UpdateDueDateEditor'
 import UpdateDescriptionEditor from './UpdateDescriptionEditor'
 import { useHub } from '@hooks/useHub'
+import { set } from 'lodash'
 
 const http = new HttpClient()
+
+type RemoteUpdatingType = {
+  assignmentId: string
+  taskId: string
+}
 
 function TaskDetailInfo() {
   const task = useContext(TaskDetailContext)
@@ -21,6 +27,7 @@ function TaskDetailInfo() {
   const project = useSelector((state: RootState) => state.project.activeProject)
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const taskUpdateConnection = useHub('/dragHub', 'SendAddToDragGroup', project?.board?.id, account?.id)
+  const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
   useEffect(() => {
     if (taskUpdateConnection) {
       taskUpdateConnection.on('ReceiveUpdateTaskInfo', (assignmentId: string, data: UpdatedTaskResponse) => {
@@ -38,7 +45,14 @@ function TaskDetailInfo() {
                 }
               } as typeof prev)
           )
+          setRemoteUpdating(undefined)
         }
+      })
+      taskUpdateConnection.on('ReceiveStartUpdateTaskInfo', (assignmentId: string, taskId: string) => {
+        if (taskId && taskId === taskDetail?.id) setRemoteUpdating({ assignmentId, taskId })
+      })
+      taskUpdateConnection.on('ReceiveCancelUpdateTaskInfo', (assignmentId: string, taskId: string) => {
+        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(undefined)
       })
     }
   }, [taskUpdateConnection])
@@ -57,9 +71,6 @@ function TaskDetailInfo() {
       const data = res?.data as UpdatedTaskResponse
       task?.setState?.(prev => ({ ...prev, taskDetail: { ...taskDetail, name: data?.name } } as typeof prev))
       handleSendMessageToDragHub(data)
-      // if (taskUpdateConnection && project?.board?.id && data && account?.id) {
-      //   taskUpdateConnection.invoke('SendUpdateTaskInfo', project?.board?.id, account?.id, data)
-      // }
     }
   }
   const handleUpdatePriority = async (priority: string) => {
@@ -92,10 +103,18 @@ function TaskDetailInfo() {
       handleSendMessageToDragHub(data)
     }
   }
+  const updator = remoteUpdating && project.members?.find(m => m.id === remoteUpdating?.assignmentId)
   return (
     <>
-      <div className='task-details-basic-info'>
-        <UpdateTaskNameEditor taskName={taskDetail?.name} onUpdateTaskName={handleUpdateName} />
+      <div
+        className={`task-details-basic-info${remoteUpdating ? ' remote-updating' : ''}`}
+        data-update={`${updator?.email} is updating`}
+      >
+        <UpdateTaskNameEditor
+          hubConnection={taskUpdateConnection}
+          task={taskDetail}
+          onUpdateTaskName={handleUpdateName}
+        />
         <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
           <p className='bold'>
             <i className='fa-solid fa-user-pen'></i> Created by:
@@ -117,22 +136,28 @@ function TaskDetailInfo() {
           <p className='bold'>
             <i className='fa-solid fa-tag'></i> Priority:
           </p>
-          {/* <PriorityTag priority={taskDetail?.priority} /> */}
-          <UpdatePriorityEditor onUpdate={handleUpdatePriority} priority={taskDetail?.priority} />
+          <UpdatePriorityEditor
+            hubConnection={taskUpdateConnection}
+            taskId={taskDetail?.id}
+            onUpdate={handleUpdatePriority}
+            priority={taskDetail?.priority}
+          />
         </Flex>
         <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
           <p className='bold'>
             <i className='fa-regular fa-clock'></i> Due date:
           </p>
-          {/* <p>{taskDetail?.dueDate ?? <span className='text-light'>[Not set]</span>}</p>
-           */}
           <UpdateDueDateEditor dueDate={taskDetail?.dueDate} onUpdate={handleUpdateDueDate} />
         </Flex>
         <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
           <p className='bold'>
             <i className='fa-solid fa-scroll'></i> Description
           </p>
-          <UpdateDescriptionEditor description={taskDetail?.description} onUpdate={handleUpdateDescription} />
+          <UpdateDescriptionEditor
+            hubConnection={taskUpdateConnection}
+            task={taskDetail}
+            onUpdate={handleUpdateDescription}
+          />
         </Flex>
         <Subtasks subtasks={taskDetail?.subTasks as SubtaskForBoard[]} taskId={taskDetail?.id ?? ''} />
       </div>

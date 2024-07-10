@@ -12,7 +12,6 @@ function UpdateDueDateEditor({ dueDate, onUpdate = () => {} }: UpdateDueDateEdit
   const handleTogglePicker = () => {
     if (inputRef?.current) {
       inputRef.current.showPicker()
-      // inputRef.current.togglePopover();
     }
   }
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
