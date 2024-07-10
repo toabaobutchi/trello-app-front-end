@@ -32,10 +32,27 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    changeSubtaskCount: (state, action) => {
+      const data = action.payload
+      const taskId = data?.taskId as string
+      const subtaskCount = data?.subtaskCount as number
+      if (taskId && subtaskCount) {
+        const list = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(taskId))
+        if (list) {
+          const task = list.tasks?.find(t => t.id === taskId)
+          if (task) {
+            task.subTaskCount = (task.subTaskCount ?? 0) + subtaskCount
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     updateTaskInfo: (state, action) => {
       const data = action.payload as UpdatedTaskResponse
-      if(data) {
-        const task = state.activeProject.board.lists?.find(l => l.id === data.listId)?.tasks?.find(t => t.id === data.id)
+      if (data) {
+        const task = state.activeProject.board.lists
+          ?.find(l => l.id === data.listId)
+          ?.tasks?.find(t => t.id === data.id)
         if (task) {
           task.name = data.name || task.name
           task.description = data.description

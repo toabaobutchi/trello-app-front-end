@@ -4,6 +4,7 @@ import {
   ChangeTaskOrderResponse,
   DragOverResult,
   ListResponseForBoard,
+  SubtaskForBoard,
   TaskResponseForBoard,
   UpdatedTaskResponse
 } from '@utils/types'
@@ -133,6 +134,15 @@ function BoardContent() {
       )
       dragConnection.on('ReceiveUpdateTaskInfo', (assignmentId: string, data: UpdatedTaskResponse) => {
         dispatch(projectSlice.actions.updateTaskInfo(data))
+      })
+      dragConnection.on(
+        'ReceiveAddSubtaskResult',
+        (assignmentId: string, taskid: string, subtasks: SubtaskForBoard[]) => {
+          dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: subtasks.length }))
+        }
+      )
+      dragConnection.on('ReceiveDeleteSubtask', (assignmentId: string, taskid: string, subtaskId: number) => {
+        dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 }))
       })
     }
   }, [dragConnection, dispatch])

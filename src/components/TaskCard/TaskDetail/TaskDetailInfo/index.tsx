@@ -159,7 +159,11 @@ function TaskDetailInfo() {
             onUpdate={handleUpdateDescription}
           />
         </Flex>
-        <Subtasks subtasks={taskDetail?.subTasks as SubtaskForBoard[]} taskId={taskDetail?.id ?? ''} />
+        <Subtasks
+          hubConnection={taskUpdateConnection}
+          subtasks={taskDetail?.subTasks as SubtaskForBoard[]}
+          taskId={taskDetail?.id ?? ''}
+        />
       </div>
     </>
   )

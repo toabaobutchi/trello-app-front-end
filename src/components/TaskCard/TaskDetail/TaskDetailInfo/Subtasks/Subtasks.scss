@@ -64,3 +64,21 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
+.remote-actors {
+  list-style: disc;
+
+  li {
+    padding: 0.5rem;
+    font: inherit;
+    color: var(--text-secondary-color);
+
+    img {
+      width: 25px;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      object-fit: cover;
+      max-width: 100%;
+    }
+  }
+}

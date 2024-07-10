@@ -443,3 +443,13 @@ export type UpdatedTaskResponse = {
   dueDate?: number
   priority?: string
 }
+
+export type SubtaskResponse = {
+  id: number
+  title: string
+  createdAt: number
+  taskId: string
+  isCompleted: boolean
+  completedAt?: number
+  assignmentId: string
+}
