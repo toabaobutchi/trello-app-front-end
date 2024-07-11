@@ -1,10 +1,11 @@
-import { AssignmentResponse, ProjectResponse, SelectListItem } from '@utils/types'
+import { AssignmentResponse, ProjectPageParams, ProjectResponse, SelectListItem } from '@utils/types'
 import './ProjectOptions.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import { memo, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import SelectList from '@comps/SelectList'
+import { useParams } from 'react-router-dom'
 
 type ProjectOptionsProps = {
   project: ProjectResponse
@@ -48,7 +49,8 @@ const getRoles = (assignmentId: string) => {
 }
 
 const getRole = (assignment: AssignmentResponse) => {
-  return `${assignment.id}-${assignment.permission?.toLowerCase()}`
+  const permission = assignment.permission?.toLowerCase() !== 'owner' ? assignment.permission?.toLowerCase() : 'admin'
+  return `${assignment.id}-${permission}`
 }
 
 const http = new HttpClient()
@@ -58,11 +60,12 @@ const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsPro
 
   const handleToggleAssignmentsBox = async () => {
     setSelectBox(prevState => ({ ...prevState, isOpen: !prevState.isOpen }))
-    const res = await http.getAuth(`/assignments/in-project/${project.id}`)
+    const res = await http.getAuth(`/assignments/in-project/${project.id}?exceptMe=true`)
     if (res?.status === HttpStatusCode.Ok) {
       setSelectBox(prevState => ({ ...prevState, assignments: res.data }))
     }
   }
+
   const handleToggleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProjectSelects(prev => ({ ...prev, isAll: e.target.checked }))
     onChange(project.id, { ...projectSelects, isAll: e.target.checked })
@@ -175,6 +178,11 @@ const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsPro
                 </Flex>
               )
             })}
+            {selectBox.assignments && selectBox.assignments.length <= 0 && (
+              <>
+                <span className='text-danger'>No assignees found</span>
+              </>
+            )}
           </>
         )}
       </div>

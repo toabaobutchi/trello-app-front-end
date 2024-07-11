@@ -5,7 +5,7 @@ class HttpClient {
   constructor() {
     this.axios = axios.create({
       baseURL: 'https://localhost:7207/api',
-      timeout: 5000,
+      timeout: 30 * 1000,
       withCredentials: true
     })
   }
@@ -21,8 +21,11 @@ class HttpClient {
 
   async getAuth(url: string, accessToken: string = '', options: AxiosRequestConfig<object> = {}) {
     try {
-      if(!accessToken) accessToken = localStorage.getItem('access_token') ?? ""
-      const response = await this.axios.get(url, { headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }, ...options })
+      if (!accessToken) accessToken = localStorage.getItem('access_token') ?? ''
+      const response = await this.axios.get(url, {
+        headers: { Authorization: `Bearer ${accessToken}`, ...options.headers },
+        ...options
+      })
       return { data: response.data.data, status: response.data.status, message: response.data.message }
     } catch (err) {
       console.log(err)
@@ -42,8 +45,11 @@ class HttpClient {
 
   async postAuth(url: string, data: object, accessToken: string = '', options: AxiosRequestConfig<object> = {}) {
     try {
-      if(!accessToken) accessToken = localStorage.getItem('access_token') ?? ""
-      const response = await this.axios.post(url, data, { headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }, ...options })
+      if (!accessToken) accessToken = localStorage.getItem('access_token') ?? ''
+      const response = await this.axios.post(url, data, {
+        headers: { Authorization: `Bearer ${accessToken}`, ...options.headers },
+        ...options
+      })
       return { data: response.data.data, status: response.data.status, message: response.data.message }
     } catch (err) {
       console.log(err)
@@ -62,8 +68,11 @@ class HttpClient {
   }
   async putAuth(url: string, data: object = {}, accessToken: string = '', options: AxiosRequestConfig<object> = {}) {
     try {
-      if(!accessToken) accessToken = localStorage.getItem('access_token') ?? ""
-      const response = await this.axios.put(url, data, { headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }, ...options })
+      if (!accessToken) accessToken = localStorage.getItem('access_token') ?? ''
+      const response = await this.axios.put(url, data, {
+        headers: { Authorization: `Bearer ${accessToken}`, ...options.headers },
+        ...options
+      })
       return { data: response.data.data, status: response.data.status, message: response.data.message }
     } catch (err) {
       console.log(err)
@@ -72,8 +81,11 @@ class HttpClient {
   }
   async deleteAuth(url: string, accessToken: string = '', options: AxiosRequestConfig<object> = {}) {
     try {
-      if(!accessToken) accessToken = localStorage.getItem('access_token') ?? ""
-      const response = await this.axios.delete(url, { headers: { Authorization: `Bearer ${accessToken}`, ...options.headers }, ...options })
+      if (!accessToken) accessToken = localStorage.getItem('access_token') ?? ''
+      const response = await this.axios.delete(url, {
+        headers: { Authorization: `Bearer ${accessToken}`, ...options.headers },
+        ...options
+      })
       return { data: response.data.data, status: response.data.status, message: response.data.message }
     } catch (err) {
       console.log(err)
