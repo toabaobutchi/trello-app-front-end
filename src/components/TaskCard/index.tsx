@@ -57,6 +57,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
+  const [joinModal, setJoinModal] = useState(false)
   const taskAssignments = useMemo(() => {
     const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
     return tAssignments
@@ -64,7 +65,9 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
-
+  const handleToggleJoinModal = () => {
+    setJoinModal(!joinModal)
+  }
   const handleCloseTaskDetailModal = () => {
     setModalState({ ...modalState, open: false })
   }
@@ -239,7 +242,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                     <Button variant='text' theme='default'>
                       <i className='fa-regular fa-trash-can'></i> Delete
                     </Button>
-                    <Button variant='text' theme='default'>
+                    <Button onClick={handleToggleJoinModal} variant='text' theme='default'>
                       <i className='fa-solid fa-right-to-bracket'></i> Join
                     </Button>
                     <Button variant='text' theme='default'>
@@ -305,6 +308,31 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           onClose={handleToggleDuplicateTaskModal}
         >
           <DuplicateTask task={task} onCloseModal={handleToggleDuplicateTaskModal} />
+        </Modal>
+        <Modal
+          style={{ width: '30%' }}
+          layout={{
+            header: {
+              title: 'Join task',
+              closeIcon: true
+            },
+            footer: (
+              <>
+                <Flex $alignItem='center' $gap='1rem'>
+                  <Button onClick={handleToggleJoinModal} variant='filled' theme='danger'>
+                    Cancel
+                  </Button>
+                  <Button variant='filled' theme='primary'>
+                    Join
+                  </Button>
+                </Flex>
+              </>
+            )
+          }}
+          open={joinModal}
+          onClose={handleToggleJoinModal}
+        >
+          Join task <span className='text-primary fw-bold'>{task?.name}</span>
         </Modal>
       </TaskDetailContext.Provider>
     </>

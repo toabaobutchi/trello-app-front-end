@@ -78,6 +78,7 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
         <i className='fa-solid fa-ellipsis'></i>
       </Button>
       <Menu
+        // style={{ width: '100px' }}
         onPointerDown={e => e.stopPropagation()}
         open={state?.openMenu === EActionType.OPEN_MAINMENU}
         anchorElement={state?.anchorEl as HTMLElement}
@@ -92,7 +93,7 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
       </Menu>
       <Menu
         onPointerDown={e => e.stopPropagation()}
-        style={{ width: 'max-content' }}
+        style={{ width: '200px' }}
         open={state?.openMenu === EActionType.OPEN_WIPMENU}
         anchorElement={state?.anchorEl as HTMLElement}
         onClose={handleCloseMenu}
