@@ -58,13 +58,16 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
   const [joinModal, setJoinModal] = useState(false)
-  const taskAssignments = useMemo(() => {
-    const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
-    return tAssignments
-  }, [members, task?.taskAssignmentIds])
+
+  // const taskAssignments = useMemo(() => {
+  //   const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
+  //   return tAssignments
+  // }, [members, task?.taskAssignmentIds])
+
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
+
   const handleToggleJoinModal = () => {
     setJoinModal(!joinModal)
   }
@@ -248,9 +251,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                     <Button variant='text' theme='default'>
                       <i className='fa-regular fa-envelope'></i> Invite member
                     </Button>
-                    {/* <Button variant='text' theme='default'>
-                      <i className='fa-solid fa-thumbtack'></i> Need help!
-                    </Button> */}
                     <Flex $alignItem='center' $gap='0.5rem'>
                       <SwitchButton
                         inputAttributes={{
