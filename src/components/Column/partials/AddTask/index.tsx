@@ -2,26 +2,21 @@ import Button from '@comps/Button'
 import FloatLabelInput from '@comps/FloatLabelInput'
 import Flex from '@comps/StyledComponents/Flex'
 import useClickTracker from '@hooks/useClickTracker'
-import { HubConnection } from '@microsoft/signalr'
 import { projectSlice } from '@redux/ProjectSlice'
 import { RootState } from '@redux/store'
 import HttpClient from '@utils/HttpClient'
+import { DragHub } from '@utils/Hubs'
 import { CreateTaskModel, CreateTaskResponse, InputChange, ListResponseForBoard } from '@utils/types'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const http = new HttpClient()
 
-function AddTask({ column, hubConnection }: { column?: ListResponseForBoard; hubConnection?: HubConnection }) {
+function AddTask({ column }: { column?: ListResponseForBoard }) {
   const [isAddingTask, setIsAddingTask] = useState(false)
   const handleToggleAddTask = () => {
     setIsAddingTask(!isAddingTask)
   }
-  useEffect(() => {
-    if (hubConnection) {
-      // hubConnection.on('')
-    }
-  }, [hubConnection])
   return (
     <>
       {!isAddingTask ? (
@@ -29,24 +24,17 @@ function AddTask({ column, hubConnection }: { column?: ListResponseForBoard; hub
           <i className='fa-solid fa-plus'></i> Add a task ...
         </Button>
       ) : (
-        <AddTaskInput hubConnection={hubConnection} onCancelAddTask={handleToggleAddTask} column={column} />
+        <AddTaskInput onCancelAddTask={handleToggleAddTask} column={column} />
       )}
     </>
   )
 }
 
-function AddTaskInput({
-  onCancelAddTask,
-  column,
-  hubConnection
-}: {
-  onCancelAddTask: () => void
-  column?: ListResponseForBoard
-  hubConnection?: HubConnection
-}) {
+function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void; column?: ListResponseForBoard }) {
   const [addTask, setAddTask] = useState<string>('')
   const projectId = useSelector((state: RootState) => state.project.activeProject.board?.id)
   const accountId = useSelector((state: RootState) => state.login.accountInfo?.id)
+  const [dragHub] = useState<DragHub>(new DragHub())
   const dispatch = useDispatch()
   const handleChangeTaskName = (e: InputChange) => {
     setAddTask(e.target.value)
@@ -75,9 +63,8 @@ function AddTaskInput({
         const data = res?.data as CreateTaskResponse
         onCancelAddTask()
         dispatch(projectSlice.actions.addNewTask(data))
-        console.log('hub connection: ', hubConnection)
-        if (hubConnection) {
-          hubConnection.invoke('SendAddNewTask', projectId, accountId, data)
+        if (dragHub.isConnected) {
+          dragHub.connection?.invoke('SendAddNewTask', projectId, accountId, data)
         }
       }
     }

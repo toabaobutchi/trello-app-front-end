@@ -7,7 +7,7 @@ export class ProjectHub extends HubBase {
     super(path ?? '/projectHub')
   }
   get connection() {
-    if (!ProjectHub.connection || ProjectHub.connection.state !== HubConnectionState.Connected) {
+    if (!this.isConnected) {
       this.connect().then(connection => {
         ProjectHub.connection = connection
       })

@@ -1,4 +1,4 @@
-import { HubConnection } from '@microsoft/signalr'
+import { HubConnection, HubConnectionState } from '@microsoft/signalr'
 import HubBase from './HubBase'
 
 export class DragHub extends HubBase {
@@ -6,16 +6,20 @@ export class DragHub extends HubBase {
   constructor(path?: string) {
     super(path ?? '/dragHub')
   }
-  async getConnection() {
-    if (!DragHub.connection || DragHub.connection.state.startsWith('Disconnect')) {
-      DragHub.connection = await this.connect()
+  get connection() {
+    if (!this.isConnected) {
+      this.connect().then(connection => {
+        DragHub.connection = connection
+      })
     }
     return DragHub.connection
   }
-  async disconnect() {
+  get isConnected() {
+    return DragHub.connection && DragHub.connection.state === HubConnectionState.Connected
+  }
+  disconnect() {
     if (DragHub.connection) {
-      await DragHub.connection.stop()
+      DragHub.connection.stop().then(() => (DragHub.connection = undefined))
     }
-    DragHub.connection = undefined
   }
 }

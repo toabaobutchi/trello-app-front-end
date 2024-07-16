@@ -1,7 +1,7 @@
 import config from '@confs/app.config'
-import { HubConnectionBuilder } from '@microsoft/signalr'
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 
-export default class HubBase {
+export default abstract class HubBase {
   baseUrl: string
   constructor(path: string) {
     this.baseUrl = `${config.baseUrl}${path}`
@@ -15,4 +15,6 @@ export default class HubBase {
       return undefined
     }
   }
+  abstract get connection(): HubConnection | undefined
+  abstract disconnect(): void
 }
