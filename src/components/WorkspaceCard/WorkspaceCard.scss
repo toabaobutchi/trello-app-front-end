@@ -1,0 +1,19 @@
+.workspace-card {
+  padding: 1rem;
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+  min-width: 300px;
+
+  &__header {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+
+  &__content {
+    &__creation-time {
+      font-size: 0.9rem;
+      color: var(--text-secondary-color);
+      margin-bottom: 1rem;
+    }
+  }
+}

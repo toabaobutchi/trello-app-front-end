@@ -43,6 +43,7 @@ export type TaskDetailForBoard = {
   listId: string
   listName: string
   dueDate?: number
+  lastListUpdatedAt?: number
   attachmentsCount: number
   creatorId?: string // assignment id
   taskAssignmentIds?: string[]
@@ -251,7 +252,7 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   priority?: string
   listId: string
   isReOpened?: boolean
-  // assigneeCount: number
+  lastListUpdatedAt?: number
   taskAssignmentIds: string[]
   commentCount: number
   completedSubTaskCount?: number

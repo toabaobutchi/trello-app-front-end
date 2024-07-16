@@ -135,6 +135,22 @@ export const getDisplayDateString = (date: Date) => {
   return date.toLocaleDateString()
 }
 
+export const getDateString = (date: Date, includeTime: boolean = false) => {
+  if (!date) return ''
+  const dateString = `${date.getDate().toString().padStart(2, '0')}/${date
+    .getMonth()
+    .toString()
+    .padStart(2, '0')}/${date.getFullYear()}`
+  if (includeTime)
+    return (
+      dateString +
+      ` ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')} ${
+        date.getHours() > 12 ? 'PM' : 'AM'
+      }`
+    )
+  else return dateString
+}
+
 export const handleTriggerKeyPress = <TElement = HTMLInputElement>(
   callback: (e: React.KeyboardEvent<TElement>) => void,
   ...triggerKeys: string[]

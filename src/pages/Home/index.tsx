@@ -2,13 +2,13 @@ import YourTasksToDay from './partials/YourTasksToDay'
 import Workspaces from './partials/Workspaces'
 import { memo } from 'react'
 
-function Home() {
+const Home = memo(() => {
   return (
     <>
       <YourTasksToDay />
       <Workspaces />
     </>
   )
-}
+})
 
-export default memo(Home)
+export default Home

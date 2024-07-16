@@ -11,10 +11,10 @@ import { projectSlice } from '@redux/ProjectSlice'
 import { HttpStatusCode } from 'axios'
 import { RootState } from '@redux/store'
 import HttpClient from '@utils/HttpClient'
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
-import config from '@confs/app.config'
 import TableContent from './partials/TableContent'
 import LoadingLayout from '@layouts/LoadingLayout'
+import { ProjectHub } from '@utils/Hubs'
+import { HubConnectionState } from '@microsoft/signalr'
 
 const BoardContent = lazy(() => import('./partials/BoardContent'))
 
@@ -26,7 +26,7 @@ function Project() {
   const project = useSelector((state: RootState) => state.project.activeProject.board)
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const dispatch = useDispatch()
-  const [projectConnection, setProjectConnection] = useState<HubConnection>()
+  const [projectHub] = useState<ProjectHub>(new ProjectHub())
 
   useEffect(() => {
     if (!project || project?.id !== params.projectId) {
@@ -40,36 +40,24 @@ function Project() {
 
   useEffect(() => {
     if (project?.id) {
-      const connection = new HubConnectionBuilder()
-        .withUrl(`${config.baseUrl}/projectHub`)
-        .withAutomaticReconnect()
-        .build()
-      connection
-        .start()
-        .then(() => {
-          setProjectConnection(connection)
-          connection.invoke('SubscribeProject', project?.id, account?.id)
-        })
-        .catch(err => console.log(err))
+      if (projectHub.isConnected) {
+        const connection = projectHub.connection
+        connection?.invoke('SubscribeProject', 'project', 'userid').catch(() => {})
+      }
     }
 
     return () => {
-      if (projectConnection) {
-        projectConnection.stop()
-      }
+      projectHub.disconnect()
     }
   }, [project?.id])
 
   useEffect(() => {
-    if (projectConnection) {
-      projectConnection.on('ReceiveSubscriber', (assignmentIds: string[]) => {
+    if (projectHub.isConnected) {
+      projectHub.connection?.on('ReceiveSubscriber', (assignmentIds: string[]) => {
         dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
       })
-      projectConnection.onclose(err => {
-        console.log(err?.message)
-      })
     }
-  }, [projectConnection])
+  }, [projectHub.connection])
 
   useEffect(() => {
     // tải thành viên của project

@@ -20,7 +20,7 @@ function SharedWorkspaces() {
           header={{
             content: (
               <p>
-                <i className='fa-solid fa-share-nodes'></i> Shared projects
+                <i className='fa-solid fa-share-nodes'></i> Shared workspaces
               </p>
             )
           }}

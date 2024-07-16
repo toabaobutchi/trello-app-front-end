@@ -25,6 +25,7 @@ function DefaultLayout({ children = '' }: { children?: React.ReactNode }) {
   useEffect(() => {
     dispatch(fetchWorkspaces())
   }, [dispatch])
+  
   return (
     <>
       <Flex $flexDirection='column' style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
