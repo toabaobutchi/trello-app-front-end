@@ -15,7 +15,7 @@ export class DragHub extends HubBase {
     return DragHub.connection
   }
   get isConnected() {
-    return DragHub.connection && DragHub.connection.state === HubConnectionState.Connected
+    return DragHub.connection && DragHub.connection.state.startsWith('Connect')
   }
   disconnect() {
     if (DragHub.connection) {

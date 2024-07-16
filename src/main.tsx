@@ -136,6 +136,10 @@ const router = createBrowserRouter([
       // }
       return res
     }
+  },
+  {
+    path: '*',
+    element: <Error />
   }
 ])
 

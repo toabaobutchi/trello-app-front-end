@@ -3,6 +3,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import { useEffect, useState } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**@deprecated Extends {@link HubBase} instead */
 export function useHub(path: string, subscriber?: string, ...args: any[]) {
   const [connection, setConnection] = useState<HubConnection>()
   useEffect(() => {

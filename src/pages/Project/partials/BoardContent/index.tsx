@@ -66,7 +66,7 @@ export type RemoteDraggingType = {
 function BoardContent() {
   const dispatch = useDispatch<AppDispatch>()
   const project = useSelector((state: RootState) => state.project.activeProject)
-  const account = useSelector((state: RootState) => state.login.accountInfo)
+  // const account = useSelector((state: RootState) => state.login.accountInfo)
   // dùng để lưu trữ tạm thời để các kéo thả - sau đó cập nhật lại sau
   const [listState, setListState] = useState<ListResponseForBoard[]>([])
   const [activeDragItem, setActiveDragItem] = useState<ActiveDragItemType>()
@@ -76,24 +76,13 @@ function BoardContent() {
   const [dragHub] = useState<DragHub>(new DragHub())
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
 
-  const listJson = JSON.stringify(project?.board?.lists)
   useEffect(() => {
     const lists = filterLists(project?.board?.lists, project?.currentFilters)
     setListState(prev => lists as ListResponseForBoard[])
-  }, [project?.board?.lists, listJson, dispatch, project?.currentFilters, project?.changeId])
+  }, [project?.board?.lists, dispatch, project?.currentFilters, project?.changeId])
 
   useEffect(() => {
     if (project?.board?.id) {
-      // if (dragHub) dragHub.stop()
-      // const connection = new HubConnectionBuilder()
-      //   .withUrl(`${config.baseUrl}/dragHub`)
-      //   .withAutomaticReconnect()
-      //   .build()
-      // connection.start().then(() => {
-      //   setDragHub(connection)
-      //   connection.invoke('SendAddToDragGroup', project?.board?.id, account?.id)
-      // })
-      console.log('Connect ', project?.board?.id)
       if (!dragHub.isConnected) dragHub.connection?.invoke('SendAddToDragGroup').catch(() => {})
     }
 
@@ -103,11 +92,12 @@ function BoardContent() {
         dragHub.connection?.stop()
       }
     }
-  }, [account.id, project?.board?.id])
+  }, [dragHub, project?.board?.id])
 
   // signalr listeners
   useEffect(() => {
-    if (dragHub.isConnected && project?.board?.id) {
+    // if (dragHub.isConnected && project?.board?.id) {
+    if (project?.board?.id) {
       dragHub.connection?.on('ReceiveStartDragList', (assignmentId: string, listId: string) => {
         setRemoteDragging({
           isDragging: true,

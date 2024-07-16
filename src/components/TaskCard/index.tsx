@@ -280,17 +280,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
                         </Button>
                       </>
                     )}
-                    {/* <Flex $alignItem='center' $gap='0.5rem'>
-                      <SwitchButton
-                        inputAttributes={{
-                          id: 'mark-complete-toggle',
-                          type: 'checkbox',
-                          name: 'mark-complete-toggle',
-                          checked: Boolean(modalState?.taskDetail?.isCompleted)
-                        }}
-                        onChange={handleMarkCompleteTask}
-                      />
-                    </Flex> */}
                   </Flex>
                 </>
               )

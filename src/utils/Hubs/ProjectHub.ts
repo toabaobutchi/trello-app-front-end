@@ -1,4 +1,4 @@
-import { HubConnection, HubConnectionState } from '@microsoft/signalr'
+import { HubConnection } from '@microsoft/signalr'
 import HubBase from './HubBase'
 
 export class ProjectHub extends HubBase {
@@ -16,7 +16,7 @@ export class ProjectHub extends HubBase {
   }
 
   get isConnected() {
-    return ProjectHub.connection && ProjectHub.connection.state === HubConnectionState.Connected
+    return ProjectHub.connection && ProjectHub.connection.state.startsWith('Connect')
   }
 
   disconnect() {

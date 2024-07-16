@@ -12,7 +12,7 @@ import UpdatePriorityEditor from './UpdatePriorityEditor'
 import UpdateDueDateEditor from './UpdateDueDateEditor'
 import UpdateDescriptionEditor from './UpdateDescriptionEditor'
 import { useHub } from '@hooks/useHub'
-import { set } from 'lodash'
+import { TaskHub } from '@utils/Hubs/TaskHub'
 
 const http = new HttpClient()
 
@@ -27,6 +27,7 @@ function TaskDetailInfo() {
   const project = useSelector((state: RootState) => state.project.activeProject)
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const taskUpdateConnection = useHub('/dragHub', 'SendAddToDragGroup', project?.board?.id, account?.id)
+  const [taskHub] = useState<TaskHub>(new TaskHub())
   const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
   useEffect(() => {
     if (taskUpdateConnection) {
