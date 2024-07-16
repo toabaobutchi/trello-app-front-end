@@ -2,12 +2,13 @@ import { getSlug } from '@utils/functions'
 import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
 
 const routeLinks = {
-  welcome: '/',
-  home: '/home',
-  yourTasks: '/your-tasks',
-  workspaces: '/workspaces/:ownerShip/:slug/:workspaceId',
-  project: '/projects/:ownerShip/:slug/:projectId/v/:viewMode',
-  projectInvitation: '/projects/:pid/invitation'
+  welcome: '/welcome',
+  home: '/',
+  yourTasks: 'your-tasks',
+  workspaces: 'workspaces/:ownerShip/:slug/:workspaceId',
+  project: 'projects/:ownerShip/:slug/:projectId/v/:viewMode',
+  task: 'task/:taskId',
+  projectInvitation: 'projects/:pid/invitation'
 }
 
 export const linkCreator = {

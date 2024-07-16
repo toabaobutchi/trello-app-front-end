@@ -5,7 +5,7 @@ import ProjectHeader from './partials/ProjectHeader'
 // import BoardContent from './partials/BoardContent'
 import { ProjectPageParams } from '@utils/types'
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { HttpStatusCode } from 'axios'
@@ -14,7 +14,6 @@ import HttpClient from '@utils/HttpClient'
 import TableContent from './partials/TableContent'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { ProjectHub } from '@utils/Hubs'
-import { HubConnectionState } from '@microsoft/signalr'
 
 const BoardContent = lazy(() => import('./partials/BoardContent'))
 
@@ -85,6 +84,7 @@ function Project() {
           </Suspense>
 
           {project && params.viewMode === 'table' && <TableContent />}
+          <Outlet />
         </Flex>
       )}
     </>

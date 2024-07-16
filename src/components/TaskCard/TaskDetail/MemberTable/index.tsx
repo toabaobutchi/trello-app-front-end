@@ -2,12 +2,12 @@ import Button from '@comps/Button'
 import './MemberTable.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import { useContext, useState } from 'react'
-import { TaskDetailContext } from '@comps/TaskCard'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 
 function MemberTable() {
-  const taskDetail = useContext(TaskDetailContext)?.state?.taskDetail
+  const taskDetail = useContext(TaskDetailContext)?.task
   const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
   const [taskMembers] = useState(() => projectMembers.filter(m => taskDetail?.taskAssignmentIds?.includes(m.id)))
   return (

@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import './Attachment.scss'
-import { TaskDetailContext } from '@comps/TaskCard'
 import emptyAttachmentImage from '@assets/attachment.svg'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
@@ -10,6 +9,7 @@ import AttachmentInput from './AttachmentInput'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import Tooltip from '@comps/Tooltip-v2'
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 
 const http = new HttpClient()
 
@@ -19,7 +19,7 @@ export type AttachmentInputs = {
 }
 
 function Attachment() {
-  const taskDetail = useContext(TaskDetailContext)?.state?.taskDetail
+  const taskDetail = useContext(TaskDetailContext)?.task
   const members = useSelector((state: RootState) => state?.project?.activeProject?.members)
   const account = useSelector((state: RootState) => state?.login?.accountInfo)
   const [attachments, setAttatchments] = useState<AttachmentResponse[]>([])

@@ -2,9 +2,10 @@ import Header from '@comps/Header'
 import SideBar from '@comps/SideBar'
 import Flex from '@comps/StyledComponents/Flex'
 import { fetchWorkspaces } from '@redux/WorkspaceSlice'
-import { AppDispatch, RootState } from '@redux/store'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from '@redux/store'
+import { Suspense, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -20,19 +21,23 @@ const MainContent = styled.div`
   flex: 1;
 `
 
-function DefaultLayout({ children = '' }: { children?: React.ReactNode }) {
+function DefaultLayout() {
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {
     dispatch(fetchWorkspaces())
   }, [dispatch])
-  
+
   return (
     <>
       <Flex $flexDirection='column' style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
         <Header />
         <Container>
           <SideBar />
-          <MainContent>{children}</MainContent>
+          <MainContent>
+            <Suspense>
+              <Outlet />
+            </Suspense>
+          </MainContent>
         </Container>
       </Flex>
     </>

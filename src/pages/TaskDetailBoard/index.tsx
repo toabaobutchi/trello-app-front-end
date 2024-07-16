@@ -1,0 +1,172 @@
+import Button from '@comps/Button'
+import Modal from '@comps/Modal'
+import Flex from '@comps/StyledComponents/Flex'
+import SwitchButton from '@comps/SwitchButton'
+import TaskDetail from '@comps/TaskCard/TaskDetail'
+import DuplicateTask from '@comps/TaskCard/TaskDetail/DuplicateTask'
+import HttpClient from '@utils/HttpClient'
+import { MarkedTaskResponse, TaskDetailForBoard } from '@utils/types'
+import { HttpStatusCode } from 'axios'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { TaskDetailContext } from './context'
+
+const http = new HttpClient()
+
+function TaskDetailBoard() {
+  const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
+  const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
+  const navigate = useNavigate()
+  const [joinModal, setJoinModal] = useState(false)
+  const { taskId } = useParams()
+  useEffect(() => {
+    http.getAuth(`/tasks/${taskId}/v/board`).then(res => {
+      if (res?.status === HttpStatusCode.Ok) {
+        setTaskDetail(res?.data)
+      } else console.log('Fail: ', res?.message)
+    })
+  }, [])
+  const handleToggleDuplicateTaskModal = () => {
+    setDuplicateTaskModal(!duplicateTaskModal)
+  }
+  const handleToggleJoinModal = () => {
+    setJoinModal(!joinModal)
+  }
+  const timeOutId = useRef<number>()
+  const handleMarkNeedHelp = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // xoá đi vòng lặp cũ
+    if (timeOutId.current) {
+      clearTimeout(timeOutId.current)
+    }
+    timeOutId.current = setTimeout(async () => {
+      const res = await http.putAuth(`/tasks/${taskId}/mark`, { isMarkedNeedHelp: e.target.checked })
+      if (res?.status === HttpStatusCode.Ok) {
+        const data = res?.data as MarkedTaskResponse
+        setTaskDetail(
+          prev =>
+            ({
+              ...prev,
+              isMarkedNeedHelp: data?.isMarkedNeedHelp
+            } as TaskDetailForBoard)
+        )
+        // dispatch to store
+      }
+    }, 500)
+  }
+  const handleCloseTaskDetailModal = () => {
+    navigate('..')
+  }
+  const handleMarkCompleteTask = async () => {
+    const res = await http.putAuth(`/tasks/${taskId}/mark`, { isCompleted: true })
+    if (res?.status === HttpStatusCode.Ok) {
+      const data = res?.data as MarkedTaskResponse
+      setTaskDetail(
+        prev =>
+          ({
+            ...prev,
+            isCompleted: data?.isCompleted
+          } as TaskDetailForBoard)
+      )
+    }
+  }
+  return (
+    <>
+      <TaskDetailContext.Provider value={{ task: taskDetail, setTask: setTaskDetail }}>
+        <Modal
+          style={{ width: '70%' }}
+          layout={{
+            header: {
+              closeIcon: true,
+              title: (
+                <>
+                  <Flex $alignItem='center' $gap='1rem'>
+                    <Button onClick={handleToggleDuplicateTaskModal} variant='text' theme='default'>
+                      <i className='fa-regular fa-clone'></i> Duplicate
+                    </Button>
+                    <Button variant='text' theme='default'>
+                      <i className='fa-regular fa-trash-can'></i> Delete
+                    </Button>
+                    <Button onClick={handleToggleJoinModal} variant='text' theme='default'>
+                      <i className='fa-solid fa-right-to-bracket'></i> Join
+                    </Button>
+                    <Button variant='text' theme='default'>
+                      <i className='fa-regular fa-envelope'></i> Invite member
+                    </Button>
+                    <Flex $alignItem='center' $gap='0.5rem'>
+                      <SwitchButton
+                        inputAttributes={{
+                          id: 'need-help-toggle',
+                          type: 'checkbox',
+                          name: 'need-help-toggle',
+                          checked: Boolean(taskDetail?.isMarkedNeedHelp)
+                        }}
+                        onChange={handleMarkNeedHelp}
+                      />
+                      <label
+                        className={taskDetail?.isMarkedNeedHelp ? 'text-success' : 'text-secondary'}
+                        style={{ fontSize: '1rem' }}
+                        htmlFor='need-help-toggle'
+                      >
+                        Need help!
+                      </label>
+                    </Flex>
+                    {!taskDetail?.isCompleted ? (
+                      <Button onClick={handleMarkCompleteTask} variant='text' theme='default'>
+                        <i className='fa-solid fa-check'></i> Mark as completed
+                      </Button>
+                    ) : (
+                      <>
+                        <Button variant='text' theme='success'>
+                          Completed <i className='fa-solid fa-check'></i>
+                        </Button>
+                      </>
+                    )}
+                  </Flex>
+                </>
+              )
+            }
+          }}
+          open
+          onClose={handleCloseTaskDetailModal}
+        >
+          {taskDetail && <TaskDetail />}
+        </Modal>
+        <Modal
+          layout={{ header: { title: 'Duplicate task', closeIcon: true } }}
+          style={{ width: '30%' }}
+          open={duplicateTaskModal}
+          onClose={handleToggleDuplicateTaskModal}
+        >
+          <DuplicateTask task={taskDetail} onCloseModal={handleToggleDuplicateTaskModal} />
+        </Modal>
+        <Modal
+          style={{ width: '30%' }}
+          layout={{
+            header: {
+              title: 'Join task',
+              closeIcon: true
+            },
+            footer: (
+              <>
+                <Flex $alignItem='center' $gap='1rem'>
+                  <Button onClick={handleToggleJoinModal} variant='filled' theme='danger'>
+                    Cancel
+                  </Button>
+                  <Button variant='filled' theme='primary'>
+                    Join
+                  </Button>
+                </Flex>
+              </>
+            )
+          }}
+          open={joinModal}
+          onClose={handleToggleJoinModal}
+        >
+          Join task <span className='text-primary fw-bold'>{taskDetail?.name}</span>
+        </Modal>
+      </TaskDetailContext.Provider>
+    </>
+  )
+}
+
+export default TaskDetailBoard

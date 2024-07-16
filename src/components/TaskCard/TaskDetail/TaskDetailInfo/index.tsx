@@ -1,7 +1,7 @@
 import Flex from '@comps/StyledComponents/Flex'
 import Subtasks from './Subtasks'
 import { useContext, useEffect, useState } from 'react'
-import { TaskDetailContext } from '@comps/TaskCard'
+// import { TaskDetailContext } from '@comps/TaskCard'
 import { AssignmentResponse, SubtaskForBoard, UpdatedTaskResponse } from '@utils/types'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
@@ -13,6 +13,7 @@ import UpdateDueDateEditor from './UpdateDueDateEditor'
 import UpdateDescriptionEditor from './UpdateDescriptionEditor'
 import { useHub } from '@hooks/useHub'
 import { TaskHub } from '@utils/Hubs/TaskHub'
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 
 const http = new HttpClient()
 
@@ -22,28 +23,25 @@ type RemoteUpdatingType = {
 }
 
 function TaskDetailInfo() {
-  const task = useContext(TaskDetailContext)
-  const taskDetail = task?.state?.taskDetail
+  const context = useContext(TaskDetailContext)
+  const taskDetail = context?.task
   const project = useSelector((state: RootState) => state.project.activeProject)
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const taskUpdateConnection = useHub('/dragHub', 'SendAddToDragGroup', project?.board?.id, account?.id)
-  const [taskHub] = useState<TaskHub>(new TaskHub())
+  // const [taskHub] = useState<TaskHub>(new TaskHub())
   const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
   useEffect(() => {
     if (taskUpdateConnection) {
       taskUpdateConnection.on('ReceiveUpdateTaskInfo', (assignmentId: string, data: UpdatedTaskResponse) => {
         if (data && data.id === taskDetail?.id) {
-          task?.setState?.(
+          context?.setTask?.(
             prev =>
               ({
                 ...prev,
-                taskDetail: {
-                  ...taskDetail,
-                  name: data?.name,
-                  description: data?.description,
-                  priority: data?.priority,
-                  dueDate: data?.dueDate
-                }
+                name: data?.name,
+                description: data?.description,
+                priority: data?.priority,
+                dueDate: data?.dueDate
               } as typeof prev)
           )
           setRemoteUpdating(undefined)
@@ -70,7 +68,7 @@ function TaskDetailInfo() {
     const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { name })
     if (res?.status === HttpStatusCode.Ok) {
       const data = res?.data as UpdatedTaskResponse
-      task?.setState?.(prev => ({ ...prev, taskDetail: { ...taskDetail, name: data?.name } } as typeof prev))
+      context?.setTask?.(prev => ({ ...prev, name: data?.name } as typeof prev))
       handleSendMessageToDragHub(data)
     }
   }
@@ -78,7 +76,7 @@ function TaskDetailInfo() {
     const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { priority })
     if (res?.status === HttpStatusCode.Ok) {
       const data = res?.data as UpdatedTaskResponse
-      task?.setState?.(prev => ({ ...prev, taskDetail: { ...taskDetail, priority: data?.priority } } as typeof prev))
+      context?.setTask?.(prev => ({ ...prev, priority: data?.priority } as typeof prev))
       handleSendMessageToDragHub(data)
     }
   }
@@ -89,7 +87,7 @@ function TaskDetailInfo() {
         console.log('Task due date is larger than project due date')
       } else {
         const data = res?.data as UpdatedTaskResponse
-        task?.setState?.(prev => ({ ...prev, taskDetail: { ...taskDetail, dueDate: data?.dueDate } } as typeof prev))
+        context?.setTask?.(prev => ({ ...prev, dueDate: data?.dueDate } as typeof prev))
         handleSendMessageToDragHub(data)
       }
     }
@@ -98,9 +96,7 @@ function TaskDetailInfo() {
     const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { description })
     if (res?.status === HttpStatusCode.Ok) {
       const data = res?.data as UpdatedTaskResponse
-      task?.setState?.(
-        prev => ({ ...prev, taskDetail: { ...taskDetail, description: res?.data?.description } } as typeof prev)
-      )
+      context?.setTask?.(prev => ({ ...prev, description: res?.data?.description } as typeof prev))
       handleSendMessageToDragHub(data)
     }
   }

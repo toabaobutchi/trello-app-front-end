@@ -1,4 +1,4 @@
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskDetailForBoard, TaskResponseForBoard } from '@utils/types'
 import './DuplicateTask.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
@@ -20,7 +20,7 @@ export type InheritOptions = {
 
 const http = new HttpClient()
 
-function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskResponseForBoard; onCloseModal?: () => void }) {
+function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailForBoard; onCloseModal?: () => void }) {
   const [inheritOptions, setInheritOptions] = useState<InheritOptions>({
     priority: true,
     description: true,

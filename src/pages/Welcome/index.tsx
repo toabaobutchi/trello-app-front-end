@@ -108,7 +108,7 @@ function Welcome() {
     if (response?.status === 200) {
       // thành công
       dispatch(loginSlice.actions.setAccessToken(response?.data))
-      navigate('home')
+      navigate('/')
     } else {
       console.log('Login Failed')
     }
