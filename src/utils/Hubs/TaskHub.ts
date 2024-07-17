@@ -1,28 +1,37 @@
-import { HubConnection } from '@microsoft/signalr'
+import { HubConnection, HubConnectionState } from '@microsoft/signalr'
 import HubBase from './HubBase'
+import { hubs } from './hubs'
 
 export class TaskHub extends HubBase {
   protected static connection?: HubConnection = undefined
-  constructor(path?: string) {
-    super(path ?? '/taskHub')
+  protected taskId?: string
+  constructor(taskId?: string, path?: string) {
+    super(path || '/taskHub')
+    this.taskId = taskId
   }
   get connection() {
+    console.log('get connection')
     if (!TaskHub.connection) {
       this.connect().then(connection => {
-        TaskHub.connection = connection
+        connection
+          ?.invoke(hubs.taskDetail.send.subscribeTaskGroup, this.taskId)
+          .then(_ => {
+            TaskHub.connection = connection
+          })
+          .catch(_ => {})
       })
     }
+    console.log('Connection: ', TaskHub.connection)
     return TaskHub.connection
   }
 
   get isConnected() {
-    // `Connected` và `Connecting` thì trả về true, không cần phải gọi đi kết nối lại
-    return Boolean(TaskHub.connection && TaskHub.connection.state.toLowerCase().includes('connect'))
+    return Boolean(TaskHub.connection && TaskHub.connection.state === HubConnectionState.Connected)
   }
 
   disconnect() {
-    if (TaskHub.connection) {
-      TaskHub.connection.stop().then(() => (TaskHub.connection = undefined))
+    if (this.isConnected) {
+      TaskHub.connection?.stop().then(() => (TaskHub.connection = undefined))
     }
   }
 }

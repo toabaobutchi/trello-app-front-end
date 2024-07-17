@@ -42,6 +42,7 @@ function SubtaskItem({
         const updatedSubtaskName = res?.data
         onChangeSubTaskName(subTask.id, updatedSubtaskName)
       }
+      handleToggleChangeSubtaskName()
     }
   }
   return (

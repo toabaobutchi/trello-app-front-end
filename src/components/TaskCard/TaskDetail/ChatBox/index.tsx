@@ -20,17 +20,19 @@ function ChatBox() {
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const [assignment] = useState(members?.find(m => m.userId === account.id))
 
-  const [taskHub] = useState<TaskHub>(new TaskHub())
+  const [taskHub] = useState<TaskHub>(new TaskHub(task?.id))
   useEffect(() => {
     if (!taskHub.isConnected && task?.id) {
-      console.log('Connecting ....')
       const connection = taskHub.connection
-      connection?.invoke(hubs.taskDetail.send.subscribeTaskGroup, task?.id).catch(_ => {})
+      console.log('Run listener', connection?.state)
+      connection?.on(hubs.taskDetail.receive.comment, (commentResponse: CommentResponse) => {
+        console.log('Received comment: ', commentResponse)
+        setComments(prev => [...prev, commentResponse])
+      })
     }
 
     return () => {
       if (taskHub.isConnected && task?.id) {
-        console.log('Stoping ...')
         taskHub.connection?.stop()
       }
     }
@@ -45,12 +47,12 @@ function ChatBox() {
       })
   }, [task?.id])
 
-  useEffect(() => {
-    if (taskHub.isConnected && task?.id)
-      taskHub.connection?.on(hubs.taskDetail.receive.comment, (commentResponse: CommentResponse) => {
-        setComments(prev => [...prev, commentResponse])
-      })
-  }, [])
+  // useEffect(() => {
+  //   if (taskHub.isConnected && task?.id) {
+  //     console.log('run listener')
+  //     taskHub.connection
+  //   }
+  // }, [taskHub.isConnected])
   const handleComment = async (comment: string) => {
     const commentModel: CreateCommentModel = {
       content: comment,
@@ -61,12 +63,10 @@ function ChatBox() {
     if (res?.status === 200) {
       setComments(prev => [...prev, res?.data])
       if (taskHub.isConnected) {
-        console.log('SendComment')
-        taskHub.connection?.invoke(hubs.taskDetail.send.comment, res?.data).catch(_ => {})
+        taskHub.connection?.invoke(hubs.taskDetail.send.comment, task?.id, res?.data).catch(_ => {})
       }
     }
   }
-
   return (
     <>
       <div className='chat-box'>
