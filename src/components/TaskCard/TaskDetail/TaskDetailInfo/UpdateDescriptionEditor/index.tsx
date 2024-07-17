@@ -3,10 +3,9 @@ import Flex from '@comps/StyledComponents/Flex'
 import { useState } from 'react'
 import './UpdateDescriptionEditor.scss'
 import Tooltip from '@comps/Tooltip-v2'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
 import { TaskDetailForBoard } from '@utils/types'
 import { HubConnection } from '@microsoft/signalr'
+import { hubs } from '@utils/Hubs'
 
 type UpdateDescriptionEditorProps = {
   task?: TaskDetailForBoard
@@ -16,14 +15,15 @@ type UpdateDescriptionEditorProps = {
 
 function UpdateDescriptionEditor({ hubConnection, task, onUpdate = () => {} }: UpdateDescriptionEditorProps) {
   const [updateDescription, setUpdateDescription] = useState<string>()
-  const projectId = useSelector((state: RootState) => state.project.activeProject.board.id)
-  const accountId = useSelector((state: RootState) => state.login.accountInfo.id)
   const handleToggle = () => {
     setUpdateDescription(updateDescription !== undefined ? undefined : task?.description ?? '')
     if (hubConnection) {
       if (updateDescription === undefined) {
-        hubConnection.invoke('SendStartUpdateTaskInfo', projectId, accountId, task?.id)
-      } else hubConnection.invoke('SendCancelUpdateTaskInfo', projectId, accountId, task?.id)
+        // SendStartUpdateTaskInfo
+        hubConnection.invoke(hubs.project.send.startUpdateTaskInfo, task?.id)
+      }
+      // SendCancelUpdateTaskInfo
+      else hubConnection.invoke(hubs.project.send.cancelUpdateTaskInfo, task?.id)
     }
   }
   const handleClear = () => {

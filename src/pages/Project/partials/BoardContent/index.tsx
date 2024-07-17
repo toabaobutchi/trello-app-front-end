@@ -33,10 +33,8 @@ import { projectSlice } from '@redux/ProjectSlice'
 import HttpClient from '@utils/HttpClient'
 import { cloneDeep } from 'lodash'
 import { MyCustomSensor } from '@utils/MyCustomSensor'
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
-import config from '@confs/app.config'
 import { filterLists } from '@utils/functions'
-import { DragHub } from '@utils/Hubs'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 const http = new HttpClient()
 
@@ -50,7 +48,8 @@ const dropAnimation: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
     styles: {
       active: {
-        opacity: '0.5'
+        opacity: '0.5',
+        transition: '0.25s linear'
       }
     }
   })
@@ -73,32 +72,32 @@ function BoardContent() {
   const [oldColumn, setOldColumn] = useState<ListResponseForBoard>()
 
   //signalR
-  const [dragHub] = useState<DragHub>(new DragHub())
+  const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
 
   useEffect(() => {
     const lists = filterLists(project?.board?.lists, project?.currentFilters)
-    setListState(prev => lists as ListResponseForBoard[])
+    setListState(_prev => lists as ListResponseForBoard[])
   }, [project?.board?.lists, dispatch, project?.currentFilters, project?.changeId])
 
   useEffect(() => {
     if (project?.board?.id) {
-      if (!dragHub.isConnected) dragHub.connection?.invoke('SendAddToDragGroup').catch(() => {})
+      if (!projectHub.isConnected) projectHub.connection?.invoke('SendAddToDragGroup').catch(() => {})
     }
 
     return () => {
-      // if (dragHub) dragHub.stop()
-      if (dragHub.isConnected) {
-        dragHub.connection?.stop()
+      // if (dragHub) projectHub.stop()
+      if (projectHub.isConnected) {
+        projectHub.connection?.stop()
       }
     }
-  }, [dragHub, project?.board?.id])
+  }, [projectHub, project?.board?.id])
 
   // signalr listeners
   useEffect(() => {
-    // if (dragHub.isConnected && project?.board?.id) {
     if (project?.board?.id) {
-      dragHub.connection?.on('ReceiveStartDragList', (assignmentId: string, listId: string) => {
+      // ReceiveStartDragList
+      projectHub.connection?.on(hubs.project.receive.startDragList, (assignmentId: string, listId: string) => {
         setRemoteDragging({
           isDragging: true,
           subId: assignmentId,
@@ -106,17 +105,17 @@ function BoardContent() {
           dragObject: 'Column'
         })
       })
-
-      dragHub.connection?.on('ReceiveEndDragList', (assignmentId: string, updatedListOrder: string) => {
+      // ReceiveEndDragList
+      projectHub.connection?.on(hubs.project.receive.endDragList, (_assignmentId: string, updatedListOrder: string) => {
         dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
         setTimeout(() => {
           if (remoteDragging) setRemoteDragging(undefined)
         }, 500)
       })
-
-      dragHub.connection?.on(
-        'ReceiveStartDragTask',
-        (assignmentId: string, updatedListOrder: string, taskId: string) => {
+      // ReceiveStartDragTask
+      projectHub.connection?.on(
+        hubs.project.receive.startDragTask,
+        (assignmentId: string, _updatedListOrder: string, taskId: string) => {
           setRemoteDragging({
             isDragging: true,
             subId: assignmentId,
@@ -125,10 +124,10 @@ function BoardContent() {
           })
         }
       )
-
-      dragHub.connection?.on(
-        'ReceiveEndDragTask',
-        (assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
+      // ReceiveEndDragTask
+      projectHub.connection?.on(
+        hubs.project.receive.endDragTask,
+        (_assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
           dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
           // setRemoteDragging(undefined)
           setTimeout(() => {
@@ -136,30 +135,41 @@ function BoardContent() {
           }, 500)
         }
       )
-      dragHub.connection?.on('ReceiveUpdateTaskInfo', (assignmentId: string, data: UpdatedTaskResponse) => {
-        dispatch(projectSlice.actions.updateTaskInfo(data))
-      })
-      dragHub.connection?.on(
-        'ReceiveAddSubtaskResult',
-        (assignmentId: string, taskid: string, subtasks: SubtaskForBoard[]) => {
+      // ReceiveUpdateTaskInfo
+      projectHub.connection?.on(
+        hubs.project.receive.updateTaskInfo,
+        (_assignmentId: string, data: UpdatedTaskResponse) => {
+          dispatch(projectSlice.actions.updateTaskInfo(data))
+        }
+      )
+      // ReceiveAddSubtaskResult
+      projectHub.connection?.on(
+        hubs.project.receive.addSubtaskResult,
+        (_assignmentId: string, taskid: string, subtasks: SubtaskForBoard[]) => {
           dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: subtasks.length }))
         }
       )
-      dragHub.connection?.on('ReceiveDeleteSubtask', (assignmentId: string, taskid: string, subtaskId: number) => {
-        dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 }))
-      })
-      dragHub.connection?.on(
-        'ReceiveCheckSubtask',
-        (assignmentId: string, taskid: string, subtaskId: number, status: boolean) => {
+      // ReceiveDeleteSubtask
+      projectHub.connection?.on(
+        hubs.project.receive.deleteSubtask,
+        (_assignmentId: string, taskid: string, _subtaskId: number) => {
+          dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 }))
+        }
+      )
+      // ReceiveCheckSubtask
+      projectHub.connection?.on(
+        hubs.project.receive.checkSubtask,
+        (_assignmentId: string, taskid: string, _subtaskId: number, status: boolean) => {
           dispatch(projectSlice.actions.changeSubtaskStatus({ taskId: taskid, status }))
         }
       )
-      dragHub.connection?.on('ReceiveAddNewTask', (assignmentId: string, data: CreateTaskResponse) => {
-        console.log('ReceiveAddNewTask')
+      // ReceiveAddNewTask
+      projectHub.connection?.on(hubs.project.receive.addNewTask, (_assignmentId: string, data: CreateTaskResponse) => {
         dispatch(projectSlice.actions.addNewTask(data))
       })
     }
-  }, [dragHub, dispatch])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectHub, dispatch])
 
   const findColumnByCardId = (cardId: string) => {
     return listState?.find(list => list?.tasks?.map(task => task.id).includes(cardId))
@@ -175,8 +185,7 @@ function BoardContent() {
     overId: string,
     callApi?: boolean
   ) => {
-    const overCardIndex = overList.tasks?.findIndex(task => task.id === overId)
-    // console.log(overCardIndex)
+    const overCardIndex = overList.tasks?.findIndex(task => task.id === overId) ?? -1
     const isBelowOverItem =
       active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height
     const modifier = isBelowOverItem ? 1 : 0
@@ -212,14 +221,14 @@ function BoardContent() {
       oldListId: nextActiveColumn?.id as string,
       oldTaskOrder: nextActiveColumn?.taskOrder as string
     }
-    setListState(prev => nextColumns) // set truoc, cho response de quyet dinh sau
+    setListState(_prev => nextColumns) // set truoc, cho response de quyet dinh sau
     if (callApi) {
       http
         .putAuth(`/tasks/${activeId}/change-order`, changeTaskOrderModel)
         .then(res => {
           if (res?.status !== 200) {
             console.log('Update task order failed')
-            setListState(prev => project?.board?.lists as ListResponseForBoard[])
+            setListState(_prev => project?.board?.lists as ListResponseForBoard[])
           } else {
             const dragOverResult: DragOverResult = {
               activeList: nextActiveColumn as ListResponseForBoard,
@@ -227,12 +236,13 @@ function BoardContent() {
             }
             dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
             // call hub
-            if (dragHub) {
+            if (projectHub.isConnected) {
+              projectHub.connection?.send(hubs.project.send.endDragTask, res?.data, dragOverResult)
               // dragHub?.send('SendEndDragTask', project?.board?.id, account?.id, res?.data, dragOverResult)
             }
           }
         })
-        .catch(() => setListState(prev => project?.board?.lists as ListResponseForBoard[]))
+        .catch(() => setListState(_prev => project?.board?.lists as ListResponseForBoard[]))
     }
   }
 
@@ -244,17 +254,13 @@ function BoardContent() {
     })
     if (e?.active?.data?.current?.dragObject === 'Card') {
       setOldColumn(findColumnByCardId(e?.active?.id as string))
-      if (dragHub) {
-        // dragHub?.send(
-        //   'SendStartDragTask',
-        //   project?.board?.id,
-        //   account?.id,
-        //   e?.active?.data?.current?.listId,
-        //   e?.active?.id
-        // )
+      if (projectHub.isConnected) {
+        // SendStartDragTask
+        projectHub.connection?.send(hubs.project.send.startDragTask, e?.active?.data?.current?.listId, e?.active?.id)
       }
     } else {
-      // if (dragHub) dragHub?.send('SendStartDragList', project?.board?.id, account?.id, e?.active?.id)
+      // SendStartDragList
+      if (projectHub.isConnected) projectHub.connection?.send(hubs.project.send.startDragList, e?.active?.id)
     }
   }
 
@@ -343,11 +349,11 @@ function BoardContent() {
           newTaskOrder: targetColumn?.taskOrder as string,
           oldTaskOrder: targetColumn?.taskOrder as string
         }
-        setListState(prev => nextColumns)
+        setListState(_prev => nextColumns)
         http.putAuth(`/tasks/${activeDragItem.id}/change-order`, changeTaskOrderModel).then(res => {
           if (res?.status !== 200) {
             console.log('Update task order failed')
-            setListState(prev => project?.board?.lists as ListResponseForBoard[])
+            setListState(_prev => project?.board?.lists as ListResponseForBoard[])
           } else {
             const dragOverResult: DragOverResult = {
               activeList: targetColumn as ListResponseForBoard,
@@ -355,8 +361,9 @@ function BoardContent() {
             }
             dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
             // call hub
-            if (dragHub) {
-              // dragHub?.send('SendEndDragTask', project?.board?.id, account?.id, res?.data, dragOverResult)
+            if (projectHub.isConnected) {
+              // SendEndDragTask
+              projectHub.connection?.send(hubs.project.send.endDragTask, res?.data, dragOverResult)
             }
           }
         })
@@ -383,8 +390,8 @@ function BoardContent() {
               // cập nhật lại thành công
               const updatedListOrder = res.data as string
               dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
-              if (dragHub) {
-                // dragHub?.send('SendEndDragList', project?.board?.id, account?.id, updatedListOrder)
+              if (projectHub.isConnected) {
+                projectHub.connection?.send('SendEndDragList', updatedListOrder)
               }
             } else {
               setListState(listState) // reset lại list state như ban đầu, huỷ cập nhật

@@ -2,9 +2,8 @@ import Button from '@comps/Button'
 import SelectList from '@comps/SelectList'
 import PriorityTag from '@comps/TaskCard/PriorityTag'
 import { HubConnection } from '@microsoft/signalr'
-import { RootState } from '@redux/store'
+import { hubs } from '@utils/Hubs'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 type UpdatePriorityEditorProps = {
   priority?: string
@@ -48,14 +47,15 @@ const prioritiesSelectList = [
 ]
 function UpdatePriorityEditor({ priority, taskId, onUpdate = () => {}, hubConnection }: UpdatePriorityEditorProps) {
   const [priorityValue, setPriorityValue] = useState<string>()
-  const projectId = useSelector((state: RootState) => state.project.activeProject.board.id)
-  const accountId = useSelector((state: RootState) => state.login.accountInfo.id)
   const handleToggleEditor = () => {
     setPriorityValue(priorityValue !== undefined ? undefined : priority)
     if (hubConnection) {
       if (priorityValue === undefined) {
-        hubConnection.invoke('SendStartUpdateTaskInfo', projectId, accountId, taskId)
-      } else hubConnection.invoke('SendCancelUpdateTaskInfo', projectId, accountId, taskId)
+        // SendStartUpdateTaskInfo
+        hubConnection.invoke(hubs.project.send.startUpdateTaskInfo, taskId)
+      }
+      // SendCancelUpdateTaskInfo
+      else hubConnection.invoke(hubs.project.send.startUpdateTaskInfo, taskId)
     }
   }
   const handleChoose = ({ value }: { value: string }) => {

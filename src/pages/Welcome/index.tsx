@@ -3,11 +3,12 @@ import logo from '@assets/trello_pic.png'
 import rightSideImage from '@assets/img_welcome.webp'
 import config from '@confs/app.config'
 import { GoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
-import { JwtPayload, jwtDecode } from 'jwt-decode'
+import { JwtPayload } from 'jwt-decode'
 import HttpClient from '@utils/HttpClient'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginSlice } from './LoginSlice'
+import routeLinks from '@routes/router'
 
 const Container = styled.div`
   display: flex;
@@ -108,7 +109,7 @@ function Welcome() {
     if (response?.status === 200) {
       // thành công
       dispatch(loginSlice.actions.setAccessToken(response?.data))
-      navigate('/')
+      navigate(routeLinks.home)
     } else {
       console.log('Login Failed')
     }

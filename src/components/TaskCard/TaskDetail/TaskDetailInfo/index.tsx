@@ -1,9 +1,8 @@
 import Flex from '@comps/StyledComponents/Flex'
 import Subtasks from './Subtasks'
 import { useContext, useEffect, useState } from 'react'
-// import { TaskDetailContext } from '@comps/TaskCard'
 import { AssignmentResponse, SubtaskForBoard, UpdatedTaskResponse } from '@utils/types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import UpdateTaskNameEditor from './UpdateTaskNameEditor'
 import HttpClient from '@utils/HttpClient'
@@ -12,8 +11,9 @@ import UpdatePriorityEditor from './UpdatePriorityEditor'
 import UpdateDueDateEditor from './UpdateDueDateEditor'
 import UpdateDescriptionEditor from './UpdateDescriptionEditor'
 import { useHub } from '@hooks/useHub'
-import { TaskHub } from '@utils/Hubs/TaskHub'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
+import { hubs, ProjectHub } from '@utils/Hubs'
+import { projectSlice } from '@redux/ProjectSlice'
 
 const http = new HttpClient()
 
@@ -25,43 +25,54 @@ type RemoteUpdatingType = {
 function TaskDetailInfo() {
   const context = useContext(TaskDetailContext)
   const taskDetail = context?.task
+  const dispatch = useDispatch()
   const project = useSelector((state: RootState) => state.project.activeProject)
   const account = useSelector((state: RootState) => state.login.accountInfo)
-  const taskUpdateConnection = useHub('/dragHub', 'SendAddToDragGroup', project?.board?.id, account?.id)
-  // const [taskHub] = useState<TaskHub>(new TaskHub())
+  // const projectHub.connection = useHub('/dragHub', 'SendAddToDragGroup', project?.board?.id, account?.id)
+  const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
-  useEffect(() => {
-    if (taskUpdateConnection) {
-      taskUpdateConnection.on('ReceiveUpdateTaskInfo', (assignmentId: string, data: UpdatedTaskResponse) => {
-        if (data && data.id === taskDetail?.id) {
-          context?.setTask?.(
-            prev =>
-              ({
-                ...prev,
-                name: data?.name,
-                description: data?.description,
-                priority: data?.priority,
-                dueDate: data?.dueDate
-              } as typeof prev)
-          )
-          setRemoteUpdating(undefined)
-        }
-      })
-      taskUpdateConnection.on('ReceiveStartUpdateTaskInfo', (assignmentId: string, taskId: string) => {
-        if (taskId && taskId === taskDetail?.id) setRemoteUpdating({ assignmentId, taskId })
-      })
-      taskUpdateConnection.on('ReceiveCancelUpdateTaskInfo', (assignmentId: string, taskId: string) => {
-        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(undefined)
-      })
-    }
-  }, [taskUpdateConnection])
-  // lấy thông tin creator
   const [creator] = useState<AssignmentResponse | undefined>(() =>
     project?.members.find(p => p.id === taskDetail?.creatorId)
   )
+  useEffect(() => {
+    if (projectHub.isConnected) {
+      // ReceiveUpdateTaskInfo
+      projectHub.connection?.on(
+        hubs.project.receive.updateTaskInfo,
+        (_assignmentId: string, data: UpdatedTaskResponse) => {
+          if (data && data.id === taskDetail?.id) {
+            context?.setTask?.(
+              prev =>
+                ({
+                  ...prev,
+                  name: data?.name,
+                  description: data?.description,
+                  priority: data?.priority,
+                  dueDate: data?.dueDate
+                } as typeof prev)
+            )
+            setRemoteUpdating(undefined)
+          }
+        }
+      )
+      // ReceiveStartUpdateTaskInfo
+      projectHub.connection?.on(hubs.project.receive.startUpdateTaskInfo, (assignmentId: string, taskId: string) => {
+        if (taskId && taskId === taskDetail?.id) setRemoteUpdating({ assignmentId, taskId })
+      })
+
+      // ReceiveCancelUpdateTaskInfo
+      projectHub.connection?.on(hubs.project.receive.cancelUpdateTaskInfo, (_assignmentId: string, taskId: string) => {
+        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(undefined)
+      })
+    }
+  }, [projectHub, taskDetail?.id, context])
+  // lấy thông tin creator
+
   const handleSendMessageToDragHub = (data: UpdatedTaskResponse) => {
-    if (taskUpdateConnection && project?.board?.id && data && account?.id) {
-      taskUpdateConnection.invoke('SendUpdateTaskInfo', project?.board?.id, account?.id, data)
+    dispatch(projectSlice.actions.updateTaskInfo(data)) // cập nhật cho giao diện cá nhân
+    if (projectHub.connection && project?.board?.id && data && account?.id) {
+      // SendUpdateTaskInfo
+      projectHub.connection.invoke(hubs.project.send.updateTaskInfo, data)
     }
   }
   const handleUpdateName = async (name: string) => {
@@ -108,7 +119,7 @@ function TaskDetailInfo() {
         data-update={`${updator?.email} is updating`}
       >
         <UpdateTaskNameEditor
-          hubConnection={taskUpdateConnection}
+          hubConnection={projectHub.connection}
           task={taskDetail}
           onUpdateTaskName={handleUpdateName}
         />
@@ -134,7 +145,7 @@ function TaskDetailInfo() {
             <i className='fa-solid fa-tag'></i> Priority:
           </p>
           <UpdatePriorityEditor
-            hubConnection={taskUpdateConnection}
+            hubConnection={projectHub.connection}
             taskId={taskDetail?.id}
             onUpdate={handleUpdatePriority}
             priority={taskDetail?.priority}
@@ -151,13 +162,13 @@ function TaskDetailInfo() {
             <i className='fa-solid fa-scroll'></i> Description
           </p>
           <UpdateDescriptionEditor
-            hubConnection={taskUpdateConnection}
+            hubConnection={projectHub.connection}
             task={taskDetail}
             onUpdate={handleUpdateDescription}
           />
         </Flex>
         <Subtasks
-          hubConnection={taskUpdateConnection}
+          hubConnection={projectHub.connection}
           subtasks={taskDetail?.subTasks as SubtaskForBoard[]}
           taskId={taskDetail?.id ?? ''}
         />

@@ -8,13 +8,14 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { useHub } from '@hooks/useHub'
 import { TaskDetailContext, TaskDetailContextType } from '@pages/TaskDetailBoard/context'
+import { hubs, TaskHub } from '@utils/Hubs'
 
 const http = new HttpClient()
 
 function ChatBox() {
   const [comments, setComments] = useState<CommentResponse[]>([])
   const context = useContext(TaskDetailContext)
-  const { task, setTask } = context as TaskDetailContextType
+  const { task } = context as TaskDetailContextType
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const [assignment] = useState(members?.find(m => m.userId === account.id))
@@ -25,6 +26,18 @@ function ChatBox() {
     assignment?.id as unknown as object
   )
 
+  const [taskHub] = useState<TaskHub>(new TaskHub())
+  useEffect(() => {
+    if (!taskHub.isConnected && task?.id) {
+      taskHub.connection?.invoke(hubs.taskDetail.send.subscribeTaskGroup, task?.id)
+    }
+
+    return () => {
+      if (taskHub.isConnected) {
+        taskHub.connection?.stop()
+      }
+    }
+  }, [task?.id, taskHub])
   useEffect(() => {
     // Fetch comments from API
     if (task?.id)
@@ -36,12 +49,13 @@ function ChatBox() {
   }, [task?.id])
 
   useEffect(() => {
-    if (connection) {
-      connection.on('RecieveComment', (commentResponse: CommentResponse) => {
+    if (taskHub.isConnected) {
+      // RecieveComment
+      taskHub.connection?.on(hubs.taskDetail.receive.comment, (commentResponse: CommentResponse) => {
         setComments(prev => [...prev, commentResponse])
       })
     }
-  }, [connection])
+  }, [taskHub])
 
   const handleComment = async (comment: string) => {
     const commentModel: CreateCommentModel = {
@@ -53,7 +67,8 @@ function ChatBox() {
     if (res?.status === 200) {
       setComments(prev => [...prev, res?.data])
       if (connection) {
-        connection.invoke('SendComment', res?.data)
+        // SendComment
+        connection.invoke(hubs.taskDetail.send.comment, res?.data)
       }
     }
   }

@@ -4,23 +4,26 @@ import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { HubConnection } from '@microsoft/signalr'
 import { TaskDetailForBoard } from '@utils/types'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
+import { hubs } from '@utils/Hubs'
+
 type UpdateTaskNameEditorProps = {
   task?: TaskDetailForBoard
   hubConnection?: HubConnection
   onUpdateTaskName?: (taskName: string) => void
 }
+
 function UpdateTaskNameEditor({ task, onUpdateTaskName = () => {}, hubConnection }: UpdateTaskNameEditorProps) {
-  const projectId = useSelector((state: RootState) => state.project.activeProject.board.id)
-  const accountId = useSelector((state: RootState) => state.login.accountInfo.id)
   const [name, setName] = useState<string>()
   const handleToggle = () => {
     setName(name !== undefined ? undefined : task?.name)
     if (hubConnection) {
       if (name === undefined) {
-        hubConnection.invoke('SendStartUpdateTaskInfo', projectId, accountId, task?.id)
-      } else hubConnection.invoke('SendCancelUpdateTaskInfo', projectId, accountId, task?.id)
+        // trường hợp đang chuẩn bị bật editor
+        // SendStartUpdateTaskInfo
+        hubConnection.invoke(hubs.project.send.startUpdateTaskInfo, task?.id)
+      }
+      // SendCancelUpdateTaskInfo
+      else hubConnection.invoke(hubs.project.send.cancelUpdateTaskInfo, task?.id)
     }
   }
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
