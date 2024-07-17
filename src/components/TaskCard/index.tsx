@@ -34,7 +34,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const dispatch = useDispatch()
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  // const [modalState, setModalState] = useState<TaskDetailModelState>({ open: false })
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
 
@@ -58,8 +57,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
       dispatch(projectSlice.actions.deleteTask(data))
     }
   }
-
-  console.log('pathname >>> ', pathname)
 
   return (
     <>

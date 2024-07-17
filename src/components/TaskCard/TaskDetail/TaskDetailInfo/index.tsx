@@ -35,7 +35,7 @@ function TaskDetailInfo() {
     project?.members.find(p => p.id === taskDetail?.creatorId)
   )
   useEffect(() => {
-    if (projectHub.isConnected) {
+    if (projectHub.isConnected && taskDetail?.id) {
       // ReceiveUpdateTaskInfo
       projectHub.connection?.on(
         hubs.project.receive.updateTaskInfo,
@@ -51,18 +51,18 @@ function TaskDetailInfo() {
                   dueDate: data?.dueDate
                 } as typeof prev)
             )
-            setRemoteUpdating(undefined)
+            setRemoteUpdating(_prev => undefined)
           }
         }
       )
       // ReceiveStartUpdateTaskInfo
       projectHub.connection?.on(hubs.project.receive.startUpdateTaskInfo, (assignmentId: string, taskId: string) => {
-        if (taskId && taskId === taskDetail?.id) setRemoteUpdating({ assignmentId, taskId })
+        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(_prev => ({ assignmentId, taskId }))
       })
 
       // ReceiveCancelUpdateTaskInfo
       projectHub.connection?.on(hubs.project.receive.cancelUpdateTaskInfo, (_assignmentId: string, taskId: string) => {
-        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(undefined)
+        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(_prev => undefined)
       })
     }
   }, [projectHub, taskDetail?.id, context])

@@ -163,3 +163,28 @@ export const handleTriggerKeyPress = <TElement = HTMLInputElement>(
     }
   }
 }
+
+export const getCommentTime = (commentTime: number) => {
+  const commentDate = new Date(commentTime)
+  const currentDate = new Date()
+  const diffTime = currentDate.getTime() - commentDate.getTime()
+  const diffMinutes = Math.floor(diffTime / (1000 * 60))
+  if (diffMinutes < 60)
+    return {
+      diff: diffMinutes,
+      unit: 'minute'
+    }
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+  if (diffDays > 0) {
+    return {
+      diff: diffDays,
+      unit: 'day'
+    }
+  } else {
+    return {
+      diff: Math.floor(diffTime / (1000 * 60 * 60)),
+      unit: 'hour'
+    }
+  }
+  // return diffDays > 0 ? `${diffDays}d ago` : `${Math.floor(diffTime / (1000 * 60 * 60))}h ago`
+}

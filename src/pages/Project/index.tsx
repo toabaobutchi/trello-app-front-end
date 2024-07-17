@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
 import ProjectHeader from './partials/ProjectHeader'
-// import BoardContent from './partials/BoardContent'
 import { ProjectPageParams } from '@utils/types'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
@@ -13,7 +11,7 @@ import { RootState } from '@redux/store'
 import HttpClient from '@utils/HttpClient'
 import TableContent from './partials/TableContent'
 import LoadingLayout from '@layouts/LoadingLayout'
-import { ProjectHub } from '@utils/Hubs'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 const BoardContent = lazy(() => import('./partials/BoardContent'))
 
@@ -22,8 +20,8 @@ const http = new HttpClient()
 function Project() {
   const params = useParams() as ProjectPageParams
   //TODO Tuy vao viewmode ma lay ra du lieu can thiet
-  const project = useSelector((state: RootState) => state.project.activeProject.board)
-  const account = useSelector((state: RootState) => state.login.accountInfo)
+  const activeProject = useSelector((state: RootState) => state.project.activeProject)
+  const { board: project, members } = activeProject
   const dispatch = useDispatch()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
 
@@ -38,36 +36,40 @@ function Project() {
   }, [params?.projectId])
 
   useEffect(() => {
-    if (project?.id) {
-      if (projectHub.isConnected) {
-        const connection = projectHub.connection
-        connection?.invoke('SubscribeProject', 'project', 'userid').catch(() => {})
+    if (project?.id && project?.id === params.projectId) {
+      if (!projectHub.isConnected) {
+        projectHub.connection
       }
     }
 
     return () => {
-      projectHub.disconnect()
+      if (projectHub.isConnected && project?.id && project?.id === params.projectId) {
+        projectHub.disconnect()
+      }
     }
   }, [project?.id])
 
   useEffect(() => {
-    if (projectHub.isConnected) {
-      projectHub.connection?.on('ReceiveSubscriber', (assignmentIds: string[]) => {
+    if (projectHub.isConnected && project?.id && project.id === params.projectId) {
+      // ReceiveSubscriber
+      projectHub.connection?.on(hubs.project.receive.subscriber, (assignmentIds: string[]) => {
         dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
       })
     }
-  }, [projectHub.connection])
+  }, [projectHub.isConnected, project?.id, project?.id === params.projectId])
 
   useEffect(() => {
     // tải thành viên của project
-    http.getAuth(`/assignments/in-project/${project?.id}`).then(res => {
-      if (res?.status === HttpStatusCode.Ok) {
-        dispatch(projectSlice.actions.setProjectMembers(res.data))
-      } else {
-        console.log('Can not get project members', res?.data)
-      }
-    })
+    if (project?.id && project.id === params.projectId)
+      http.getAuth(`/assignments/in-project/${project?.id}`).then(res => {
+        if (res?.status === HttpStatusCode.Ok) {
+          dispatch(projectSlice.actions.setProjectMembers(res.data))
+        } else {
+          console.log('Can not get project members', res?.data)
+        }
+      })
   }, [project?.id])
+
   return (
     <>
       {project && (
@@ -80,11 +82,11 @@ function Project() {
               </>
             }
           >
-            {project && params.viewMode === 'board' && <BoardContent />}
+            {project?.id && project.id === params.projectId && params.viewMode === 'board' && <BoardContent />}
           </Suspense>
 
           {project && params.viewMode === 'table' && <TableContent />}
-          <Outlet />
+          {members.length > 0 && <Outlet />}
         </Flex>
       )}
     </>

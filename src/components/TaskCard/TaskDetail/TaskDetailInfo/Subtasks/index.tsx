@@ -28,12 +28,14 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
         hubs.project.receive.checkSubtask,
         (_assignmentId: string, taskid: string, subtaskId: number, status: boolean) => {
           if (taskId !== taskid) return
-          const newSubtasks = [..._subtasks]
-          const updatedSubtask = newSubtasks?.find(s => s.id === subtaskId)
-          if (updatedSubtask) {
-            updatedSubtask!.isCompleted = status
-            setSubtasks(newSubtasks)
-          }
+          console.log('ReceiveCheckSubtask')
+          setSubtasks(prev => {
+            const newSubtasks = [...prev]
+            const updatedSubtask = newSubtasks.find(subtask => subtask.id === subtaskId)
+            if (!updatedSubtask) return prev
+            updatedSubtask.isCompleted = status
+            return newSubtasks
+          })
         }
       )
       // ReceiveChangeSubtaskName
@@ -93,9 +95,10 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
     if (res?.status === HttpStatusCode.Ok) {
       // update lại trạng thái subtask
       updatedSubtask!.isCompleted = res?.data
-      setSubtasks(newSubtasks)
+      setSubtasks(_prev => newSubtasks)
       if (hubConnection) {
         // SendCheckSubtask
+        console.log('SendCheckSubtask')
         hubConnection.invoke(hubs.project.send.checkSubtask, taskId, updatedSubtask?.id, Boolean(res?.data))
       }
     }
@@ -122,7 +125,7 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
     setSubtasks(_prev => newSubtasks)
     if (hubConnection) {
       // SendChangeSubtaskName
-      hubConnection.invoke(hubs.project.send.changeSubtaskName, taskId, updatedSubtask?.id, name)
+      hubConnection.invoke(hubs.project.send.changeSubtaskName, taskId, updatedSubtask?.id, name).catch(_ => {})
     }
   }
   return (

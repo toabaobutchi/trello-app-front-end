@@ -1,4 +1,4 @@
-import { HubConnection } from '@microsoft/signalr'
+import { HubConnection, HubConnectionState } from '@microsoft/signalr'
 import HubBase from './HubBase'
 
 export class ProjectHub extends HubBase {
@@ -7,8 +7,9 @@ export class ProjectHub extends HubBase {
     super(path ?? '/projectHub')
   }
   get connection() {
-    if (!this.isConnected) {
+    if (!ProjectHub.connection) {
       this.connect().then(connection => {
+        console.log('Projecthub connection established')
         ProjectHub.connection = connection
       })
     }
@@ -16,12 +17,16 @@ export class ProjectHub extends HubBase {
   }
 
   get isConnected() {
-    return ProjectHub.connection && ProjectHub.connection.state.startsWith('Connect')
+    return Boolean(ProjectHub.connection && ProjectHub.connection.state === HubConnectionState.Connected)
+  }
+
+  get isConnecting() {
+    return Boolean(ProjectHub.connection && ProjectHub.connection.state.includes('Connect'))
   }
 
   disconnect() {
-    if (ProjectHub.connection) {
-      ProjectHub.connection.stop().then(() => (ProjectHub.connection = undefined))
+    if (this.isConnected) {
+      ProjectHub.connection?.stop().then(() => (ProjectHub.connection = undefined))
     }
   }
 }

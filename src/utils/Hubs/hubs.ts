@@ -41,7 +41,8 @@ export const hubs = {
       finishAddSubtasks: 'ReceiveFinishAddSubtasks',
       addSubtaskResult: 'ReceiveAddSubtaskResult',
       deleteSubtask: 'ReceiveDeleteSubtask',
-      addNewTask: 'ReceiveAddNewTask'
+      addNewTask: 'ReceiveAddNewTask',
+      subscriber: 'ReceiveSubscriber'
     }
   },
   taskDetail: {

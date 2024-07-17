@@ -7,7 +7,7 @@ export class TaskHub extends HubBase {
     super(path ?? '/taskHub')
   }
   get connection() {
-    if (!this.isConnected) {
+    if (!TaskHub.connection) {
       this.connect().then(connection => {
         TaskHub.connection = connection
       })
@@ -17,7 +17,7 @@ export class TaskHub extends HubBase {
 
   get isConnected() {
     // `Connected` và `Connecting` thì trả về true, không cần phải gọi đi kết nối lại
-    return TaskHub.connection && TaskHub.connection.state.startsWith('Connect')
+    return Boolean(TaskHub.connection && TaskHub.connection.state.toLowerCase().includes('connect'))
   }
 
   disconnect() {

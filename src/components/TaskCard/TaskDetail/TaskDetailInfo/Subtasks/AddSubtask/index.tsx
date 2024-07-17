@@ -3,6 +3,7 @@ import MultipleInput from '@comps/MultipleInput'
 import Flex from '@comps/StyledComponents/Flex'
 import { HubConnection } from '@microsoft/signalr'
 import { RootState } from '@redux/store'
+import { hubs } from '@utils/Hubs'
 import { AssignmentResponse } from '@utils/types'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -17,18 +18,19 @@ function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
   const [texts, setTexts] = useState<string[]>([])
   const [remoteActors, setRemoteActors] = useState<AssignmentResponse[]>([])
   const project = useSelector((state: RootState) => state.project.activeProject)
-  const accountId = useSelector((state: RootState) => state.login.accountInfo.id)
   const [openInput, setOpenInput] = useState(false)
   useEffect(() => {
     if (hubConnection) {
-      hubConnection.on('ReceiveAddingSubtasks', (assignmentId: string, taskid: string) => {
+      // ReceiveAddingSubtasks
+      hubConnection.on(hubs.project.receive.addingSubtasks, (assignmentId: string, taskid: string) => {
         if (taskId !== taskid) return
         const actor = project?.members?.find(m => m.id === assignmentId)
         if (actor) {
           setRemoteActors(prev => [...prev, actor])
         }
       })
-      hubConnection.on('ReceiveFinishAddSubtasks', (assignmentId: string, taskid: string) => {
+      // ReceiveFinishAddSubtasks
+      hubConnection.on(hubs.project.receive.finishAddSubtasks, (assignmentId: string, taskid: string) => {
         if (taskid !== taskId) return
         setRemoteActors(prev => {
           let newRemoteActors = [...prev]
@@ -42,7 +44,8 @@ function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
     setOpenInput(!openInput)
     // ấn cancel và đã có nhập dữ liệu rồi
     if (hubConnection && !openInput && texts.length > 0) {
-      hubConnection.invoke('SendFinishAddSubtasks', project?.board?.id, accountId, taskId)
+      // SendFinishAddSubtasks
+      hubConnection.invoke(hubs.project.send.finishAddSubtasks, taskId)
     }
     setTexts([])
   }
@@ -52,7 +55,8 @@ function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
   const handleAddTask = () => {
     if (texts.length) {
       if (hubConnection) {
-        hubConnection.invoke('SendFinishAddSubtasks', project?.board?.id, accountId, taskId)
+        // SendFinishAddSubtasks
+        hubConnection.invoke(hubs.project.send.finishAddSubtasks, taskId)
       }
       onAddTask(texts)
     }
@@ -61,7 +65,8 @@ function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
   const handleTrigger = (value: string) => {
     // gọi 1 lần, không cần gọi lần 2
     if (hubConnection && texts.length === 0) {
-      hubConnection.invoke('SendAddingSubtasks', project.board.id, accountId, taskId)
+      // SendAddingSubtasks
+      hubConnection.invoke(hubs.project.send.addingSubtasks, taskId)
     }
     setTexts([...texts, value])
   }
@@ -73,12 +78,10 @@ function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
           <ul className='remote-actors'>
             {remoteActors.map(actor => {
               return (
-                <>
-                  <li className='row gap-1'>
-                    <img src={actor?.avatar} alt='avatar' />
-                    <span>{actor?.email}</span>
-                  </li>
-                </>
+                <li key={actor.id} className='row gap-1'>
+                  <img src={actor?.avatar} alt='avatar' />
+                  <span>{actor?.email}</span>
+                </li>
               )
             })}
           </ul>

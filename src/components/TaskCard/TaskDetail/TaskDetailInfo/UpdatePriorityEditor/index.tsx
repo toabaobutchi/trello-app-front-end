@@ -55,7 +55,7 @@ function UpdatePriorityEditor({ priority, taskId, onUpdate = () => {}, hubConnec
         hubConnection.invoke(hubs.project.send.startUpdateTaskInfo, taskId)
       }
       // SendCancelUpdateTaskInfo
-      else hubConnection.invoke(hubs.project.send.startUpdateTaskInfo, taskId)
+      else hubConnection.invoke(hubs.project.send.cancelUpdateTaskInfo, taskId)
     }
   }
   const handleChoose = ({ value }: { value: string }) => {

@@ -65,7 +65,6 @@ export type RemoteDraggingType = {
 function BoardContent() {
   const dispatch = useDispatch<AppDispatch>()
   const project = useSelector((state: RootState) => state.project.activeProject)
-  // const account = useSelector((state: RootState) => state.login.accountInfo)
   // dùng để lưu trữ tạm thời để các kéo thả - sau đó cập nhật lại sau
   const [listState, setListState] = useState<ListResponseForBoard[]>([])
   const [activeDragItem, setActiveDragItem] = useState<ActiveDragItemType>()
@@ -80,24 +79,24 @@ function BoardContent() {
     setListState(_prev => lists as ListResponseForBoard[])
   }, [project?.board?.lists, dispatch, project?.currentFilters, project?.changeId])
 
-  useEffect(() => {
-    if (project?.board?.id) {
-      if (!projectHub.isConnected) projectHub.connection?.invoke('SendAddToDragGroup').catch(() => {})
-    }
+  // useEffect(() => {
+  //   if (project?.board?.id) {
+  //     if (!projectHub.isConnected) projectHub.connection
+  //   }
 
-    return () => {
-      // if (dragHub) projectHub.stop()
-      if (projectHub.isConnected) {
-        projectHub.connection?.stop()
-      }
-    }
-  }, [projectHub, project?.board?.id])
+  //   return () => {
+  //     if (projectHub.isConnected) {
+  //       projectHub.connection?.stop()
+  //     }
+  //   }
+  // }, [projectHub, project?.board?.id])
 
   // signalr listeners
   useEffect(() => {
-    if (project?.board?.id) {
+    if (project?.board?.id && projectHub.isConnected) {
       // ReceiveStartDragList
       projectHub.connection?.on(hubs.project.receive.startDragList, (assignmentId: string, listId: string) => {
+        console.log('BoardContent >>> ReceiveStartDragList >>> ', listId)
         setRemoteDragging({
           isDragging: true,
           subId: assignmentId,
@@ -107,9 +106,10 @@ function BoardContent() {
       })
       // ReceiveEndDragList
       projectHub.connection?.on(hubs.project.receive.endDragList, (_assignmentId: string, updatedListOrder: string) => {
+        console.log('BoardContent >>> ReceiveEndDragList >>> ', updatedListOrder)
         dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
         setTimeout(() => {
-          if (remoteDragging) setRemoteDragging(undefined)
+          setRemoteDragging(_prev => undefined)
         }, 500)
       })
       // ReceiveStartDragTask
@@ -131,7 +131,7 @@ function BoardContent() {
           dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
           // setRemoteDragging(undefined)
           setTimeout(() => {
-            if (remoteDragging) setRemoteDragging(undefined)
+            setRemoteDragging(_prev => undefined)
           }, 500)
         }
       )
@@ -168,8 +168,8 @@ function BoardContent() {
         dispatch(projectSlice.actions.addNewTask(data))
       })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectHub, dispatch])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectHub, dispatch, project?.board?.id])
 
   const findColumnByCardId = (cardId: string) => {
     return listState?.find(list => list?.tasks?.map(task => task.id).includes(cardId))

@@ -1,21 +1,37 @@
 import Flex from '@comps/StyledComponents/Flex'
 import { RootState } from '@redux/store'
+import { getCommentTime } from '@utils/functions'
 import { CommentResponse } from '@utils/types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 function ChatBoxItem({ comment }: { comment: CommentResponse }) {
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [commentor] = useState(() => members.find(m => m.id === comment?.assignmentId))
-  const [commentTime] = useState(() => {
-    const commentDate = new Date(comment.commentAt)
-    const currentDate = new Date()
-    const diffTime = currentDate.getTime() - commentDate.getTime()
-    const diffMinutes = Math.floor(diffTime / (1000 * 60))
-    if (diffMinutes < 60) return `${diffMinutes}m ago`
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-    return diffDays > 0 ? `${diffDays}d ago` : `${Math.floor(diffTime / (1000 * 60 * 60))}h ago`
-  })
+  const [commentTime, setCommentTime] = useState<{ diff: number; unit: string }>()
+  useEffect(() => {
+    const commentTime = getCommentTime(comment.commentAt)
+    setCommentTime(commentTime)
+    let timer = 0
+    // ngừng lại khi vượt quá 14 ngày
+    if (commentTime.diff < 14 && commentTime.unit.toLowerCase() === 'day') {
+      let reCalculateTime = 0
+      if (commentTime.unit.toLowerCase() === 'day') {
+        reCalculateTime = 60000 * 24
+      } else if (commentTime.unit.toLowerCase() === 'hour') {
+        reCalculateTime = 60000 * 60
+      } else {
+        reCalculateTime = 60000
+      }
+      timer = setInterval(() => {
+        setCommentTime(getCommentTime(comment.commentAt))
+      }, reCalculateTime)
+    }
+
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [])
   return (
     <>
       <div className='chat-box-content-item'>
@@ -26,7 +42,10 @@ function ChatBoxItem({ comment }: { comment: CommentResponse }) {
             </span>
             <p className='chat-box-content-item-info-display-name'>{commentor?.displayName}</p>
           </Flex>
-          <p className='chat-box-content-item-info-time'>{commentTime}</p>
+          <p className='chat-box-content-item-info-time'>
+            {commentTime?.diff}
+            {commentTime?.unit.charAt(0)} ago
+          </p>
         </div>
         <div className='chat-box-content-item-comment'>
           <p>{comment.content}</p>
