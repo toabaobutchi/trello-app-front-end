@@ -7,8 +7,7 @@ import HttpClient from '@utils/HttpClient'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { TaskDetailContext, TaskDetailContextType } from '@pages/TaskDetailBoard/context'
-import { hubs, TaskHub } from '@utils/Hubs'
-import _ from 'lodash'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 const http = new HttpClient()
 
@@ -20,23 +19,17 @@ function ChatBox() {
   const account = useSelector((state: RootState) => state.login.accountInfo)
   const [assignment] = useState(members?.find(m => m.userId === account.id))
 
-  const [taskHub] = useState<TaskHub>(new TaskHub(task?.id))
+  const [projectHub] = useState<ProjectHub>(new ProjectHub())
   useEffect(() => {
-    if (!taskHub.isConnected && task?.id) {
-      const connection = taskHub.connection
-      console.log('Run listener', connection?.state)
-      connection?.on(hubs.taskDetail.receive.comment, (commentResponse: CommentResponse) => {
-        console.log('Received comment: ', commentResponse)
-        setComments(prev => [...prev, commentResponse])
+    if (projectHub.isConnected && task?.id) {
+      projectHub.connection?.on(hubs.project.receive.comment, (commentResult: CommentResponse) => {
+        if (commentResult.taskId === task.id) {
+          setComments(prev => [...prev, commentResult])
+        }
       })
     }
-
-    return () => {
-      if (taskHub.isConnected && task?.id) {
-        taskHub.connection?.stop()
-      }
-    }
   }, [task?.id])
+
   useEffect(() => {
     // Fetch comments from API
     if (task?.id)
@@ -47,12 +40,6 @@ function ChatBox() {
       })
   }, [task?.id])
 
-  // useEffect(() => {
-  //   if (taskHub.isConnected && task?.id) {
-  //     console.log('run listener')
-  //     taskHub.connection
-  //   }
-  // }, [taskHub.isConnected])
   const handleComment = async (comment: string) => {
     const commentModel: CreateCommentModel = {
       content: comment,
@@ -62,8 +49,9 @@ function ChatBox() {
     const res = await http.postAuth('/comments', commentModel)
     if (res?.status === 200) {
       setComments(prev => [...prev, res?.data])
-      if (taskHub.isConnected) {
-        taskHub.connection?.invoke(hubs.taskDetail.send.comment, task?.id, res?.data).catch(_ => {})
+
+      if (projectHub.isConnected) {
+        projectHub.connection?.invoke(hubs.project.send.comment, res?.data)
       }
     }
   }

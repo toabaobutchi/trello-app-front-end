@@ -21,10 +21,13 @@ function MultipleSelectList({ items, selectedItems, label = '', onSelect = () =>
   const [selectList, setSelectList] = useState<SelectListState>({
     selectedItems: selectedItems ?? [],
     isSelecting: false,
-    restSelectList: items.filter(item => {
-      const index = selectedItems?.findIndex((sItem: SelectListItem) => sItem.value === item.value)
-      return index === -1
-    })
+    restSelectList:
+      selectedItems && selectedItems.length
+        ? items.filter(item => {
+            const index = selectedItems?.findIndex((sItem: SelectListItem) => sItem.value === item.value)
+            return index === -1
+          })
+        : items
   })
   const handleToggleSelect = useCallback(() => {
     setSelectList({

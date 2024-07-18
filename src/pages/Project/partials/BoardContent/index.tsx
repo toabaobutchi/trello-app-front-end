@@ -2,6 +2,7 @@ import Flex from '@comps/StyledComponents/Flex'
 import {
   ChangeTaskOrderModel,
   ChangeTaskOrderResponse,
+  CreateListResponse,
   CreateTaskResponse,
   DragOverResult,
   ListResponseForBoard,
@@ -79,24 +80,11 @@ function BoardContent() {
     setListState(_prev => lists as ListResponseForBoard[])
   }, [project?.board?.lists, dispatch, project?.currentFilters, project?.changeId])
 
-  // useEffect(() => {
-  //   if (project?.board?.id) {
-  //     if (!projectHub.isConnected) projectHub.connection
-  //   }
-
-  //   return () => {
-  //     if (projectHub.isConnected) {
-  //       projectHub.connection?.stop()
-  //     }
-  //   }
-  // }, [projectHub, project?.board?.id])
-
   // signalr listeners
   useEffect(() => {
     if (project?.board?.id && projectHub.isConnected) {
       // ReceiveStartDragList
       projectHub.connection?.on(hubs.project.receive.startDragList, (assignmentId: string, listId: string) => {
-        console.log('BoardContent >>> ReceiveStartDragList >>> ', listId)
         setRemoteDragging({
           isDragging: true,
           subId: assignmentId,
@@ -106,7 +94,6 @@ function BoardContent() {
       })
       // ReceiveEndDragList
       projectHub.connection?.on(hubs.project.receive.endDragList, (_assignmentId: string, updatedListOrder: string) => {
-        console.log('BoardContent >>> ReceiveEndDragList >>> ', updatedListOrder)
         dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
         setTimeout(() => {
           setRemoteDragging(_prev => undefined)
@@ -166,6 +153,10 @@ function BoardContent() {
       // ReceiveAddNewTask
       projectHub.connection?.on(hubs.project.receive.addNewTask, (_assignmentId: string, data: CreateTaskResponse) => {
         dispatch(projectSlice.actions.addNewTask(data))
+      })
+
+      projectHub.connection?.on(hubs.project.receive.addNewList, (data: CreateListResponse) => {
+        dispatch(projectSlice.actions.addNewList(data))
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

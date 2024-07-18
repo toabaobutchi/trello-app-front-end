@@ -3,12 +3,13 @@ import './AddNewList.scss'
 import { useEffect, useRef, useState } from 'react'
 import Flex from '@comps/StyledComponents/Flex'
 import FloatLabelInput from '@comps/FloatLabelInput'
-import { CreateListModel, InputChange } from '@utils/types'
+import { CreateListModel, CreateListResponse, InputChange } from '@utils/types'
 import useClickTracker from '@hooks/useClickTracker'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import HttpClient from '@utils/HttpClient'
 import { projectSlice } from '@redux/ProjectSlice'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 const http = new HttpClient()
 
@@ -40,11 +41,12 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
   const activeProject = useSelector((state: RootState) => state.project.activeProject.board)
   const dispatch = useDispatch()
   const [listName, setListName] = useState('')
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { outClick } = useClickTracker(containerRef?.current as HTMLElement)
+  const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const handleChangeListName = (e: InputChange) => {
     setListName(e.target.value)
   }
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { outClick } = useClickTracker(containerRef?.current as HTMLElement)
   useEffect(() => {
     if (outClick.isOutClick) {
       onCancel()
@@ -63,7 +65,11 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
     if (res?.status === 200) {
       onCancel()
       // cập nhật lại list của project
-      dispatch(projectSlice.actions.addNewList(res.data))
+      const data = res.data as CreateListResponse
+      dispatch(projectSlice.actions.addNewList(data))
+      if (projectHub.isConnected) {
+        projectHub.connection?.invoke(hubs.project.send.addNewList, data)
+      }
     } else {
       console.log('Can not create list')
     }

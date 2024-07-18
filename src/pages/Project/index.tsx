@@ -56,7 +56,7 @@ function Project() {
         dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
       })
     }
-  }, [projectHub.isConnected, project?.id, project?.id === params.projectId])
+  }, [projectHub.isConnected, project.id, projectHub.connection, params.projectId, dispatch])
 
   useEffect(() => {
     // tải thành viên của project

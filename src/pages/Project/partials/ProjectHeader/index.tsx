@@ -6,6 +6,7 @@ import ProjectShare from './ProjectShare'
 import WorkspaceTreeMenu from './WorkspaceTreeMenu'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import ProjectMembers from './ProjectMembers'
 
 function ProjectHeader() {
   const project = useSelector((state: RootState) => state.project.activeProject)
@@ -34,6 +35,7 @@ function ProjectHeader() {
           <ProjectFilterMenu />
           <SearchInput attributes={{ id: 'search-card-input', placeholder: 'Search in project' }}></SearchInput>
           <ProjectShare />
+          <ProjectMembers />
         </Flex>
       </Flex>
     </>

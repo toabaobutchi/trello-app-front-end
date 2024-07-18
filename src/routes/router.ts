@@ -10,6 +10,7 @@ const routeLinks = {
   workspaces: '/workspaces/:ownerShip/:slug/:workspaceId',
   project: '/projects/:ownerShip/:slug/:projectId/v/:viewMode',
   task: 'task/:taskId',
+  members: 'members',
   projectInvitation: '/projects/:pid/invitation'
 }
 

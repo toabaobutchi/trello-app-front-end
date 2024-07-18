@@ -25,7 +25,9 @@ export const hubs = {
       finishAddSubtasks: 'SendFinishAddSubtasks',
       addSubtaskResult: 'SendAddSubtaskResult',
       deleteSubtask: 'SendDeleteSubtask',
-      addNewTask: 'SendAddNewTask'
+      addNewTask: 'SendAddNewTask',
+      comment: 'SendComment',
+      addNewList: 'SendAddNewList'
     },
     receive: {
       startDragList: 'ReceiveStartDragList',
@@ -42,17 +44,17 @@ export const hubs = {
       addSubtaskResult: 'ReceiveAddSubtaskResult',
       deleteSubtask: 'ReceiveDeleteSubtask',
       addNewTask: 'ReceiveAddNewTask',
-      subscriber: 'ReceiveSubscriber'
+      subscriber: 'ReceiveSubscriber',
+      comment: 'RecieveComment',
+      addNewList: 'ReceiveAddNewList'
     }
   },
   taskDetail: {
     send: {
-      subscribeTaskGroup: 'SubscribeTaskGroup',
-      comment: 'SendComment'
+      subscribeTaskGroup: 'SubscribeTaskGroup'
     },
     receive: {
-      subscribeTaskGroup: 'RecieveSubscriber',
-      comment: 'RecieveComment'
+      subscribeTaskGroup: 'RecieveSubscriber'
     }
   }
 }

@@ -11,6 +11,7 @@ import React, { Suspense } from 'react'
 import routeLinks, { loader } from '@routes/router'
 import LoadingLayout from '@layouts/LoadingLayout'
 import TaskDetailBoard from '@pages/TaskDetailBoard'
+import ProjectMember from '@pages/ProjectMember'
 const Home = React.lazy(() => import('@pages/Home'))
 const Error = React.lazy(() => import('@pages/Error'))
 const Welcome = React.lazy(() => import('@pages/Welcome'))
@@ -18,7 +19,6 @@ const YourTasks = React.lazy(() => import('@pages/YourTasks'))
 const Workspaces = React.lazy(() => import('@pages/Workspaces'))
 const Project = React.lazy(() => import('@pages/Project'))
 const ProjectInvitation = React.lazy(() => import('@pages/ProjectInvitation'))
-
 
 const router = createBrowserRouter([
   {
@@ -57,6 +57,10 @@ const router = createBrowserRouter([
           {
             path: routeLinks.task,
             element: <TaskDetailBoard />
+          },
+          {
+            path: routeLinks.members,
+            element: <ProjectMember />
           }
         ]
       },
