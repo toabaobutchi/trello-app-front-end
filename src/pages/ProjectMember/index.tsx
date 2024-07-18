@@ -9,6 +9,7 @@ import Tooltip from '@comps/Tooltip-v2'
 import MultipleSelectList from '@comps/MultipleSelectList'
 import { roles } from '@utils/objects'
 import ProjectMemberFilter from './ProjectMemberFilter'
+import ProjectMemberItem from './ProjectMemberItem'
 
 function ProjectMember() {
   const navigate = useNavigate()
@@ -44,30 +45,9 @@ function ProjectMember() {
         </Flex> */}
         <ProjectMemberFilter />
         {/* Render project members */}
-        {projectMembers.map(member => {
-          const isOnline = onlineMembers?.includes(member?.id)
-          return (
-            <Flex $alignItem='center' $gap='1rem' key={member.id} className='member-info-row'>
-              <div className={`member-info-avatar`}>
-                <img src={member.avatar} alt='avatar' />
-              </div>
-              <div className='member-info-name'>
-                <p className='row gap-1'>
-                  {member?.displayName} {isOnline && <span className='active-text'>{isOnline ? 'Active' : ''}</span>}
-                </p>
-                <p className='text-secondary'>{member?.email}</p>
-              </div>
-              <div className='member-info-permission'>{member?.permission}</div>
-              <Flex $alignItem='center' $gap='0.5rem' className='member-info-actions'>
-                <Tooltip content='Kick the member out' arrow delay='0.5s'>
-                  <Button variant='text' theme='danger'>
-                    <i className='fa-solid fa-arrow-right-from-bracket'></i>
-                  </Button>
-                </Tooltip>
-              </Flex>
-            </Flex>
-          )
-        })}
+        {projectMembers.map(member => (
+          <ProjectMemberItem key={member.id} member={member} />
+        ))}
       </Modal>
     </>
   )

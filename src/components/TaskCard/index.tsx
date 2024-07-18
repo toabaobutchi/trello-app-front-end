@@ -58,6 +58,14 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     }
   }
 
+  const handleJoinTask = async () => {
+    const res = await http.postAuth(`/tasks/${task?.id}/join`, {})
+    if (res?.status === HttpStatusCode.Ok) {
+      console.log(res.data)
+      // dispatch(projectSlice.actions.joinTask(task))
+    }
+  }
+
   return (
     <>
       <div
@@ -100,7 +108,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             <MenuItem className='text-primary'>
               <i className='fa-solid fa-up-down-left-right'></i> Move
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={handleJoinTask}>
               <i className='fa-solid fa-right-to-bracket'></i> Join
             </MenuItem>
           </DropdownMenu>
