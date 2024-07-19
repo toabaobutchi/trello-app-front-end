@@ -5,20 +5,35 @@ import SwitchButton from '@comps/SwitchButton'
 import TaskDetail from '@comps/TaskCard/TaskDetail'
 import DuplicateTask from '@comps/TaskCard/TaskDetail/DuplicateTask'
 import HttpClient from '@utils/HttpClient'
-import { MarkedTaskResponse, TaskDetailForBoard } from '@utils/types'
+import { JoinTaskResponse, MarkedTaskResponse, TaskDetailForBoard } from '@utils/types'
 import { HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TaskDetailContext } from './context'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import useAccount from '@hooks/useAccount'
+import { useDispatch } from 'react-redux'
+import { projectSlice } from '@redux/ProjectSlice'
 
 const http = new HttpClient()
 
 function TaskDetailBoard() {
   const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
   const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
+  const { members } = useProjectSelector()
+  const dispatch = useDispatch()
+  const { accountInfo } = useAccount()
+  const [isJoined, setIsJoined] = useState(false)
   const navigate = useNavigate()
   const [joinModal, setJoinModal] = useState(false)
   const { taskId } = useParams()
+  useEffect(() => {
+    if (taskDetail?.id) {
+      const member = members.find(m => m.userId === accountInfo?.id)
+      if (!member) setIsJoined(false)
+      else setIsJoined(taskDetail?.taskAssignmentIds?.includes(member.id) ?? false)
+    }
+  }, [taskDetail?.id, members])
   useEffect(() => {
     http.getAuth(`/tasks/${taskId}/v/board`).then(res => {
       if (res?.status === HttpStatusCode.Ok) {
@@ -69,6 +84,15 @@ function TaskDetailBoard() {
       )
     }
   }
+  const handleJoinTask = async () => {
+    const res = await http.postAuth(`/tasks/${taskId}/join`, {})
+    if (res?.status === HttpStatusCode.Ok) {
+      handleToggleJoinModal()
+      setIsJoined(true)
+      const data = res?.data as JoinTaskResponse
+      dispatch(projectSlice.actions.joinTask(data))
+    }
+  }
   return (
     <>
       <TaskDetailContext.Provider value={{ task: taskDetail, setTask: setTaskDetail }}>
@@ -86,9 +110,11 @@ function TaskDetailBoard() {
                     <Button variant='text' theme='default'>
                       <i className='fa-regular fa-trash-can'></i> Delete
                     </Button>
-                    <Button onClick={handleToggleJoinModal} variant='text' theme='default'>
-                      <i className='fa-solid fa-right-to-bracket'></i> Join
-                    </Button>
+                    {!isJoined && (
+                      <Button onClick={handleToggleJoinModal} variant='text' theme='default'>
+                        <i className='fa-solid fa-right-to-bracket'></i> Join
+                      </Button>
+                    )}
                     <Button variant='text' theme='default'>
                       <i className='fa-regular fa-envelope'></i> Invite member
                     </Button>
@@ -152,7 +178,7 @@ function TaskDetailBoard() {
                   <Button onClick={handleToggleJoinModal} variant='filled' theme='danger'>
                     Cancel
                   </Button>
-                  <Button variant='filled' theme='primary'>
+                  <Button onClick={handleJoinTask} variant='filled' theme='primary'>
                     Join
                   </Button>
                 </Flex>

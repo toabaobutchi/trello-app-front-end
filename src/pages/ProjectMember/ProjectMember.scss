@@ -55,3 +55,8 @@
     color: var(--primary-color);
   }
 }
+
+.profile-expanded {
+  border-radius: var(--primary-radius);
+  border: var(--thin-border-width) solid var(--primary-color);
+}

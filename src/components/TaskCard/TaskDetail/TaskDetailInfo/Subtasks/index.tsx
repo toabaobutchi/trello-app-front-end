@@ -7,6 +7,8 @@ import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
+import { useDispatch } from 'react-redux'
+import { projectSlice } from '@redux/ProjectSlice'
 
 const http = new HttpClient()
 
@@ -18,6 +20,7 @@ type SubtasksProps = {
 
 function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
   const [_subtasks, setSubtasks] = useState<SubtaskForBoard[]>([])
+  const dispatch = useDispatch()
   useEffect(() => {
     setSubtasks(subtasks)
   }, [subtasks])
@@ -80,6 +83,7 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
         // SendAddSubtaskResult
         hubConnection.invoke(hubs.project.send.addSubtaskResult, taskId, data)
       }
+      dispatch(projectSlice.actions.changeSubtaskCount({ taskId, subtaskCount: data.length }))
     }
   }
   const handleCheckSubtask = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,9 +102,9 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
       setSubtasks(_prev => newSubtasks)
       if (hubConnection) {
         // SendCheckSubtask
-        console.log('SendCheckSubtask')
         hubConnection.invoke(hubs.project.send.checkSubtask, taskId, updatedSubtask?.id, Boolean(res?.data))
       }
+      dispatch(projectSlice.actions.changeSubtaskStatus({ taskId, status: Boolean(res?.data) }))
     }
   }
   const handleDeleteSubtask = async (subtaskId: number) => {
@@ -115,6 +119,7 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
         // SendDeleteSubtask
         hubConnection.invoke(hubs.project.send.deleteSubtask, taskId, data.id)
       }
+      dispatch(projectSlice.actions.changeSubtaskCount({ taskId, subtaskCount: -1 }))
     }
   }
   const handleChangeSubtaskName = (sid: number, name: string) => {

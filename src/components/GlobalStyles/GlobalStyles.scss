@@ -24,6 +24,12 @@
   --table-row-bg-color: #f4f4f4;
   --card-radius: 15px;
 
+  --danger-bg-color: #e9067821;
+  --info-bg-color: #2e70ff21;
+  --warning-bg-color: #d89e0021;
+  --primary-bg-color: #007bc221;
+  --success-bg-color: #02a43021;
+
   --primary-radius: 5px;
   --secondary-radius: 3px;
   --chat-input-radius: 1.3rem;
@@ -131,7 +137,7 @@ html {
 
 .card-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 }
 
 .remote-dragging-object {

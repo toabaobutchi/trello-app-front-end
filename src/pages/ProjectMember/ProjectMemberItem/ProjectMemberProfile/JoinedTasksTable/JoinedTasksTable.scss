@@ -1,18 +1,39 @@
 .joined-tasks-container {
   padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+  grid-auto-flow: row dense;
+  width: 100%;
 }
 
 .joined-task-item {
   border: var(--thin-border-width) solid var(--light-color);
   border-radius: var(--primary-radius);
-  padding: 0.25rem 0.5rem;
-  width: max-content;
-  min-width: 200px;
+  padding: 0.5rem 1rem;
+  // width: max-content;
+  // min-width: 200px;
 
   &-name {
     font-weight: bold;
     text-decoration: none;
     font-size: 1.1rem;
+    color: var(--secondary-color);
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    &__high {
+      color: var(--danger-color);
+    }
+    &__medium {
+      color: var(--warning-color);
+    }
+    &__normal {
+      color: var(--primary-color);
+    }
+    &__low {
+      color: var(--success-color);
+    }
   }
 
   &-status {
@@ -31,12 +52,16 @@
     color: var(--warning-color);
   }
 
-  &-duedate, &-join-time {
-    font-size: 0.85rem;
+  &-duedate,
+  &-join-time {
+    font-size: 0.9rem;
 
     &__overdue {
       background-color: #e9067821;
       color: var(--danger-color);
     }
   }
+}
+.priority-tag-text {
+  font-size: 0.9rem;
 }

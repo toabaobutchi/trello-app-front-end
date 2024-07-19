@@ -20,7 +20,7 @@ function ProjectMemberItem({ member }: MemberItemProps) {
   }
   return (
     <>
-      <Flex $alignItem='center' $flexWrap='wrap' $gap='1rem' key={member.id} className='member-info-row'>
+      <Flex $alignItem='center' $flexWrap='wrap' $gap='1rem' key={member.id} className={`member-info-row ${profileExpanded ? 'profile-expanded': ''}`}>
         <div className={`member-info-avatar`}>
           <img src={member.avatar} alt='avatar' />
         </div>

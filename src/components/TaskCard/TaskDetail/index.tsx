@@ -37,26 +37,9 @@ const initTab = 'comments'
 
 const TaskDetail = memo(() => {
   const [activeTab, setActiveTab] = useState(initTab)
-  // const context = useContext(TaskDetailContext)
-  // const [taskHub] = useState<TaskHub>(new TaskHub())
   const handleTabClick = (value: string) => {
     setActiveTab(value)
   }
-  // useEffect(() => {
-  //   if (!taskHub.isConnected && context?.task?.id) {
-  //     const connection = taskHub.connection
-  //     if (connection) {
-  //       connection.then(connect => {
-  //         connect?.invoke(hubs.taskDetail.send.subscribeTaskGroup, context.task?.id).catch(_ => {})
-  //       })
-  //     }
-  //   }
-  //   return () => {
-  //     if (taskHub.isConnected && context?.task?.id) {
-  //       taskHub.disconnect()
-  //     }
-  //   }
-  // }, [context?.task?.id])
   return (
     <>
       <div className='task-details'>

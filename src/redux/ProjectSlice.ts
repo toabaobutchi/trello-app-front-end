@@ -9,6 +9,7 @@ import {
   DeletedTaskResponse,
   DragOverResult,
   FilterType,
+  JoinTaskResponse,
   ListResponseForBoard,
   ProjectResponseForBoard,
   TaskResponseForBoard,
@@ -32,6 +33,19 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    joinTask: (state, action) => {
+      const data = action?.payload as JoinTaskResponse
+      if (data) {
+        const containList = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(data.taskId))
+        if (containList) {
+          const task = containList.tasks?.find(t => t.id === data.taskId)
+          if (task) {
+            task.taskAssignmentIds.push(data.assignmentId)
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     changeSubtaskStatus: (state, action) => {
       const data = action.payload
       const taskId = data?.taskId as string

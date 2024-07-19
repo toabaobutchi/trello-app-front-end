@@ -10,7 +10,6 @@ import { HttpStatusCode } from 'axios'
 import UpdatePriorityEditor from './UpdatePriorityEditor'
 import UpdateDueDateEditor from './UpdateDueDateEditor'
 import UpdateDescriptionEditor from './UpdateDescriptionEditor'
-import { useHub } from '@hooks/useHub'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
@@ -70,9 +69,9 @@ function TaskDetailInfo() {
 
   const handleSendMessageToDragHub = (data: UpdatedTaskResponse) => {
     dispatch(projectSlice.actions.updateTaskInfo(data)) // cập nhật cho giao diện cá nhân
-    if (projectHub.connection && project?.board?.id && data && account?.id) {
+    if (projectHub.isConnected && project?.board?.id && data && account?.id) {
       // SendUpdateTaskInfo
-      projectHub.connection.invoke(hubs.project.send.updateTaskInfo, data)
+      projectHub.connection?.invoke(hubs.project.send.updateTaskInfo, data)
     }
   }
   const handleUpdateName = async (name: string) => {

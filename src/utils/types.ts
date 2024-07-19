@@ -488,3 +488,10 @@ export type AssignmentProfileResponse = {
   joinAt: number
   joinedTasks: JoinedTaskResponse[]
 }
+
+export type JoinTaskResponse = {
+  taskId: string
+  assignmentId: string
+  assignerId: string
+  assignedAt: number
+}

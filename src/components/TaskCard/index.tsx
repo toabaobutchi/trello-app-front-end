@@ -122,7 +122,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           <Flex $alignItem='center' $gap='1rem'>
             {task.subTaskCount ? (
               <div className='task-card-body-subtasks'>
-                <i className='fa-solid fa-list-check'></i> {task.completedSubTaskCount}/{task.subTaskCount}
+                <i className="fa-regular fa-square-check"></i> {task.completedSubTaskCount}/{task.subTaskCount}
               </div>
             ) : (
               <></>
@@ -150,12 +150,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               <img src={member.avatar} alt='avatar' />
             </div>
           ))}
-          {/* <div className='task-card-footer-members-image-container'>
-            <img
-              src='https://play-lh.googleusercontent.com/hJGHtbYSQ0nCnoEsK6AGojonjELeAh_Huxg361mVrPmzdwm8Ots-JzEH5488IS2nojI'
-              alt='avatar'
-            />
-          </div> */}
         </Flex>
       </div>
     </>
