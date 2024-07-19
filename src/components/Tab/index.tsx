@@ -1,6 +1,6 @@
 import './Tab.scss'
 
-interface TabNav {
+export type TabNav = {
   value: string
   display?: React.ReactNode
   toggleId?: string

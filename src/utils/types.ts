@@ -467,3 +467,24 @@ export type ProjectResponse = {
   slug: string
   listOrder?: string
 }
+
+export type Milisecond = number
+
+export type JoinedTaskResponse = {
+  id: string
+  name: string
+  isCompleted?: boolean
+  priority?: string
+  isMarkedNeedHelp?: boolean
+  listId: string
+  listName: string
+  dueDate?: number
+  assignedAt: number
+  assignmentCount: number
+}
+
+export type AssignmentProfileResponse = {
+  id: string
+  joinAt: number
+  joinedTasks: JoinedTaskResponse[]
+}

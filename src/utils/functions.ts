@@ -137,8 +137,7 @@ export const getDisplayDateString = (date: Date) => {
 
 export const getDateString = (date: Date, includeTime: boolean = false) => {
   if (!date) return ''
-  const dateString = `${date.getDate().toString().padStart(2, '0')}/${date
-    .getMonth()
+  const dateString = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
     .toString()
     .padStart(2, '0')}/${date.getFullYear()}`
   if (includeTime)

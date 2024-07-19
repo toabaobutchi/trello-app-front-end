@@ -5,13 +5,14 @@ import { RootState } from '@redux/store'
 import { AssignmentResponse } from '@utils/types'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import ProjectMemberProfile from './ProjectMemberProfile'
 
 type MemberItemProps = {
   member: AssignmentResponse
 }
 
 function ProjectMemberItem({ member }: MemberItemProps) {
-  const { onlineMembers } = useSelector((state: RootState) => state.project.activeProject)
+  const onlineMembers = useSelector((state: RootState) => state.project.activeProject.onlineMembers)
   const [profileExpanded, setProfileExpanded] = useState(false)
   const isOnline = onlineMembers?.includes(member.id) ?? false
   const handleToggleProfile = () => {
@@ -42,7 +43,7 @@ function ProjectMemberItem({ member }: MemberItemProps) {
             </Button>
           </Tooltip>
         </Flex>
-        {profileExpanded && <div className='member-info-full w-full mb-1'>Tải thông tin đầy đủ của assignment</div>}
+        {profileExpanded && <ProjectMemberProfile member={member} />}
       </Flex>
     </>
   )

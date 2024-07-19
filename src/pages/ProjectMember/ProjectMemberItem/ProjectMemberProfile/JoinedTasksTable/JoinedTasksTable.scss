@@ -1,0 +1,42 @@
+.joined-tasks-container {
+  padding: 0.5rem;
+}
+
+.joined-task-item {
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+  padding: 0.25rem 0.5rem;
+  width: max-content;
+  min-width: 200px;
+
+  &-name {
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+
+  &-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--primary-radius);
+    font-size: 0.8rem;
+  }
+
+  &__completed {
+    background-color: #02a43021;
+    color: var(--success-color);
+  }
+
+  &__need-help {
+    background-color: #ff9f0021;
+    color: var(--warning-color);
+  }
+
+  &-duedate, &-join-time {
+    font-size: 0.85rem;
+
+    &__overdue {
+      background-color: #e9067821;
+      color: var(--danger-color);
+    }
+  }
+}

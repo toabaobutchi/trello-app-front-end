@@ -8,7 +8,7 @@ import { AssignmentResponse, DeletedTaskResponse, TaskResponseForBoard } from '@
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId } from '@utils/functions'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
@@ -18,6 +18,8 @@ import { projectSlice } from '@redux/ProjectSlice'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const http = new HttpClient()
+
+const displayAvatarCount = 3
 
 function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remoteDragging?: RemoteDraggingType }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -37,10 +39,10 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
 
-  // const taskAssignments = useMemo(() => {
-  //   const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
-  //   return tAssignments
-  // }, [members, task?.taskAssignmentIds])
+  const taskAssignments = useMemo(() => {
+    const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
+    return tAssignments
+  }, [members, task?.taskAssignmentIds])
 
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
@@ -140,31 +142,20 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           $flexDirection='row-reverse'
           className='posr task-card-footer-members'
         >
-          <div className='task-card-footer-members-more'>+3 more</div>
-          <div className='task-card-footer-members-image-container'>
+          {taskAssignments.length - displayAvatarCount > 0 && (
+            <div className='task-card-footer-members-more'>+{taskAssignments.length - displayAvatarCount} more</div>
+          )}
+          {taskAssignments.slice(0, displayAvatarCount).map(member => (
+            <div key={member.id} className='task-card-footer-members-image-container'>
+              <img src={member.avatar} alt='avatar' />
+            </div>
+          ))}
+          {/* <div className='task-card-footer-members-image-container'>
             <img
               src='https://play-lh.googleusercontent.com/hJGHtbYSQ0nCnoEsK6AGojonjELeAh_Huxg361mVrPmzdwm8Ots-JzEH5488IS2nojI'
               alt='avatar'
             />
-          </div>
-          <div className='task-card-footer-members-image-container'>
-            <img
-              src='https://makeover.imgix.net/data%2FWum4u3uPWFWmq0OOcldmZ7F1ZIx1%2Fstyles%2Fabc907637dcab5b86e04ee33fc9c79b2%2Fimages%2Fb877cb300f3aeb0ea0b1f13a44d39007?alt=media&token=c3783a66-4660-4819-98e2-f4c1e83e7752'
-              alt='avatar'
-            />
-          </div>
-          <div className='task-card-footer-members-image-container'>
-            <img
-              src='https://play-lh.googleusercontent.com/7Ak4Ye7wNUtheIvSKnVgGL_OIZWjGPZNV6TP_3XLxHC-sDHLSE45aDg41dFNmL5COA'
-              alt='avatar'
-            />
-          </div>
-          <div className='task-card-footer-members-image-container'>
-            <img
-              src='https://marketplace.canva.com/EAFltIh8PKg/1/0/1600w/canva-cute-anime-cartoon-illustration-girl-avatar-J7nVyTlhTAE.jpg'
-              alt='avatar'
-            />
-          </div>
+          </div> */}
         </Flex>
       </div>
     </>
