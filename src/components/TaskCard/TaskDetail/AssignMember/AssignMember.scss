@@ -1,5 +1,12 @@
 .assignee-item {
   padding: 0.5rem 1rem;
+  display: block;
+  cursor: pointer;
+
+  &.selected {
+    background-color: var(--success-bg-color);
+    border-radius: var(--primary-radius);
+  }
 
   img {
     width: 30px;
@@ -14,4 +21,8 @@
       font-size: 0.9rem;
     }
   }
+}
+
+.assign-options-checkbox {
+  display: none;
 }

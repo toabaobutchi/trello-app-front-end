@@ -27,7 +27,7 @@
     border-radius: var(--primary-radius);
     animation: zoomIn 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
     transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    transform-origin: top center;
+    transform-origin: left center;
   }
 
   @keyframes zoomIn {

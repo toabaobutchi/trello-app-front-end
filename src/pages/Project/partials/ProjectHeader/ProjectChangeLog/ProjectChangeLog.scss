@@ -1,0 +1,27 @@
+.change-log-header {
+  padding-bottom: 0.5rem;
+  border-bottom: var(--thin-border-width) solid var(--light-color);
+
+  &-text {
+    font-size: 1.3rem;
+  }
+}
+
+.change-log-container {
+  padding: 0.5rem 0;
+  max-height: 700px;
+  overflow-y: auto;
+}
+
+.change-log-item {
+  padding: 0.5rem 0 0.5rem 1rem;
+
+  &:hover {
+    background-color: var(--bright-color);
+    border-radius: var(--primary-radius);
+  }
+
+  &-time {
+    font-size: 0.9rem;
+  }
+}
