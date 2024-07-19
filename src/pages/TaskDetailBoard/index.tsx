@@ -14,6 +14,8 @@ import { useProjectSelector } from '@hooks/useProjectSelector'
 import useAccount from '@hooks/useAccount'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
+import { useModal } from '@hooks/useModal'
+import AssignMember from '@comps/TaskCard/TaskDetail/AssignMember'
 
 const http = new HttpClient()
 
@@ -26,6 +28,7 @@ function TaskDetailBoard() {
   const [isJoined, setIsJoined] = useState(false)
   const navigate = useNavigate()
   const [joinModal, setJoinModal] = useState(false)
+  const [assignModal, handleToggleAssignModal] = useModal()
   const { taskId } = useParams()
   useEffect(() => {
     if (taskDetail?.id) {
@@ -93,6 +96,7 @@ function TaskDetailBoard() {
       dispatch(projectSlice.actions.joinTask(data))
     }
   }
+
   return (
     <>
       <TaskDetailContext.Provider value={{ task: taskDetail, setTask: setTaskDetail }}>
@@ -115,8 +119,8 @@ function TaskDetailBoard() {
                         <i className='fa-solid fa-right-to-bracket'></i> Join
                       </Button>
                     )}
-                    <Button variant='text' theme='default'>
-                      <i className='fa-regular fa-envelope'></i> Invite member
+                    <Button onClick={handleToggleAssignModal} variant='text' theme='default'>
+                      <i className='fa-solid fa-user-plus'></i> Assign
                     </Button>
                     <Flex $alignItem='center' $gap='0.5rem'>
                       <SwitchButton
@@ -189,6 +193,14 @@ function TaskDetailBoard() {
           onClose={handleToggleJoinModal}
         >
           Join task <span className='text-primary fw-bold'>{taskDetail?.name}</span>
+        </Modal>
+        <Modal
+          open={assignModal}
+          layout={{ header: { closeIcon: true, title: 'Assign to new members' } }}
+          onClose={handleToggleAssignModal}
+          style={{ width: '30%' }}
+        >
+          {taskDetail && <AssignMember task={taskDetail} onCloseModal={handleToggleAssignModal} />}
         </Modal>
       </TaskDetailContext.Provider>
     </>

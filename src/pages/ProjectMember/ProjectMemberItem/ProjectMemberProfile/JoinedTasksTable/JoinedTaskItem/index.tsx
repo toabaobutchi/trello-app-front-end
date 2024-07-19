@@ -10,7 +10,9 @@ function JoinedTaskItem({ task }: { task: JoinedTaskResponse }) {
         <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' $gap='0.25rem' className='mb-1'>
           <NavLink
             to={`../task/${task.id}`}
-            className={`joined-task-item-name row jcsb w-full ${'joined-task-item-name__' + task.priority?.toLowerCase()}`}
+            className={`joined-task-item-name row jcsb w-full ${
+              'joined-task-item-name__' + task.priority?.toLowerCase()
+            }`}
           >
             {task.name} <p className='priority-tag-text'>{'#' + (task.priority?.toLowerCase() || 'not-set')}</p>
           </NavLink>
@@ -33,7 +35,7 @@ function JoinedTaskItem({ task }: { task: JoinedTaskResponse }) {
           </Flex>
         </Flex>
         <Flex $alignItem='center' $gap='0.5rem' className='joined-task-item-duedate'>
-          Duedate:&nbsp;
+          <i className='fa-regular fa-clock'></i> Duedate:&nbsp;
           {task?.dueDate ? (
             <>
               <p>{getDateString(new Date(task.dueDate * 1000))}</p>
@@ -45,7 +47,10 @@ function JoinedTaskItem({ task }: { task: JoinedTaskResponse }) {
           )}
         </Flex>
         <p className='joined-task-item-join-time'>
-          Joined/Assigned at:&nbsp; {getDateString(new Date(task.assignedAt))}
+          <i className='fa-solid fa-user-clock'></i> Joined at:&nbsp; {getDateString(new Date(task.assignedAt))}
+        </p>
+        <p className='joined-task-item-assignment-count'>
+          <i className='fa-solid fa-users-between-lines'></i> Assignees:&nbsp; {task.assignmentCount}
         </p>
       </div>
     </>

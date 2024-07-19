@@ -26,8 +26,6 @@ function TaskDetailInfo() {
   const taskDetail = context?.task
   const dispatch = useDispatch()
   const project = useSelector((state: RootState) => state.project.activeProject)
-  const account = useSelector((state: RootState) => state.login.accountInfo)
-  // const projectHub.connection = useHub('/dragHub', 'SendAddToDragGroup', project?.board?.id, account?.id)
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
   const [creator] = useState<AssignmentResponse | undefined>(() =>
@@ -69,7 +67,7 @@ function TaskDetailInfo() {
 
   const handleSendMessageToDragHub = (data: UpdatedTaskResponse) => {
     dispatch(projectSlice.actions.updateTaskInfo(data)) // cập nhật cho giao diện cá nhân
-    if (projectHub.isConnected && project?.board?.id && data && account?.id) {
+    if (projectHub.isConnected && data) {
       // SendUpdateTaskInfo
       projectHub.connection?.invoke(hubs.project.send.updateTaskInfo, data)
     }

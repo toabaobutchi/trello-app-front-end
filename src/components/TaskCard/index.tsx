@@ -4,10 +4,10 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { AssignmentResponse, DeletedTaskResponse, TaskResponseForBoard } from '@utils/types'
+import { AssignmentResponse, DeletedTaskResponse, JoinTaskResponse, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { createCardId } from '@utils/functions'
+import { createCardId, getDateString } from '@utils/functions'
 import { useEffect, useMemo, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 const http = new HttpClient()
 
@@ -26,7 +27,12 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     id: createCardId(task),
     data: { ...task, dragObject: 'Card' }
   })
+  const { board } = useProjectSelector()
 
+  const isJoined = useMemo(
+    () => task.taskAssignmentIds?.includes(board.assignmentId),
+    [task.id, task.taskAssignmentIds, board.assignmentId]
+  )
   const style = {
     // touchAction: 'none',
     transform: CSS.Translate.toString(transform),
@@ -63,8 +69,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const handleJoinTask = async () => {
     const res = await http.postAuth(`/tasks/${task?.id}/join`, {})
     if (res?.status === HttpStatusCode.Ok) {
-      console.log(res.data)
-      // dispatch(projectSlice.actions.joinTask(task))
+      dispatch(projectSlice.actions.joinTask(res.data as JoinTaskResponse))
     }
   }
 
@@ -110,9 +115,11 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             <MenuItem className='text-primary'>
               <i className='fa-solid fa-up-down-left-right'></i> Move
             </MenuItem>
-            <MenuItem onClick={handleJoinTask}>
-              <i className='fa-solid fa-right-to-bracket'></i> Join
-            </MenuItem>
+            {!isJoined && (
+              <MenuItem onClick={handleJoinTask}>
+                <i className='fa-solid fa-right-to-bracket'></i> Join
+              </MenuItem>
+            )}
           </DropdownMenu>
         </Flex>
         <div className='task-card-body'>
@@ -122,7 +129,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           <Flex $alignItem='center' $gap='1rem'>
             {task.subTaskCount ? (
               <div className='task-card-body-subtasks'>
-                <i className="fa-regular fa-square-check"></i> {task.completedSubTaskCount}/{task.subTaskCount}
+                <i className='fa-regular fa-square-check'></i> {task.completedSubTaskCount}/{task.subTaskCount}
               </div>
             ) : (
               <></>
@@ -133,7 +140,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           </Flex>
           <div className='task-card-footer-due-date'>
             <i className='fa-regular fa-clock'></i>{' '}
-            {task?.dueDate ? new Date(task.dueDate).toLocaleDateString() : <span className='text-light'>Not set</span>}
+            {task?.dueDate ? getDateString(new Date(task.dueDate * 1000)) : <span className='text-light'>Not set</span>}
           </div>
         </Flex>
         <Flex

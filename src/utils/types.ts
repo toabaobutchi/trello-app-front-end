@@ -291,8 +291,8 @@ export type ProjectResponseForBoard = {
   slug?: string
   workspaceId: string
   context: string
-  // memberCount?: number
   listOrder?: string
+  assignmentId: string
   lists?: ListResponseForBoard[]
 }
 

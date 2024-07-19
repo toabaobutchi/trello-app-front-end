@@ -20,7 +20,13 @@ function ProjectMemberItem({ member }: MemberItemProps) {
   }
   return (
     <>
-      <Flex $alignItem='center' $flexWrap='wrap' $gap='1rem' key={member.id} className={`member-info-row ${profileExpanded ? 'profile-expanded': ''}`}>
+      <Flex
+        $alignItem='center'
+        $flexWrap='wrap'
+        $gap='1rem'
+        key={member.id}
+        className={`member-info-row ${profileExpanded ? 'profile-expanded' : ''}`}
+      >
         <div className={`member-info-avatar`}>
           <img src={member.avatar} alt='avatar' />
         </div>
@@ -39,7 +45,11 @@ function ProjectMemberItem({ member }: MemberItemProps) {
           </Tooltip>
           <Tooltip content='About this member' arrow delay='0.5s'>
             <Button onClick={handleToggleProfile} variant='text' theme='primary'>
-              <i className='fa-regular fa-id-card'></i>
+              {profileExpanded ? (
+                <i className='fa-regular fa-folder-open'></i>
+              ) : (
+                <i className='fa-solid fa-folder'></i>
+              )}
             </Button>
           </Tooltip>
         </Flex>

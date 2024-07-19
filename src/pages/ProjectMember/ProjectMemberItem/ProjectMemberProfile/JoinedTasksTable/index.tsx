@@ -7,11 +7,10 @@ function JoinedTasksTable({ joinedTasks }: { joinedTasks?: JoinedTaskResponse[] 
       {joinedTasks && joinedTasks.length > 0 && (
         <div className='joined-tasks-container'>
           {joinedTasks.map(task => (
-            <JoinedTaskItem task={task} />
+            <JoinedTaskItem key={task.id} task={task} />
           ))}
         </div>
       )}
-
       {(!joinedTasks || joinedTasks.length <= 0) && (
         <p className='w-full text-warning'>
           <i className='fa-solid fa-users-slash'></i> This member has not joined or be assigned to any task yet

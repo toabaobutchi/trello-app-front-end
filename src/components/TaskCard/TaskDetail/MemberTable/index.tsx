@@ -21,22 +21,20 @@ function MemberTable() {
       >
         {taskMembers?.map(tm => {
           return (
-            <>
-              <div className='member-info'>
-                <Flex $alignItem='center' $gap='1rem'>
-                  <img src={tm.avatar} alt='avatar' />
-                  <div>
-                    <p className='member-info-title'>
-                      {tm?.email} ({tm.displayName})
-                    </p>
-                    <p className='member-info-role'>{tm.permission}</p>
-                  </div>
-                </Flex>
-                <Button theme='danger'>
-                  <i className='fa-regular fa-trash-can'></i>
-                </Button>
-              </div>
-            </>
+            <div key={tm.id} className='member-info'>
+              <Flex $alignItem='center' $gap='1rem'>
+                <img src={tm.avatar} alt='avatar' />
+                <div>
+                  <p className='member-info-title'>
+                    {tm?.email} ({tm.displayName})
+                  </p>
+                  <p className='member-info-role'>{tm.permission}</p>
+                </div>
+              </Flex>
+              <Button theme='danger'>
+                <i className='fa-regular fa-trash-can'></i>
+              </Button>
+            </div>
           )
         })}
       </Flex>
