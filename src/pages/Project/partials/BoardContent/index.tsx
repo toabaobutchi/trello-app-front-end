@@ -399,11 +399,11 @@ function BoardContent() {
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
 
   const sensors = useSensors(customMouseSensor, touchSensor)
-  const handleScroll = (e: React.WheelEvent) => {
-    if (e.ctrlKey) {
-      e.currentTarget.scrollLeft += e.deltaY
-    }
-  }
+  // const handleScroll = (e: React.WheelEvent) => {
+  //   if (e.ctrlKey) {
+  //     e.currentTarget.scrollTo({ top: 0, left: e.currentTarget.scrollLeft + e.deltaY, behavior: 'smooth' })
+  //   }
+  // }
   return (
     <>
       <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} sensors={sensors}>
@@ -412,7 +412,7 @@ function BoardContent() {
           items={listState?.map(l => l?.id) ?? []}
           strategy={horizontalListSortingStrategy}
         >
-          <Flex $gap='1.5rem' className='column-list' onWheel={handleScroll}>
+          <Flex $gap='1.5rem' className='column-list'>
             {listState?.map(column => (
               <SortableColumn remoteDragging={remoteDragging} key={column.id} column={column} />
             ))}

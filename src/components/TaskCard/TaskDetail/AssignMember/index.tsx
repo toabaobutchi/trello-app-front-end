@@ -54,7 +54,7 @@ function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
               Select member that will be assigned to task <span className='text-primary bolder'>{task.name}</span>
             </p>
             {restMembers.map(member => (
-              <AssignmentMemberItem member={member} onSelect={handleSelectMembers} />
+              <AssignmentMemberItem key={member.id} member={member} onSelect={handleSelectMembers} />
             ))}
           </>
         ) : (

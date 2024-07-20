@@ -89,6 +89,7 @@ html {
   color: var(--text-primary-color);
   font-size: 14px;
   font-weight: 500;
+  scroll-behavior: smooth;
 }
 
 @media screen and (max-width: 768px) {

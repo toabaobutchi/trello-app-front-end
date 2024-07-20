@@ -47,7 +47,16 @@ function SideBar() {
             defaultExpand
           >
             <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
-              <Expander header={{ content: <p><i className="fa-solid fa-cloud"></i> Your workspaces</p> }} defaultExpand>
+              <Expander
+                header={{
+                  content: (
+                    <p>
+                      <i className='fa-solid fa-cloud'></i> Your workspaces
+                    </p>
+                  )
+                }}
+                defaultExpand
+              >
                 {workspaces.workspaceList?.map(workspace => {
                   const path = linkCreator.workspaces({
                     slug: getSlug(workspace.slug),
@@ -70,9 +79,10 @@ function SideBar() {
             <SharedWorkspaces />
           </Expander>
         </SideBarItem>
-        <SideBarItem>
-          <i className='fa-solid fa-calendar-days'></i> Schedule
-        </SideBarItem>
+        <SideBarItem.Link to='/invitations'>
+          <i className='fa-solid fa-envelope sidebar-close-icon'></i>{' '}
+          <i className='fa-solid fa-envelope-open-text sidebar-open-icon'></i> Schedule
+        </SideBarItem.Link>
 
         <Button
           onClick={toggleSidebar}

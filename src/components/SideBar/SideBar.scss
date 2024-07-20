@@ -46,7 +46,8 @@
         max-width: 80%;
         font: inherit;
 
-        &:focus, &:not(:placeholder-shown) {
+        &:focus,
+        &:not(:placeholder-shown) {
           border: var(--thin-border-width) solid var(--primary-color);
           box-shadow: inset 0 0 2px 0 var(--primary-color);
         }
@@ -71,4 +72,18 @@
 .sidebar-overlay,
 .sidebar-overlay.hide {
   display: none;
+}
+
+.sidebar-item {
+  .sidebar-open-icon {
+    display: none;
+  }
+  &.active {
+    .sidebar-open-icon {
+      display: block;
+    }
+    .sidebar-close-icon {
+      display: none;
+    }
+  }
 }
