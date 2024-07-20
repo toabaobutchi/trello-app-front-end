@@ -2,12 +2,12 @@ import SearchInput from '@comps/SearchInput'
 import Flex from '@comps/StyledComponents/Flex'
 import ProjectViewModeNavBar from './ProjectViewModeNavBar'
 import ProjectFilterMenu from './ProjectFilterMenu'
-import ProjectShare from './ProjectShare'
 import WorkspaceTreeMenu from './WorkspaceTreeMenu'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
-import ProjectMembers from './ProjectMembers'
-import ProjectChangeLog from './ProjectChangeLog'
+import ProjectUtilities from './ProjectUtilities'
+import './ProjectHeader.responsive.scss'
+import ProjectSearch from './ProjectSearch'
 
 function ProjectHeader() {
   const project = useSelector((state: RootState) => state.project.activeProject)
@@ -34,10 +34,9 @@ function ProjectHeader() {
         </Flex>
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
           <ProjectFilterMenu />
-          <SearchInput attributes={{ id: 'search-card-input', placeholder: 'Search in project' }}></SearchInput>
-          <ProjectShare />
-          <ProjectMembers />
-          <ProjectChangeLog />
+          {/* <SearchInput attributes={{ id: 'search-card-input', placeholder: 'Search in project' }}></SearchInput> */}
+          <ProjectSearch />
+          <ProjectUtilities />
         </Flex>
       </Flex>
     </>

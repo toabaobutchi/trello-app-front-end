@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './SearchInput.scss'
 
-interface SearchInputProps {
+interface SearchInputProps extends React.ComponentPropsWithRef<'div'> {
   beforeButton?: React.ReactNode
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -10,10 +10,11 @@ interface SearchInputProps {
 }
 
 function SearchInput({
-  beforeButton = <i className="fa-solid fa-magnifying-glass"></i>,
+  beforeButton = <i className='fa-solid fa-magnifying-glass'></i>,
   onChange = () => {},
   attributes = {},
-  style = {}
+  style = {},
+  ...props
 }: SearchInputProps) {
   const { value = '', ...otherAttributes } = attributes
   const [text, setText] = useState(value)
@@ -26,21 +27,13 @@ function SearchInput({
   }
   return (
     <>
-      <div className='search-input'>
+      <div {...props} className={`search-input ${props?.className}`}>
         {beforeButton && (
-          <label
-            htmlFor={otherAttributes.id}
-            className='search-input-before-button'
-          >
+          <label htmlFor={otherAttributes.id} className='search-input-before-button'>
             {beforeButton}
           </label>
         )}
-        <input
-          value={text}
-          {...otherAttributes}
-          style={style}
-          onChange={handleChange}
-        />
+        <input value={text} {...otherAttributes} style={style} onChange={handleChange} />
       </div>
     </>
   )

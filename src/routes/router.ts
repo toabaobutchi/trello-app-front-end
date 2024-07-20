@@ -11,6 +11,7 @@ const routeLinks = {
   project: '/projects/:ownerShip/:slug/:projectId/v/:viewMode',
   task: 'task/:taskId',
   members: 'members',
+  share: 'share-project',
   projectInvitation: '/projects/:pid/invitation'
 }
 

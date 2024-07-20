@@ -19,9 +19,6 @@ function ProjectChangeLog() {
               <>
                 <Flex $alignItem='center' $justifyContent='space-between' className='change-log-header'>
                   <p className='change-log-header-text text-primary bolder'>Project Change Log</p>
-                  <Button variant='text' theme='default'>
-                    <i className='fa-solid fa-times'></i>
-                  </Button>
                 </Flex>
               </>
             )
@@ -29,7 +26,7 @@ function ProjectChangeLog() {
         }}
         title={{
           content: (
-            <Button>
+            <Button variant='text'>
               <i className='fa-solid fa-timeline fa-fw'></i>
             </Button>
           )

@@ -14,38 +14,59 @@ interface SelectListProps extends React.ComponentProps<'div'> {
   label?: CustomizablePropType
   onChoose?: (selectedItem: SelectListItem) => void
   size?: 'small' | 'medium' | 'large'
+  manualSelectedValue?: string
 }
 
-function SelectList({ items, selectedValue, onChoose = () => {}, label, size = 'medium', ...props }: SelectListProps) {
+function SelectList({
+  items,
+  selectedValue,
+  onChoose = () => {},
+  label,
+  size = 'medium',
+  manualSelectedValue,
+  ...props
+}: SelectListProps) {
   const [expand, setExpand] = useState(false)
   const selectListRef = useRef<HTMLDivElement>(null)
   const selectListId = useId()
   const [selectedItem, setSelectedItem] = useState<SelectListItem | undefined>(() => {
     return items?.find(item => item.value === selectedValue) ?? items?.[0]
   })
+
+  useEffect(() => {
+    if (manualSelectedValue && selectedItem && manualSelectedValue !== selectedItem.value) {
+      setSelectedItem(items?.find(item => item.value === manualSelectedValue))
+    }
+  }, [manualSelectedValue])
+
   const handleSelect = (select: SelectListItem) => {
     setSelectedItem(select)
     onChoose(select)
+    handleClose()
+  }
+  const handleClose = () => setExpand(_ => false)
+  const handleToggleSelect = () => {
     setExpand(!expand)
   }
-  const handleToggleSelect = useCallback(() => {
-    setExpand(!expand)
-  }, [expand])
-  const { outClick, reset } = useClickTracker(selectListRef.current as HTMLElement)
+  const { outClick } = useClickTracker(selectListRef.current as HTMLElement)
   useEffect(() => {
     if (outClick.isOutClick && expand) {
-      handleToggleSelect()
-      reset()
+      handleClose()
+      // reset()
     }
-  }, [expand, handleToggleSelect, outClick, reset])
+  }, [outClick])
   return (
     <>
       <p className={`select-list-label ${label?.className ?? ''}`.trimEnd()} style={label?.style}>
         {label?.content}
       </p>
-      <div ref={selectListRef} id={selectListId} className={`select-list ${size}-list ${props?.className ?? ''}`.trimEnd()} style={props?.style}>
-        <div className='selected-item' onClick={handleToggleSelect}>
-          {selectedItem?.display} <i className="fa-solid fa-caret-down"></i>
+      <div
+        id={selectListId}
+        className={`select-list ${size}-list ${props?.className ?? ''}`.trimEnd()}
+        style={props?.style}
+      >
+        <div ref={selectListRef} className='selected-item' onClick={handleToggleSelect}>
+          {selectedItem?.display ?? selectedItem?.value} <i className='fa-solid fa-caret-down'></i>
         </div>
         {expand && items && (
           <div className='select-list-data-context'>

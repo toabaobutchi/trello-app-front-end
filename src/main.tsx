@@ -12,6 +12,7 @@ import routeLinks, { loader } from '@routes/router'
 import LoadingLayout from '@layouts/LoadingLayout'
 import TaskDetailBoard from '@pages/TaskDetailBoard'
 import ProjectMember from '@pages/ProjectMember'
+import ProjectShare from '@pages/Project/partials/ProjectHeader/ProjectShare'
 const Home = React.lazy(() => import('@pages/Home'))
 const Error = React.lazy(() => import('@pages/Error'))
 const Welcome = React.lazy(() => import('@pages/Welcome'))
@@ -42,12 +43,6 @@ const router = createBrowserRouter([
       {
         path: routeLinks.workspaces,
         element: <Workspaces />,
-        // loader: async ({ params }) => {
-        //   const { ownerShip } = params as WorkspacePageParams
-        //   const prefixPath = ownerShip === 'owner' ? 'w' : 'sw'
-        //   const res = await http.getAuth(`/${prefixPath}/${params.workspaceId}/projects`)
-        //   return res
-        // }
         loader: loader.workspace
       },
       {
@@ -61,6 +56,10 @@ const router = createBrowserRouter([
           {
             path: routeLinks.members,
             element: <ProjectMember />
+          },
+          {
+            path: routeLinks.share,
+            element: <ProjectShare />
           }
         ]
       },

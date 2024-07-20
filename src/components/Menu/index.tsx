@@ -25,7 +25,7 @@ function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: Men
     if (menuRef.current && open) {
       const isOutScreen = isOutOfScreen(menuRef.current as HTMLElement)
       if (isOutScreen.horizontal?.isOverflow) {
-        menuRef.current.style.transform = `translateX(-${isOutScreen.horizontal.diff}px)`
+        menuRef.current.style.transform = `translateX(-${isOutScreen.horizontal.diff}px) scale(1)`
       }
     }
   }, [open])

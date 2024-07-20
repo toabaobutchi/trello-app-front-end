@@ -1,13 +1,24 @@
 .anchor-menu {
   background-color: #fff;
   max-width: 100%;
-  transition: 0.25s ease;
+  transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
   border-radius: var(--primary-radius);
-  display: none;
+  // display: none;
   padding: 1rem;
   z-index: var(--menu-z-index);
+  transform-origin: top center;
 
   &.open {
-    display: block;
+    // animation: zoomOut 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+}
+@keyframes zoomOut {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }

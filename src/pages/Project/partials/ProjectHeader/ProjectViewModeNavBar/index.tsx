@@ -12,25 +12,25 @@ const ProjectViewModeNavBar = memo(
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'board' })}
             className='project-view-mode-item view-mode'
           >
-            <i className='fa-solid fa-table-columns'></i> Board
+            <i className='fa-solid fa-table-columns'></i> <span className='project-view-mode-item-text'>Board</span>
           </NavLink>
           <NavLink
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'table' })}
             className='project-view-mode-item view-mode'
           >
-            <i className='fa-solid fa-table-list'></i> Table
+            <i className='fa-solid fa-table-list'></i> <span className='project-view-mode-item-text'>Table</span>
           </NavLink>
           <NavLink
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'calendar' })}
             className='project-view-mode-item view-mode'
           >
-            <i className='fa-regular fa-calendar-days'></i> Calendar
+            <i className='fa-regular fa-calendar-days'></i> <span className='project-view-mode-item-text'>Calendar</span>
           </NavLink>
           <NavLink
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'chart' })}
             className='project-view-mode-item view-mode'
           >
-            <i className='fa-solid fa-chart-gantt'></i> Chart
+            <i className='fa-solid fa-chart-gantt'></i> <span className='project-view-mode-item-text'>Chart</span>
           </NavLink>
         </Flex>
       </>

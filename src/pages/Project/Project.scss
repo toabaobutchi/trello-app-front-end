@@ -42,6 +42,15 @@
 .project-header {
   padding-bottom: 1rem;
   width: 100%;
+
+  .utils-menu-item {
+    &:hover {
+      color: var(--primary-color);
+      background-color: var(--clicked-menu-color);
+      border-radius: var(--primary-radius);
+      font-weight: bold;
+    }
+  }
 }
 
 .column-list {

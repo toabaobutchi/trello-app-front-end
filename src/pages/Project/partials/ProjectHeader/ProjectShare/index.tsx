@@ -7,7 +7,7 @@ import Input from '@comps/Input'
 import SelectList from '@comps/SelectList'
 import ButtonGroup from '@comps/ButtonGroup'
 import HttpClient from '@utils/HttpClient'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { InputChange, ProjectPageParams } from '@utils/types'
 import { HttpStatusCode } from 'axios'
 import shareImage from '@assets/share-project.jpg'
@@ -39,13 +39,14 @@ type InvitationType = {
   permission: string
 }
 function ProjectShare() {
-  const [modalOpen, setModalOpen] = useState(false)
+  // const [modalOpen, setModalOpen] = useState(false)
   const [shareActiveTab, setShareActiveTab] = useState(initActiveTab)
-  const handleToggleModal = () => setModalOpen(!modalOpen)
+  // const handleToggleModal = () => setModalOpen(!modalOpen)
   const [invitation, setInvitation] = useState<InvitationType>({
     email: '',
     permission: 'member'
   })
+  const navigate = useNavigate()
   const params = useParams() as ProjectPageParams
 
   const handleShareProject = async () => {
@@ -53,7 +54,7 @@ function ProjectShare() {
     if (!email || !permission) return
     const res = await http.postAuth(`/projects/${params.projectId}/invite`, invitation)
     if (res?.status === HttpStatusCode.Ok) {
-      setModalOpen(false)
+      // setModalOpen(false)
       setInvitation({ email: '', permission: 'member' })
     }
   }
@@ -66,15 +67,18 @@ function ProjectShare() {
   const handleTabChange = (tab: string) => {
     setShareActiveTab(tab)
   }
+  const handleClose = () => {
+    navigate('..')
+  }
   return (
     <>
-      <Button onClick={handleToggleModal} variant='filled'>
+      {/* <Button onClick={handleToggleModal} variant='filled'>
         <i className='fa-solid fa-share-nodes'></i> Share
-      </Button>
+      </Button> */}
       <Modal
         style={{ width: '35%' }}
-        onClose={handleToggleModal}
-        open={modalOpen}
+        onClose={handleClose}
+        open
         layout={{ header: { title: 'Share project', closeIcon: true } }}
       >
         <Tab tabs={tabs} activeTab={shareActiveTab} onTabClick={handleTabChange}>
