@@ -1,63 +1,48 @@
-import FixedMenu from '@comps/FixedMenu'
-import ImageBox from '@comps/ImageBox'
-import MenuFooter from '@comps/MenuFooter'
-import Tooltip from '@comps/Tooltip'
-import config from '@confs/app.config'
+import Flex from '@comps/StyledComponents'
+import SwitchButton from '@comps/SwitchButton'
+import { useState } from 'react'
 
 function InformationMenu() {
+  const [theme, setTheme] = useState(() => {
+    const currentTheme = localStorage.getItem('theme') || 'light'
+    return currentTheme === 'light'
+  })
+  const handleChangeTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTheme(e.target.checked)
+    if (e.target.checked) {
+      localStorage.setItem('theme', 'light')
+      document.documentElement.classList.remove('dark')
+    } else {
+      localStorage.setItem('theme', 'dark')
+      document.documentElement.classList.add('dark')
+    }
+  }
   return (
     <>
-      <FixedMenu
-        title={{
-          content: (
-            <Tooltip content='Settings' style={{ lineHeight: 'normal' }}>
-              <i className='fa-solid fa-screwdriver-wrench'></i>
-            </Tooltip>
-          ),
-          className: 'utils-menu__hover utils-menu-help'
-        }}
-        style={{ top: config.header.height, right: '0.5%' }}
-        width='350px'
-        side='right'
-        layout={{
-          footer: {
-            content: (
-              <MenuFooter
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexWrap: 'wrap',
-                  width: '100%',
-                  gap: '1rem'
-                }}
-              >
-                <p>Item 1</p>
-                <p>Item 2</p>
-                <p>Item 3</p>
-                <p>Item 4</p>
-                <p>Item 5</p>
-                <p>Item 6</p>
-              </MenuFooter>
-            )
-          }
-        }}
-      >
-        <ImageBox
-          src='https://trello.com/assets/77d4b431a528da2dd7c6.png'
-          caption={{
-            content: (
-              <>
-                <p>New to Trello? Check out the guide</p>
-                <div style={{ textAlign: 'center' }}>
-                  <a href='#'>Get new tip...</a>
-                </div>
-              </>
-            ),
-            style: { fontSize: '1rem' }
+      <Flex $alignItem='center' $gap='0.25rem'>
+        <SwitchButton
+          size='medium'
+          onChange={handleChangeTheme}
+          inputAttributes={{ type: 'checkbox', id: 'theme-toggle-button', checked: theme }}
+          icon={{
+            checked: <i className='fa-solid fa-sun'></i>,
+            unchecked: <i className='fa-solid fa-moon text-warning'></i>
           }}
         />
-      </FixedMenu>
+        {/* <label htmlFor='theme-toggle-button'>
+          {theme ? (
+            <>
+              <i className='fa-solid fa-sun'></i>
+            </>
+          ) : (
+            <>
+              <span className='text-warning'>
+                <i className='fa-solid fa-moon'></i>
+              </span>
+            </>
+          )}
+        </label> */}
+      </Flex>
     </>
   )
 }

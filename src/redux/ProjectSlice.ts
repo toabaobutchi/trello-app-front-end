@@ -6,6 +6,7 @@ import {
   ChangeTaskOrderResponse,
   CreateListResponse,
   CreateTaskResponse,
+  DeletedListResponse,
   DeletedTaskResponse,
   DragOverResult,
   FilterType,
@@ -33,6 +34,14 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    deleteList: (state, action) => {
+      const data = action.payload as DeletedListResponse
+      if (data) {
+        console.log('Delete list')
+        state.activeProject.board.lists = state.activeProject.board.lists?.filter(l => l.id !== data.id)
+        state.activeProject.changeId = new Date().getTime()
+      }
+    },
     joinTask: (state, action) => {
       const data = action?.payload as JoinTaskResponse
       if (data) {

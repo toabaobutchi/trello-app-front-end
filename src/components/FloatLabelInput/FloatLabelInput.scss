@@ -17,12 +17,13 @@
       top: 50%;
       left: var(--input-padding);
       transform: translateY(-50%);
-      background-color: #fff;
+      background-color: var(--input-bg-color);
       padding: 0 0.5rem;
       color: var(--secondary-color);
       transition: 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
       cursor: text;
       user-select: none;
+      border-radius: var(--primary-radius);
     }
 
     > input {

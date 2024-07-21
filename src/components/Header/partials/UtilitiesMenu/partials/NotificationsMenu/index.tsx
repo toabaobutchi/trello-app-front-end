@@ -3,11 +3,11 @@ import MenuHeader from '@comps/MenuHeader'
 import NotificationHeader from '../NotificationHeader'
 import ImageBox from '@comps/ImageBox'
 import config from '@confs/app.config'
-import Tooltip from '@comps/Tooltip'
 import { useHub } from '@hooks/useHub'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { useEffect } from 'react'
+import Tooltip from '@comps/Tooltip-v2'
 
 function NotificationMenu() {
   const account = useSelector((state: RootState) => state.login.accountInfo)
@@ -24,7 +24,7 @@ function NotificationMenu() {
       <FixedMenu
         title={{
           content: (
-            <Tooltip content='Notifications' style={{ lineHeight: 'normal' }}>
+            <Tooltip content='Notifications' position='bottom' arrow>
               <i className='fa-regular fa-bell'></i>
             </Tooltip>
           ),

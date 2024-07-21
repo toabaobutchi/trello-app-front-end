@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useModal } from '@hooks/useModal'
 import AssignMember from '@comps/TaskCard/TaskDetail/AssignMember'
+import LoadingLayout from '@layouts/LoadingLayout'
 
 const http = new HttpClient()
 
@@ -159,7 +160,9 @@ function TaskDetailBoard() {
           open
           onClose={handleCloseTaskDetailModal}
         >
-          {taskDetail && <TaskDetail />}
+          <LoadingLayout className='row jcc w-full h-full' isLoading={!taskDetail}>
+            <TaskDetail />
+          </LoadingLayout>
         </Modal>
         <Modal
           layout={{ header: { title: 'Duplicate task', closeIcon: true } }}

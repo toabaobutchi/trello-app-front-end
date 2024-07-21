@@ -4,19 +4,26 @@ import FloatLabelInput from '@comps/FloatLabelInput'
 import Menu from '@comps/Menu'
 import MenuHeaderWithAction from '@comps/MenuHeaderWithAction'
 import MenuItem from '@comps/MenuItem'
+import Modal from '@comps/Modal'
+import Flex from '@comps/StyledComponents'
+import { useModal } from '@hooks/useModal'
 import { projectSlice } from '@redux/ProjectSlice'
 import { handleTriggerKeyPress } from '@utils/functions'
 import HttpClient from '@utils/HttpClient'
-import { InputChange, UpdatedListResponse } from '@utils/types'
+import { hubs, ProjectHub } from '@utils/Hubs'
+import { DeletedListResponse, InputChange, ListResponseForBoard, UpdatedListResponse } from '@utils/types'
+import { HttpStatusCode } from 'axios'
 import { memo, useReducer, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 const http = new HttpClient()
 
-const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
+const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
   const [state, dispatch] = useReducer<React.Reducer<State, Action>>(reducer, initialState)
   const reduxDispatch = useDispatch()
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const [deleteModal, handleToggleDeleteModal] = useModal()
+  const [projectHub] = useState(new ProjectHub())
   const handleToggleMenu = () => {
     if (state?.openMenu === undefined) {
       dispatch(actions.openMainMenu(buttonRef.current as HTMLElement))
@@ -49,13 +56,13 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
   )
   const handleSubmitWIP = (wip?: string) => {
     // kiểm tra giá trị đầu vào
-    if (!wip) return
+    if (!wip || !list?.id) return
     else if (isNaN(parseInt(wip))) {
       console.log(`${wip} is not a number`)
       return
     }
     const validWip = parseInt(wip)
-    http.putAuth(`/lists/${listId}`, { wipLimit: validWip }).then(res => {
+    http.putAuth(`/lists/${list?.id}`, { wipLimit: validWip }).then(res => {
       if (res?.status === 200) {
         const data = res?.data as UpdatedListResponse
         reduxDispatch(projectSlice.actions.updateListInfo(data))
@@ -64,6 +71,21 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
         console.log('Update WIP limit failed')
       }
     })
+  }
+  const handleDeleteList = async () => {
+    if (list?.id) {
+      const res = await http.deleteAuth(`/lists/${list?.id}`)
+      if (res?.status === HttpStatusCode.Ok) {
+        const data = res?.data as DeletedListResponse
+        console.log('Delete list response', data)
+        reduxDispatch(projectSlice.actions.deleteList(data))
+        handleToggleDeleteModal()
+        handleCloseMenu()
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.deleteList, data)
+        }
+      }
+    }
   }
   return (
     <>
@@ -84,7 +106,7 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
         anchorElement={state?.anchorEl as HTMLElement}
         onClose={handleCloseMenu}
       >
-        <MenuItem>
+        <MenuItem onClick={handleToggleDeleteModal}>
           <i className='fa-regular fa-trash-can'></i>&nbsp; Delete list
         </MenuItem>
         <MenuItem onClick={handleOpenWIPMenu}>
@@ -105,29 +127,68 @@ const ColumnOptionMenu = memo(({ listId }: { listId?: string }) => {
           </>
         }
       >
-        <WIPMenu onSubmit={handleSubmitWIP} onClose={handleCloseMenu} />
+        <WIPMenu minWIP={list?.tasks?.length} onSubmit={handleSubmitWIP} onClose={handleCloseMenu} />
       </Menu>
+      <Modal
+        style={{ width: '30%' }}
+        layout={{
+          header: { title: <p className='text-danger'>Delete list</p>, closeIcon: true },
+          footer: (
+            <>
+              <Flex $alignItem='center' $gap='1rem'>
+                <Button onClick={handleToggleDeleteModal} variant='filled' theme='warning'>
+                  Cancel
+                </Button>
+                {!list?.tasks ||
+                  (list?.tasks?.length <= 0 && (
+                    <Button onClick={handleDeleteList} variant='filled' theme='danger'>
+                      Delete
+                    </Button>
+                  ))}
+              </Flex>
+            </>
+          )
+        }}
+        open={deleteModal}
+        onClose={handleToggleDeleteModal}
+      >
+        {list?.tasks && list?.tasks?.length > 0 ? (
+          <>
+            <h3>Some tasks were lelf behind!</h3>
+            <p> Please move them to another list before delete and try again!</p>
+          </>
+        ) : (
+          <>
+            <p>
+              Delete list <span className='text-danger bold'>{list?.name ?? '[ ... ]'}</span> ?
+            </p>
+          </>
+        )}
+      </Modal>
     </>
   )
 })
 
 function WIPMenu({
+  minWIP = 1,
   onSubmit = () => {},
   onClose = () => {}
 }: {
+  minWIP?: number
   onSubmit?: (wip?: string) => void
   onClose?: () => void
 }) {
-  const [wip, setWip] = useState('')
+  const [wip, setWip] = useState(minWIP)
   const handleSubmit = () => {
-    onSubmit(wip)
+    onSubmit(wip + '')
     onClose()
   }
   const triggerSubmit = handleTriggerKeyPress(() => {
     handleSubmit()
   }, 'Enter')
   const handleChangeWIP = (e: InputChange) => {
-    setWip(e.target.value)
+    const value = parseInt(e.target.value)
+    if (value >= minWIP || value <= 0) setWip(parseInt(e.target.value))
   }
   return (
     <>
@@ -143,7 +204,7 @@ function WIPMenu({
         onChange={handleChangeWIP}
       />
       <p className='text-secondary my-1'>
-        WIP Limit is stand for <b>Work in progress Limit</b>. Value <code>0</code> is unlimited
+        WIP Limit is stand for <b>Work in progress Limit</b>. Negative value means unlimited
       </p>
       <Button onClick={handleSubmit} variant='filled' theme='primary'>
         Set WIP Limit

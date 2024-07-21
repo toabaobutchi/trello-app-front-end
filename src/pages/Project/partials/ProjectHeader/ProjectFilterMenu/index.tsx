@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import SwitchButton from '@comps/SwitchButton'
 import { getDateTimeString } from '@utils/functions'
 import { projectSlice } from '@redux/ProjectSlice'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 // co the hard code nhu the nay
 const items = [
@@ -43,12 +44,15 @@ const initValue: FilterType = {
   priorities: [],
   dueDate: undefined,
   overDueFilter: false,
-  noAssigneesFilter: false
+  noAssigneesFilter: false,
+  members: undefined
 }
+
 const ProjectFilterMenu = memo(() => {
   const [filter, setFilter] = useState<FilterType>(initValue)
   const [modalOpen, setModalOpen] = useState(false)
   const dispatch = useDispatch()
+  const { members } = useProjectSelector()
   const handleToggleModal = () => setModalOpen(!modalOpen)
 
   const handleSelectPriority = (items: SelectListItem[]) => {
@@ -65,6 +69,9 @@ const ProjectFilterMenu = memo(() => {
   }
   const handleChangeDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(prev => ({ ...prev, isFiltering: true, dueDate: new Date(e.target.value).getTime() }))
+  }
+  const handleSelectMembers = (members: SelectListItem[]) => {
+    setFilter(prev => ({ ...prev, isFiltering: true, members }))
   }
 
   // const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
@@ -108,11 +115,11 @@ const ProjectFilterMenu = memo(() => {
           onSelect={handleSelectPriority}
         />
         <p style={{ marginTop: '0.5rem' }}>Assignees</p>
-        {/* <MultipleSelectList
-          items={projectMembers?.map(pm => ({ value: pm.email, display: pm.email }))}
+        <MultipleSelectList
+          items={members?.map(pm => ({ value: pm.id, display: pm.email }))}
           selectedItems={filter?.members}
-          onSelect={handleSelectMember}
-        /> */}
+          onSelect={handleSelectMembers}
+        />
         <Flex $alignItem='center' $gap='0.5rem' style={{ margin: '0.5rem 0' }}>
           <Input.CheckBox
             id='filter-no-assignee'

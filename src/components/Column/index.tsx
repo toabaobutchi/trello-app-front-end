@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import AddTaskAbove from './partials/AddTaskAbove'
 import ColumnOptionMenu from './partials/ColumnOptionMenu'
-import { HubConnection } from '@microsoft/signalr'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
@@ -23,7 +22,6 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
-  // console.log('Re-render >>> Column >>> ', column?.name, column?.wipLimit)
   return (
     <>
       <div
@@ -48,7 +46,7 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
           </div>
           <Flex $alignItem='center' $gap='0.25rem'>
             <AddTaskAbove column={column} />
-            <ColumnOptionMenu listId={column?.id} />
+            <ColumnOptionMenu list={column} />
           </Flex>
         </Flex>
         <div onPointerDown={e => e.stopPropagation()} className='column-body'>

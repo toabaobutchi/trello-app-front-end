@@ -495,3 +495,9 @@ export type JoinTaskResponse = {
   assignerId: string
   assignedAt: number
 }
+
+export type DeletedListResponse = {
+  id: string
+  name: string
+  projectId: string
+}

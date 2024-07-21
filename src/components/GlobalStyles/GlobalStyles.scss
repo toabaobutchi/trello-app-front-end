@@ -3,7 +3,6 @@
 :root {
   // app config colors
   --text-primary-color: #172b4d;
-  // --text-secondary-color: #44546f;
   --text-secondary-color: #4a4a4a;
 
   // global colors
@@ -23,6 +22,8 @@
   --bright-color: #f1f1f1;
   --table-row-bg-color: #f4f4f4;
   --card-radius: 15px;
+
+  --theme-bg-color: #fff;
 
   --danger-bg-color: #e9067821;
   --info-bg-color: #2e70ff21;
@@ -90,6 +91,24 @@ html {
   font-size: 14px;
   font-weight: 500;
   scroll-behavior: smooth;
+}
+
+html.dark {
+  --theme-bg-color: #222;
+  --light-color: #444;
+  --primary-color: #005383;
+  // app config colors
+  --text-primary-color: #ababab;
+  // --text-secondary-color: #44546f;
+  --text-secondary-color: #777;
+  --input-bg-color: #363636;
+  --side-bar-item-hover-color: #ffffffeb;
+  background-color: #222;
+
+  input,
+  textarea {
+    background-color: var(--input-bg-color);
+  }
 }
 
 @media screen and (max-width: 768px) {

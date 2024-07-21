@@ -2,7 +2,6 @@ import SelectList from '@comps/SelectList'
 import './ProjectSearch.scss'
 import { useEffect, useRef, useState } from 'react'
 import Flex from '@comps/StyledComponents/Flex'
-import { AssignmentResponse, TaskResponseForBoard } from '@utils/types'
 import ProjectSearchSuggestions from './ProjectSearchSuggestions'
 import useClickTracker from '@hooks/useClickTracker'
 
@@ -18,21 +17,12 @@ const items = [
   { value: 'assignee', display: '@assignee' }
 ]
 
-// type TaskSuggestionState = {
-//   selectedObject: 'task'
-// } & { suggestions?: TaskResponseForBoard[] }
-
-// type AssignmentSuggestionState = {
-//   selectedObject: 'assignee'
-// } & { suggestions?: AssignmentResponse[] }
-
-// export type SuggestionState = TaskSuggestionState | AssignmentSuggestionState
 
 function ProjectSearchInput() {
   const [searchObject, setSearchObject] = useState(items[0].value)
   const [quickSelectObject, setQuickSelectObject] = useState<string>()
   const [searchInput, setSearchInput] = useState('')
-  const [lostFocus, setLostFocus] = useState(false)
+  const [lostFocus, setLostFocus] = useState(true)
 
   const handleChooseSearchObject = ({ value }: { value: string }) => {
     if (value === 'task' || value === 'assignee') {

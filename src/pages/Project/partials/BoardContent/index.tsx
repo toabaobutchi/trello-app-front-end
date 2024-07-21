@@ -154,12 +154,16 @@ function BoardContent() {
       projectHub.connection?.on(hubs.project.receive.addNewTask, (_assignmentId: string, data: CreateTaskResponse) => {
         dispatch(projectSlice.actions.addNewTask(data))
       })
-
-      projectHub.connection?.on(hubs.project.receive.addNewList, (data: CreateListResponse) => {
+      // SendAddNewList
+      projectHub.connection?.on(hubs.project.receive.addNewList, (_assignmentId: string, data: CreateListResponse) => {
         dispatch(projectSlice.actions.addNewList(data))
       })
+      // SendDeleteList
+      projectHub.connection?.on(hubs.project.receive.deleteList, (_assignmentId: string, listId: string) => {
+        dispatch(projectSlice.actions.deleteList(listId))
+      })
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectHub, dispatch, project?.board?.id])
 
   const findColumnByCardId = (cardId: string) => {

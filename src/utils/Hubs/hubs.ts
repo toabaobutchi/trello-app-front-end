@@ -28,7 +28,8 @@ export const hubs = {
       addNewTask: 'SendAddNewTask',
       comment: 'SendComment',
       addNewList: 'SendAddNewList',
-      getOnlineMembers: 'SendGetOnlineMembers'
+      getOnlineMembers: 'SendGetOnlineMembers',
+      deleteList: 'SendDeleteList'
     },
     receive: {
       startDragList: 'ReceiveStartDragList',
@@ -48,7 +49,8 @@ export const hubs = {
       subscriber: 'ReceiveSubscriber',
       comment: 'RecieveComment',
       addNewList: 'ReceiveAddNewList',
-      onlineMembers: 'ReceiveOnlineMembers'
+      onlineMembers: 'ReceiveOnlineMembers',
+      deleteList: 'ReceiveDeleteList'
     }
   },
   taskDetail: {

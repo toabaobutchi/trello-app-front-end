@@ -1,4 +1,3 @@
-import Flex from '@comps/StyledComponents'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import useSubNavigate from '@hooks/useSubNavigate'
 import useTasks from '@hooks/useTasks'
@@ -17,7 +16,7 @@ function ProjectSearchSuggestions({ searchText, searchObject, lostFocus }: Proje
   const tasks = useTasks()
   const { members } = useProjectSelector()
   const deferrSearchText = useDeferredValue(searchText)
-  const [navigate, location] = useSubNavigate()
+  const [_, location] = useSubNavigate()
   const { pathname } = location
   const suggestions = useMemo(() => {
     switch (searchObject) {
