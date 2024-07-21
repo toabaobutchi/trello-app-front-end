@@ -3,7 +3,10 @@ type OutClickResult = {
   isOutClick: boolean
   clickedElement: HTMLElement | null
 }
-export default function useClickTracker(trackedElement: HTMLElement, excludesElements?: HTMLElement[]) {
+export default function useClickTracker<TElement extends HTMLElement = HTMLElement>(
+  trackedElement?: TElement | null,
+  excludesElements?: HTMLElement[]
+) {
   const [outClick, setOutClick] = useState<OutClickResult>({
     isOutClick: false,
     clickedElement: null

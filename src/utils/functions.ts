@@ -185,5 +185,15 @@ export const getCommentTime = (commentTime: number) => {
       unit: 'hour'
     }
   }
-  // return diffDays > 0 ? `${diffDays}d ago` : `${Math.floor(diffTime / (1000 * 60 * 60))}h ago`
+}
+
+export function filterBySearchName<T extends { id: string }>(array?: T[], keys?: (keyof T)[], searchName?: string) {
+  if (!array || !keys || keys.length <= 0) return []
+  if (!searchName) return array
+  let newArray = [] as T[]
+  keys.forEach(key => {
+    newArray.push(...array.filter(item => (item[key] as string).toLowerCase().includes(searchName.toLowerCase())))
+  })
+  newArray = Array.from(new Map(newArray.map(item => [item.id, item])).values())
+  return newArray
 }

@@ -1,9 +1,10 @@
 import SelectList from '@comps/SelectList'
 import './ProjectSearch.scss'
-import { useDeferredValue, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Flex from '@comps/StyledComponents/Flex'
-import useTasks from '@hooks/useTasks'
 import { AssignmentResponse, TaskResponseForBoard } from '@utils/types'
+import ProjectSearchSuggestions from './ProjectSearchSuggestions'
+import useClickTracker from '@hooks/useClickTracker'
 
 function ProjectSearch() {
   return (
@@ -17,39 +18,57 @@ const items = [
   { value: 'assignee', display: '@assignee' }
 ]
 
+// type TaskSuggestionState = {
+//   selectedObject: 'task'
+// } & { suggestions?: TaskResponseForBoard[] }
+
+// type AssignmentSuggestionState = {
+//   selectedObject: 'assignee'
+// } & { suggestions?: AssignmentResponse[] }
+
+// export type SuggestionState = TaskSuggestionState | AssignmentSuggestionState
+
 function ProjectSearchInput() {
   const [searchObject, setSearchObject] = useState(items[0].value)
   const [quickSelectObject, setQuickSelectObject] = useState<string>()
   const [searchInput, setSearchInput] = useState('')
-  const input = useDeferredValue(searchInput)
-  const tasks = useTasks()
-  const [suggestions, setSuggestions] = useState<TaskResponseForBoard[] | AssignmentResponse[]>()
+  const [lostFocus, setLostFocus] = useState(false)
+
   const handleChooseSearchObject = ({ value }: { value: string }) => {
-    setSearchObject(value)
+    if (value === 'task' || value === 'assignee') {
+      setSearchObject(value)
+      setQuickSelectObject(undefined) // reset manual selection
+    }
   }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
     if (value && value.startsWith('@')) {
       const displayTexts = items.map(i => i.display)
       if (displayTexts.includes(value)) {
-        setSearchObject(value.slice(1))
-        setQuickSelectObject(value.slice(1))
-        value = ''
+        const sliceValue = value.slice(1)
+        if (sliceValue === 'task' || sliceValue === 'assignee') {
+          setSearchObject(sliceValue)
+          setQuickSelectObject(sliceValue)
+          value = ''
+        }
       }
     }
     setSearchInput(value)
   }
+  const trackedElement = useRef<HTMLDivElement>(null)
+  const { outClick } = useClickTracker<HTMLDivElement>(trackedElement?.current)
   useEffect(() => {
-    const handleSearch = () => {
-      if (searchObject === 'task') {
-        setSuggestions(tasks?.filter(t => t.name.includes(input.toLowerCase())))
-      }
+    if (outClick.isOutClick && !lostFocus) {
+      setLostFocus(true)
     }
-    if (input) handleSearch()
-  }, [input])
+    // else setLostFocus(false)
+  }, [outClick])
+  const handleFocus = () => {
+    setLostFocus(false)
+  }
   return (
     <>
-      <div className='posr'>
+      <div className='posr' ref={trackedElement}>
         <Flex $alignItem='center' className='project-search-container'>
           <SelectList
             size='small'
@@ -57,6 +76,7 @@ function ProjectSearchInput() {
             manualSelectedValue={quickSelectObject}
             onChoose={handleChooseSearchObject}
             selectedValue={searchObject}
+            className={`${lostFocus ? 'blur' : 'focused'}`}
           />
           <input
             type='text'
@@ -64,13 +84,12 @@ function ProjectSearchInput() {
             placeholder='Search for projects'
             value={searchInput}
             onChange={handleInputChange}
+            onFocus={handleFocus}
           />
         </Flex>
-        <div className={`project-search-suggestions ${searchInput && 'open'}`}>
-          {suggestions?.map(item => (
-            <p>{item?.name}</p>
-          ))}
-        </div>
+        {searchInput && !searchInput.startsWith('@') && (
+          <ProjectSearchSuggestions searchText={searchInput} searchObject={searchObject} lostFocus={lostFocus} />
+        )}
       </div>
     </>
   )

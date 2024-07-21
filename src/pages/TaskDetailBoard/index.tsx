@@ -72,7 +72,7 @@ function TaskDetailBoard() {
     }, 500)
   }
   const handleCloseTaskDetailModal = () => {
-    navigate('..')
+    navigate(-1)
   }
   const handleMarkCompleteTask = async () => {
     const res = await http.putAuth(`/tasks/${taskId}/mark`, { isCompleted: true })
