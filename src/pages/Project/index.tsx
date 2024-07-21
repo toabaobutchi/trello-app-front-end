@@ -2,7 +2,7 @@ import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
 import ProjectHeader from './partials/ProjectHeader'
 import { ProjectPageParams } from '@utils/types'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
@@ -12,6 +12,7 @@ import HttpClient from '@utils/HttpClient'
 import TableContent from './partials/TableContent'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 const BoardContent = lazy(() => import('./partials/BoardContent'))
 
@@ -19,9 +20,7 @@ const http = new HttpClient()
 
 function Project() {
   const params = useParams() as ProjectPageParams
-  //TODO Tuy vao viewmode ma lay ra du lieu can thiet
-  const activeProject = useSelector((state: RootState) => state.project.activeProject)
-  const { board: project, members } = activeProject
+  const { board: project } = useProjectSelector()
   const dispatch = useDispatch()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
 
@@ -36,27 +35,28 @@ function Project() {
   }, [params?.projectId])
 
   useEffect(() => {
-    if (project?.id && project?.id === params.projectId) {
+    if (project && project.id && project.id === params.projectId) {
       if (!projectHub.isConnected) {
-        projectHub.connection
+        projectHub.connection // kết nối đến hub
       }
     }
 
     return () => {
-      if (projectHub.isConnected && project?.id && project?.id === params.projectId) {
+      if (projectHub.isConnecting && project?.id && project?.id === params.projectId) {
         projectHub.disconnect()
       }
     }
   }, [project?.id])
 
   useEffect(() => {
-    if (projectHub.isConnected && project?.id && project.id === params.projectId) {
-      // ReceiveSubscriber
-      projectHub.connection?.on(hubs.project.receive.subscriber, (assignmentIds: string[]) => {
+    if (projectHub.isConnected) {
+      projectHub.connection?.on(hubs.project.receive.onlineMembers, (assignmentIds: string[]) => {
+        console.log(assignmentIds)
         dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
       })
+      projectHub.connection?.invoke(hubs.project.send.getOnlineMembers).catch(_ => {})
     }
-  }, [projectHub.isConnected, project.id, params.projectId, dispatch])
+  }, [project, project?.id, projectHub.isConnected])
 
   useEffect(() => {
     // tải thành viên của project
@@ -86,7 +86,7 @@ function Project() {
           </Suspense>
 
           {project && params.viewMode === 'table' && <TableContent />}
-          {members.length > 0 && <Outlet />}
+          <Outlet />
         </Flex>
       )}
     </>

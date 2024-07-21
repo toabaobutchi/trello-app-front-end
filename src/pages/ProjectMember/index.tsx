@@ -10,7 +10,7 @@ function ProjectMember() {
   const navigate = useNavigate()
   const { members: projectMembers } = useSelector((state: RootState) => state.project.activeProject)
   const handleClose = () => {
-    navigate('..')
+    navigate(-1)
   }
   return (
     <>
