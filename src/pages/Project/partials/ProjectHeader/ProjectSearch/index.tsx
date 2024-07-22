@@ -17,7 +17,6 @@ const items = [
   { value: 'assignee', display: '@assignee' }
 ]
 
-
 function ProjectSearchInput() {
   const [searchObject, setSearchObject] = useState(items[0].value)
   const [quickSelectObject, setQuickSelectObject] = useState<string>()

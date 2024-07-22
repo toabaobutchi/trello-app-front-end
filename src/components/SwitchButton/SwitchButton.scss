@@ -1,4 +1,8 @@
 .switch-btn {
+  --checked-theme: var(--success-color);
+  --unchecked-theme: var(--light-color);
+  --switch-foreground: var(--secondary-color);
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,13 +14,73 @@
     opacity: 0;
 
     &:checked ~ label {
-      background-color: var(--success-color);
+      background-color: var(--checked-theme);
       .slider {
         left: calc(100% - 1px);
         transform: translateX(-100%) translateY(-50%);
         background-color: #fff;
-        color: var(--success-color);
+        color: var(--switch-foreground);
       }
+    }
+  }
+
+  &.c-theme {
+    &__success {
+      --checked-theme: var(--success-color);
+    }
+    &__warning {
+      --checked-theme: var(--warning-color);
+    }
+    &__danger {
+      --checked-theme: var(--danger-color);
+    }
+    &__primary {
+      --checked-theme: var(--primary-color);
+    }
+    &__info {
+      --checked-theme: var(--info-color);
+    }
+    &__light {
+      --checked-theme: var(--light-color);
+    }
+    &__secondary {
+      --checked-theme: var(--secondary-color);
+    }
+    &__dark {
+      --checked-theme: var(--dark-color);
+    }
+    &__default {
+      --checked-theme: var(--text-secondary-color);
+    }
+  }
+
+  &.u-theme {
+    &__success {
+      --unchecked-theme: var(--success-color);
+    }
+    &__warning {
+      --unchecked-theme: var(--warning-color);
+    }
+    &__danger {
+      --unchecked-theme: var(--danger-color);
+    }
+    &__primary {
+      --unchecked-theme: var(--primary-color);
+    }
+    &__info {
+      --unchecked-theme: var(--info-color);
+    }
+    &__light {
+      --unchecked-theme: var(--light-color);
+    }
+    &__secondary {
+      --unchecked-theme: var(--secondary-color);
+    }
+    &__dark {
+      --unchecked-theme: var(--dark-color);
+    }
+    &__default {
+      --unchecked-theme: var(--text-secondary-color);
     }
   }
 
@@ -86,7 +150,7 @@
     position: relative;
     border-radius: 10px;
     border: var(--thin-border-width) solid var(--light-color);
-    background-color: var(--secondary-color);
+    background-color: var(--unchecked-theme);
     display: block;
 
     .slider {
@@ -97,14 +161,57 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      background-color: var(--secondary-color);
+      background-color: #fff;
       border: 1px solid var(--light-color);
       transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.6rem;
-      color: var(--light-color);
+      color: var(--unchecked-theme);
+    }
+  }
+
+  &.sync-theme {
+    &:checked ~ label {
+      .slider {
+        --switch-foreground: var(--checked-theme);
+      }
+    }
+    label {
+      .slider {
+        --switch-foreground: var(--unchecked-theme);
+      }
+    }
+  }
+
+  &.foreground {
+    &__success {
+      --switch-foreground: var(--success-color);
+    }
+    &__warning {
+      --switch-foreground: var(--warning-color);
+    }
+    &__danger {
+      --switch-foreground: var(--danger-color);
+    }
+    &__primary {
+      --switch-foreground: var(--primary-color);
+    }
+    &__info {
+      --switch-foreground: var(--info-color);
+    }
+    &__light {
+      --switch-foreground: var(--light-color);
+    }
+    &__secondary {
+      --switch-foreground: var(--secondary-color);
+    }
+    &__dark {
+      --switch-foreground: var(--dark-color);
+    }
+    &__default {
+      --switch-foreground: var(--text-secondary-color);
     }
   }
 }

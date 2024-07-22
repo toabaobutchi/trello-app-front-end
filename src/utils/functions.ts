@@ -197,3 +197,21 @@ export function filterBySearchName<T extends { id: string }>(array?: T[], keys?:
   newArray = Array.from(new Map(newArray.map(item => [item.id, item])).values())
   return newArray
 }
+export enum DateCompareState {
+  Normal,
+  Overdue,
+  DueSoon
+}
+export function isOverdue(date?: number) {
+  if (!date) return DateCompareState.Normal
+  // console.log(getDateString(new Date(date)))
+  const diff = date - new Date().getTime()
+  const diffDays = Math.floor(diff / (24 * 60 * 60 * 1000))
+  if (diffDays > 0 && diffDays <= 1) {
+    return DateCompareState.DueSoon
+  } else if (diffDays < 0) {
+    // console.log('Overdue')
+    return DateCompareState.Overdue
+  }
+  return DateCompareState.Normal
+}

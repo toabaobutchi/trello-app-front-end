@@ -1,6 +1,7 @@
 .project-view-mode {
   color: var(--text-secondary-color);
-  font-size: 1.1rem;
+  // flex: 1;
+  // font-size: 1.1rem;
 
   .project-view-mode-item {
     cursor: pointer;
@@ -53,6 +54,17 @@
   }
 }
 
+.project-path-container {
+  border-bottom: var(--thin-border-width) solid var(--bright-color);
+  width: 100%;
+  color: var(--text-secondary-color);
+
+  a {
+    text-decoration: none;
+    color: var(--text-secondary-color);
+  }
+}
+
 .column-list {
   overflow: auto;
   padding: 0.7rem 0 3.7rem 0.7rem;
@@ -61,3 +73,7 @@
   flex: 1;
   background-color: var(--board-bg-color, #fff);
 }
+
+// .project-name {
+//   font-size: 1.7rem;
+// }

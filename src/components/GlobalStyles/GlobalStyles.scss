@@ -17,6 +17,7 @@
   --info-color: #2e70ff;
   --warning-color: #d89e00;
   --primary-color: #007bc2;
+  // --primary-color: #0AB3C2;
   --success-color: #02a430;
   --dark-color: #333;
   --bright-color: #f1f1f1;
@@ -24,14 +25,16 @@
   --card-radius: 15px;
 
   --theme-bg-color: #fff;
+  --input-bg-color: #fff;
 
   --danger-bg-color: #e9067821;
   --info-bg-color: #2e70ff21;
   --warning-bg-color: #d89e0021;
-  --primary-bg-color: #007bc221;
+  --primary-bg-color: #0ab3c221;
   --success-bg-color: #02a43021;
+  --secondary-bg-color: #77777721;
 
-  --primary-radius: 5px;
+  --primary-radius: 7px;
   --secondary-radius: 3px;
   --chat-input-radius: 1.3rem;
   --multiple-input-value-box-radius: 13px;
@@ -54,7 +57,7 @@
   --task-card-box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
   --task-card-box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   // --task-card-hover-box-shadow: rgba(51, 111, 214, 0.671) 0px 4px 8px -2px;
-  --task-card-hover-box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+  --task-card-hover-box-shadow: rgba(161, 205, 255, 0.3) 0px 0px 0px 3px;
   --list-box-shadow: 0 0 1rem 0 #c1c1c1;
   --list-padding: 0 0.5rem 0 1rem;
   --task-card-hover-shadow: rgba(51, 111, 214, 0.671) 0px 0px 8px 3px;

@@ -10,6 +10,7 @@ import { workspaceSlice } from '@redux/WorkspaceSlice'
 import HttpClient from '@utils/HttpClient'
 import { NavLink } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 const http = new HttpClient()
 
@@ -18,6 +19,7 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
   const menu = useMenu<HTMLButtonElement>()
   const dispatch = useDispatch()
   const activeWorkspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
+  // const { board } = useProjectSelector()
   useEffect(() => {
     if (!activeWorkspace?.id && workspaceId) {
       http
@@ -39,7 +41,7 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
         className={`${menu.open ? 'click-button__open' : ''}`}
         variant='text'
         theme={`${menu.open ? 'primary' : 'default'}`}
-        size='large'
+        size='small'
       >
         <i className='fa-solid fa-folder-tree'></i>
       </Button>
@@ -74,6 +76,18 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
           )
         })}
       </Menu>
+      {/* <div className='current-project-path row gap-2'>
+        <NavLink
+          to={linkCreator.workspaces({
+            ownerShip: activeWorkspace.context,
+            slug: activeWorkspace.slug,
+            workspaceId: activeWorkspace.id + ''
+          })}
+        >
+          {activeWorkspace?.name}
+        </NavLink>{' '}
+        <i className='fa-solid fa-angle-right'></i> {board?.name}
+      </div> */}
     </>
   )
 }

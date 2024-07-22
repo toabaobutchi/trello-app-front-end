@@ -7,7 +7,7 @@ import MenuItem from '@comps/MenuItem'
 import { AssignmentResponse, DeletedTaskResponse, JoinTaskResponse, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { createCardId, getDateString } from '@utils/functions'
+import { createCardId, DateCompareState, getDateString, isOverdue } from '@utils/functions'
 import { useEffect, useMemo, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
@@ -124,6 +124,14 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
         </Flex>
         <div className='task-card-body'>
           <div className='task-card-body-name'>{task.name}</div>
+          <div className='task-card-body-tags row gap-1'>
+            {isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.DueSoon && (
+              <p className='tag text-warning bg-warning'>#duesoon</p>
+            )}
+            {isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.Overdue && (
+              <p className='tag text-danger bg-danger'>#overdue</p>
+            )}
+          </div>
         </div>
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>
           <Flex $alignItem='center' $gap='1rem'>
@@ -138,7 +146,15 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               <i className='fa-regular fa-message'></i> {task?.commentCount ?? 0}
             </div>
           </Flex>
-          <div className='task-card-footer-due-date'>
+          <div
+            className={`task-card-footer-due-date ${
+              isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.DueSoon
+                ? 'text-warning bold'
+                : isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.Overdue
+                ? 'text-danger bold'
+                : ''
+            }`}
+          >
             <i className='fa-regular fa-clock'></i>{' '}
             {task?.dueDate ? getDateString(new Date(task.dueDate * 1000)) : <span className='text-light'>Not set</span>}
           </div>

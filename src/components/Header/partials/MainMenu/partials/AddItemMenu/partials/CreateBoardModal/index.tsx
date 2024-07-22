@@ -83,7 +83,6 @@ function CreateBoardModal({ open, onClose = () => {} }: CreateBoardModalProps) {
       )
     }
   }
-
   return (
     <>
       <Modal
@@ -95,38 +94,57 @@ function CreateBoardModal({ open, onClose = () => {} }: CreateBoardModalProps) {
         {ownWorkspace && ownWorkspace.length > 0 && (
           <>
             <FloatLabelInput
-              label='Board title'
+              label='Project name'
               input={{ id: 'create-board', name: 'title', autoFocus: true, value: boardData.title }}
               onChange={handleChangeBoard.inputs}
             />
 
             <Flex className='mt-1' $gap='0.5rem' $alignItem='center'>
-              <SwitchButton
-                inputAttributes={{ type: 'checkbox', id: 'use-color', checked: boardData.useColor }}
+              <div className='row gap-1'>
+                <SwitchButton
+                  inputAttributes={{ type: 'checkbox', id: 'use-color', checked: boardData.useColor }}
+                  size='small'
+                  onChange={handleChangeBoard.toggleUseColor}
+                  theme={{
+                    checked: 'primary'
+                  }}
+                />
+                <label style={{ cursor: 'pointer' }} htmlFor='use-color'>
+                  Use background color
+                </label>
+              </div>
+              {boardData.useColor && (
+                <ColorPicker
+                  label={{
+                    content: (
+                      <span className='row gap-1'>
+                        <i className='fa-solid fa-chevron-right'></i> Select project color:
+                      </span>
+                    )
+                  }}
+                  input={{ id: 'project-color', value: boardData.color, name: 'color' }}
+                  // style={{ marginTop: '0.5rem', marginLeft: '1rem' }}
+                  onChange={handleChangeBoard.inputs}
+                />
+              )}
+            </Flex>
+
+            <Flex $alignItem='center' $gap='0.5rem' className='mt-1'>
+              <p>Select a workspace:</p>
+              <SelectList
+                onChoose={handleChangeBoard.selectedWorkspace}
+                items={ownWorkspace?.map(workspace => ({ value: workspace.id.toString(), display: workspace.name }))}
                 size='small'
               />
-              <label style={{ cursor: 'pointer' }} htmlFor='use-color'>
-                Use background color
-              </label>
             </Flex>
-            {boardData.useColor && (
-              <ColorPicker
-                label={{ content: 'Select project color:' }}
-                input={{ id: 'project-color', value: boardData.color, name: 'color' }}
-                style={{ marginTop: '0.5rem', marginLeft: '1rem' }}
-                onChange={handleChangeBoard.inputs}
-              />
-            )}
-            <SelectList
-              label={{ content: 'Select workspace:', style: { marginTop: '0.5rem' } }}
-              onChoose={handleChangeBoard.selectedWorkspace}
-              items={ownWorkspace?.map(workspace => ({ value: workspace.id.toString(), display: workspace.name }))}
-            />
             <Flex className='mt-1' $gap='0.5rem' $alignItem='center'>
               <SwitchButton
                 inputAttributes={{ type: 'checkbox', id: 'set-dute-date', checked: boardData.dueDate === undefined }}
                 size='small'
                 onChange={handleChangeBoard.toggleSetDueDate}
+                theme={{
+                  checked: 'primary'
+                }}
               />
               <label style={{ cursor: 'pointer' }} htmlFor='set-dute-date'>
                 I do not want to set due date
