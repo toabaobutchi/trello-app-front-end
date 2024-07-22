@@ -3,13 +3,21 @@
 }
 
 .active-text {
-  padding: 0.25rem 0.5rem;
-  background-color: var(--success-color);
-  color: var(--bright-color);
-  font-weight: bold;
-  font-size: 0.9rem;
-  border-radius: var(--primary-radius);
-  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--success-color);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -7px;
+    transform: translateY(-50%);
+    width: 5px;
+    aspect-ratio: 1/1;
+    background: var(--success-color);
+    border-radius: 50%;
+  }
 }
 
 .member-info {

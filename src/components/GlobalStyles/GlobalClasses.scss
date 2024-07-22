@@ -70,6 +70,9 @@
 .text-light {
   color: var(--light-color);
 }
+.text-purple {
+  color: var(--purple-color);
+}
 
 .bg-primary {
   background-color: var(--primary-bg-color) !important;
@@ -97,6 +100,51 @@
 
 .bg-light {
   background-color: var(--light-color);
+}
+.bg-purple {
+  background-color: var(--purple-bg-color);
+}
+
+.hover-bg-primary {
+  &:hover {
+    background-color: var(--primary-bg-color) !important;
+  }
+}
+
+.hover-bg-secondary {
+  &:hover {
+    background-color: var(--secondary-bg-color) !important;
+  }
+}
+
+.hover-bg-danger {
+  &:hover {
+    background-color: var(--danger-bg-color) !important;
+  }
+}
+
+.hover-bg-info {
+  &:hover {
+    background-color: var(--info-bg-color) !important;
+  }
+}
+
+.hover-bg-success {
+  &:hover {
+    background-color: var(--success-bg-color) !important;
+  }
+}
+
+.hover-bg-warning {
+  &:hover {
+    background-color: var(--warning-bg-color) !important;
+  }
+}
+
+.hover-bg-light {
+  &:hover {
+    background-color: var(--light-color);
+  }
 }
 
 .row {

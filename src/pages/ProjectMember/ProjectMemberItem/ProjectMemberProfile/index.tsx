@@ -12,8 +12,8 @@ const tabs: TabNav[] = [
     display: 'Join tasks'
   },
   {
-    value: 'assignTasks',
-    display: 'Assign new tasks'
+    value: 'activities',
+    display: 'Activities'
   }
 ]
 
@@ -38,7 +38,7 @@ function ProjectMemberProfile({ member }: { member?: AssignmentResponse }) {
           <Tab.Content show={activeTab === tabs[0].value}>
             {profile && <JoinedTasksTable joinedTasks={profile.joinedTasks} />}
           </Tab.Content>
-          <Tab.Content show={activeTab === tabs[1].value}>Assign new tasks</Tab.Content>
+          <Tab.Content show={activeTab === tabs[1].value}>Activities</Tab.Content>
         </Tab>
       </div>
     </>

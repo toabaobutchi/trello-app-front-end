@@ -13,19 +13,19 @@ function ProjectUtilities() {
     navigate(`${pathname}/${routeLinks.members}`)
     closeMenu()
   }
-  const handleNavigateShareBoard = () => {
-    navigate(`${pathname}/${routeLinks.share}`)
-    closeMenu()
-  }
+  // const handleNavigateShareBoard = () => {
+  //   navigate(`${pathname}/${routeLinks.share}`)
+  //   closeMenu()
+  // }
   return (
     <>
       <Button onClick={toggleMenu} ref={anchorRef} variant='filled'>
         <i className='fa-solid fa-screwdriver-wrench'></i> <span className='project-util-button-text'>Utilities</span>
       </Button>
       <Menu open={open} anchorElement={anchorRef.current} onClose={closeMenu} style={{ width: '300px' }}>
-        <MenuItem onClick={handleNavigateShareBoard} className='utils-menu-item'>
+        {/* <MenuItem onClick={handleNavigateShareBoard} className='utils-menu-item'>
           <i className='fa-solid fa-share-nodes'></i> Share project
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem className='utils-menu-item' onClick={handleNavigateMemberBoard}>
           <i className='fa-solid fa-users-line'></i> Members management
         </MenuItem>

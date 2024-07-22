@@ -68,12 +68,42 @@
 .column-list {
   overflow: auto;
   padding: 0.7rem 0 3.7rem 0.7rem;
-  // height: 100%;
   width: 100%;
   flex: 1;
-  background-color: var(--board-bg-color, #fff);
+  background-color: var(--board-bg-color);
+  border-radius: var(--primary-radius);
 }
 
-// .project-name {
-//   font-size: 1.7rem;
-// }
+.project-name {
+  font-size: 1.7rem;
+  margin-bottom: 0;
+}
+
+.project-info-toggle-button {
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+  clip-path: circle();
+  &:hover {
+    background-color: var(--bright-color);
+  }
+}
+.project-share-button {
+  text-decoration: none;
+  color: var(--text-secondary-color);
+  padding: 0.5rem 0.65rem;
+  // font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // clip-path: circle();
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+
+  &:hover {
+    background-color: var(--primary-bg-color);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+}

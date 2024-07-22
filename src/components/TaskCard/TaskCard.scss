@@ -84,6 +84,10 @@
       font-weight: 600;
       margin: 0.5rem 0;
       max-width: 300px;
+
+      &__completed {
+        text-decoration: line-through double;
+      }
     }
 
     &-tags {

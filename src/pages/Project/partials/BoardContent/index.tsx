@@ -404,7 +404,7 @@ function BoardContent() {
 
   const sensors = useSensors(customMouseSensor, touchSensor)
   // const handleScroll = (e: React.WheelEvent) => {
-  //   if (e.ctrlKey) {
+  //   if (e.altKey) {
   //     e.currentTarget.scrollTo({ top: 0, left: e.currentTarget.scrollLeft + e.deltaY, behavior: 'smooth' })
   //   }
   // }

@@ -106,10 +106,10 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
         anchorElement={state?.anchorEl as HTMLElement}
         onClose={handleCloseMenu}
       >
-        <MenuItem onClick={handleToggleDeleteModal}>
+        <MenuItem className='text-danger hover-bg-danger' onClick={handleToggleDeleteModal}>
           <i className='fa-regular fa-trash-can'></i>&nbsp; Delete list
         </MenuItem>
-        <MenuItem onClick={handleOpenWIPMenu}>
+        <MenuItem className='text-warning hover-bg-warning' onClick={handleOpenWIPMenu}>
           <i className='fa-solid fa-lock'></i>&nbsp; Set WIP Limit
         </MenuItem>
       </Menu>

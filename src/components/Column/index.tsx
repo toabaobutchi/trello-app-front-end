@@ -39,10 +39,14 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
       >
         <Flex $alignItem='center' $justifyContent='space-between' className='column-header'>
           <div className='column-header-name'>
-            <p>
-              {column?.name} ({column?.tasks?.length})
+            <p className='row gap-1'>
+              {column?.name} <span className='column-header-task-count'>{column?.tasks?.length}</span>
             </p>
-            {Boolean(column?.wipLimit) && <p className='text-danger wip-limit'>WIP Limit: {column?.wipLimit}</p>}
+            {Boolean(column?.wipLimit) && (
+              <p className='text-danger wip-limit'>
+                <i className='fa-solid fa-lock'></i> WIP Limit: {column?.wipLimit}
+              </p>
+            )}
           </div>
           <Flex $alignItem='center' $gap='0.25rem'>
             <AddTaskAbove column={column} />

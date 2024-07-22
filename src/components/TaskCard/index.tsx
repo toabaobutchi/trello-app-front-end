@@ -123,13 +123,29 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           </DropdownMenu>
         </Flex>
         <div className='task-card-body'>
-          <div className='task-card-body-name'>{task.name}</div>
+          <div className={`task-card-body-name ${task.isCompleted ? 'task-card-body-name__completed' : ''}`}>
+            {task.name}
+          </div>
           <div className='task-card-body-tags row gap-1'>
             {isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.DueSoon && (
-              <p className='tag text-warning bg-warning'>#duesoon</p>
+              <p className='tag text-warning bg-warning'>
+                <i className='fa-solid fa-hourglass-half'></i> Duesoon
+              </p>
             )}
             {isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.Overdue && (
-              <p className='tag text-danger bg-danger'>#overdue</p>
+              <p className='tag text-danger bg-danger'>
+                <i className='fa-regular fa-calendar-xmark'></i> Overdue
+              </p>
+            )}
+            {task?.isCompleted && (
+              <p className='tag text-success bg-success'>
+                <i className='fa-solid fa-check'></i> Completed
+              </p>
+            )}
+            {task?.isMarkedNeedHelp && (
+              <p className='tag text-purple bg-purple'>
+                <i className='fa-regular fa-circle-question'></i> Need help
+              </p>
             )}
           </div>
         </div>

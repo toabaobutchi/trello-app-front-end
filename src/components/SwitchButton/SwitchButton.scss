@@ -1,7 +1,7 @@
 .switch-btn {
   --checked-theme: var(--success-color);
   --unchecked-theme: var(--light-color);
-  --switch-foreground: var(--secondary-color);
+  // --switch-foreground: var(--secondary-color);
 
   display: flex;
   align-items: center;
@@ -168,16 +168,20 @@
       align-items: center;
       justify-content: center;
       font-size: 0.6rem;
-      color: var(--unchecked-theme);
+      color: var(--switch-foreground);
     }
   }
 
   &.sync-theme {
-    &:checked ~ label {
-      .slider {
-        --switch-foreground: var(--checked-theme);
+    input[type='checkbox'],
+    input[type='radio'] {
+      &:checked ~ label {
+        .slider {
+          --switch-foreground: var(--checked-theme);
+        }
       }
     }
+
     label {
       .slider {
         --switch-foreground: var(--unchecked-theme);

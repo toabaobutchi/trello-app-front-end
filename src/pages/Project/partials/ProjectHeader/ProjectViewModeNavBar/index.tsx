@@ -9,10 +9,16 @@ const ProjectViewModeNavBar = memo(
       <>
         <Flex $gap='1rem' $alignItem='center' className='project-view-mode'>
           <NavLink
+            to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'overview' })}
+            className='project-view-mode-item view-mode'
+          >
+            <i className='fa-regular fa-clipboard'></i> <span className='project-view-mode-item-text'>Overview</span>
+          </NavLink>
+          <NavLink
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'board' })}
             className='project-view-mode-item view-mode'
           >
-            <i className='fa-solid fa-table-columns'></i> <span className='project-view-mode-item-text'>Board</span>
+            <i className='fa-brands fa-trello'></i> <span className='project-view-mode-item-text'>Task Board</span>
           </NavLink>
           <NavLink
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'table' })}
@@ -24,13 +30,14 @@ const ProjectViewModeNavBar = memo(
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'calendar' })}
             className='project-view-mode-item view-mode'
           >
-            <i className='fa-regular fa-calendar-days'></i> <span className='project-view-mode-item-text'>Calendar</span>
+            <i className='fa-regular fa-calendar-days'></i>{' '}
+            <span className='project-view-mode-item-text'>Calendar</span>
           </NavLink>
           <NavLink
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'chart' })}
             className='project-view-mode-item view-mode'
           >
-            <i className='fa-solid fa-chart-gantt'></i> <span className='project-view-mode-item-text'>Chart</span>
+            <i className='fa-solid fa-chart-pie'></i> <span className='project-view-mode-item-text'>Dashboard</span>
           </NavLink>
         </Flex>
       </>

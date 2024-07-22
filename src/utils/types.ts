@@ -257,6 +257,7 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   commentCount: number
   completedSubTaskCount?: number
   subTaskCount?: number
+  isMarkedNeedHelp?: boolean
 }
 
 export type DeletedTaskResponse = {
@@ -307,7 +308,7 @@ export type CreateProjectModel = {
 
 export type SelectListItem = {
   value: string
-  display?: string
+  display?: React.ReactNode
 }
 
 export type ListChangeResponse = {

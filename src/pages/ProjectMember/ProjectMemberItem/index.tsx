@@ -31,8 +31,8 @@ function ProjectMemberItem({ member }: MemberItemProps) {
           <img src={member.avatar} alt='avatar' />
         </div>
         <div className='member-info-name'>
-          <p className='row gap-1'>
-            {member?.displayName} {isOnline && <span className='active-text'>{isOnline ? 'Active' : ''}</span>}
+          <p className='row gap-2'>
+            {member?.displayName} {isOnline && <span className='active-text'>{isOnline ? 'Available for work' : ''}</span>}
           </p>
           <p className='text-secondary'>{member?.email}</p>
         </div>

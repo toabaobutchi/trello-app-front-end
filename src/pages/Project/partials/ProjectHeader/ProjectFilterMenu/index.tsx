@@ -14,28 +14,29 @@ import SwitchButton from '@comps/SwitchButton'
 import { getDateTimeString } from '@utils/functions'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import CheckBox from '@comps/CheckBox'
 
 // co the hard code nhu the nay
 const items = [
   {
     value: 'High',
-    display: 'High'
+    display: <p className='text-danger'>High</p>
   },
   {
     value: 'Medium',
-    display: 'Medium'
+    display: <p className='text-warning'>Medium</p>
   },
   {
     value: 'Normal',
-    display: 'Normal'
+    display: <p className='text-primary'>Normal</p>
   },
   {
     value: 'Low',
-    display: 'Low'
+    display: <p className='text-success'>Low</p>
   },
   {
     value: '',
-    display: 'Not set'
+    display: <p className='text-secondary'>Not set</p>
   }
 ]
 
@@ -96,8 +97,8 @@ const ProjectFilterMenu = memo(() => {
           </Tooltip>
         }
       >
-        <Button onClick={handleToggleModal} variant='text' theme='default'>
-          <i className='fa-solid fa-filter'></i> Filters
+        <Button onClick={handleToggleModal} variant='text' theme='primary'>
+          <i className='fa-solid fa-sliders'></i> Filters
         </Button>
       </ButtonGroup>
       <Modal
@@ -143,9 +144,9 @@ const ProjectFilterMenu = memo(() => {
           <Flex
             className='w-full mb-1'
             $alignItem='center'
-            $justifyContent='space-between'
             $flexWrap='wrap'
             $gap='0.5rem'
+            $justifyContent='space-between'
           >
             <Flex $alignItem='center' $gap='0.5rem'>
               <SwitchButton
@@ -157,7 +158,7 @@ const ProjectFilterMenu = memo(() => {
                 }}
                 onChange={handleToggleDueDateFilter}
               />
-              <label htmlFor="'choose-due-date-option'">Due date by</label>
+              <label htmlFor='choose-due-date-option'>Due date by</label>
               <input
                 className='due-date-filter-input'
                 type='datetime-local'
@@ -168,7 +169,7 @@ const ProjectFilterMenu = memo(() => {
                 onChange={handleChangeDueDate}
               />
             </Flex>
-            <Flex $alignItem='center' $gap='0.5rem'>
+            {/* <Flex $alignItem='center' $gap='0.5rem'>
               <SwitchButton
                 inputAttributes={{
                   type: 'checkbox',
@@ -177,10 +178,55 @@ const ProjectFilterMenu = memo(() => {
                   checked: filter.overDueFilter
                 }}
                 onChange={handleToggleOverdueFilter}
+                icon={{
+                  checked: <i className='fa-regular fa-calendar-xmark'></i>,
+                  unchecked: <i className='fa-regular fa-calendar-check'></i>
+                }}
+                theme={{ checked: 'danger' }}
+                foreGround
               />
               <label htmlFor='choose-over-due-option'>Overdue</label>
-            </Flex>
+            </Flex> */}
           </Flex>
+        </Flex>
+        <p>Tags</p>
+        <Flex className='w-full my-1' $alignItem='center' $flexWrap='wrap' $gap='0.5rem'>
+          <Input.CheckBox
+            id='filter-overdue'
+            checked={filter?.noAssigneesFilter}
+            borderTheme={{ normal: 'light', onChecked: 'danger', applyToForeground: true }}
+            label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
+            // onChange={handleSelectNoAssigneeFilter}
+          >
+            Overdue <i className='fa-regular fa-calendar-xmark'></i>
+          </Input.CheckBox>
+          <Input.CheckBox
+            id='filter-duesoon'
+            checked={filter?.noAssigneesFilter}
+            borderTheme={{ normal: 'light', onChecked: 'warning', applyToForeground: true }}
+            label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
+            // onChange={handleSelectNoAssigneeFilter}
+          >
+            Duesoon <i className='fa-solid fa-hourglass-half'></i>
+          </Input.CheckBox>
+          <Input.CheckBox
+            id='filter-completed'
+            checked={filter?.noAssigneesFilter}
+            borderTheme={{ normal: 'light', onChecked: 'success', applyToForeground: true }}
+            label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
+            // onChange={handleSelectNoAssigneeFilter}
+          >
+            Completed <i className='fa-solid fa-check'></i>
+          </Input.CheckBox>
+          <Input.CheckBox
+            id='filter-needhelp'
+            checked={filter?.noAssigneesFilter}
+            borderTheme={{ normal: 'light', onChecked: 'danger', applyToForeground: true }}
+            label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
+            // onChange={handleSelectNoAssigneeFilter}
+          >
+            Need help <i className='fa-regular fa-circle-question'></i>
+          </Input.CheckBox>
         </Flex>
         <Flex $alignItem='center' $justifyContent='end'>
           <Button onClick={handleFilter} variant='filled'>

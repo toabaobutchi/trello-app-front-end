@@ -1,5 +1,5 @@
 .column {
-  border: var(--thin-border-width) solid var(--light-color);
+  // border: var(--thin-border-width) solid var(--light-color);
   border-radius: var(--card-radius);
   padding: var(--list-padding);
   min-width: 300px;
@@ -15,10 +15,18 @@
       color: var(--text-primary-color);
 
       > p.wip-limit {
-        font-size: 0.9rem;
-        font-style: italic;
+        font-size: 0.8rem;
+        // font-style: italic;
         font-weight: 600;
       }
+    }
+
+    &-task-count {
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--primary-radius);
+      background-color: var(--task-count-bg-color);
     }
 
     &-more-button {

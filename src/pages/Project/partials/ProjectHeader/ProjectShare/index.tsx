@@ -72,9 +72,6 @@ function ProjectShare() {
   }
   return (
     <>
-      {/* <Button onClick={handleToggleModal} variant='filled'>
-        <i className='fa-solid fa-share-nodes'></i> Share
-      </Button> */}
       <Modal
         style={{ width: '35%' }}
         onClose={handleClose}

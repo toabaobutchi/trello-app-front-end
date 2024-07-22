@@ -1,6 +1,6 @@
 .project-search-container {
   border: var(--thin-border-width) solid var(--light-color);
-  border-radius: var(--primary-radius);
+  border-radius: var(--input-radius);
   width: 20vw;
 
   > input {
@@ -9,7 +9,7 @@
     padding: 0.5rem 0.25rem;
     font: inherit;
     color: var(--text-secondary-color);
-    border-radius: 0 var(--primary-radius) var(--primary-radius) 0;
+    border-radius: 0 var(--input-radius) var(--input-radius) 0;
     flex: 1;
   }
 
@@ -25,9 +25,9 @@
 
     .selected-item {
       background: var(--bright-color);
-      border-radius: var(--primary-radius) 0 0 var(--primary-radius);
-      padding-left: 0.3rem;
-      padding-right: 0.3rem;
+      border-radius: var(--input-radius) 0 0 var(--input-radius);
+      padding-left: 0.4rem;
+      padding-right: 0.4rem;
     }
   }
 }
