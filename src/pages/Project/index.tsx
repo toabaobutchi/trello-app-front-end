@@ -12,6 +12,7 @@ import TableContent from './partials/TableContent'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import ProjectSideBar from './partials/ProjectSideBar'
 
 const BoardContent = lazy(() => import('./partials/BoardContent'))
 
@@ -50,7 +51,6 @@ function Project() {
   useEffect(() => {
     if (projectHub.isConnected) {
       projectHub.connection?.on(hubs.project.receive.onlineMembers, (assignmentIds: string[]) => {
-        console.log(assignmentIds)
         dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
       })
       projectHub.connection?.invoke(hubs.project.send.getOnlineMembers).catch(_ => {})
@@ -81,7 +81,10 @@ function Project() {
               </>
             }
           >
-            {project?.id && project.id === params.projectId && params.viewMode === 'board' && <BoardContent />}
+            <Flex>
+              <ProjectSideBar />
+              {project?.id && project.id === params.projectId && params.viewMode === 'board' && <BoardContent />}
+            </Flex>
           </Suspense>
 
           {project && params.viewMode === 'table' && <TableContent />}

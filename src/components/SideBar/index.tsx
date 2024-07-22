@@ -81,7 +81,7 @@ function SideBar() {
         </SideBarItem>
         <SideBarItem.Link to='/invitations'>
           <i className='fa-solid fa-envelope sidebar-close-icon'></i>{' '}
-          <i className='fa-solid fa-envelope-open-text sidebar-open-icon'></i> Schedule
+          <i className='fa-solid fa-envelope-open-text sidebar-open-icon'></i> Invitations
         </SideBarItem.Link>
 
         <Button

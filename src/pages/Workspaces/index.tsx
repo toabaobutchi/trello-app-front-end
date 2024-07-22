@@ -1,7 +1,7 @@
-import { WorkspaceResponseWithRelatedProjects } from '@utils/types'
+import { WorkspacePageParams, WorkspaceResponseWithRelatedProjects } from '@utils/types'
 import { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useParams } from 'react-router-dom'
 import './Workspaces.scss'
 import ProjectCard from './partials/ProjectCard'
 import { useDispatch } from 'react-redux'
@@ -18,10 +18,12 @@ function Workspaces() {
   const res = useLoaderData() as AxiosResponse
   const workspace = res?.data as WorkspaceResponseWithRelatedProjects
   const [projectModal, setProjectModal] = useState(false)
+  const params = useParams() as WorkspacePageParams
   // đặt activeWorkspace (workspace đang thao tác)
   useEffect(() => {
+    if (workspace?.id && params.workspaceId !== workspace.id.toString()) console.log('Set activeWorkspace')
     dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))
-  }, [dispatch, workspace])
+  }, [dispatch, workspace?.id])
   const handleToggle = () => {
     setProjectModal(!projectModal)
   }

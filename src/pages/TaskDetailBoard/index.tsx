@@ -17,6 +17,7 @@ import { projectSlice } from '@redux/ProjectSlice'
 import { useModal } from '@hooks/useModal'
 import AssignMember from '@comps/TaskCard/TaskDetail/AssignMember'
 import LoadingLayout from '@layouts/LoadingLayout'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 const http = new HttpClient()
 
@@ -31,6 +32,7 @@ function TaskDetailBoard() {
   const [joinModal, setJoinModal] = useState(false)
   const [assignModal, handleToggleAssignModal] = useModal()
   const { taskId } = useParams()
+  const [projectHub] = useState(new ProjectHub())
   useEffect(() => {
     if (taskDetail?.id) {
       const member = members.find(m => m.userId === accountInfo?.id)
@@ -69,6 +71,10 @@ function TaskDetailBoard() {
             } as TaskDetailForBoard)
         )
         // dispatch to store
+        dispatch(projectSlice.actions.markTask(data))
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
+        }
       }
     }, 500)
   }
@@ -123,24 +129,26 @@ function TaskDetailBoard() {
                     <Button onClick={handleToggleAssignModal} variant='text' theme='default'>
                       <i className='fa-solid fa-user-plus'></i> Assign
                     </Button>
-                    <Flex $alignItem='center' $gap='0.5rem'>
-                      <SwitchButton
-                        inputAttributes={{
-                          id: 'need-help-toggle',
-                          type: 'checkbox',
-                          name: 'need-help-toggle',
-                          checked: Boolean(taskDetail?.isMarkedNeedHelp)
-                        }}
-                        onChange={handleMarkNeedHelp}
-                      />
-                      <label
-                        className={taskDetail?.isMarkedNeedHelp ? 'text-success' : 'text-secondary'}
-                        style={{ fontSize: '1rem' }}
-                        htmlFor='need-help-toggle'
-                      >
-                        Need help!
-                      </label>
-                    </Flex>
+                    {taskDetail?.id && (
+                      <Flex $alignItem='center' $gap='0.5rem'>
+                        <SwitchButton
+                          inputAttributes={{
+                            id: 'need-help-toggle',
+                            type: 'checkbox',
+                            name: 'need-help-toggle',
+                            checked: Boolean(taskDetail?.isMarkedNeedHelp)
+                          }}
+                          onChange={handleMarkNeedHelp}
+                        />
+                        <label
+                          className={taskDetail?.isMarkedNeedHelp ? 'text-success' : 'text-secondary'}
+                          style={{ fontSize: '1rem' }}
+                          htmlFor='need-help-toggle'
+                        >
+                          Need help!
+                        </label>
+                      </Flex>
+                    )}
                     {!taskDetail?.isCompleted ? (
                       <Button onClick={handleMarkCompleteTask} variant='text' theme='default'>
                         <i className='fa-solid fa-check'></i> Mark as completed

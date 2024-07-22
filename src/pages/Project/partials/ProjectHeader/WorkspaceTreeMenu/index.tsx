@@ -10,42 +10,44 @@ import { workspaceSlice } from '@redux/WorkspaceSlice'
 import HttpClient from '@utils/HttpClient'
 import { NavLink } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
-import { useProjectSelector } from '@hooks/useProjectSelector'
+import { defaultLayoutSlice } from '@layouts/DefaultLayout/DefaultLayoutSlice'
 
 const http = new HttpClient()
 
 // dựa vào dữ liệu của activeWorkspace trong store để sử dụng
 function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
-  const menu = useMenu<HTMLButtonElement>()
+  // const menu = useMenu<HTMLButtonElement>()
   const dispatch = useDispatch()
-  const activeWorkspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
+  const projectSidebar = useSelector((state: RootState) => state.sideBar.projectSidebar)
+  // const activeWorkspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
   // const { board } = useProjectSelector()
-  useEffect(() => {
-    if (!activeWorkspace?.id && workspaceId) {
-      http
-        .getAuth(`/w/${workspaceId}/projects`)
-        .then(workspace => {
-          dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))
-        })
-        .catch(err => {
-          console.error('Can not fetch workspace', err)
-        })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceId])
+  // useEffect(() => {
+  //   if (!activeWorkspace?.id && workspaceId) {
+  //     http
+  //       .getAuth(`/w/${workspaceId}/projects`)
+  //       .then(workspace => {
+  //         dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))
+  //       })
+  //       .catch(err => {
+  //         console.error('Can not fetch workspace', err)
+  //       })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [workspaceId])
+  const handleToggleProjectSidebar = () => {
+    dispatch(defaultLayoutSlice.actions.toggleProjectSidebar())
+  }
   return (
     <>
       <Button
-        ref={menu.anchorRef}
-        onClick={menu.toggleMenu}
-        className={`${menu.open ? 'click-button__open' : ''}`}
+        onClick={handleToggleProjectSidebar}
         variant='text'
-        theme={`${menu.open ? 'primary' : 'default'}`}
         size='small'
+        theme={`${projectSidebar ? 'primary' : 'secondary'}`}
       >
         <i className='fa-solid fa-folder-tree'></i>
       </Button>
-      <Menu
+      {/* <Menu
         style={{ width: '200px', fontSize: '1.1rem' }}
         onClose={menu.closeMenu}
         open={menu.open}
@@ -75,7 +77,7 @@ function WorkspaceTreeMenu({ workspaceId }: { workspaceId: string }) {
             </NavLink>
           )
         })}
-      </Menu>
+      </Menu> */}
       {/* <div className='current-project-path row gap-2'>
         <NavLink
           to={linkCreator.workspaces({

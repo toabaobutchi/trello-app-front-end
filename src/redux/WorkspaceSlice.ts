@@ -14,7 +14,7 @@ export const workspaceSlice = createSlice({
   initialState: {
     workspaceList: [] as WorkspaceResponse[],
     sharedWorkspaceList: [] as WorkspaceResponse[],
-    activeWorkspace: {} as WorkspaceResponseWithRelatedProjects
+    activeWorkspace: undefined as unknown as WorkspaceResponseWithRelatedProjects
   },
   reducers: {
     // payload: {projectId?: string, isPinned: boolean}

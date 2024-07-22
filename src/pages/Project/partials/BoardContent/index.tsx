@@ -6,6 +6,7 @@ import {
   CreateTaskResponse,
   DragOverResult,
   ListResponseForBoard,
+  MarkedTaskResponse,
   SubtaskForBoard,
   TaskResponseForBoard,
   UpdatedTaskResponse
@@ -162,6 +163,9 @@ function BoardContent() {
       projectHub.connection?.on(hubs.project.receive.deleteList, (_assignmentId: string, listId: string) => {
         dispatch(projectSlice.actions.deleteList(listId))
       })
+      projectHub.connection?.on(hubs.project.receive.markTask, (_assignmentId: string, data: MarkedTaskResponse) => {
+        dispatch(projectSlice.actions.markTask(data))
+      })
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [projectHub, dispatch, project?.board?.id])
@@ -278,7 +282,10 @@ function BoardContent() {
 
     if (activeList.id !== overList.id) {
       // nếu có chỉ định wip limit và số lượng task trong list đã đủ thì ngừng lại
-      if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length > overList.wipLimit) return
+      if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length === overList.wipLimit) {
+        console.log('WIP Limit: ' + overList.wipLimit, overList.tasks?.length)
+        return
+      }
       moveCardsInDifferentColumns(
         overList,
         active,
@@ -310,7 +317,7 @@ function BoardContent() {
 
       if (oldColumn?.id !== overList.id) {
         // thay doi card tren 2 column
-        if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length > overList.wipLimit) return
+        if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length === overList.wipLimit) return
         moveCardsInDifferentColumns(
           overList,
           active,

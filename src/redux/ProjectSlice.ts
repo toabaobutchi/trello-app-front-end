@@ -12,6 +12,7 @@ import {
   FilterType,
   JoinTaskResponse,
   ListResponseForBoard,
+  MarkedTaskResponse,
   ProjectResponseForBoard,
   TaskResponseForBoard,
   UpdatedListResponse,
@@ -34,6 +35,21 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    markTask: (state, action) => {
+      const data = action.payload as MarkedTaskResponse
+      if (data) {
+        const list = state.activeProject.board.lists?.find(l => l.id === data.listId)
+        if (list) {
+          const task = list.tasks?.find(t => t.id === data.id)
+          if (task) {
+            task.isCompleted = data.isCompleted
+            task.isReOpened = data.isReOpened
+            task.isMarkedNeedHelp = data.isMarkedNeedHelp
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     deleteList: (state, action) => {
       const data = action.payload as DeletedListResponse
       if (data) {
