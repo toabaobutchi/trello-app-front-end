@@ -62,7 +62,7 @@ function TableContent() {
                       value={task?.id}
                     />
                   </td>
-                  <td>{index}</td>
+                  <td>{index + 1}</td>
                   <td className='table-task-name'>{task.name}</td>
                   <td>{task.listName}</td>
                   <td>{task.priority || <span className='text-light'>[ Not set ]</span>}</td>

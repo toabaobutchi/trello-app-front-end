@@ -81,13 +81,13 @@ function Project() {
               </>
             }
           >
-            <Flex>
+            <Flex className='w-full' style={{ overflow: 'hidden' }}>
               <ProjectSideBar />
               {project?.id && project.id === params.projectId && params.viewMode === 'board' && <BoardContent />}
+              {project && params.viewMode === 'table' && <TableContent />}
             </Flex>
           </Suspense>
 
-          {project && params.viewMode === 'table' && <TableContent />}
           <Outlet />
         </Flex>
       )}

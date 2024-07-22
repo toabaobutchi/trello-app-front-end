@@ -30,7 +30,7 @@ function ProjectSideBar() {
   return (
     <>
       <LoadingLayout isLoading={!workspace}>
-        <div className={`project-side-bar h-full ${projectSidebar ? 'project-side-bar__expanded' : ''}`}>
+        <div className={`project-side-bar ${projectSidebar ? 'project-side-bar__expanded' : ''}`}>
           <NavLink
             className='project-side-bar-item'
             to={linkCreator.workspaces({
