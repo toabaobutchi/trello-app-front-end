@@ -1,0 +1,20 @@
+.invited-project-card-container {
+  padding: 1rem;
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+}
+
+.invited-project-card {
+  &-header {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+  }
+  &-body {
+    color: var(--text-primary-color);
+
+    p {
+      margin-bottom: 0.25rem;
+    }
+  }
+}

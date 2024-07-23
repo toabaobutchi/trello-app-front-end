@@ -1,54 +1,60 @@
-.project-invitation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
+// .project-invitation {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   height: 100vh;
+//   width: 100vw;
 
-  &-card {
-    border-radius: var(--primary-radius);
-    background-color: #fff;
-    color: var(--primary-color);
-    padding: 2rem;
+//   &-card {
+//     border-radius: var(--primary-radius);
+//     background-color: #fff;
+//     color: var(--primary-color);
+//     padding: 2rem;
 
-    &-header {
-      font-size: 2rem;
-      padding: 1rem 0;
-      margin-bottom: 2rem;
-      position: relative;
+//     &-header {
+//       font-size: 2rem;
+//       padding: 1rem 0;
+//       margin-bottom: 2rem;
+//       position: relative;
 
-      &::after {
-        content: '';
-        position: absolute;
-        width: 98%;
-        height: 2px;
-        background-color: var(--primary-color);
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-      }
+//       &::after {
+//         content: '';
+//         position: absolute;
+//         width: 98%;
+//         height: 2px;
+//         background-color: var(--primary-color);
+//         bottom: 0;
+//         left: 50%;
+//         transform: translateX(-50%);
+//       }
 
-      &::before {
-        content: attr(content);
-        position: absolute;
-        color: var(--primary-color);
-        font-size: 1rem;
-        bottom: 2px;
-        right: 3px;
-      }
-    }
+//       &::before {
+//         content: attr(content);
+//         position: absolute;
+//         color: var(--primary-color);
+//         font-size: 1rem;
+//         bottom: 2px;
+//         right: 3px;
+//       }
+//     }
 
-    &-body {
-      &-description {
-        color: var(--text-primary-color);
-        font-size: 1.2rem;
-      }
-      &-inviter {
-        text-align: right;
-        margin-top: 1rem;
-        font-size: 1.1rem;
-        color: var(--text-secondary-color);
-      }
-    }
-  }
+//     &-body {
+//       &-description {
+//         color: var(--text-primary-color);
+//         font-size: 1.2rem;
+//       }
+//       &-inviter {
+//         text-align: right;
+//         margin-top: 1rem;
+//         font-size: 1.1rem;
+//         color: var(--text-secondary-color);
+//       }
+//     }
+//   }
+// }
+
+.invited-project-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
 }

@@ -7,7 +7,7 @@ import MenuItem from '@comps/MenuItem'
 import { AssignmentResponse, DeletedTaskResponse, JoinTaskResponse, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { createCardId, DateCompareState, getDateString, isOverdue } from '@utils/functions'
+import { createCardId, DateCompareState, getDateString, isInToday, isOverdue } from '@utils/functions'
 import { useEffect, useMemo, useState } from 'react'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
@@ -72,7 +72,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
       dispatch(projectSlice.actions.joinTask(res.data as JoinTaskResponse))
     }
   }
-
   return (
     <>
       <div
@@ -90,6 +89,11 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             : ''
         } ${task?.priority ? task?.priority?.toLowerCase() : 'default'}-task-card`}
       >
+        {isInToday(task.createdAt) && (
+          <div className='task-card__new'>
+            <i className='fa-solid fa-wand-magic-sparkles'></i> New today
+          </div>
+        )}
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-header'>
           <PriorityTag priority={task.priority} />
           <DropdownMenu

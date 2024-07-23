@@ -12,7 +12,7 @@ const routeLinks = {
   task: 'task/:taskId',
   members: 'members',
   share: 'share-project',
-  projectInvitation: '/projects/:pid/invitation'
+  projectInvitation: '/invited-projects'
 }
 
 const http = new HttpClient()
@@ -35,8 +35,7 @@ export const loader = {
     return res
   },
   invitation: async ({ params }: LoaderFunctionArgs) => {
-    const projectId = params.pid
-    const res = await http.get(`/projects/${projectId}`)
+    const res = await http.getAuth(`/invited-projects`)
     return res
   }
 }

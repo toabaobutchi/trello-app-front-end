@@ -215,3 +215,13 @@ export function isOverdue(date?: number) {
   }
   return DateCompareState.Normal
 }
+
+export function isInToday(date: number) {
+  const today = new Date()
+  const taskDate = new Date(date)
+  return (
+    today.getFullYear() === taskDate.getFullYear() &&
+    today.getMonth() === taskDate.getMonth() &&
+    today.getDate() === taskDate.getDate()
+  )
+}

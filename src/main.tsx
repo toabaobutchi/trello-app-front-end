@@ -66,25 +66,34 @@ const router = createBrowserRouter([
       {
         path: routeLinks.yourTasks,
         element: <YourTasks />
+      },
+      {
+        path: routeLinks.projectInvitation,
+        element: (
+          <>
+            <ProjectInvitation />
+          </>
+        ),
+        loader: loader.invitation
       }
     ]
   },
-  {
-    path: routeLinks.projectInvitation,
-    element: (
-      <>
-        <Suspense fallback={<LoadingLayout isLoading />}>
-          <ProjectInvitation />
-        </Suspense>
-      </>
-    ),
-    // loader: async ({ params }) => {
-    //   const projectId = params.pid
-    //   const res = await http.get(`/projects/${projectId}`)
-    //   return res
-    // }
-    loader: loader.invitation
-  },
+  // {
+  //   path: routeLinks.projectInvitation,
+  //   element: (
+  //     <>
+  //       <Suspense fallback={<LoadingLayout isLoading />}>
+  //         <ProjectInvitation />
+  //       </Suspense>
+  //     </>
+  //   ),
+  //   // loader: async ({ params }) => {
+  //   //   const projectId = params.pid
+  //   //   const res = await http.get(`/projects/${projectId}`)
+  //   //   return res
+  //   // }
+  //   loader: loader.invitation
+  // },
   {
     path: '*',
     element: <Error />

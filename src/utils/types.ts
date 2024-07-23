@@ -502,3 +502,15 @@ export type DeletedListResponse = {
   name: string
   projectId: string
 }
+
+export type InvitedProjectResponse = {
+  id: string
+  name: string
+  createdAt: number
+  dueDate?: number
+  color?: string
+  description?: string
+  invitedPermission: string
+  inviterEmail: string
+  invitedAt: number
+}

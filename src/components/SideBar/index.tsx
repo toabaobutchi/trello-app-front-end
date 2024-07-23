@@ -79,7 +79,7 @@ function SideBar() {
             <SharedWorkspaces />
           </Expander>
         </SideBarItem>
-        <SideBarItem.Link to='/invitations'>
+        <SideBarItem.Link to={routeLinks.projectInvitation}>
           <i className='fa-solid fa-envelope sidebar-close-icon'></i>{' '}
           <i className='fa-solid fa-envelope-open-text sidebar-open-icon'></i> Invitations
         </SideBarItem.Link>
