@@ -4,6 +4,8 @@ import { AxiosResponse } from 'axios'
 import HttpClient from '@utils/HttpClient'
 import { InvitedProjectResponse } from '@utils/types'
 import InvitedProjectCard from './InvitedProjectCard'
+import Flex from '@comps/StyledComponents'
+import emptyInvitationImagePage from '@assets/empty_invitation.jpg'
 
 const http = new HttpClient()
 
@@ -20,7 +22,19 @@ function ProjectInvitation() {
           ))}
         </div>
       )}
-      {!data || (data.length <= 0 && <p className='text-info'>You do not have any invitation!</p>)}
+      {!data ||
+        (data.length <= 0 && (
+          <Flex
+            $alignItem='center'
+            $gap='1rem'
+            $flexDirection='column'
+            $justifyContent='center'
+            className='w-full h-full empty-invitations'
+          >
+            <img src={emptyInvitationImagePage} alt='logo empty page' />
+            <p className='text-info bold empty-invitations-message'>You are not having any invitation</p>
+          </Flex>
+        ))}
     </>
   )
 }

@@ -20,8 +20,8 @@
     padding: 0.25rem 0.25rem;
     background-color: var(--new-tag-color);
     top: 0;
-    left: 0;
-    // transform: translateY(-50%);
+    right: 0;
+    transform: translateY(-50%);
     color: var(--bright-color);
   }
 

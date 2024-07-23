@@ -13,10 +13,6 @@ function ProjectUtilities() {
     navigate(`${pathname}/${routeLinks.members}`)
     closeMenu()
   }
-  // const handleNavigateShareBoard = () => {
-  //   navigate(`${pathname}/${routeLinks.share}`)
-  //   closeMenu()
-  // }
   return (
     <>
       <Button onClick={toggleMenu} ref={anchorRef} variant='filled'>
@@ -27,10 +23,13 @@ function ProjectUtilities() {
           <i className='fa-solid fa-share-nodes'></i> Share project
         </MenuItem> */}
         <MenuItem className='utils-menu-item' onClick={handleNavigateMemberBoard}>
-          <i className='fa-solid fa-users-line'></i> Members management
+          <i className='fa-solid fa-users-gear'></i> Members
         </MenuItem>
         <MenuItem className='utils-menu-item'>
           <i className='fa-solid fa-timeline fa-fw'></i> Timeline
+        </MenuItem>
+        <MenuItem className='utils-menu-item'>
+          <i className='fa-regular fa-trash-can'></i> Recycle bin
         </MenuItem>
       </Menu>
     </>
