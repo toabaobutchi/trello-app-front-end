@@ -92,6 +92,10 @@ function TaskDetailBoard() {
             isCompleted: data?.isCompleted
           } as TaskDetailForBoard)
       )
+      dispatch(projectSlice.actions.markTask(data))
+      if (projectHub.isConnected) {
+        projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
+      }
     }
   }
   const handleJoinTask = async () => {

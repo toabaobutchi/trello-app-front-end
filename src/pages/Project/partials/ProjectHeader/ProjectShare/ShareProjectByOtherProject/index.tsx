@@ -21,7 +21,7 @@ const destructState = (state?: ProjectShareState) => {
   if (!state) return []
   const result = [] as ShareInfo[]
   Object.entries(state).forEach(item => {
-    const [key, value] = item
+    const [_, value] = item
     result.push({
       projectId: value.projectId,
       options: value.options
@@ -41,7 +41,7 @@ function ShareProjectByOtherProject() {
         setProjects(projectsData)
       }
     })
-  }, [])
+  }, [projectId])
   const handleChangeAssignment = useCallback((projectId: string, options: ProjectSelectOptions) => {
     setProjectShareState(prev => ({ ...prev, [projectId]: { projectId, options } }))
   }, [])
@@ -54,10 +54,13 @@ function ShareProjectByOtherProject() {
         {projects.map(project => (
           <ProjectOptions onChange={handleChangeAssignment} project={project} key={project.id} />
         ))}
+        {projects?.length <= 0 && <p className='text-warning'>You have not worked with anyone yet!</p>}
         <Flex $alignItem='center' $justifyContent='end'>
-          <Button onClick={handleShareProject} variant='filled'>
-            Invite to project
-          </Button>
+          {projects?.length > 0 && (
+            <Button onClick={handleShareProject} variant='filled'>
+              Invite to project
+            </Button>
+          )}
         </Flex>
       </div>
     </>
