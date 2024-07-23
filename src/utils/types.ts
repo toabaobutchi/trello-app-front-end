@@ -512,5 +512,6 @@ export type InvitedProjectResponse = {
   description?: string
   invitedPermission: string
   inviterEmail: string
-  invitedAt: number
+  invitedAt: number,
+  invitationId: string
 }
