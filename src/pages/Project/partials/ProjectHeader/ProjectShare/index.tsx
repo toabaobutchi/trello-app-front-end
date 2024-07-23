@@ -101,7 +101,7 @@ function ProjectShare() {
               </Button>
             </Flex>
 
-            <Flex $alignItem='center' $gap='1rem' className='my-1'>
+            {/* <Flex $alignItem='center' $gap='1rem' className='my-1'>
               <p>Or</p>
               <ButtonGroup
                 openAction
@@ -115,7 +115,7 @@ function ProjectShare() {
                   <i className='fa-solid fa-feather'></i> Create a link for
                 </Button>
               </ButtonGroup>
-            </Flex>
+            </Flex> */}
           </Tab.Content>
           <Tab.Content show={shareActiveTab === 'share-by-friend'}>
             <ShareProjectByOtherProject />
