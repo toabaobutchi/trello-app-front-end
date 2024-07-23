@@ -4,7 +4,7 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { AssignmentResponse, DeletedTaskResponse, JoinTaskResponse, TaskResponseForBoard } from '@utils/types'
+import { AssignmentResponse, JoinTaskResponse, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId, DateCompareState, getDateString, isInToday, isOverdue } from '@utils/functions'
@@ -17,6 +17,8 @@ import { RootState } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import DeleteTaskMenu from './DeleteTaskMenu'
+import { useModal } from '@hooks/useModal'
 
 const http = new HttpClient()
 
@@ -44,7 +46,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const navigate = useNavigate()
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
-
+  const [confirmDeleteModal, handleToggleConfirmDeleteModal] = useModal()
   const taskAssignments = useMemo(() => {
     const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
     return tAssignments
@@ -58,13 +60,13 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     navigate(`${pathname}/task/${task?.id}`)
   }
 
-  const handleDeleteTask = async () => {
-    const res = await http.deleteAuth(`/tasks/${task.id}`)
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as DeletedTaskResponse
-      dispatch(projectSlice.actions.deleteTask(data))
-    }
-  }
+  // const handleDeleteTask = async () => {
+  //   const res = await http.deleteAuth(`/tasks/${task.id}`)
+  //   if (res?.status === HttpStatusCode.Ok) {
+  //     const data = res?.data as DeletedTaskResponse
+  //     dispatch(projectSlice.actions.deleteTask(data))
+  //   }
+  // }
 
   const handleJoinTask = async () => {
     const res = await http.postAuth(`/tasks/${task?.id}/join`, {})
@@ -113,7 +115,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               }
             }}
           >
-            <MenuItem onClick={handleDeleteTask} className='text-danger'>
+            <MenuItem onClick={handleToggleConfirmDeleteModal} className='text-danger'>
               <i className='fa-solid fa-trash-can'></i> Delete task
             </MenuItem>
             <MenuItem className='text-primary'>
@@ -125,6 +127,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               </MenuItem>
             )}
           </DropdownMenu>
+          <DeleteTaskMenu task={task} openModal={confirmDeleteModal} onClose={handleToggleConfirmDeleteModal} />
         </Flex>
         <div className='task-card-body'>
           <div className={`task-card-body-name ${task.isCompleted ? 'task-card-body-name__completed' : ''}`}>

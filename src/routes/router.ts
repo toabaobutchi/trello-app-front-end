@@ -8,10 +8,13 @@ const routeLinks = {
   home: '/home',
   yourTasks: '/your-tasks',
   workspaces: '/workspaces/:ownerShip/:slug/:workspaceId',
-  project: '/projects/:ownerShip/:slug/:projectId/v/:viewMode',
-  task: 'task/:taskId',
-  members: 'members',
-  share: 'share-project',
+  project: {
+    index: '/projects/:ownerShip/:slug/:projectId/v/:viewMode',
+    task: 'task/:taskId',
+    members: 'members',
+    share: 'share-project',
+    recycleBin: 'recycle-bin'
+  },
   projectInvitation: '/invited-projects'
 }
 
@@ -27,6 +30,7 @@ export const linkCreator = {
     return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/v/${viewMode}`
   }
 }
+
 export const loader = {
   workspace: async ({ params }: LoaderFunctionArgs) => {
     const { ownerShip } = params as WorkspacePageParams
@@ -34,8 +38,13 @@ export const loader = {
     const res = await http.getAuth(`/${prefixPath}/${params.workspaceId}/projects`)
     return res
   },
-  invitation: async ({ params }: LoaderFunctionArgs) => {
+  invitation: async () => {
     const res = await http.getAuth(`/invited-projects`)
+    return res
+  },
+  recycleBin: async ({ params }: LoaderFunctionArgs) => {
+    const { projectId } = params as ProjectPageParams
+    const res = await http.getAuth(`/projects/${projectId}/recycle-bin`)
     return res
   }
 }

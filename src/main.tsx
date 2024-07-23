@@ -46,19 +46,19 @@ const router = createBrowserRouter([
         loader: loader.workspace
       },
       {
-        path: routeLinks.project,
+        path: routeLinks.project.index,
         element: <Project />,
         children: [
           {
-            path: routeLinks.task,
+            path: routeLinks.project.task,
             element: <TaskDetailBoard />
           },
           {
-            path: routeLinks.members,
+            path: routeLinks.project.members,
             element: <ProjectMember />
           },
           {
-            path: routeLinks.share,
+            path: routeLinks.project.share,
             element: <ProjectShare />
           }
         ]

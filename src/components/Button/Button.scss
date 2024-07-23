@@ -5,10 +5,13 @@
   --danger-filled-button-hover-color: #d3086d;
   --secondary-button-hover-color: #77777722;
   --secondary-filled-button-hover-color: #646464;
-  --default-button-hover-color: #44546F22;
+  --default-button-hover-color: #44546f22;
   --default-filled-button-hover-color: #77777746;
   --default-filled-button-color: #77777728;
   --success-button-hover-color: #02a4302a;
+
+  --warning-button-hover-color: #d89e0022;
+  --warning-filled-button-hover-color: #d89e00;
 
   border: none;
   outline: none;
@@ -96,9 +99,16 @@
     &.text-btn,
     &.outlined-btn {
       color: var(--warning-color);
+      &:hover {
+        background-color: var(--warning-button-hover-color);
+      }
     }
     &.filled-btn {
       background-color: var(--warning-color);
+
+      &:hover {
+        background-color: var(--warning-filled-button-hover-color);
+      }
     }
     &.outlined-btn {
       border: var(--thin-border-width) solid var(--warning-color);
