@@ -9,11 +9,20 @@ const routeLinks = {
   yourTasks: '/your-tasks',
   workspaces: '/workspaces/:ownerShip/:slug/:workspaceId',
   project: {
-    index: '/projects/:ownerShip/:slug/:projectId/v/:viewMode',
-    task: 'task/:taskId',
-    members: 'members',
-    share: 'share-project',
-    recycleBin: 'recycle-bin'
+    index: '/projects/:ownerShip/:slug/:projectId',
+    task: '*/task/:taskId',
+    share: '*/share-project',
+    recycleBin: 'recycle-bin',
+    members: {
+      index: 'members',
+      detail: ':memberId'
+    },
+    view: {
+      index: 'v',
+      overview: 'overview',
+      board: 'board',
+      table: 'table'
+    }
   },
   projectInvitation: '/invited-projects'
 }
@@ -45,6 +54,11 @@ export const loader = {
   recycleBin: async ({ params }: LoaderFunctionArgs) => {
     const { projectId } = params as ProjectPageParams
     const res = await http.getAuth(`/projects/${projectId}/recycle-bin`)
+    return res
+  },
+  projectView: async ({ params }: LoaderFunctionArgs) => {
+    const { projectId, viewMode } = params as ProjectPageParams
+    const res = await http.getAuth(`/v2/projects/${projectId}/v/${viewMode}`)
     return res
   }
 }

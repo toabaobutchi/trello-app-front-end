@@ -13,6 +13,8 @@ import LoadingLayout from '@layouts/LoadingLayout'
 import TaskDetailBoard from '@pages/TaskDetailBoard'
 import ProjectMember from '@pages/ProjectMember'
 import ProjectShare from '@pages/Project/partials/ProjectHeader/ProjectShare'
+import BoardContent from '@pages/Project/partials/BoardContent'
+import TableContent from '@pages/Project/partials/TableContent'
 const Home = React.lazy(() => import('@pages/Home'))
 const Error = React.lazy(() => import('@pages/Error'))
 const Welcome = React.lazy(() => import('@pages/Welcome'))
@@ -49,14 +51,49 @@ const router = createBrowserRouter([
         path: routeLinks.project.index,
         element: <Project />,
         children: [
+          // view mode
+          {
+            path: routeLinks.project.view.index,
+            children: [
+              {
+                path: routeLinks.project.view.overview,
+                element: (
+                  <>
+                    <h1>Overview page - edit at main.tsx</h1>
+                  </>
+                )
+              },
+              {
+                path: routeLinks.project.view.board,
+                element: <BoardContent />
+              },
+              {
+                path: routeLinks.project.view.table,
+                element: <TableContent />
+              }
+            ]
+          },
+          // task details
           {
             path: routeLinks.project.task,
             element: <TaskDetailBoard />
           },
+          // members
           {
-            path: routeLinks.project.members,
-            element: <ProjectMember />
+            path: routeLinks.project.members.index,
+            element: <ProjectMember />,
+            children: [
+              {
+                path: routeLinks.project.members.detail,
+                element: (
+                  <>
+                    <h1>Member detail - See <code>main.tsx</code></h1>
+                  </>
+                )
+              }
+            ]
           },
+          // share
           {
             path: routeLinks.project.share,
             element: <ProjectShare />
@@ -78,22 +115,6 @@ const router = createBrowserRouter([
       }
     ]
   },
-  // {
-  //   path: routeLinks.projectInvitation,
-  //   element: (
-  //     <>
-  //       <Suspense fallback={<LoadingLayout isLoading />}>
-  //         <ProjectInvitation />
-  //       </Suspense>
-  //     </>
-  //   ),
-  //   // loader: async ({ params }) => {
-  //   //   const projectId = params.pid
-  //   //   const res = await http.get(`/projects/${projectId}`)
-  //   //   return res
-  //   // }
-  //   loader: loader.invitation
-  // },
   {
     path: '*',
     element: <Error />

@@ -83,6 +83,7 @@ function Project() {
           >
             <Flex className='w-full' style={{ overflow: 'hidden' }}>
               <ProjectSideBar />
+              {/* Outlet moi se o day */}
               {project?.id && project.id === params.projectId && params.viewMode === 'board' && <BoardContent />}
               {project && params.viewMode === 'table' && <TableContent />}
             </Flex>
