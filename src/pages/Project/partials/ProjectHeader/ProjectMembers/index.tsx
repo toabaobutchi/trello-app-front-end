@@ -9,7 +9,7 @@ function ProjectMembers() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const handleNavigate = () => {
-    navigate(`${pathname}/${routeLinks.members}`)
+    navigate(`${pathname}/${routeLinks.project.members.index}`)
   }
   return (
     <>

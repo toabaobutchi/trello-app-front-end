@@ -18,7 +18,6 @@ function ProjectHeader() {
   const [_, location] = useSubNavigate()
   return (
     <>
-      {/* <Flex $alignItem='center' $justifyContent='center' $flexWrap='wrap'></Flex> */}
       <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' className='project-header'>
         <Flex $alignItem='center' $gap='2rem'>
           <WorkspaceTreeMenu workspaceId={project?.board?.workspaceId} />
@@ -39,7 +38,7 @@ function ProjectHeader() {
         </Flex>
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
           <Tooltip content='Share project' position='bottom' arrow>
-            <NavLink className='project-share-button' to={`${location.pathname}/${routeLinks.share}`}>
+            <NavLink className='project-share-button' to={`${location.pathname}/${routeLinks.project.share}`}>
               <i className='fa-solid fa-share-nodes'></i>&nbsp; Share project
             </NavLink>
           </Tooltip>

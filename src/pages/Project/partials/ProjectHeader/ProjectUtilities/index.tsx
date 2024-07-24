@@ -2,15 +2,17 @@ import Button from '@comps/Button'
 import Menu from '@comps/Menu'
 import MenuItem from '@comps/MenuItem'
 import useMenu from '@hooks/useMenu'
-import routeLinks from '@routes/router'
-import { useLocation, useNavigate } from 'react-router-dom'
+import routeLinks, { linkCreator } from '@routes/router'
+import { ProjectPageParams } from '@utils/types'
+import { useNavigate, useParams } from 'react-router-dom'
 
 function ProjectUtilities() {
   const { anchorRef, closeMenu, toggleMenu, open } = useMenu<HTMLButtonElement>()
   const navigate = useNavigate()
-  const { pathname } = useLocation()
+  // const { pathname } = useLocation()
+  const params = useParams() as ProjectPageParams
   const handleNavigateMemberBoard = () => {
-    navigate(`${pathname}/${routeLinks.members}`)
+    navigate(linkCreator.projectMember(params))
     closeMenu()
   }
   return (
@@ -19,9 +21,6 @@ function ProjectUtilities() {
         <i className='fa-solid fa-screwdriver-wrench'></i> <span className='project-util-button-text'>Utilities</span>
       </Button>
       <Menu open={open} anchorElement={anchorRef.current} onClose={closeMenu} style={{ width: '300px' }}>
-        {/* <MenuItem onClick={handleNavigateShareBoard} className='utils-menu-item'>
-          <i className='fa-solid fa-share-nodes'></i> Share project
-        </MenuItem> */}
         <MenuItem className='utils-menu-item' onClick={handleNavigateMemberBoard}>
           <i className='fa-solid fa-users-gear'></i> Members
         </MenuItem>

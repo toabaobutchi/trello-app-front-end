@@ -2,9 +2,13 @@ import Tab, { TabNav } from '@comps/Tab'
 import useTab from '@hooks/useTab'
 import { getDateString } from '@utils/functions'
 import HttpClient from '@utils/HttpClient'
-import { AssignmentProfileResponse, AssignmentResponse } from '@utils/types'
+import { AssignmentProfileResponse, AssignmentResponse, ProjectMemberPageParams } from '@utils/types'
 import { useEffect, useState } from 'react'
 import JoinedTasksTable from './JoinedTasksTable'
+import { useParams } from 'react-router-dom'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import './ProjectMemberProfile.scss'
+import Flex from '@comps/StyledComponents'
 
 const tabs: TabNav[] = [
   {
@@ -19,20 +23,32 @@ const tabs: TabNav[] = [
 
 const initTabs = 'joinedTasks'
 const http = new HttpClient()
-function ProjectMemberProfile({ member }: { member?: AssignmentResponse }) {
+function ProjectMemberProfile() {
   const { activeTab, handleTabClick } = useTab(initTabs)
   const [profile, setProfile] = useState<AssignmentProfileResponse>()
+  const { memberId } = useParams() as ProjectMemberPageParams
+  const { members } = useProjectSelector()
+  const [memberInfo, setMemberInfo] = useState<AssignmentResponse>()
   useEffect(() => {
-    http.getAuth(`/assignments/${member?.id}/profile`).then(res => {
+    http.getAuth(`/assignments/${memberId}/profile`).then(res => {
       if (res?.status === 200) {
-        setProfile(res?.data as AssignmentProfileResponse)
+        const data = res?.data as AssignmentProfileResponse
+        setProfile(data)
+        setMemberInfo(() => members.find(m => m.id === data.id))
       }
     })
-  }, [member?.id])
+  }, [memberId])
   useState()
   return (
     <>
-      <div className='member-info-full w-full mb-1'>
+      <div className='member-info-full w-full mb-1 flex-1'>
+        <Flex $alignItem='center' $gap='1rem' className='text-primary mb-1 py-1'>
+          <img src={memberInfo?.avatar} alt='avatar' className='member-info-full-avatar' />
+          <div>
+            <p className='member-info-full-name'>{memberInfo?.displayName}</p>{' '}
+            <p className='member-info-full-email'>{memberInfo?.email}</p>
+          </div>
+        </Flex>
         {profile && <p className='mb-1'>Join project at: {getDateString(new Date(profile.joinAt * 1000), true)}</p>}
         <Tab tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick}>
           <Tab.Content show={activeTab === tabs[0].value}>

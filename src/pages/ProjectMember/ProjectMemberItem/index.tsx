@@ -2,10 +2,11 @@ import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import Tooltip from '@comps/Tooltip-v2'
 import { RootState } from '@redux/store'
-import { AssignmentResponse } from '@utils/types'
+import { AssignmentResponse, ProjectMemberPageParams, ProjectPageParams } from '@utils/types'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import ProjectMemberProfile from './ProjectMemberProfile'
+import { useNavigate, useParams } from 'react-router-dom'
+import { linkCreator } from '@routes/router'
 
 type MemberItemProps = {
   member: AssignmentResponse
@@ -13,10 +14,12 @@ type MemberItemProps = {
 
 function ProjectMemberItem({ member }: MemberItemProps) {
   const onlineMembers = useSelector((state: RootState) => state.project.activeProject.onlineMembers)
-  const [profileExpanded, setProfileExpanded] = useState(false)
+  // const [profileExpanded, setProfileExpanded] = useState(false)
   const isOnline = onlineMembers?.includes(member.id) ?? false
+  const params = useParams() as ProjectMemberPageParams
+  const navigate = useNavigate()
   const handleToggleProfile = () => {
-    setProfileExpanded(!profileExpanded)
+    navigate(linkCreator.projectMember(params, member.id))
   }
   return (
     <>
@@ -25,14 +28,15 @@ function ProjectMemberItem({ member }: MemberItemProps) {
         $flexWrap='wrap'
         $gap='1rem'
         key={member.id}
-        className={`member-info-row ${profileExpanded ? 'profile-expanded' : ''}`}
+        className={`member-info-row ${params.memberId === member.id ? 'profile-expanded' : ''}`}
       >
         <div className={`member-info-avatar`}>
           <img src={member.avatar} alt='avatar' />
         </div>
         <div className='member-info-name'>
           <p className='row gap-2'>
-            {member?.displayName} {isOnline && <span className='active-text'>{isOnline ? 'Available for work' : ''}</span>}
+            {member?.displayName}{' '}
+            {isOnline && <span className='active-text'>{isOnline ? 'Available for work' : ''}</span>}
           </p>
           <p className='text-secondary'>{member?.email}</p>
         </div>
@@ -45,7 +49,8 @@ function ProjectMemberItem({ member }: MemberItemProps) {
           </Tooltip>
           <Tooltip content='About this member' arrow delay='0.5s'>
             <Button onClick={handleToggleProfile} variant='text' theme='primary'>
-              {profileExpanded ? (
+              {/* <i className='fa-solid fa-chevron-right'></i> */}
+              {params.memberId === member.id ? (
                 <i className='fa-regular fa-folder-open'></i>
               ) : (
                 <i className='fa-solid fa-folder'></i>
@@ -53,7 +58,7 @@ function ProjectMemberItem({ member }: MemberItemProps) {
             </Button>
           </Tooltip>
         </Flex>
-        {profileExpanded && <ProjectMemberProfile member={member} />}
+        {/* {profileExpanded && <ProjectMemberProfile member={member} />} */}
       </Flex>
     </>
   )

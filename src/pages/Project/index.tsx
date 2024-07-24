@@ -1,36 +1,46 @@
 import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
 import ProjectHeader from './partials/ProjectHeader'
-import { ProjectPageParams } from '@utils/types'
-import { lazy, Suspense, useEffect, useState } from 'react'
-import { Outlet, useParams } from 'react-router-dom'
+import { ProjectPageParams, ProjectResponseForBoard } from '@utils/types'
+import { Suspense, useEffect, useState } from 'react'
+import { Outlet, useLoaderData, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
-import { HttpStatusCode } from 'axios'
+import { AxiosResponse, HttpStatusCode } from 'axios'
 import HttpClient from '@utils/HttpClient'
-import TableContent from './partials/TableContent'
+// import TableContent from './partials/TableContent'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import ProjectSideBar from './partials/ProjectSideBar'
 
-const BoardContent = lazy(() => import('./partials/BoardContent'))
+// const BoardContent = lazy(() => import('./partials/BoardContent'))
 
 const http = new HttpClient()
 
 function Project() {
   const params = useParams() as ProjectPageParams
   const { board: project } = useProjectSelector()
+  const response = useLoaderData() as AxiosResponse
   const dispatch = useDispatch()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
 
+  // useEffect(() => {
+  //   if (!project || project?.id !== params.projectId) {
+  //     http.getAuth(`/v2/projects/${params.projectId}/v/${params.viewMode}`).then(res => {
+  //       if (res?.status === HttpStatusCode.Ok) {
+  //         dispatch(projectSlice.actions.setActiveProjectBoard(res?.data))
+  //       }
+  //     })
+  //   }
+  // }, [params?.projectId])
+
   useEffect(() => {
     if (!project || project?.id !== params.projectId) {
-      http.getAuth(`/v2/projects/${params.projectId}/v/${params.viewMode}`).then(res => {
-        if (res?.status === HttpStatusCode.Ok) {
-          dispatch(projectSlice.actions.setActiveProjectBoard(res?.data))
-        }
-      })
+      if (response?.status === HttpStatusCode.Ok) {
+        const data = response?.data as ProjectResponseForBoard
+        dispatch(projectSlice.actions.setActiveProjectBoard(data))
+      }
     }
   }, [params?.projectId])
 
@@ -83,13 +93,9 @@ function Project() {
           >
             <Flex className='w-full' style={{ overflow: 'hidden' }}>
               <ProjectSideBar />
-              {/* Outlet moi se o day */}
-              {project?.id && project.id === params.projectId && params.viewMode === 'board' && <BoardContent />}
-              {project && params.viewMode === 'table' && <TableContent />}
+              <Outlet />
             </Flex>
           </Suspense>
-
-          <Outlet />
         </Flex>
       )}
     </>

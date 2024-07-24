@@ -10,19 +10,14 @@ const routeLinks = {
   workspaces: '/workspaces/:ownerShip/:slug/:workspaceId',
   project: {
     index: '/projects/:ownerShip/:slug/:projectId',
-    task: '*/task/:taskId',
-    share: '*/share-project',
+    task: 'task/:taskId',
+    share: 'share-project',
     recycleBin: 'recycle-bin',
     members: {
       index: 'members',
       detail: ':memberId'
     },
-    view: {
-      index: 'v',
-      overview: 'overview',
-      board: 'board',
-      table: 'table'
-    }
+    view: 'v/:viewMode'
   },
   projectInvitation: '/invited-projects'
 }
@@ -37,6 +32,10 @@ export const linkCreator = {
   project(routeParams: ProjectPageParams) {
     const { ownerShip, projectId, slug, viewMode } = routeParams
     return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/v/${viewMode}`
+  },
+  projectMember(routeParams: ProjectPageParams, memberId?: string) {
+    const { ownerShip, projectId, slug } = routeParams
+    return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/${routeLinks.project.members.index}/${memberId ?? ''}`
   }
 }
 

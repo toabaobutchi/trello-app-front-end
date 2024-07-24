@@ -9,12 +9,11 @@ import config from '@confs/app.config'
 import DefaultLayout from '@layouts/DefaultLayout'
 import React, { Suspense } from 'react'
 import routeLinks, { loader } from '@routes/router'
-import LoadingLayout from '@layouts/LoadingLayout'
 import TaskDetailBoard from '@pages/TaskDetailBoard'
 import ProjectMember from '@pages/ProjectMember'
 import ProjectShare from '@pages/Project/partials/ProjectHeader/ProjectShare'
-import BoardContent from '@pages/Project/partials/BoardContent'
-import TableContent from '@pages/Project/partials/TableContent'
+import ProjectMemberProfile from '@pages/ProjectMember/ProjectMemberItem/ProjectMemberProfile'
+// import ViewContent from '@pages/Project/partials/ViewContent'
 const Home = React.lazy(() => import('@pages/Home'))
 const Error = React.lazy(() => import('@pages/Error'))
 const Welcome = React.lazy(() => import('@pages/Welcome'))
@@ -22,6 +21,7 @@ const YourTasks = React.lazy(() => import('@pages/YourTasks'))
 const Workspaces = React.lazy(() => import('@pages/Workspaces'))
 const Project = React.lazy(() => import('@pages/Project'))
 const ProjectInvitation = React.lazy(() => import('@pages/ProjectInvitation'))
+const ViewContent = React.lazy(() => import('@pages/Project/partials/ViewContent'))
 
 const router = createBrowserRouter([
   {
@@ -30,7 +30,8 @@ const router = createBrowserRouter([
       <Suspense>
         <Welcome />
       </Suspense>
-    )
+    ),
+    errorElement: <Error />
   },
   {
     path: '/',
@@ -50,26 +51,21 @@ const router = createBrowserRouter([
       {
         path: routeLinks.project.index,
         element: <Project />,
+        loader: loader.projectView,
         children: [
           // view mode
           {
-            path: routeLinks.project.view.index,
+            path: routeLinks.project.view,
+            element: <ViewContent />,
             children: [
+              // task details
               {
-                path: routeLinks.project.view.overview,
-                element: (
-                  <>
-                    <h1>Overview page - edit at main.tsx</h1>
-                  </>
-                )
+                path: routeLinks.project.task,
+                element: <TaskDetailBoard />
               },
               {
-                path: routeLinks.project.view.board,
-                element: <BoardContent />
-              },
-              {
-                path: routeLinks.project.view.table,
-                element: <TableContent />
+                path: routeLinks.project.share,
+                element: <ProjectShare />
               }
             ]
           },
@@ -85,12 +81,12 @@ const router = createBrowserRouter([
             children: [
               {
                 path: routeLinks.project.members.detail,
-                element: (
-                  <>
-                    <h1>Member detail - See <code>main.tsx</code></h1>
-                  </>
-                )
-              }
+                element: <ProjectMemberProfile />
+              },
+              {
+                path: routeLinks.project.task,
+                element: <TaskDetailBoard />
+              },
             ]
           },
           // share
@@ -117,7 +113,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <Error />
+    errorElement: <Error />
   }
 ])
 

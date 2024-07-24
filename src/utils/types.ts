@@ -231,6 +231,10 @@ export type ProjectPageParams = {
   viewMode?: string | ProjectViewMode
 }
 
+export type ProjectMemberPageParams = {
+  memberId?: string
+} & Omit<ProjectPageParams, 'viewMode'>
+
 export type WorkspacePageParams = {
   ownerShip: string | OwnerShipType
   workspaceId: string
@@ -512,6 +516,6 @@ export type InvitedProjectResponse = {
   description?: string
   invitedPermission: string
   inviterEmail: string
-  invitedAt: number,
+  invitedAt: number
   invitationId: string
 }
