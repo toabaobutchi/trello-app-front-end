@@ -534,3 +534,11 @@ export type InTrashTaskResponse = {
   deletedAt: number
   deleter?: DeleterReponse
 }
+
+export type AssignByTaskModel = {
+  assignmentIds: string[]
+}
+
+export type AssignByTaskResponse = {
+  taskId: string
+} & AssignByTaskModel

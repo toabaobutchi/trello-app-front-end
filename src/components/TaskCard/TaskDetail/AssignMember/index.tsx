@@ -1,10 +1,12 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import { TaskDetailForBoard } from '@utils/types'
+import { AssignByTaskModel, TaskDetailForBoard } from '@utils/types'
 import { useMemo, useState } from 'react'
 import './AssignMember.scss'
 import AssignmentMemberItem from './AssignmentMemberItem'
+import HttpClient from '@utils/HttpClient'
+import { HttpStatusCode } from 'axios'
 
 type AssignMemberProps = {
   task: TaskDetailForBoard
@@ -14,6 +16,8 @@ type SelectedMember = {
   id: string
   isSelected?: boolean
 }
+
+const http = new HttpClient()
 
 function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
   const { members } = useProjectSelector()
@@ -35,12 +39,18 @@ function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
       return newSelectedMembers
     })
   }
-  const handleAssignMembers = () => {
+  const handleAssignMembers = async () => {
     const selectedMemberIds = selectedMembers.filter(m => m.isSelected).map(m => m.id)
 
     if (selectedMemberIds?.length > 0) {
       // call API
-      // dispatch
+      const model: AssignByTaskModel = {
+        assignmentIds: selectedMemberIds
+      }
+      const res = await http.postAuth(`assignments/assign-to-task/${task.id}`, model)
+      if(res?.status === HttpStatusCode.Ok) {
+        // dispatch
+      }
     }
 
     onCloseModal()

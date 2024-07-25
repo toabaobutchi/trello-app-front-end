@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import ProjectSideBarItem from './ProjectSideBarItem'
+import './ProjectSideBar.scss'
 
 const http = new HttpClient()
 
