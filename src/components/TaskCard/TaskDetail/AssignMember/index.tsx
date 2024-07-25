@@ -24,10 +24,13 @@ type SelectedMember = {
 const http = new HttpClient()
 
 function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
-  const { members } = useProjectSelector()
+  const { members, board } = useProjectSelector()
+
+  // tìm các thành viên còn lại - trừ người đang thực hiện
   const restMembers = useMemo(() => {
-    return members.filter(m => !task.taskAssignmentIds?.includes(m.id))
-  }, [members, task.taskAssignmentIds])
+    return members.filter(m => !task.taskAssignmentIds?.includes(m.id) && m.id !== board.assignmentId)
+  }, [members, task.taskAssignmentIds, board.assignmentId])
+
   const [selectedMembers, setSelectedMembers] = useState<SelectedMember[]>([])
   const dispatch = useDispatch()
   const context = useContext(TaskDetailContext)
@@ -55,7 +58,7 @@ function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
       const model: AssignByTaskModel = {
         assignmentIds: selectedMemberIds
       }
-      const res = await http.postAuth(`assignments/assign-to-task/${task.id}`, model)
+      const res = await http.postAuth(`/assignments/assign-to-task/${task.id}`, model)
       if (res?.status === HttpStatusCode.Ok) {
         const data = res?.data as AssignByTaskResponse
         dispatch(projectSlice.actions.addAssignmentToTask(data))
