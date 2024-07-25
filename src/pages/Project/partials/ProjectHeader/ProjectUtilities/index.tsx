@@ -15,6 +15,10 @@ function ProjectUtilities() {
     navigate(linkCreator.projectMember(params))
     closeMenu()
   }
+  const handleNavigateRecycleBin = () => {
+    navigate(linkCreator.projectRecycleBin(params))
+    closeMenu()
+  }
   return (
     <>
       <Button onClick={toggleMenu} ref={anchorRef} variant='filled'>
@@ -27,7 +31,7 @@ function ProjectUtilities() {
         <MenuItem className='utils-menu-item'>
           <i className='fa-solid fa-timeline fa-fw'></i> Timeline
         </MenuItem>
-        <MenuItem className='utils-menu-item'>
+        <MenuItem className='utils-menu-item' onClick={handleNavigateRecycleBin}>
           <i className='fa-regular fa-trash-can'></i> Recycle bin
         </MenuItem>
       </Menu>

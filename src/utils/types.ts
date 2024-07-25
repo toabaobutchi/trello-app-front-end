@@ -520,13 +520,17 @@ export type InvitedProjectResponse = {
   invitationId: string
 }
 
+export type DeleterReponse = {
+  id: string
+  name: string
+  email: string
+  avatar?: string
+}
+
 export type InTrashTaskResponse = {
   id: string
   name: string
   description?: string
   deletedAt: number
-  deleterName: string
-  deleterEmail: string
-  deleterAvatar?: string
-  deleterId: string
+  deleter?: DeleterReponse
 }
