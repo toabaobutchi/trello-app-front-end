@@ -1,15 +1,20 @@
 import Button from '@comps/Button'
 import './MemberTable.scss'
 import Flex from '@comps/StyledComponents/Flex'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
+import { AssignmentResponse } from '@utils/types'
 
 function MemberTable() {
   const taskDetail = useContext(TaskDetailContext)?.task
   const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
-  const [taskMembers] = useState(() => projectMembers.filter(m => taskDetail?.taskAssignmentIds?.includes(m.id)))
+  // su dung useEffect de thay doi
+  const [taskMembers, setTaskMembers] = useState<AssignmentResponse[]>([])
+  useEffect(() => {
+    setTaskMembers(projectMembers.filter(m => taskDetail?.taskAssignmentIds?.includes(m.id)))
+  }, [taskDetail?.taskAssignmentIds, projectMembers])
   return (
     <>
       <p className='mb-1 text-primary'>Task member</p>

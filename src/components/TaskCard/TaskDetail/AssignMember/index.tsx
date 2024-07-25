@@ -1,12 +1,16 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import { AssignByTaskModel, TaskDetailForBoard } from '@utils/types'
-import { useMemo, useState } from 'react'
+import { AssignByTaskModel, AssignByTaskResponse, TaskDetailForBoard } from '@utils/types'
+import { useContext, useMemo, useState } from 'react'
 import './AssignMember.scss'
 import AssignmentMemberItem from './AssignmentMemberItem'
 import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
+import { useDispatch } from 'react-redux'
+import { projectSlice } from '@redux/ProjectSlice'
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 type AssignMemberProps = {
   task: TaskDetailForBoard
@@ -25,6 +29,10 @@ function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
     return members.filter(m => !task.taskAssignmentIds?.includes(m.id))
   }, [members, task.taskAssignmentIds])
   const [selectedMembers, setSelectedMembers] = useState<SelectedMember[]>([])
+  const dispatch = useDispatch()
+  const context = useContext(TaskDetailContext)
+  const [projectHub] = useState(new ProjectHub())
+
   const handleSelectMembers = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedMemberId = e.target.value
     const isSelected = e.target.checked
@@ -48,8 +56,16 @@ function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
         assignmentIds: selectedMemberIds
       }
       const res = await http.postAuth(`assignments/assign-to-task/${task.id}`, model)
-      if(res?.status === HttpStatusCode.Ok) {
-        // dispatch
+      if (res?.status === HttpStatusCode.Ok) {
+        const data = res?.data as AssignByTaskResponse
+        dispatch(projectSlice.actions.addAssignmentToTask(data))
+        context?.setTask?.(
+          prev => ({ ...prev, taskAssignmentIds: prev?.taskAssignmentIds?.concat(data.assignmentIds) } as typeof prev)
+        )
+        // send notification to others
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.assignMemberToTask, data)
+        }
       }
     }
 

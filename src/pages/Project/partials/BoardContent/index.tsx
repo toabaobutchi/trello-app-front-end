@@ -1,5 +1,6 @@
 import Flex from '@comps/StyledComponents/Flex'
 import {
+  AssignByTaskResponse,
   ChangeTaskOrderModel,
   ChangeTaskOrderResponse,
   CreateListResponse,
@@ -166,6 +167,12 @@ function BoardContent() {
       projectHub.connection?.on(hubs.project.receive.markTask, (_assignmentId: string, data: MarkedTaskResponse) => {
         dispatch(projectSlice.actions.markTask(data))
       })
+      projectHub.connection?.on(
+        hubs.project.receive.assignMemberToTask,
+        (_assignmentId: string, data: AssignByTaskResponse) => {
+          dispatch(projectSlice.actions.addAssignmentToTask(data))
+        }
+      )
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [projectHub, dispatch, project?.board?.id])

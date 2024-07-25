@@ -541,4 +541,5 @@ export type AssignByTaskModel = {
 
 export type AssignByTaskResponse = {
   taskId: string
+  assignerId: string
 } & AssignByTaskModel

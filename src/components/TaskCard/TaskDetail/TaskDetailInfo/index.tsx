@@ -1,7 +1,7 @@
 import Flex from '@comps/StyledComponents/Flex'
 import Subtasks from './Subtasks'
 import { useContext, useEffect, useState } from 'react'
-import { AssignmentResponse, SubtaskForBoard, UpdatedTaskResponse } from '@utils/types'
+import { AssignByTaskResponse, AssignmentResponse, SubtaskForBoard, UpdatedTaskResponse } from '@utils/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import UpdateTaskNameEditor from './UpdateTaskNameEditor'
@@ -61,6 +61,18 @@ function TaskDetailInfo() {
       projectHub.connection?.on(hubs.project.receive.cancelUpdateTaskInfo, (_assignmentId: string, taskId: string) => {
         if (taskId && taskId === taskDetail?.id) setRemoteUpdating(_prev => undefined)
       })
+
+      projectHub.connection?.on(
+        hubs.project.receive.assignMemberToTask,
+        (_assignmentId: string, data: AssignByTaskResponse) => {
+          if (taskDetail.id === data.taskId) {
+            context?.setTask?.(
+              prev =>
+                ({ ...prev, taskAssignmentIds: prev?.taskAssignmentIds?.concat(data.assignmentIds) } as typeof prev)
+            )
+          }
+        }
+      )
     }
   }, [projectHub, taskDetail?.id, context])
   // lấy thông tin creator

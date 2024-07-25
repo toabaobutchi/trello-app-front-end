@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import HttpClient from '@utils/HttpClient'
 import { mapOrder } from '@utils/functions'
 import {
+  AssignByTaskResponse,
   AssignmentResponse,
   ChangeTaskOrderResponse,
   CreateListResponse,
@@ -35,6 +36,19 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    addAssignmentToTask: (state, action) => {
+      const data = action.payload as AssignByTaskResponse
+      if (data) {
+        const containList = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(data.taskId))
+        if (containList) {
+          const task = containList.tasks?.find(t => t.id === data.taskId)
+          if (task) {
+            task.taskAssignmentIds = task.taskAssignmentIds.concat(data.assignmentIds)
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     markTask: (state, action) => {
       const data = action.payload as MarkedTaskResponse
       if (data) {
