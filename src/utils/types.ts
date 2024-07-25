@@ -519,3 +519,14 @@ export type InvitedProjectResponse = {
   invitedAt: number
   invitationId: string
 }
+
+export type InTrashTaskResponse = {
+  id: string
+  name: string
+  description?: string
+  deletedAt: number
+  deleterName: string
+  deleterEmail: string
+  deleterAvatar?: string
+  deleterId: string
+}

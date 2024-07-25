@@ -2,11 +2,11 @@ import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import Tooltip from '@comps/Tooltip-v2'
 import { RootState } from '@redux/store'
-import { AssignmentResponse, ProjectMemberPageParams, ProjectPageParams } from '@utils/types'
-import { useState } from 'react'
+import { AssignmentResponse, ProjectMemberPageParams } from '@utils/types'
 import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
+import { useEffect, useState } from 'react'
 
 type MemberItemProps = {
   member: AssignmentResponse
@@ -14,13 +14,15 @@ type MemberItemProps = {
 
 function ProjectMemberItem({ member }: MemberItemProps) {
   const onlineMembers = useSelector((state: RootState) => state.project.activeProject.onlineMembers)
-  // const [profileExpanded, setProfileExpanded] = useState(false)
-  const isOnline = onlineMembers?.includes(member.id) ?? false
+  const [isOnline, setIsOnline] = useState(false)
   const params = useParams() as ProjectMemberPageParams
   const navigate = useNavigate()
   const handleToggleProfile = () => {
     navigate(linkCreator.projectMember(params, member.id))
   }
+  useEffect(() => {
+    setIsOnline(onlineMembers?.includes(member.id) ?? false)
+  }, [member.id, onlineMembers])
   return (
     <>
       <Flex

@@ -8,14 +8,16 @@ import ProjectUtilities from './ProjectUtilities'
 import './ProjectHeader.responsive.scss'
 import ProjectSearch from './ProjectSearch'
 import { getDateString } from '@utils/functions'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import routeLinks from '@routes/router'
 import useSubNavigate from '@hooks/useSubNavigate'
 import Tooltip from '@comps/Tooltip-v2'
+import { ProjectPageParams } from '@utils/types'
 
 function ProjectHeader() {
   const project = useSelector((state: RootState) => state.project.activeProject)
   const [_, location] = useSubNavigate()
+  const params = useParams() as ProjectPageParams
   return (
     <>
       <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' className='project-header'>
@@ -46,14 +48,16 @@ function ProjectHeader() {
           <ProjectUtilities />
         </Flex>
       </Flex>
-      <Flex $alignItem='center' $justifyContent='space-between' className='w-full mb-1'>
-        <ProjectViewModeNavBar
-          projectId={project?.board?.id}
-          ownerShip={project?.board?.context?.toLowerCase()}
-          slug={project?.board?.slug ?? ''}
-        />
-        <ProjectFilterMenu />
-      </Flex>
+      {params.projectId === project.board.id && Boolean(params.viewMode) && (
+        <Flex $alignItem='center' $justifyContent='space-between' className='w-full mb-1'>
+          <ProjectViewModeNavBar
+            projectId={project?.board?.id}
+            ownerShip={project?.board?.context?.toLowerCase()}
+            slug={project?.board?.slug ?? ''}
+          />
+          <ProjectFilterMenu />
+        </Flex>
+      )}
     </>
   )
 }

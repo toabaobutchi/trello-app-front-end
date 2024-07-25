@@ -37,7 +37,10 @@ function Expander({
         )}
       </div>
       {expanded && (
-        <div className={`expander-content ${props?.className ?? ''}`.trimEnd()} style={props?.style}>
+        <div
+          className={`expander-content ${expanded ? 'expanded' : ''} ${props?.className ?? ''}`.trimEnd()}
+          style={props?.style}
+        >
           {children}
         </div>
       )}

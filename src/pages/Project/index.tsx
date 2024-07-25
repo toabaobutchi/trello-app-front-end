@@ -25,16 +25,6 @@ function Project() {
   const dispatch = useDispatch()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
 
-  // useEffect(() => {
-  //   if (!project || project?.id !== params.projectId) {
-  //     http.getAuth(`/v2/projects/${params.projectId}/v/${params.viewMode}`).then(res => {
-  //       if (res?.status === HttpStatusCode.Ok) {
-  //         dispatch(projectSlice.actions.setActiveProjectBoard(res?.data))
-  //       }
-  //     })
-  //   }
-  // }, [params?.projectId])
-
   useEffect(() => {
     if (!project || project?.id !== params.projectId) {
       if (response?.status === HttpStatusCode.Ok) {
@@ -69,6 +59,7 @@ function Project() {
 
   useEffect(() => {
     // tải thành viên của project
+    console.log('Load assignments', project?.id && project.id === params.projectId)
     if (project?.id && project.id === params.projectId)
       http.getAuth(`/assignments/in-project/${project?.id}`).then(res => {
         if (res?.status === HttpStatusCode.Ok) {
@@ -91,7 +82,7 @@ function Project() {
               </>
             }
           >
-            <Flex className='w-full' style={{ overflow: 'hidden' }}>
+            <Flex className='w-full' style={{ overflow: 'hidden' }} $gap='0.5rem'>
               <ProjectSideBar />
               <Outlet />
             </Flex>

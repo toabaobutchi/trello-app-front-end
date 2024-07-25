@@ -37,8 +37,7 @@ function ProjectMemberProfile() {
         setMemberInfo(() => members.find(m => m.id === data.id))
       }
     })
-  }, [memberId])
-  useState()
+  }, [memberId, members])
   return (
     <>
       <div className='member-info-full w-full mb-1 flex-1'>

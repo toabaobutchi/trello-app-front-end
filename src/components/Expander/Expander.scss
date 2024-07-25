@@ -5,6 +5,7 @@
     gap: 1rem;
     padding: 1rem 0;
     cursor: pointer;
+    width: 100%;
 
     &-icon {
       .expander-icon {
@@ -28,9 +29,26 @@
   &-content {
     padding-left: 1rem;
     width: 100%;
-
-    // .expander-header {
-    //   padding: 0;
-    // }
   }
 }
+
+// @keyframes dropdown {
+//   from {
+//     max-height: 0;
+//     opacity: 0;
+//   }
+//   to {
+//     max-height: max-content;
+//     opacity: 1;
+//   }
+// }
+// @keyframes scrollup {
+//   from {
+//     height: max-content;
+//     opacity: 1;
+//   }
+//   to {
+//     height: 0;
+//     opacity: 0;
+//   }
+// }

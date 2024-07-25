@@ -7,6 +7,7 @@ import HttpClient from '@utils/HttpClient'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import ProjectSideBarItem from './ProjectSideBarItem'
 
 const http = new HttpClient()
 
@@ -26,7 +27,7 @@ function ProjectSideBar() {
           console.error('Can not fetch workspace', err)
         })
     }
-  }, [workspace?.id, board?.id])
+  }, [workspace?.id, board?.id, board?.context, board.workspaceId, dispatch])
   return (
     <>
       <LoadingLayout isLoading={!workspace?.id}>
@@ -42,21 +43,7 @@ function ProjectSideBar() {
             <i className='fa-solid fa-layer-group'></i> {workspace?.name}
           </NavLink>
           {workspace?.projects?.map(item => (
-            <NavLink
-              className='project-side-bar-item project-side-bar-item-children row jcsb'
-              key={item.id}
-              to={linkCreator.project({
-                projectId: item.id,
-                slug: item.slug,
-                ownerShip: item.context,
-                viewMode: 'board'
-              })}
-            >
-              <span>{item.name}</span>
-              <span className='project-sidebar-active-icon'>
-                <i className='fa-regular fa-folder-open'></i>
-              </span>
-            </NavLink>
+            <ProjectSideBarItem key={item.id} item={item} />
           ))}
         </div>
       </LoadingLayout>

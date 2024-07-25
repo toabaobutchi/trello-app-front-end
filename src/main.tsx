@@ -13,7 +13,6 @@ import TaskDetailBoard from '@pages/TaskDetailBoard'
 import ProjectMember from '@pages/ProjectMember'
 import ProjectShare from '@pages/Project/partials/ProjectHeader/ProjectShare'
 import ProjectMemberProfile from '@pages/ProjectMember/ProjectMemberItem/ProjectMemberProfile'
-// import ViewContent from '@pages/Project/partials/ViewContent'
 const Home = React.lazy(() => import('@pages/Home'))
 const Error = React.lazy(() => import('@pages/Error'))
 const Welcome = React.lazy(() => import('@pages/Welcome'))
@@ -22,6 +21,7 @@ const Workspaces = React.lazy(() => import('@pages/Workspaces'))
 const Project = React.lazy(() => import('@pages/Project'))
 const ProjectInvitation = React.lazy(() => import('@pages/ProjectInvitation'))
 const ViewContent = React.lazy(() => import('@pages/Project/partials/ViewContent'))
+const RecycleBin = React.lazy(() => import('@pages/RecycleBin'))
 
 const router = createBrowserRouter([
   {
@@ -86,13 +86,18 @@ const router = createBrowserRouter([
               {
                 path: routeLinks.project.task,
                 element: <TaskDetailBoard />
-              },
+              }
             ]
           },
           // share
           {
             path: routeLinks.project.share,
             element: <ProjectShare />
+          },
+          {
+            path: routeLinks.project.recycleBin,
+            element: <RecycleBin />,
+            loader: loader.recycleBin
           }
         ]
       },

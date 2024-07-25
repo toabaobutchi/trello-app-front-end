@@ -36,6 +36,10 @@ export const linkCreator = {
   projectMember(routeParams: ProjectPageParams, memberId?: string) {
     const { ownerShip, projectId, slug } = routeParams
     return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/${routeLinks.project.members.index}/${memberId ?? ''}`
+  },
+  projectRecycleBin(routeParams: ProjectPageParams) {
+    const { ownerShip, projectId, slug } = routeParams
+    return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/${routeLinks.project.recycleBin}`
   }
 }
 

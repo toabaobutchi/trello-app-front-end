@@ -1,0 +1,35 @@
+.in-trash-task-card {
+  padding: 1rem;
+  border: var(--thin-border-width) solid var(--danger-color);
+  border-radius: var(--primary-radius);
+
+  &-title {
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+
+  &-description,
+  &-delete-date {
+    font-size: 1rem;
+    color: var(--secondary-color);
+  }
+
+  &-deleter {
+    background-color: var(--bright-color);
+    border-radius: var(--primary-radius);
+    padding: 0.25rem;
+
+    &-avatar {
+      border-radius: 50%;
+      width: 30px;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+    }
+
+    &-email {
+      color: var(--secondary-color);
+      font-size: 0.9rem;
+    }
+  }
+}
