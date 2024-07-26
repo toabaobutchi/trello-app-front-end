@@ -1,20 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AccountType, LoginInfo } from '@utils/types'
-import { jwtDecode } from 'jwt-decode'
+import { AccountType, AuthResponse, LoginInfo } from '@utils/types'
 
 export const loginSlice = createSlice({
   name: 'login',
   initialState: {
     accessToken: localStorage.getItem('access_token') ?? '',
-    accountInfo: (localStorage.getItem('access_token')
-      ? jwtDecode(localStorage.getItem('access_token') as string)
-      : (undefined as unknown)) as AccountType
+    accountInfo: undefined as unknown as AccountType
   } as LoginInfo,
   reducers: {
     setAccessToken: (state, action) => {
-      state.accessToken = action.payload
-      localStorage.setItem('access_token', action.payload)
-      state.accountInfo = jwtDecode(action.payload)
+      const data = action.payload as AuthResponse
+      if (data) {
+        state.accessToken = data.accessToken
+        localStorage.setItem('access_token', data.accessToken)
+        state.accountInfo = data.user as AccountType
+      }
     }
   }
 })

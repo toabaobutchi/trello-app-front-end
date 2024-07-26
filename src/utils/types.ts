@@ -65,7 +65,6 @@ export interface AccountType {
   displayName: string
   avatar?: string
   email: string
-  exp?: number
 }
 
 export type CreateListResponse = {
@@ -543,3 +542,15 @@ export type AssignByTaskResponse = {
   taskId: string
   assignerId: string
 } & AssignByTaskModel
+
+export type User = {
+  id: string
+  email: string
+  displayName?: string
+  avatar?: string
+}
+
+export type AuthResponse = {
+  accessToken: string
+  user?: AccountType
+}

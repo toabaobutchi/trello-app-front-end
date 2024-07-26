@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginSlice } from './LoginSlice'
 import routeLinks from '@routes/router'
+import { AuthResponse } from '@utils/types'
 
 const Container = styled.div`
   display: flex;
@@ -78,23 +79,6 @@ const RightSideImage = styled.img`
   height: auto;
 `
 
-// const LoginButton = styled.button`
-//   border: none;
-//   background-color: #fff;
-//   color: var(--text-primary-color);
-//   font-size: 1.2rem;
-//   display: flex;
-//   align-items: center;
-//   gap: 1rem;
-//   padding: 0.5rem 1rem;
-//   margin-top: 2rem;
-//   border-radius: var(--primary-radius);
-//   cursor: pointer;
-//   font-weight: 500;
-//   width: max-content;
-//   text-decoration: none;
-// `
-
 const httpClient = new HttpClient()
 interface GoogleDataType extends JwtPayload {
   email: string
@@ -108,7 +92,8 @@ function Welcome() {
     const response = await httpClient.post('/account/signin', { credentials: token })
     if (response?.status === 200) {
       // thành công
-      dispatch(loginSlice.actions.setAccessToken(response?.data))
+      const data = response?.data as AuthResponse
+      dispatch(loginSlice.actions.setAccessToken(data))
       navigate(routeLinks.home)
     } else {
       console.log('Login Failed')
