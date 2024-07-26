@@ -1,7 +1,9 @@
+// import config from '@confs/app.config'
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
 class HttpClient {
   axios: AxiosInstance
+  // static accessToken?: string
   constructor() {
     this.axios = axios.create({
       baseURL: 'https://localhost:7207/api',
@@ -9,6 +11,10 @@ class HttpClient {
       withCredentials: true
     })
   }
+  // setAccessToken(accessToken: string) {
+  //   HttpClient.accessToken = accessToken
+  //   this.axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+  // }
   async get(url: string, options: object = {}) {
     try {
       const response = await this.axios.get(url, options)
@@ -18,6 +24,51 @@ class HttpClient {
       return null
     }
   }
+
+  // protected getResponse<T = any>(response: AxiosResponse) {
+  //   return {
+  //     data: (response.data.data as T) || null,
+  //     status: response.data.status,
+  //     message: response.data.message
+  //   } as HttpResponse<T>
+  // }
+
+  // protected validateUrl(url: string) {
+  //   if (!url.startsWith('/')) {
+  //     url = `/${url}`
+  //   }
+  //   return url.startsWith('/') ? url : `/${url}`
+  // }
+
+  // protected logError(error: unknown) {
+  //   if (config.env === 'Development') {
+  //     console.log(error)
+  //   }
+  // }
+
+  // async get_v2<T = any>(url: string, options: AxiosRequestConfig<object> = {}) {
+  //   try {
+  //     url = this.validateUrl(url)
+  //     const response = await this.axios.get(url, options)
+  //     const httpResponse = this.getResponse<T>(response)
+  //     return httpResponse
+  //   } catch (err) {
+  //     this.logError(err)
+  //     return null
+  //   }
+  // }
+
+  // async getAuth_v2<T = any>(url: string, options: AxiosRequestConfig<object> = {}) {
+  //   try {
+  //     url = this.validateUrl(url)
+  //     const response = await this.axios.get(url, options)
+  //     const httpResponse = this.getResponse<T>(response)
+  //     return httpResponse
+  //   } catch (err) {
+  //     this.logError(err)
+  //     return null
+  //   }
+  // }
 
   async getAuth(url: string, accessToken: string = '', options: AxiosRequestConfig<object> = {}) {
     try {
@@ -104,5 +155,9 @@ class HttpClient {
   //   }
   // }
 }
-
+// export type HttpResponse<T = any> = {
+//   status: number
+//   data: T | null
+//   message: string
+// }
 export default HttpClient

@@ -89,7 +89,7 @@ function Welcome() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogin = async (token?: string) => {
-    const response = await httpClient.post('/account/signin', { credentials: token })
+    const response = await httpClient.post('/auth/login', { credentials: token })
     if (response?.status === 200) {
       // thành công
       const data = response?.data as AuthResponse
