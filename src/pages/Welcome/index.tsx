@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { loginSlice } from './LoginSlice'
 import routeLinks from '@routes/router'
 import { AuthResponse } from '@utils/types'
+import { login } from '@services/auth.services'
 
 const Container = styled.div`
   display: flex;
@@ -79,17 +80,17 @@ const RightSideImage = styled.img`
   height: auto;
 `
 
-const httpClient = new HttpClient()
-interface GoogleDataType extends JwtPayload {
-  email: string
-  name: string
-  picture: string
-}
+// const httpClient = new HttpClient()
+// interface GoogleDataType extends JwtPayload {
+//   email: string
+//   name: string
+//   picture: string
+// }
 function Welcome() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogin = async (token?: string) => {
-    const response = await httpClient.post('/auth/login', { credentials: token })
+    const response = await login(token ?? '')
     if (response?.status === 200) {
       // thành công
       const data = response?.data as AuthResponse

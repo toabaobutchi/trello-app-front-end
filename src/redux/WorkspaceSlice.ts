@@ -6,6 +6,8 @@ import {
   WorkspaceResponseWithRelatedProjects
 } from '@utils/types'
 import HttpClient from '@utils/HttpClient'
+// import { http as httpAuth } from '@utils/Axios/HttpClientAuth'
+import { loadWorkspaces } from '@services/workspace.services'
 
 const http = new HttpClient()
 
@@ -63,7 +65,7 @@ export const workspaceSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchWorkspaces.fulfilled, (state, action) => {
-        state.workspaceList = action.payload?.data
+        state.workspaceList = action.payload?.data as WorkspaceResponse[]
       })
       .addCase(addWorkspace.fulfilled, (state, action) => {
         state.workspaceList.push(action.payload?.data)
@@ -75,7 +77,7 @@ export const workspaceSlice = createSlice({
 })
 
 export const fetchWorkspaces = createAsyncThunk('workspaces/fetchWorkspaces', async () => {
-  const res = await http.getAuth(`/workspaces`)
+  const res = await loadWorkspaces()
   return res
 })
 

@@ -14,7 +14,7 @@
       "@redux/*": ["./src/redux/*"],
       "@assets/*": ["./src/assets/*"],
       "@routes/*": ["./src/routes/*"],
-      "@fake/*": ["./src/fake/*"],
+      "@services/*": ["./src/services/*"],
       "@utils/*": ["./src/utils/*"]
     },
 

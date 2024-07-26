@@ -77,23 +77,6 @@ function AddItemMenu() {
     }
   }
   const handleSubmit = {
-    // async board() {
-    //   if (!workspaceList) {
-    //     toast.error('You have no workspace')
-    //   } else {
-    //     // eslint-disable-next-line prefer-const
-    //     let { title, color, selectedWorkspace } = state.board as {
-    //       title: string
-    //       color: string
-    //       selectedWorkspace: string
-    //     }
-    //     selectedWorkspace ??= workspaceList[0].id + ''
-    //     const result = await http.postAuth(
-    //       `/projects`,
-    //       { name: title, color, workspaceId: selectedWorkspace }
-    //     )
-    //   }
-    // },
     async workspace() {
       if (!state?.workspace?.title?.trim()) {
         toast.error('Please enter a workspace title')

@@ -1,6 +1,7 @@
 // import config from '@confs/app.config'
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
+/**@deprecated Use {@link HttpClientAuth} instead*/
 class HttpClient {
   axios: AxiosInstance
   // static accessToken?: string

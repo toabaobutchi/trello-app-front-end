@@ -13,7 +13,7 @@ export default defineConfig({
       { find: '@redux', replacement: '/src/redux' },
       { find: '@assets', replacement: '/src/assets' },
       { find: '@routes', replacement: '/src/routes' },
-      { find: '@fake', replacement: '/src/fake' },
+      { find: '@services', replacement: '/src/services' },
       { find: '@pages', replacement: '/src/pages' }
     ]
   }
