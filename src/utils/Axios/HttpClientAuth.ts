@@ -107,12 +107,28 @@ class HttpClientAuth {
     localStorage.setItem('access_token', accessToken)
   }
 
+  isSuccessResponse(response: AxiosResponse) {
+    if (response.status === 200 && response.data.status >= 200 && response.data.status <= 308) {
+      return true
+    } else return false
+  }
+
   protected getResponse<T = any>(response: AxiosResponse) {
-    return {
-      data: (response.data.data as T) || null,
-      status: response.data.status,
-      message: response.data.message
-    } as HttpResponse<T>
+    if (this.isSuccessResponse(response)) {
+      return {
+        isSuccess: true,
+        data: response.data.data as T,
+        status: response.data.status,
+        message: response.data.message
+      } as SuccessResponse<T>
+    } else {
+      return {
+        isSuccess: false,
+        data: response.data.data || null,
+        status: response.data.status,
+        message: response.data.message
+      } as ErrorResponse
+    }
   }
 
   protected validateUrl(url: string) {
@@ -202,6 +218,21 @@ class HttpClientAuth {
     }
   }
 }
+
+export type Response = {
+  status: number
+  message: string
+}
+
+export type SuccessResponse<T = any> = {
+  isSuccess: true
+  data: T
+} & Response
+
+export type ErrorResponse = {
+  isSuccess: false
+  data?: any
+} & Response
 
 export type HttpResponse<T = any> = {
   status: number

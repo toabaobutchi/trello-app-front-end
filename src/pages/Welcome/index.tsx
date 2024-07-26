@@ -80,19 +80,12 @@ const RightSideImage = styled.img`
   height: auto;
 `
 
-// const httpClient = new HttpClient()
-// interface GoogleDataType extends JwtPayload {
-//   email: string
-//   name: string
-//   picture: string
-// }
 function Welcome() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleLogin = async (token?: string) => {
     const response = await login(token ?? '')
     if (response?.status === 200) {
-      // thành công
       const data = response?.data as AuthResponse
       dispatch(loginSlice.actions.setAccessToken(data))
       navigate(routeLinks.home)

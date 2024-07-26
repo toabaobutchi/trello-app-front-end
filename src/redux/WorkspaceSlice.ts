@@ -5,11 +5,9 @@ import {
   WorkspaceResponse,
   WorkspaceResponseWithRelatedProjects
 } from '@utils/types'
-import HttpClient from '@utils/HttpClient'
 // import { http as httpAuth } from '@utils/Axios/HttpClientAuth'
-import { loadWorkspaces } from '@services/workspace.services'
+import { createWorkspace, loadSharedWorkspaces, loadWorkspaces } from '@services/workspace.services'
 
-const http = new HttpClient()
 
 export const workspaceSlice = createSlice({
   name: 'workspaces',
@@ -65,13 +63,22 @@ export const workspaceSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchWorkspaces.fulfilled, (state, action) => {
-        state.workspaceList = action.payload?.data as WorkspaceResponse[]
+        const res = action.payload
+        if (res?.isSuccess) {
+          state.workspaceList = res.data
+        }
       })
       .addCase(addWorkspace.fulfilled, (state, action) => {
-        state.workspaceList.push(action.payload?.data)
+        const res = action.payload
+        if (res?.isSuccess) {
+          state.workspaceList.push(action.payload?.data)
+        }
       })
       .addCase(fetchSharedWorkspaces.fulfilled, (state, action) => {
-        state.sharedWorkspaceList = action.payload?.data
+        const res = action.payload
+        if (res?.isSuccess) {
+          state.sharedWorkspaceList = res.data
+        }
       })
   }
 })
@@ -82,11 +89,11 @@ export const fetchWorkspaces = createAsyncThunk('workspaces/fetchWorkspaces', as
 })
 
 export const addWorkspace = createAsyncThunk('workspaces/addWorkspace', async (data: CreateWorkspaceModel) => {
-  const res = await http.postAuth(`/workspaces`, data)
+  const res = await createWorkspace(data)
   return res
 })
 
 export const fetchSharedWorkspaces = createAsyncThunk('workspaces/fetchSharedWorkspaces', async () => {
-  const res = await http.getAuth(`/shared-workspaces`)
+  const res = await loadSharedWorkspaces()
   return res
 })
