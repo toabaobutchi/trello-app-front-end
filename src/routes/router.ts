@@ -1,3 +1,5 @@
+import { getProjectForDisplaying } from '@services/project.services'
+import { getWorkspaceWithProjects } from '@services/workspace.services'
 import { getSlug } from '@utils/functions'
 import HttpClient from '@utils/HttpClient'
 import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
@@ -45,9 +47,8 @@ export const linkCreator = {
 
 export const loader = {
   workspace: async ({ params }: LoaderFunctionArgs) => {
-    const { ownerShip } = params as WorkspacePageParams
-    const prefixPath = ownerShip === 'owner' ? 'w' : 'sw'
-    const res = await http.getAuth(`/${prefixPath}/${params.workspaceId}/projects`)
+    const { ownerShip, workspaceId } = params as WorkspacePageParams
+    const res = await getWorkspaceWithProjects(ownerShip, workspaceId)
     return res
   },
   invitation: async () => {
@@ -61,7 +62,7 @@ export const loader = {
   },
   projectView: async ({ params }: LoaderFunctionArgs) => {
     const { projectId, viewMode } = params as ProjectPageParams
-    const res = await http.getAuth(`/v2/projects/${projectId}/v/${viewMode}`)
+    const res = await getProjectForDisplaying(projectId, viewMode ?? 'board')
     return res
   }
 }

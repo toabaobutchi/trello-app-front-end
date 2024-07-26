@@ -244,7 +244,6 @@ function BoardContent() {
             // call hub
             if (projectHub.isConnected) {
               projectHub.connection?.send(hubs.project.send.endDragTask, res?.data, dragOverResult)
-              // dragHub?.send('SendEndDragTask', project?.board?.id, account?.id, res?.data, dragOverResult)
             }
           }
         })

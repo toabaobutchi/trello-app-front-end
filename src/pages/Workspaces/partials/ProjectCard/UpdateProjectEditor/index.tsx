@@ -1,13 +1,6 @@
 import { useEffect, useState } from 'react'
 import './UpdateProjectEditor.scss'
-import {
-  ProjectDataInput,
-  ProjectResponseForUpdating,
-  UpdateProjectModel,
-  UpdateProjectResponse
-} from '@utils/types'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
+import { ProjectDataInput, ProjectResponseForUpdating, UpdateProjectModel } from '@utils/types'
 import LoadingLayout from '@layouts/LoadingLayout'
 import FloatLabelInput from '@comps/FloatLabelInput'
 import TextArea from '@comps/TextArea'
@@ -18,26 +11,30 @@ import Button from '@comps/Button'
 import { getDateTimeString, getDisplayDateString } from '@utils/functions'
 import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
-
-const http = new HttpClient()
+import { getUpdateProject, updateProject } from '@services/project.services'
 
 function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: string; onClose?: () => void }) {
   const dispatch = useDispatch()
   const [project, setProject] = useState<ProjectDataInput>()
   const [originalData, setOriginalData] = useState<ProjectResponseForUpdating>()
+
+  // load project data to update
   useEffect(() => {
-    http.getAuth(`/projects/${projectId}/updating`).then(res => {
-      if (res?.status === HttpStatusCode.Ok) {
-        const data = res?.data as ProjectResponseForUpdating
-        setOriginalData(data)
-        const inputData: ProjectDataInput = {
-          ...data,
-          useColor: Boolean(data?.color)
+    if (projectId) {
+      getUpdateProject(projectId).then(res => {
+        if (res?.isSuccess) {
+          const data = res?.data
+          setOriginalData(data)
+          const inputData: ProjectDataInput = {
+            ...data,
+            useColor: Boolean(data?.color)
+          }
+          setProject(inputData)
         }
-        setProject(inputData)
-      }
-    })
+      })
+    }
   }, [projectId])
+
   const handleChangeBoard = {
     toggleSetDueDate(e: React.ChangeEvent<HTMLInputElement>) {
       setProject({ ...project, dueDate: e.currentTarget.checked ? undefined : Date.now() } as ProjectDataInput)
@@ -55,6 +52,8 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
   const handleReset = () => {
     setProject({ ...originalData, useColor: Boolean(originalData?.color) } as ProjectDataInput)
   }
+
+  // update project
   const handleSubmit = async () => {
     const data: UpdateProjectModel = {
       name: project?.name ?? '',
@@ -62,14 +61,15 @@ function UpdateProjectEditor({ projectId, onClose = () => {} }: { projectId?: st
       description: project?.description,
       dueDate: project?.dueDate ? project?.dueDate : undefined
     }
-    const res = await http.putAuth(`projects/${projectId}`, data)
-    if (res?.status === HttpStatusCode.Ok) {
-      // dispatch to change UI
-      const data = res?.status as UpdateProjectResponse
-      dispatch(workspaceSlice.actions.updateProject(data))
-      onClose()
-    } else {
-      handleReset()
+    if (projectId) {
+      const res = await updateProject(projectId, data)
+      if (res?.isSuccess) {
+        const data = res.data
+        dispatch(workspaceSlice.actions.updateProject(data))
+        onClose()
+      } else {
+        handleReset()
+      }
     }
   }
   return (

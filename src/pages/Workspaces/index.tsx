@@ -21,9 +21,9 @@ function Workspaces() {
   const params = useParams() as WorkspacePageParams
   // đặt activeWorkspace (workspace đang thao tác)
   useEffect(() => {
-    if (workspace?.id && params.workspaceId !== workspace.id.toString()) console.log('Set activeWorkspace')
-    dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))
-  }, [dispatch, workspace?.id])
+    if (workspace?.id && params.workspaceId !== workspace.id.toString())
+      dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))
+  }, [dispatch, params.workspaceId, workspace, workspace.id])
   const handleToggle = () => {
     setProjectModal(!projectModal)
   }

@@ -554,3 +554,8 @@ export type AuthResponse = {
   accessToken: string
   user?: AccountType
 }
+
+export type WorkspaceUpdateModel = {
+  name?: string
+  description?: string
+}

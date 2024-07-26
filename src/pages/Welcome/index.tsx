@@ -85,8 +85,8 @@ function Welcome() {
   const navigate = useNavigate()
   const handleLogin = async (token?: string) => {
     const response = await login(token ?? '')
-    if (response?.status === 200) {
-      const data = response?.data as AuthResponse
+    if (response?.isSuccess) {
+      const data = response.data
       dispatch(loginSlice.actions.setAccessToken(data))
       navigate(routeLinks.home)
     } else {

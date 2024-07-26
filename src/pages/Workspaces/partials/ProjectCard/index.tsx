@@ -18,7 +18,6 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
   const { open, anchorRef, toggleMenu, closeMenu } = useMenu<HTMLButtonElement>()
   const [updateModal, setUpdateModal] = useState(false)
   const dispatch = useDispatch()
-  // const [projectState, setProjectState] = useState<ProjectCardType>()
   const navigate = useNavigate()
   const navigateToProjectDetail = () => {
     navigate(

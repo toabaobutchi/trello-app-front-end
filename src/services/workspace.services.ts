@@ -1,5 +1,10 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import { CreateWorkspaceModel, WorkspaceResponse } from '@utils/types'
+import {
+  CreateWorkspaceModel,
+  WorkspaceResponse,
+  WorkspaceResponseWithRelatedProjects,
+  WorkspaceUpdateModel
+} from '@utils/types'
 
 const loadWorkspaces = async () => {
   const res = await http.get<WorkspaceResponse[]>('/workspaces')
@@ -16,4 +21,15 @@ const createWorkspace = async (newWorkspace: CreateWorkspaceModel) => {
   return res
 }
 
-export { loadWorkspaces, createWorkspace, loadSharedWorkspaces }
+const updateWorkspace = async (workspaceId: string | number, model: WorkspaceUpdateModel) => {
+  const res = await http.put<WorkspaceUpdateModel, WorkspaceResponse>(`/workspaces/${workspaceId}`, model)
+  return res
+}
+
+const getWorkspaceWithProjects = async (ownerShip: string, workspaceId: string) => {
+  const prefixPath = ownerShip === 'owner' ? 'w' : 'sw'
+  const res = await http.get<WorkspaceResponseWithRelatedProjects>(`/${prefixPath}/${workspaceId}/projects`)
+  return res
+}
+
+export { loadWorkspaces, createWorkspace, loadSharedWorkspaces, updateWorkspace, getWorkspaceWithProjects }

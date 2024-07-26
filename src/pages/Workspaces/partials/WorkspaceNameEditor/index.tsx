@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import './WorkspaceNameEditor.scss'
-import { Workspace, WorkspaceResponseWithRelatedProjects } from '@utils/types'
-import HttpClient from '@utils/HttpClient'
+import { WorkspaceResponseWithRelatedProjects } from '@utils/types'
 import { HttpStatusCode } from 'axios'
 import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
 import Button from '@comps/Button'
-
-const http = new HttpClient()
+import { updateWorkspace } from '@services/workspace.services'
+import { handleTriggerKeyPress } from '@utils/functions'
 
 function WorkspaceNameEditor({ workspace }: { workspace: WorkspaceResponseWithRelatedProjects }) {
   const dispatch = useDispatch()
@@ -37,10 +36,10 @@ function WorkspaceNameEditor({ workspace }: { workspace: WorkspaceResponseWithRe
     if (!workspaceNameState.tempName) {
       console.error('Workspace name is empty')
     } else {
-      const res = await http.putAuth(`/workspaces/${workspace.id}`, { name: workspaceNameState?.tempName })
-      if (res?.status === HttpStatusCode.Ok) {
-        // thanh cong
-        const updatedWorkspace = res.data as Workspace
+      // const res = await http.putAuth(`/workspaces/${workspace.id}`, { name: workspaceNameState?.tempName })
+      const res = await updateWorkspace(workspace.id, { name: workspaceNameState?.tempName })
+      if (res?.isSuccess) {
+        const updatedWorkspace = res.data
         setWorkspaceNameState({ ...workspaceNameState, name: updatedWorkspace.name, isEditing: false })
         // cập nhật lại store - workspaceList
         dispatch(
@@ -59,12 +58,15 @@ function WorkspaceNameEditor({ workspace }: { workspace: WorkspaceResponseWithRe
       }
     }
   }
-  const handleCaptureEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      handleChangeWorkspaceNameSubmit()
-    }
-  }
+  // const handleCaptureEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     e.preventDefault()
+  //     handleChangeWorkspaceNameSubmit()
+  //   }
+  // }
+  const handleCaptureEnter = handleTriggerKeyPress(() => {
+    handleChangeWorkspaceNameSubmit()
+  }, 'Enter')
   return (
     <>
       <i className='fa-solid fa-layer-group'></i>
@@ -76,7 +78,7 @@ function WorkspaceNameEditor({ workspace }: { workspace: WorkspaceResponseWithRe
           id='workspace-name-edit-input'
           value={workspaceNameState?.tempName}
           onChange={handleChangeWorkspaceName}
-          onKeyDown={handleCaptureEnter}
+          onKeyDown={handleCaptureEnter.handler}
         />
       )}
 

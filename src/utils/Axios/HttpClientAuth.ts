@@ -234,10 +234,6 @@ export type ErrorResponse = {
   data?: any
 } & Response
 
-export type HttpResponse<T = any> = {
-  status: number
-  data?: T
-  message: string
-}
+export type HttpResponse<T = any> = ErrorResponse | SuccessResponse<T> | null
 
 export const http = new HttpClientAuth()

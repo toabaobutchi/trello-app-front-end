@@ -2,7 +2,7 @@ import Button from '@comps/Button'
 import './YourTasksToDay.scss'
 import TodayTask from './partials/TodayTask'
 import routeLinks from '@routes/router'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // fake data
 const taskList = ['Database design', 'Frontend', 'Research']

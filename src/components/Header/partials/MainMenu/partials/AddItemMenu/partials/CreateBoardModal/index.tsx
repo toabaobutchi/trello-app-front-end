@@ -10,14 +10,11 @@ import ColorPicker from '@comps/ColorPicker'
 import TextArea from '@comps/TextArea'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
-import { BoardDataInput, CreateProjectModel, ProjectContextResponse } from '@utils/types'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
+import { BoardDataInput, CreateProjectModel } from '@utils/types'
 import { useNavigate } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
 import { addWorkspace } from '@redux/WorkspaceSlice'
-
-const http = new HttpClient()
+import { createProject } from '@services/project.services'
 
 type CreateBoardModalProps = {
   open: boolean
@@ -69,10 +66,10 @@ function CreateBoardModal({ open, onClose = () => {} }: CreateBoardModalProps) {
       console.log('Please enter a name')
       return
     }
-    const res = await http.postAuth('/projects', data)
-    if (res?.status === HttpStatusCode.Ok) {
+    const res = await createProject(data)
+    if (res?.isSuccess) {
       handleClose()
-      const createdProject = res.data as ProjectContextResponse
+      const createdProject = res.data
       navigate(
         linkCreator.project({
           viewMode: 'board',
@@ -123,7 +120,6 @@ function CreateBoardModal({ open, onClose = () => {} }: CreateBoardModalProps) {
                     )
                   }}
                   input={{ id: 'project-color', value: boardData.color, name: 'color' }}
-                  // style={{ marginTop: '0.5rem', marginLeft: '1rem' }}
                   onChange={handleChangeBoard.inputs}
                 />
               )}

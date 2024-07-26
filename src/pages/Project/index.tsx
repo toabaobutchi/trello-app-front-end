@@ -6,29 +6,24 @@ import { Suspense, useEffect, useState } from 'react'
 import { Outlet, useLoaderData, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
-import { AxiosResponse, HttpStatusCode } from 'axios'
-import HttpClient from '@utils/HttpClient'
-// import TableContent from './partials/TableContent'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import ProjectSideBar from './partials/ProjectSideBar'
-
-// const BoardContent = lazy(() => import('./partials/BoardContent'))
-
-const http = new HttpClient()
+import { getAssignmentsInProject } from '@services/assignment.services'
+import { HttpResponse } from '@utils/Axios/HttpClientAuth'
 
 function Project() {
   const params = useParams() as ProjectPageParams
   const { board: project } = useProjectSelector()
-  const response = useLoaderData() as AxiosResponse
+  const response = useLoaderData() as HttpResponse<ProjectResponseForBoard>
   const dispatch = useDispatch()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
 
   useEffect(() => {
     if (!project || project?.id !== params.projectId) {
-      if (response?.status === HttpStatusCode.Ok) {
-        const data = response?.data as ProjectResponseForBoard
+      if (response?.isSuccess) {
+        const data = response.data
         dispatch(projectSlice.actions.setActiveProjectBoard(data))
       }
     }
@@ -59,16 +54,15 @@ function Project() {
 
   useEffect(() => {
     // tải thành viên của project
-    console.log('Load assignments', project?.id && project.id === params.projectId)
     if (project?.id && project.id === params.projectId)
-      http.getAuth(`/assignments/in-project/${project?.id}`).then(res => {
-        if (res?.status === HttpStatusCode.Ok) {
+      getAssignmentsInProject(project.id).then(res => {
+        if (res?.isSuccess) {
           dispatch(projectSlice.actions.setProjectMembers(res.data))
         } else {
           console.log('Can not get project members', res?.data)
         }
       })
-  }, [project?.id])
+  }, [project.id, params.projectId, dispatch])
 
   return (
     <>
