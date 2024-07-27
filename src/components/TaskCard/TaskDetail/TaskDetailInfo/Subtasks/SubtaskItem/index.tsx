@@ -5,8 +5,8 @@ import useMenu from '@hooks/useMenu'
 import Menu from '@comps/Menu'
 import Button from '@comps/Button'
 import { useState } from 'react'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
+import { changeSubtaskName } from '@services/subtask.services'
+import { handleTriggerKeyPress } from '@utils/functions'
 
 type SubtaskItemProps = {
   subTask: SubtaskForBoard
@@ -14,8 +14,6 @@ type SubtaskItemProps = {
   onDeleteSubtask?: (subTaskId: number) => void
   onChangeSubTaskName?: (subTaskId: number, subTaskName: string) => void
 }
-
-const http = new HttpClient()
 
 function SubtaskItem({
   subTask,
@@ -34,17 +32,20 @@ function SubtaskItem({
   const handleChangeSubtaskName = (e: InputChange) => {
     setSubtaskName(e.target.value)
   }
-  const handleSubmitSubtaskName = async (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && subtaskName) {
+  const handleSubmitSubtaskName = async () => {
+    if (subtaskName) {
       // submit
-      const res = await http.putAuth(`/subtasks/${subTask.id}/change-name`, { name: subtaskName })
-      if (res?.status === HttpStatusCode.Ok) {
-        const updatedSubtaskName = res?.data
+      const res = await changeSubtaskName(subTask.id, subtaskName)
+      if (res?.isSuccess) {
+        const updatedSubtaskName = res.data
         onChangeSubTaskName(subTask.id, updatedSubtaskName)
       }
       handleToggleChangeSubtaskName()
     }
   }
+  const handleTrigger = handleTriggerKeyPress(() => {
+    handleSubmitSubtaskName()
+  }, 'Enter')
   return (
     <>
       <Flex key={subTask?.id} $alignItem='center' $justifyContent='space-between' className='subtasks-item'>
@@ -67,7 +68,7 @@ function SubtaskItem({
                 onChange={handleChangeSubtaskName}
                 autoFocus
                 onBlur={handleToggleChangeSubtaskName}
-                onKeyDown={handleSubmitSubtaskName}
+                onKeyDown={handleTrigger.handler}
               />
             </>
           )}

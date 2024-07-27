@@ -8,15 +8,12 @@ import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents'
 import { useModal } from '@hooks/useModal'
 import { projectSlice } from '@redux/ProjectSlice'
+import { deleteList, updateList } from '@services/list.services'
 import { handleTriggerKeyPress } from '@utils/functions'
-import HttpClient from '@utils/HttpClient'
 import { hubs, ProjectHub } from '@utils/Hubs'
-import { DeletedListResponse, InputChange, ListResponseForBoard, UpdatedListResponse } from '@utils/types'
-import { HttpStatusCode } from 'axios'
+import { InputChange, ListResponseForBoard } from '@utils/types'
 import { memo, useReducer, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-
-const http = new HttpClient()
 
 const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
   const [state, dispatch] = useReducer<React.Reducer<State, Action>>(reducer, initialState)
@@ -62,9 +59,9 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
       return
     }
     const validWip = parseInt(wip)
-    http.putAuth(`/lists/${list?.id}`, { wipLimit: validWip }).then(res => {
-      if (res?.status === 200) {
-        const data = res?.data as UpdatedListResponse
+    updateList(list.id, { wipLimit: validWip }).then(res => {
+      if (res?.isSuccess) {
+        const data = res.data
         reduxDispatch(projectSlice.actions.updateListInfo(data))
         handleCloseMenu()
       } else {
@@ -74,10 +71,9 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
   }
   const handleDeleteList = async () => {
     if (list?.id) {
-      const res = await http.deleteAuth(`/lists/${list?.id}`)
-      if (res?.status === HttpStatusCode.Ok) {
-        const data = res?.data as DeletedListResponse
-        console.log('Delete list response', data)
+      const res = await deleteList(list.id)
+      if (res?.isSuccess) {
+        const data = res.data
         reduxDispatch(projectSlice.actions.deleteList(data))
         handleToggleDeleteModal()
         handleCloseMenu()

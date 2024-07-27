@@ -3,12 +3,10 @@ import FloatLabelInput from '@comps/FloatLabelInput'
 import Menu from '@comps/Menu'
 import useMenu from '@hooks/useMenu'
 import { projectSlice } from '@redux/ProjectSlice'
-import HttpClient from '@utils/HttpClient'
+import { addNewTask } from '@services/task.services'
 import { CreateTaskModel, InputChange, ListResponseForBoard } from '@utils/types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-
-const http = new HttpClient()
 
 function AddTaskAbove({ column }: { column?: ListResponseForBoard }) {
   const addNewTaskMenu = useMenu<HTMLButtonElement>()
@@ -24,8 +22,8 @@ function AddTaskAbove({ column }: { column?: ListResponseForBoard }) {
         listId: column?.id as string,
         name: newTaskName
       }
-      const res = await http.postAuth('/tasks', newTask)
-      if (res?.status === 200) {
+      const res = await addNewTask(newTask)
+      if (res?.isSuccess) {
         addNewTaskMenu.closeMenu()
         setNewTaskName('')
         dispatch(projectSlice.actions.addNewTask(res.data))

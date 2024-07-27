@@ -33,14 +33,12 @@ import TaskCard from '@comps/TaskCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
-import HttpClient from '@utils/HttpClient'
 import { cloneDeep } from 'lodash'
 import { MyCustomSensor } from '@utils/MyCustomSensor'
 import { filterLists } from '@utils/functions'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { changeTaskOrder } from '@services/task.services'
-
-const http = new HttpClient()
+import { changeListOrder } from '@services/list.services'
 
 type ActiveDragItemType = {
   id?: string | number
@@ -359,23 +357,25 @@ function BoardContent() {
           oldTaskOrder: targetColumn?.taskOrder as string
         }
         setListState(_prev => nextColumns)
-        http.putAuth(`/tasks/${activeDragItem.id}/change-order`, changeTaskOrderModel).then(res => {
-          if (res?.status !== 200) {
-            console.log('Update task order failed')
-            setListState(_prev => project?.board?.lists as ListResponseForBoard[])
-          } else {
-            const dragOverResult: DragOverResult = {
-              activeList: targetColumn as ListResponseForBoard,
-              overList: targetColumn
+        if (activeDragItem?.id) {
+          changeTaskOrder(activeDragItem.id as string, changeTaskOrderModel).then(res => {
+            if (!res?.isSuccess) {
+              console.log('Update task order failed')
+              setListState(_prev => project?.board?.lists as ListResponseForBoard[])
+            } else {
+              const dragOverResult: DragOverResult = {
+                activeList: targetColumn as ListResponseForBoard,
+                overList: targetColumn
+              }
+              dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res.data }))
+              // call hub
+              if (projectHub.isConnected) {
+                // SendEndDragTask
+                projectHub.connection?.send(hubs.project.send.endDragTask, res?.data, dragOverResult)
+              }
             }
-            dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
-            // call hub
-            if (projectHub.isConnected) {
-              // SendEndDragTask
-              projectHub.connection?.send(hubs.project.send.endDragTask, res?.data, dragOverResult)
-            }
-          }
-        })
+          })
+        }
       }
     } // xử lý trường hợp kéo thả cột
     else {
@@ -394,13 +394,14 @@ function BoardContent() {
           setListState(newListState) // tạm thời set lại - ngăn việc tạm dừng UI
 
           // gọi api cập nhật lại
-          http.putAuth(`/lists/change-order`, { newListOrder }).then(res => {
-            if (res?.status === 200) {
+          changeListOrder(newListOrder).then(res => {
+            if (res?.isSuccess) {
               // cập nhật lại thành công
-              const updatedListOrder = res.data as string
+              const updatedListOrder = res.data
               dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
               if (projectHub.isConnected) {
-                projectHub.connection?.send('SendEndDragList', updatedListOrder)
+                // SendEndDragList
+                projectHub.connection?.send(hubs.project.send.endDragList, updatedListOrder)
               }
             } else {
               setListState(listState) // reset lại list state như ban đầu, huỷ cập nhật

@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import HttpClient from '@utils/HttpClient'
+import { createSlice } from '@reduxjs/toolkit'
 import { mapOrder } from '@utils/functions'
 import {
   AssignByTaskResponse,
@@ -19,8 +18,6 @@ import {
   UpdatedListResponse,
   UpdatedTaskResponse
 } from '@utils/types'
-
-const http = new HttpClient()
 
 export const projectSlice = createSlice({
   name: 'project',
@@ -233,25 +230,25 @@ export const projectSlice = createSlice({
       const filters = action.payload as FilterType
       state.activeProject.currentFilters = filters
     }
-  },
-  extraReducers: builder => {
-    builder.addCase(changeListOrder.fulfilled, (state, action) => {
-      const newListOrder = action?.payload?.data as string
-      state.activeProject.board.listOrder = newListOrder
-      const updatedListOrder = newListOrder.split(',')
-      state.activeProject.board!.lists = state.activeProject.board?.lists?.sort(
-        (a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0)
-      )
-    })
   }
+  // extraReducers: builder => {
+  // builder.addCase(changeListOrder.fulfilled, (state, action) => {
+  //   const newListOrder = action?.payload?.data as string
+  //   state.activeProject.board.listOrder = newListOrder
+  //   const updatedListOrder = newListOrder.split(',')
+  //   state.activeProject.board!.lists = state.activeProject.board?.lists?.sort(
+  //     (a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0)
+  //   )
+  // })
+  // }
 })
 
-export const fetchProjectsForBoard = createAsyncThunk('projects/fetchProjectsForBoard', async (projectId: string) => {
-  const res = await http.getAuth(`/projects/${projectId}v/board`)
-  return res
-})
+// export const fetchProjectsForBoard = createAsyncThunk('projects/fetchProjectsForBoard', async (projectId: string) => {
+//   const res = await http.getAuth(`/projects/${projectId}v/board`)
+//   return res
+// })
 
-export const changeListOrder = createAsyncThunk('projects/changeListOrder', async (newListOrder: string) => {
-  const res = await http.putAuth(`/lists/change-order`, { newListOrder })
-  return res
-})
+// export const changeListOrder = createAsyncThunk('projects/changeListOrder', async (newListOrder: string) => {
+//   const res = await http.putAuth(`/lists/change-order`, { newListOrder })
+//   return res
+// })

@@ -3,13 +3,11 @@ import FloatLabelInput from '@comps/FloatLabelInput'
 import Flex from '@comps/StyledComponents/Flex'
 import useClickTracker from '@hooks/useClickTracker'
 import { projectSlice } from '@redux/ProjectSlice'
-import HttpClient from '@utils/HttpClient'
 import { hubs, ProjectHub } from '@utils/Hubs'
-import { CreateTaskModel, CreateTaskResponse, InputChange, ListResponseForBoard } from '@utils/types'
+import { CreateTaskModel, InputChange, ListResponseForBoard } from '@utils/types'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-
-const http = new HttpClient()
+import { addNewTask } from '@services/task.services'
 
 function AddTask({ column }: { column?: ListResponseForBoard }) {
   const [isAddingTask, setIsAddingTask] = useState(false)
@@ -55,9 +53,9 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
         listId: column?.id,
         name: addTask
       }
-      const res = await http.postAuth('/tasks', newTask)
-      if (res?.status === 200) {
-        const data = res?.data as CreateTaskResponse
+      const res = await addNewTask(newTask)
+      if (res?.isSuccess) {
+        const data = res.data
         onCancelAddTask()
         dispatch(projectSlice.actions.addNewTask(data))
         if (projectHub.isConnected) {

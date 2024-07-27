@@ -4,13 +4,11 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { AssignmentResponse, JoinTaskResponse, TaskResponseForBoard } from '@utils/types'
+import { AssignmentResponse, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId, DateCompareState, getDateString, isInToday, isOverdue } from '@utils/functions'
 import { useEffect, useMemo, useState } from 'react'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
 import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
@@ -19,8 +17,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import DeleteTaskMenu from './DeleteTaskMenu'
 import { useModal } from '@hooks/useModal'
-
-const http = new HttpClient()
+import { joinTask } from '@services/task.services'
 
 const displayAvatarCount = 3
 
@@ -69,9 +66,9 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   // }
 
   const handleJoinTask = async () => {
-    const res = await http.postAuth(`/tasks/${task?.id}/join`, {})
-    if (res?.status === HttpStatusCode.Ok) {
-      dispatch(projectSlice.actions.joinTask(res.data as JoinTaskResponse))
+    const res = await joinTask(task.id)
+    if (res?.isSuccess) {
+      dispatch(projectSlice.actions.joinTask(res.data))
     }
   }
   return (

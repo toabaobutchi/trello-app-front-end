@@ -3,6 +3,9 @@ import { http } from '@utils/Axios/HttpClientAuth'
 import {
   ChangeTaskOrderModel,
   ChangeTaskOrderResponse,
+  CreateTaskModel,
+  CreateTaskResponse,
+  DeletedTaskResponse,
   InTrashTaskResponse,
   JoinTaskResponse,
   MarkedTaskResponse,
@@ -48,4 +51,23 @@ const updateTask = async (taskId: string, model: UpdateTaskModel) => {
   return res
 }
 
-export { changeTaskOrder, getRecycleBin, getTaskDetail, markTask, joinTask, duplicateTask, updateTask }
+const addNewTask = async (model: CreateTaskModel) => {
+  const res = await http.post<CreateTaskModel, CreateTaskResponse>('/tasks', model)
+  return res
+}
+const deleteTask = async (taskId: string, moveToTrash: boolean = false) => {
+  const res = await http.delete<DeletedTaskResponse>(`/tasks/${taskId}/${moveToTrash ? 'move-to-trash' : ''}`)
+  return res
+}
+
+export {
+  changeTaskOrder,
+  getRecycleBin,
+  getTaskDetail,
+  markTask,
+  joinTask,
+  duplicateTask,
+  updateTask,
+  addNewTask,
+  deleteTask
+}

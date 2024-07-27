@@ -2,9 +2,8 @@ import Button from '@comps/Button'
 import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents'
 import { projectSlice } from '@redux/ProjectSlice'
-import HttpClient from '@utils/HttpClient'
-import { DeletedTaskResponse, TaskResponseForBoard } from '@utils/types'
-import { HttpStatusCode } from 'axios'
+import { deleteTask } from '@services/task.services'
+import { TaskResponseForBoard } from '@utils/types'
 import { useDispatch } from 'react-redux'
 
 type DeleteTaskMenuProps = {
@@ -13,14 +12,12 @@ type DeleteTaskMenuProps = {
   onClose: () => void
 }
 
-const http = new HttpClient()
-
 function DeleteTaskMenu({ task, openModal, onClose }: DeleteTaskMenuProps) {
   const dispatch = useDispatch()
-  const handleDeleteTask = async (action?: 'move-to-trash') => {
-    const res = await http.deleteAuth(`/tasks/${task.id}/${action ?? ''}`)
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as DeletedTaskResponse
+  const handleDeleteTask = async (moveToTrash: boolean = false) => {
+    const res = await deleteTask(task.id, moveToTrash)
+    if (res?.isSuccess) {
+      const data = res.data
       dispatch(projectSlice.actions.deleteTask(data))
       onClose()
     }
@@ -29,7 +26,7 @@ function DeleteTaskMenu({ task, openModal, onClose }: DeleteTaskMenuProps) {
     await handleDeleteTask()
   }
   const handleDeleteMoveToTrash = async () => {
-    await handleDeleteTask('move-to-trash')
+    await handleDeleteTask(true)
   }
   return (
     <>

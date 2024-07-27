@@ -2,15 +2,13 @@ import './Subtasks.scss'
 import { useEffect, useState } from 'react'
 import AddSubtask from './AddSubtask'
 import SubtaskItem from './SubtaskItem'
-import { SubtaskForBoard, SubtaskResponse } from '@utils/types'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
+import { SubtaskForBoard } from '@utils/types'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
+import { addSubtasks, checkSubtask, deleteSubtask } from '@services/subtask.services'
 
-const http = new HttpClient()
 
 type SubtasksProps = {
   subtasks: SubtaskForBoard[]
@@ -75,9 +73,9 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
   }, [hubConnection, taskId])
 
   const handleAddSubtasks = async (names: string[]) => {
-    const res = await http.postAuth('/subtasks', { names, taskId })
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as SubtaskForBoard[]
+    const res = await addSubtasks({ taskId, names })
+    if (res?.isSuccess) {
+      const data = res.data
       setSubtasks(prev => [...prev, ...data])
       if (hubConnection) {
         // SendAddSubtaskResult
@@ -95,22 +93,22 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
 
     if (!updatedSubtask) return
 
-    const res = await http.putAuth(`/subtasks/${updatedSubtask?.id}/change-status`, { isCompleted: e.target.checked })
-    if (res?.status === HttpStatusCode.Ok) {
+    const res = await checkSubtask(updatedSubtask.id, e.target.checked)
+    if (res?.isSuccess) {
       // update lại trạng thái subtask
-      updatedSubtask!.isCompleted = res?.data
+      updatedSubtask.isCompleted = res.data
       setSubtasks(_prev => newSubtasks)
       if (hubConnection) {
         // SendCheckSubtask
-        hubConnection.invoke(hubs.project.send.checkSubtask, taskId, updatedSubtask?.id, Boolean(res?.data))
+        hubConnection.invoke(hubs.project.send.checkSubtask, taskId, updatedSubtask?.id, Boolean(res.data))
       }
       dispatch(projectSlice.actions.changeSubtaskStatus({ taskId, status: Boolean(res?.data) }))
     }
   }
   const handleDeleteSubtask = async (subtaskId: number) => {
-    const res = await http.deleteAuth(`/subtasks/${subtaskId}`)
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as SubtaskResponse
+    const res = await deleteSubtask(subtaskId)
+    if (res?.isSuccess) {
+      const data = res.data
       setSubtasks(prev => {
         const newSubtasks = prev.filter(subtask => subtask.id !== data.id)
         return newSubtasks

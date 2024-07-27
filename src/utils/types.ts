@@ -572,3 +572,14 @@ export type UpdateTaskModel = {
   priority?: string
   description?: string
 }
+
+export type UpdateListModel = {
+  name?: string
+  description?: string
+  wipLimit?: number
+}
+
+export type AddSubtasksModel = {
+  taskId: string
+  names?: string[]
+}
