@@ -86,6 +86,10 @@ const router = createBrowserRouter([
               {
                 path: routeLinks.project.task,
                 element: <TaskDetailBoard />
+              },
+              {
+                path: routeLinks.project.share,
+                element: <ProjectShare />
               }
             ]
           },

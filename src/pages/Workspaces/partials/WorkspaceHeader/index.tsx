@@ -13,13 +13,16 @@ function WorkspaceHeader({ workspace }: { workspace: WorkspaceResponseWithRelate
       return account
     } else return workspace?.owner
   })
+  console.log(account)
   return (
     <>
       <Flex $alignItem='center' $gap='1rem' className='page-header workspace-header'>
         <WorkspaceNameEditor workspace={workspace} />
         <Flex $alignItem='center' $gap='0.5rem' className='workspace-header-creator'>
           <img src={creator?.avatar} alt='creator avatar' />
-          <p>{creator?.email} ({creator?.displayName})</p>
+          <p>
+            {creator?.email} ({creator?.displayName})
+          </p>
         </Flex>
       </Flex>
     </>
