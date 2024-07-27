@@ -4,8 +4,7 @@ import { AuthResponse } from '@utils/types'
 const login = async (credentials: string) => {
   const res = await http.post<{ credentials: string }, AuthResponse>('/auth/login', { credentials })
   if (res?.isSuccess) {
-    const { accessToken } = res.data
-    http.setAccessToken(accessToken)
+    http.setLoginData(res.data)
   }
   return res
 }

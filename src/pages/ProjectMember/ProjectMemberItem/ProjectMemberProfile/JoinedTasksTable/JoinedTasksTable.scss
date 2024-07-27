@@ -9,6 +9,11 @@
   overflow-y: auto;
 }
 
+.joined-task-filters {
+  border-bottom: var(--thin-border-width) solid var(--bright-color);
+  padding-bottom: 0.5rem;
+}
+
 .joined-task-item {
   border: var(--thin-border-width) solid var(--light-color);
   border-radius: var(--primary-radius);

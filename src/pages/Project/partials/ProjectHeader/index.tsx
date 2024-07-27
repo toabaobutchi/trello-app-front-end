@@ -9,7 +9,7 @@ import './ProjectHeader.responsive.scss'
 import ProjectSearch from './ProjectSearch'
 import { getDateString } from '@utils/functions'
 import { NavLink, useParams } from 'react-router-dom'
-import routeLinks from '@routes/router'
+import routeLinks, { linkCreator } from '@routes/router'
 import useSubNavigate from '@hooks/useSubNavigate'
 import Tooltip from '@comps/Tooltip-v2'
 import { ProjectPageParams } from '@utils/types'
@@ -40,7 +40,7 @@ function ProjectHeader() {
         </Flex>
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
           <Tooltip content='Share project' position='bottom' arrow>
-            <NavLink className='project-share-button' to={`${location.pathname}/${routeLinks.project.share}`}>
+            <NavLink className='project-share-button' to={linkCreator.shareProject(params)}>
               <i className='fa-solid fa-share-nodes'></i>&nbsp; Share project
             </NavLink>
           </Tooltip>

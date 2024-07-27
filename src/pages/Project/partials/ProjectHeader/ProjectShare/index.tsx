@@ -62,7 +62,7 @@ function ProjectShare() {
     setShareActiveTab(tab)
   }
   const handleClose = () => {
-    navigate('..')
+    navigate(-1)
   }
   return (
     <>

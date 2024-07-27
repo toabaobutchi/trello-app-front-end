@@ -18,7 +18,9 @@ function ProjectMemberItem({ member }: MemberItemProps) {
   const params = useParams() as ProjectMemberPageParams
   const navigate = useNavigate()
   const handleToggleProfile = () => {
-    navigate(linkCreator.projectMember(params, member.id))
+    if (params.memberId && params.memberId === member.id) {
+      navigate(linkCreator.projectMember(params))
+    } else navigate(linkCreator.projectMember(params, member.id))
   }
   useEffect(() => {
     setIsOnline(onlineMembers?.includes(member.id) ?? false)

@@ -2,6 +2,7 @@
 import config from '@confs/app.config'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { refreshToken } from '@services/auth.services'
+import { AccountType, AuthResponse } from '@utils/types'
 
 interface RefreshTokenResponse {
   access_token: string
@@ -15,6 +16,7 @@ interface FailedQueueItem {
 class HttpClientAuth {
   axios: AxiosInstance
   static accessToken?: string
+  static account?: AccountType
   protected static isRefreshing: boolean
   protected static failedQueue: FailedQueueItem[]
   constructor() {
@@ -69,12 +71,12 @@ class HttpClientAuth {
             refreshToken()
               .then(res => {
                 if (res && res.status === 200) {
-                  const newAccessToken = res.data as string
-                  localStorage.setItem('access_token', newAccessToken)
-                  this.axios.defaults.headers['Authorization'] = `Bearer ${newAccessToken}`
+                  const data = res.data as AuthResponse
+                  localStorage.setItem('access_token', data.accessToken)
+                  this.axios.defaults.headers['Authorization'] = `Bearer ${data.accessToken}`
                   originalRequest.headers = originalRequest.headers || {}
-                  originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
-                  this.processQueue(null, newAccessToken)
+                  originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`
+                  this.processQueue(null, data.accessToken)
                   resolve(this.axios(originalRequest))
                 }
               })
@@ -103,8 +105,9 @@ class HttpClientAuth {
     HttpClientAuth.failedQueue = []
   }
 
-  setAccessToken(accessToken: string) {
-    localStorage.setItem('access_token', accessToken)
+  setLoginData(res: AuthResponse) {
+    localStorage.setItem('access_token', res.accessToken)
+    // HttpClientAuth.account = res.user
   }
 
   isSuccessResponse(response: AxiosResponse) {
