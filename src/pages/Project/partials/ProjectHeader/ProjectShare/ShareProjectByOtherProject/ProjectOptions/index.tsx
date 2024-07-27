@@ -1,9 +1,9 @@
 import { AssignmentResponse, ProjectResponse, SelectListItem } from '@utils/types'
 import './ProjectOptions.scss'
 import Flex from '@comps/StyledComponents/Flex'
-import { memo, useState } from 'react'
+import { useState } from 'react'
 import SelectList from '@comps/SelectList'
-import { getAssignmentsInProject } from '@services/assignment.services'
+import { getAssignmentsFromAnotherProject } from '@services/assignment.services'
 
 type ProjectOptionsProps = {
   project: ProjectResponse
@@ -51,13 +51,13 @@ const getRole = (assignment: AssignmentResponse) => {
   return `${assignment.id}-${permission}`
 }
 
-const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsProps) => {
+const ProjectOptions = ({ project, onChange = () => {} }: ProjectOptionsProps) => {
   const [selectBox, setSelectBox] = useState<SelectBoxState>({ isOpen: false })
   const [projectSelects, setProjectSelects] = useState<ProjectSelectOptions>(initSelectOptionsState)
 
   const handleToggleAssignmentsBox = async () => {
     setSelectBox(prevState => ({ ...prevState, isOpen: !prevState.isOpen }))
-    const res = await getAssignmentsInProject(project.id)
+    const res = await getAssignmentsFromAnotherProject(project.id)
     if (res?.isSuccess) {
       setSelectBox(prevState => ({ ...prevState, assignments: res.data }))
     }
@@ -67,6 +67,7 @@ const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsPro
     setProjectSelects(prev => ({ ...prev, isAll: e.target.checked }))
     onChange(project.id, { ...projectSelects, isAll: e.target.checked })
   }
+
   const handleSelectAssignment = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedAssignmentId = e.target.value
     // trường hợp thêm vào - checked
@@ -97,6 +98,7 @@ const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsPro
       })
     }
   }
+
   const handleChoosePermission = ({ value }: { value: string }) => {
     const assignmentId = value.split('-')[0]
     setProjectSelects(prev => {
@@ -109,6 +111,7 @@ const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsPro
       return newProjectSelects
     })
   }
+
   return (
     <>
       <div className='project-options-container'>
@@ -185,6 +188,6 @@ const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsPro
       </div>
     </>
   )
-})
+}
 
 export default ProjectOptions

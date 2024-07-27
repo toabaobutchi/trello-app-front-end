@@ -4,7 +4,7 @@ import ProjectOptions, { ProjectSelectOptions } from './ProjectOptions'
 import { useParams } from 'react-router-dom'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
-import { getJoinedProjects } from '@services/project.services'
+import { getJoinedProjects, inviteToProjectByAnotherMember } from '@services/project.services'
 
 type ProjectShareState = {
   [projectId: string]: ShareInfo
@@ -29,9 +29,11 @@ const destructState = (state?: ProjectShareState) => {
 }
 
 function ShareProjectByOtherProject() {
+  // danh sách các dự án đã tham gia
   const [projects, setProjects] = useState<ProjectResponse[]>([])
   const [projectShareState, setProjectShareState] = useState<ProjectShareState>()
   const { projectId } = useParams() as ProjectPageParams
+
   useEffect(() => {
     getJoinedProjects(projectId).then(res => {
       if (res?.isSuccess) {
@@ -40,13 +42,19 @@ function ShareProjectByOtherProject() {
       }
     })
   }, [projectId])
+
   const handleChangeAssignment = useCallback((projectId: string, options: ProjectSelectOptions) => {
     setProjectShareState(prev => ({ ...prev, [projectId]: { projectId, options } }))
   }, [])
 
   //TODO share project with other members
-  const handleShareProject = () => {
-    console.log(destructState(projectShareState))
+  const handleShareProject = async () => {
+    const res = await inviteToProjectByAnotherMember(projectId, destructState(projectShareState))
+    if (res?.isSuccess) {
+      console.log('Invite successfully')
+    } else {
+      console.log('Invite failed')
+    }
   }
   return (
     <>

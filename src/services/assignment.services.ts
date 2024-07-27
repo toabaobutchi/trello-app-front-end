@@ -1,8 +1,10 @@
 import { http } from '@utils/Axios/HttpClientAuth'
 import { AssignByTaskModel, AssignByTaskResponse, AssignmentProfileResponse, AssignmentResponse } from '@utils/types'
 
-const getAssignmentsInProject = async (projectId: string) => {
-  const res = await http.get<AssignmentResponse[]>(`/assignments/in-project/${projectId}?exceptMe=true`)
+const getAssignmentsInProject = async (projectId: string, exceptMe: boolean = false) => {
+  const res = await http.get<AssignmentResponse[]>(
+    `/assignments/in-project/${projectId}${exceptMe ? '?exceptMe=true' : ''}`
+  )
   return res
 }
 
@@ -16,4 +18,9 @@ const assignMembersToTask = async (taskId: string, model: AssignByTaskModel) => 
   return res
 }
 
-export { getAssignmentsInProject, getAssignmentProfile, assignMembersToTask }
+const getAssignmentsFromAnotherProject = async (projectId: string) => {
+  const res = await http.get<AssignmentResponse[]>(`/assignments/in-other-project/${projectId}`)
+  return res
+}
+
+export { getAssignmentsInProject, getAssignmentProfile, assignMembersToTask, getAssignmentsFromAnotherProject }

@@ -72,7 +72,8 @@ class HttpClientAuth {
               .then(res => {
                 if (res && res.status === 200) {
                   const data = res.data as AuthResponse
-                  localStorage.setItem('access_token', data.accessToken)
+                  // localStorage.setItem('access_token', data.accessToken)
+                  this.setLoginData(data)
                   this.axios.defaults.headers['Authorization'] = `Bearer ${data.accessToken}`
                   originalRequest.headers = originalRequest.headers || {}
                   originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`
@@ -107,7 +108,7 @@ class HttpClientAuth {
 
   setLoginData(res: AuthResponse) {
     localStorage.setItem('access_token', res.accessToken)
-    // HttpClientAuth.account = res.user
+    HttpClientAuth.account = res.user
   }
 
   isSuccessResponse(response: AxiosResponse) {
@@ -240,3 +241,5 @@ export type ErrorResponse = {
 export type HttpResponse<T = any> = ErrorResponse | SuccessResponse<T> | null
 
 export const http = new HttpClientAuth()
+
+export default HttpClientAuth

@@ -1,6 +1,6 @@
 import { RootState } from '@redux/store'
 import { useSelector } from 'react-redux'
-import { Outlet, useOutlet } from 'react-router-dom'
+import { useOutlet } from 'react-router-dom'
 import './ProjectMember.scss'
 import ProjectMemberFilter from './ProjectMemberFilter'
 import ProjectMemberItem from './ProjectMemberItem'

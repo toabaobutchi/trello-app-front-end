@@ -40,6 +40,11 @@ const getJoinedProjects = async (currentProjectId: string) => {
   return res
 }
 
+const inviteToProjectByAnotherMember = async (projectId: string, data: any) => {
+  const res = await http.post(`/projects/${projectId}/invite/existed-user`, data)
+  return res
+}
+
 const getOtherAssignmentsInProject = async (projectId: string) => {
   const res = await http.get<AssignmentResponse[]>(`/assignments/in-project/${projectId}?exceptMe=true`)
   return res
@@ -52,5 +57,6 @@ export {
   getProjectForDisplaying,
   inviteToProjectByEmail,
   getJoinedProjects,
-  getOtherAssignmentsInProject
+  getOtherAssignmentsInProject,
+  inviteToProjectByAnotherMember
 }
