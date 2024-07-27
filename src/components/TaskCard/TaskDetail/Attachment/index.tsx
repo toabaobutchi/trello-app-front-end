@@ -4,14 +4,12 @@ import emptyAttachmentImage from '@assets/attachment.svg'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { AttachmentResponse, CreateAttachmentModel } from '@utils/types'
-import HttpClient from '@utils/HttpClient'
 import AttachmentInput from './AttachmentInput'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import Tooltip from '@comps/Tooltip-v2'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
-
-const http = new HttpClient()
+import { addAttachment, getAttachmentsInTask } from '@services/attachment.services'
 
 export type AttachmentInputs = {
   link: string
@@ -25,11 +23,13 @@ function Attachment() {
   const [attachments, setAttatchments] = useState<AttachmentResponse[]>([])
   const [addingAttachment, setAddingAttachment] = useState<AttachmentInputs>()
   useEffect(() => {
-    http.getAuth(`/attachments/in-task/${taskDetail?.id}`).then(res => {
-      if (res?.status === 200) {
-        setAttatchments(res.data)
-      }
-    })
+    if (taskDetail?.id) {
+      getAttachmentsInTask(taskDetail.id).then(res => {
+        if (res?.isSuccess) {
+          setAttatchments(res.data)
+        }
+      })
+    }
   }, [taskDetail?.id])
   const handleToggleAddingAttachmentInput = () => {
     setAddingAttachment(addingAttachment ? undefined : { link: '', displayText: '' })
@@ -41,8 +41,8 @@ function Attachment() {
       taskId: taskDetail?.id as string,
       assignmentId: assignment?.id as string
     } as CreateAttachmentModel
-    const res = await http.postAuth('/attachments', model)
-    if (res?.status === 200) {
+    const res = await addAttachment(model)
+    if (res?.isSuccess) {
       setAttatchments([...attachments, res.data])
       handleToggleAddingAttachmentInput()
     }

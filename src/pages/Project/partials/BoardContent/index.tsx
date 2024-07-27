@@ -38,6 +38,7 @@ import { cloneDeep } from 'lodash'
 import { MyCustomSensor } from '@utils/MyCustomSensor'
 import { filterLists } from '@utils/functions'
 import { hubs, ProjectHub } from '@utils/Hubs'
+import { changeTaskOrder } from '@services/task.services'
 
 const http = new HttpClient()
 
@@ -229,10 +230,9 @@ function BoardContent() {
     }
     setListState(_prev => nextColumns) // set truoc, cho response de quyet dinh sau
     if (callApi) {
-      http
-        .putAuth(`/tasks/${activeId}/change-order`, changeTaskOrderModel)
+      changeTaskOrder(activeId, changeTaskOrderModel)
         .then(res => {
-          if (res?.status !== 200) {
+          if (!res?.isSuccess) {
             console.log('Update task order failed')
             setListState(_prev => project?.board?.lists as ListResponseForBoard[])
           } else {
@@ -240,10 +240,11 @@ function BoardContent() {
               activeList: nextActiveColumn as ListResponseForBoard,
               overList: nextOverColumn
             }
-            dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: res?.data }))
+            const data = res.data
+            dispatch(projectSlice.actions.changeTaskOrder({ dragOverResult, resData: data }))
             // call hub
             if (projectHub.isConnected) {
-              projectHub.connection?.send(hubs.project.send.endDragTask, res?.data, dragOverResult)
+              projectHub.connection?.send(hubs.project.send.endDragTask, data, dragOverResult)
             }
           }
         })
@@ -416,11 +417,6 @@ function BoardContent() {
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
 
   const sensors = useSensors(customMouseSensor, touchSensor)
-  // const handleScroll = (e: React.WheelEvent) => {
-  //   if (e.altKey) {
-  //     e.currentTarget.scrollTo({ top: 0, left: e.currentTarget.scrollLeft + e.deltaY, behavior: 'smooth' })
-  //   }
-  // }
   return (
     <>
       <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} sensors={sensors}>

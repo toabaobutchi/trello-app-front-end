@@ -22,7 +22,7 @@ function ProjectHeader() {
     <>
       <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' className='project-header'>
         <Flex $alignItem='center' $gap='2rem'>
-          <WorkspaceTreeMenu workspaceId={project?.board?.workspaceId} />
+          <WorkspaceTreeMenu />
           <div>
             <Flex $alignItem='center' $gap='0.5rem'>
               <p className='page-header project-name'>

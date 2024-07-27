@@ -3,21 +3,17 @@ import './ChatBox.scss'
 import ChatBoxItem from './ChatBoxItem'
 import ChatInput from './ChatInput'
 import { CommentResponse, CreateCommentModel } from '@utils/types'
-import HttpClient from '@utils/HttpClient'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
 import { TaskDetailContext, TaskDetailContextType } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
-
-const http = new HttpClient()
+import { getCommentsInTask, sendComment } from '@services/comment.services'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 function ChatBox() {
   const [comments, setComments] = useState<CommentResponse[]>([])
   const context = useContext(TaskDetailContext)
   const { task } = context as TaskDetailContextType
-  const members = useSelector((state: RootState) => state.project.activeProject.members)
-  const account = useSelector((state: RootState) => state.login.accountInfo)
-  const [assignment] = useState(members?.find(m => m.userId === account.id))
+  const { members, board } = useProjectSelector()
+  const [assignment] = useState(members?.find(m => m.id === board.assignmentId))
 
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
   useEffect(() => {
@@ -33,25 +29,27 @@ function ChatBox() {
   useEffect(() => {
     // Fetch comments from API
     if (task?.id)
-      http.getAuth(`/comments/in-task/${task?.id}`).then(res => {
-        if (res?.status === 200) {
+      getCommentsInTask(task.id).then(res => {
+        if (res?.isSuccess) {
           setComments(_prev => res.data)
         } else console.log('Fail: ', res?.message)
       })
   }, [task?.id])
 
   const handleComment = async (comment: string) => {
-    const commentModel: CreateCommentModel = {
-      content: comment,
-      taskId: task?.id as string,
-      assignmentId: assignment?.id as string
-    }
-    const res = await http.postAuth('/comments', commentModel)
-    if (res?.status === 200) {
-      setComments(prev => [...prev, res?.data])
+    if (task?.id && assignment?.id) {
+      const commentModel: CreateCommentModel = {
+        content: comment,
+        taskId: task.id,
+        assignmentId: assignment.id
+      }
+      const res = await sendComment(commentModel)
+      if (res?.isSuccess) {
+        setComments(prev => [...prev, res.data])
 
-      if (projectHub.isConnected) {
-        projectHub.connection?.invoke(hubs.project.send.comment, res?.data)
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.comment, res.data)
+        }
       }
     }
   }

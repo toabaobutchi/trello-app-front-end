@@ -1,12 +1,10 @@
-import HttpClient from '@utils/HttpClient'
 import { ProjectPageParams, ProjectResponse } from '@utils/types'
 import { useCallback, useEffect, useState } from 'react'
 import ProjectOptions, { ProjectSelectOptions } from './ProjectOptions'
 import { useParams } from 'react-router-dom'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
-
-const http = new HttpClient()
+import { getJoinedProjects } from '@services/project.services'
 
 type ProjectShareState = {
   [projectId: string]: ShareInfo
@@ -35,16 +33,18 @@ function ShareProjectByOtherProject() {
   const [projectShareState, setProjectShareState] = useState<ProjectShareState>()
   const { projectId } = useParams() as ProjectPageParams
   useEffect(() => {
-    http.getAuth(`/projects/all?exceptId=${projectId}`).then(res => {
-      if (res?.status === 200) {
-        const projectsData = res?.data as ProjectResponse[]
-        setProjects(projectsData)
+    getJoinedProjects(projectId).then(res => {
+      if (res?.isSuccess) {
+        const joinedProjects = res.data
+        setProjects(joinedProjects)
       }
     })
   }, [projectId])
   const handleChangeAssignment = useCallback((projectId: string, options: ProjectSelectOptions) => {
     setProjectShareState(prev => ({ ...prev, [projectId]: { projectId, options } }))
   }, [])
+
+  //TODO share project with other members
   const handleShareProject = () => {
     console.log(destructState(projectShareState))
   }

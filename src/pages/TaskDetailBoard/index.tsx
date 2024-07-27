@@ -4,29 +4,25 @@ import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
 import TaskDetail from '@comps/TaskCard/TaskDetail'
 import DuplicateTask from '@comps/TaskCard/TaskDetail/DuplicateTask'
-import HttpClient from '@utils/HttpClient'
-import { JoinTaskResponse, MarkedTaskResponse, TaskDetailForBoard } from '@utils/types'
+import { TaskDetailForBoard } from '@utils/types'
 import { HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TaskDetailContext } from './context'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import useAccount from '@hooks/useAccount'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useModal } from '@hooks/useModal'
 import AssignMember from '@comps/TaskCard/TaskDetail/AssignMember'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
-
-const http = new HttpClient()
+import { getTaskDetail, joinTask, markTask } from '@services/task.services'
 
 function TaskDetailBoard() {
   const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
   const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
-  const { members } = useProjectSelector()
+  const { members, board } = useProjectSelector()
   const dispatch = useDispatch()
-  const { accountInfo } = useAccount()
   const [isJoined, setIsJoined] = useState(false)
   const navigate = useNavigate()
   const [joinModal, setJoinModal] = useState(false)
@@ -35,18 +31,20 @@ function TaskDetailBoard() {
   const [projectHub] = useState(new ProjectHub())
   useEffect(() => {
     if (taskDetail?.id) {
-      const member = members.find(m => m.userId === accountInfo?.id)
+      const member = members.find(m => m.id === board?.assignmentId)
       if (!member) setIsJoined(false)
       else setIsJoined(taskDetail?.taskAssignmentIds?.includes(member.id) ?? false)
     }
-  }, [taskDetail?.id, members])
+  }, [taskDetail?.id, members, taskDetail?.taskAssignmentIds, board?.assignmentId])
   useEffect(() => {
-    http.getAuth(`/tasks/${taskId}/v/board`).then(res => {
-      if (res?.status === HttpStatusCode.Ok) {
-        setTaskDetail(res?.data)
-      } else console.log('Fail: ', res?.message)
-    })
-  }, [])
+    if (taskId) {
+      getTaskDetail(taskId).then(res => {
+        if (res?.status === HttpStatusCode.Ok) {
+          setTaskDetail(res?.data)
+        } else console.log('Fail: ', res?.message)
+      })
+    }
+  }, [taskId])
   const handleToggleDuplicateTaskModal = () => {
     setDuplicateTaskModal(!duplicateTaskModal)
   }
@@ -60,20 +58,22 @@ function TaskDetailBoard() {
       clearTimeout(timeOutId.current)
     }
     timeOutId.current = setTimeout(async () => {
-      const res = await http.putAuth(`/tasks/${taskId}/mark`, { isMarkedNeedHelp: e.target.checked })
-      if (res?.status === HttpStatusCode.Ok) {
-        const data = res?.data as MarkedTaskResponse
-        setTaskDetail(
-          prev =>
-            ({
-              ...prev,
-              isMarkedNeedHelp: data?.isMarkedNeedHelp
-            } as TaskDetailForBoard)
-        )
-        // dispatch to store
-        dispatch(projectSlice.actions.markTask(data))
-        if (projectHub.isConnected) {
-          projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
+      if (taskId) {
+        const res = await markTask(taskId, { isMarkedNeedHelp: e.target.checked })
+        if (res?.isSuccess) {
+          const data = res.data
+          setTaskDetail(
+            prev =>
+              ({
+                ...prev,
+                isMarkedNeedHelp: data?.isMarkedNeedHelp
+              } as TaskDetailForBoard)
+          )
+          // dispatch to store
+          dispatch(projectSlice.actions.markTask(data))
+          if (projectHub.isConnected) {
+            projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
+          }
         }
       }
     }, 500)
@@ -82,29 +82,33 @@ function TaskDetailBoard() {
     navigate(-1)
   }
   const handleMarkCompleteTask = async () => {
-    const res = await http.putAuth(`/tasks/${taskId}/mark`, { isCompleted: true })
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as MarkedTaskResponse
-      setTaskDetail(
-        prev =>
-          ({
-            ...prev,
-            isCompleted: data?.isCompleted
-          } as TaskDetailForBoard)
-      )
-      dispatch(projectSlice.actions.markTask(data))
-      if (projectHub.isConnected) {
-        projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
+    if (taskId) {
+      const res = await markTask(taskId, { isCompleted: true })
+      if (res?.status === HttpStatusCode.Ok) {
+        const data = res.data
+        setTaskDetail(
+          prev =>
+            ({
+              ...prev,
+              isCompleted: data?.isCompleted
+            } as TaskDetailForBoard)
+        )
+        dispatch(projectSlice.actions.markTask(data))
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
+        }
       }
     }
   }
   const handleJoinTask = async () => {
-    const res = await http.postAuth(`/tasks/${taskId}/join`, {})
-    if (res?.status === HttpStatusCode.Ok) {
-      handleToggleJoinModal()
-      setIsJoined(true)
-      const data = res?.data as JoinTaskResponse
-      dispatch(projectSlice.actions.joinTask(data))
+    if (taskId) {
+      const res = await joinTask(taskId)
+      if (res?.isSuccess) {
+        handleToggleJoinModal()
+        setIsJoined(true)
+        const data = res.data
+        dispatch(projectSlice.actions.joinTask(data))
+      }
     }
   }
 
@@ -176,6 +180,8 @@ function TaskDetailBoard() {
             <TaskDetail />
           </LoadingLayout>
         </Modal>
+        
+        {/* duplicate modal */}
         <Modal
           layout={{ header: { title: 'Duplicate task', closeIcon: true } }}
           style={{ width: '30%' }}
@@ -184,6 +190,8 @@ function TaskDetailBoard() {
         >
           <DuplicateTask task={taskDetail} onCloseModal={handleToggleDuplicateTaskModal} />
         </Modal>
+
+        {/* join modal */}
         <Modal
           style={{ width: '30%' }}
           layout={{
@@ -209,6 +217,8 @@ function TaskDetailBoard() {
         >
           Join task <span className='text-primary fw-bold'>{taskDetail?.name}</span>
         </Modal>
+
+        {/* assign modal */}
         <Modal
           open={assignModal}
           layout={{ header: { closeIcon: true, title: 'Assign to new members' } }}

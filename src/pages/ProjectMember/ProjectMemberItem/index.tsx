@@ -51,7 +51,6 @@ function ProjectMemberItem({ member }: MemberItemProps) {
           </Tooltip>
           <Tooltip content='About this member' arrow delay='0.5s'>
             <Button onClick={handleToggleProfile} variant='text' theme='primary'>
-              {/* <i className='fa-solid fa-chevron-right'></i> */}
               {params.memberId === member.id ? (
                 <i className='fa-regular fa-folder-open'></i>
               ) : (
@@ -60,7 +59,6 @@ function ProjectMemberItem({ member }: MemberItemProps) {
             </Button>
           </Tooltip>
         </Flex>
-        {/* {profileExpanded && <ProjectMemberProfile member={member} />} */}
       </Flex>
     </>
   )

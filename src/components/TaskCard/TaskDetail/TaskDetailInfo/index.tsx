@@ -1,11 +1,16 @@
 import Flex from '@comps/StyledComponents/Flex'
 import Subtasks from './Subtasks'
 import { useContext, useEffect, useState } from 'react'
-import { AssignByTaskResponse, AssignmentResponse, SubtaskForBoard, UpdatedTaskResponse } from '@utils/types'
+import {
+  AssignByTaskResponse,
+  AssignmentResponse,
+  SubtaskForBoard,
+  TaskDetailForBoard,
+  UpdatedTaskResponse
+} from '@utils/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import UpdateTaskNameEditor from './UpdateTaskNameEditor'
-import HttpClient from '@utils/HttpClient'
 import { HttpStatusCode } from 'axios'
 import UpdatePriorityEditor from './UpdatePriorityEditor'
 import UpdateDueDateEditor from './UpdateDueDateEditor'
@@ -13,8 +18,7 @@ import UpdateDescriptionEditor from './UpdateDescriptionEditor'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
-
-const http = new HttpClient()
+import { updateTask } from '@services/task.services'
 
 type RemoteUpdatingType = {
   assignmentId: string
@@ -84,40 +88,55 @@ function TaskDetailInfo() {
       projectHub.connection?.invoke(hubs.project.send.updateTaskInfo, data)
     }
   }
+  const updateTaskContext = (
+    updateKey: keyof TaskDetailForBoard,
+    updatedDataKey: keyof UpdatedTaskResponse,
+    data: UpdatedTaskResponse
+  ) => {
+    context?.setTask?.(prev => ({ ...prev, [updateKey]: data?.[updatedDataKey] } as typeof prev))
+  }
   const handleUpdateName = async (name: string) => {
-    const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { name })
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as UpdatedTaskResponse
-      context?.setTask?.(prev => ({ ...prev, name: data?.name } as typeof prev))
-      handleSendMessageToDragHub(data)
-    }
-  }
-  const handleUpdatePriority = async (priority: string) => {
-    const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { priority })
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as UpdatedTaskResponse
-      context?.setTask?.(prev => ({ ...prev, priority: data?.priority } as typeof prev))
-      handleSendMessageToDragHub(data)
-    }
-  }
-  const handleUpdateDueDate = async (dueDate: Date) => {
-    const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { dueDate: dueDate.getTime() / 1000 })
-    if (res?.status === HttpStatusCode.Ok) {
-      if (res?.status === HttpStatusCode.ResetContent) {
-        console.log('Task due date is larger than project due date')
-      } else {
-        const data = res?.data as UpdatedTaskResponse
-        context?.setTask?.(prev => ({ ...prev, dueDate: data?.dueDate } as typeof prev))
+    if (taskDetail?.id) {
+      const res = await updateTask(taskDetail.id, { name })
+      if (res?.isSuccess) {
+        const data = res.data
+        updateTaskContext('name', 'name', data)
         handleSendMessageToDragHub(data)
       }
     }
   }
+  const handleUpdatePriority = async (priority: string) => {
+    if (taskDetail?.id) {
+      const res = await updateTask(taskDetail.id, { priority })
+      if (res?.isSuccess) {
+        const data = res.data
+        updateTaskContext('priority', 'priority', data)
+        handleSendMessageToDragHub(data)
+      }
+    }
+  }
+  const handleUpdateDueDate = async (dueDate: Date) => {
+    if (taskDetail?.id) {
+      const res = await updateTask(taskDetail.id, { dueDate: dueDate.getTime() / 1000 })
+      if (res?.isSuccess) {
+        if (res?.status === HttpStatusCode.ResetContent) {
+          console.log('Task due date is larger than project due date')
+        } else {
+          const data = res.data
+          updateTaskContext('dueDate', 'dueDate', data)
+          handleSendMessageToDragHub(data)
+        }
+      }
+    }
+  }
   const handleUpdateDescription = async (description: string) => {
-    const res = await http.putAuth(`/tasks/${taskDetail?.id}`, { description })
-    if (res?.status === HttpStatusCode.Ok) {
-      const data = res?.data as UpdatedTaskResponse
-      context?.setTask?.(prev => ({ ...prev, description: res?.data?.description } as typeof prev))
-      handleSendMessageToDragHub(data)
+    if (taskDetail?.id) {
+      const res = await updateTask(taskDetail.id, { description })
+      if (res?.isSuccess) {
+        const data = res.data
+        updateTaskContext('description', 'description', data)
+        handleSendMessageToDragHub(data)
+      }
     }
   }
   const updator = remoteUpdating && project.members?.find(m => m.id === remoteUpdating?.assignmentId)

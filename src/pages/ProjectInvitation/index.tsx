@@ -1,13 +1,10 @@
 import './ProjectInvitation.scss'
 import { useLoaderData } from 'react-router-dom'
 import { AxiosResponse } from 'axios'
-import HttpClient from '@utils/HttpClient'
 import { InvitedProjectResponse } from '@utils/types'
 import InvitedProjectCard from './InvitedProjectCard'
 import Flex from '@comps/StyledComponents'
 import emptyInvitationImagePage from '@assets/empty_invitation.jpg'
-
-const http = new HttpClient()
 
 function ProjectInvitation() {
   const res = useLoaderData() as AxiosResponse

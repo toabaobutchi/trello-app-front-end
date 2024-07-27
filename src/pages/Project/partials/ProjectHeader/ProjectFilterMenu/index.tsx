@@ -9,12 +9,10 @@ import Tooltip from '@comps/Tooltip'
 import Input from '@comps/Input'
 import Flex from '@comps/StyledComponents/Flex'
 import { useDispatch } from 'react-redux'
-// import { RootState } from '@redux/store'
 import SwitchButton from '@comps/SwitchButton'
 import { getDateTimeString } from '@utils/functions'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import CheckBox from '@comps/CheckBox'
 
 // co the hard code nhu the nay
 const items = [
@@ -65,9 +63,9 @@ const ProjectFilterMenu = memo(() => {
   const handleToggleDueDateFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(prev => ({ ...prev, isFiltering: true, dueDate: e.target.checked ? new Date().getTime() : undefined }))
   }
-  const handleToggleOverdueFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(prev => ({ ...prev, isFiltering: true, overDueFilter: e.target.checked }))
-  }
+  // const handleToggleOverdueFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setFilter(prev => ({ ...prev, isFiltering: true, overDueFilter: e.target.checked }))
+  // }
   const handleChangeDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(prev => ({ ...prev, isFiltering: true, dueDate: new Date(e.target.value).getTime() }))
   }
@@ -169,24 +167,6 @@ const ProjectFilterMenu = memo(() => {
                 onChange={handleChangeDueDate}
               />
             </Flex>
-            {/* <Flex $alignItem='center' $gap='0.5rem'>
-              <SwitchButton
-                inputAttributes={{
-                  type: 'checkbox',
-                  name: 'dueDateFilter',
-                  id: 'choose-over-due-option',
-                  checked: filter.overDueFilter
-                }}
-                onChange={handleToggleOverdueFilter}
-                icon={{
-                  checked: <i className='fa-regular fa-calendar-xmark'></i>,
-                  unchecked: <i className='fa-regular fa-calendar-check'></i>
-                }}
-                theme={{ checked: 'danger' }}
-                foreGround
-              />
-              <label htmlFor='choose-over-due-option'>Overdue</label>
-            </Flex> */}
           </Flex>
         </Flex>
         <p>Tags</p>

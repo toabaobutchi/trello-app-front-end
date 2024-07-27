@@ -559,3 +559,16 @@ export type WorkspaceUpdateModel = {
   name?: string
   description?: string
 }
+
+export type MarkTaskModel = {
+  isCompleted?: boolean
+  isMarkedNeedHelp?: boolean
+  isReOpened?: boolean
+}
+
+export type UpdateTaskModel = {
+  name?: string
+  dueDate?: number
+  priority?: string
+  description?: string
+}

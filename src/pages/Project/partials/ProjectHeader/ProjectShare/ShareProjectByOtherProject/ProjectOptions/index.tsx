@@ -1,11 +1,9 @@
-import { AssignmentResponse, ProjectPageParams, ProjectResponse, SelectListItem } from '@utils/types'
+import { AssignmentResponse, ProjectResponse, SelectListItem } from '@utils/types'
 import './ProjectOptions.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import { memo, useState } from 'react'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
 import SelectList from '@comps/SelectList'
-import { useParams } from 'react-router-dom'
+import { getAssignmentsInProject } from '@services/assignment.services'
 
 type ProjectOptionsProps = {
   project: ProjectResponse
@@ -53,15 +51,14 @@ const getRole = (assignment: AssignmentResponse) => {
   return `${assignment.id}-${permission}`
 }
 
-const http = new HttpClient()
 const ProjectOptions = memo(({ project, onChange = () => {} }: ProjectOptionsProps) => {
   const [selectBox, setSelectBox] = useState<SelectBoxState>({ isOpen: false })
   const [projectSelects, setProjectSelects] = useState<ProjectSelectOptions>(initSelectOptionsState)
 
   const handleToggleAssignmentsBox = async () => {
     setSelectBox(prevState => ({ ...prevState, isOpen: !prevState.isOpen }))
-    const res = await http.getAuth(`/assignments/in-project/${project.id}?exceptMe=true`)
-    if (res?.status === HttpStatusCode.Ok) {
+    const res = await getAssignmentsInProject(project.id)
+    if (res?.isSuccess) {
       setSelectBox(prevState => ({ ...prevState, assignments: res.data }))
     }
   }

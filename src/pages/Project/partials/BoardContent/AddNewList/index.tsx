@@ -3,15 +3,13 @@ import './AddNewList.scss'
 import { useEffect, useRef, useState } from 'react'
 import Flex from '@comps/StyledComponents/Flex'
 import FloatLabelInput from '@comps/FloatLabelInput'
-import { CreateListModel, CreateListResponse, InputChange } from '@utils/types'
+import { CreateListModel, InputChange } from '@utils/types'
 import useClickTracker from '@hooks/useClickTracker'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
-import HttpClient from '@utils/HttpClient'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
-
-const http = new HttpClient()
+import { createList } from '@services/list.services'
 
 function AddNewList() {
   const [isAddingList, setIsAddingList] = useState(false)
@@ -61,11 +59,12 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
       name: listName,
       projectId: activeProject.id
     }
-    const res = await http.postAuth('/lists', postData)
-    if (res?.status === 200) {
+    // const res = await http.postAuth('/lists', postData)
+    const res = await createList(postData)
+    if (res?.isSuccess) {
       onCancel()
       // cập nhật lại list của project
-      const data = res.data as CreateListResponse
+      const data = res.data
       dispatch(projectSlice.actions.addNewList(data))
       if (projectHub.isConnected) {
         projectHub.connection?.invoke(hubs.project.send.addNewList, data)

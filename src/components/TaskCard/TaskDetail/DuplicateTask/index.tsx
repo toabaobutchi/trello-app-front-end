@@ -1,4 +1,4 @@
-import { TaskDetailForBoard, TaskResponseForBoard } from '@utils/types'
+import { TaskDetailForBoard } from '@utils/types'
 import './DuplicateTask.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
@@ -6,10 +6,9 @@ import PriorityTag from '@comps/TaskCard/PriorityTag'
 import Button from '@comps/Button'
 import { useState } from 'react'
 import FloatLabelInput from '@comps/FloatLabelInput'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
+import { duplicateTask } from '@services/task.services'
 
 export type InheritOptions = {
   priority?: boolean
@@ -17,8 +16,6 @@ export type InheritOptions = {
   description?: boolean
   duplicateTaskCount?: number
 }
-
-const http = new HttpClient()
 
 function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailForBoard; onCloseModal?: () => void }) {
   const [inheritOptions, setInheritOptions] = useState<InheritOptions>({
@@ -36,13 +33,15 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
   }
   const handleDuplicateTask = async () => {
     // Duplicate task logic goes here
-    const res = await http.postAuth(`/tasks/${task?.id}/duplicate`, inheritOptions)
-    if (res?.status === HttpStatusCode.Ok) {
-      // console.log(res.data)
-      dispatch(projectSlice.actions.setDuplicateTasks(res?.data))
+    // const res = await http.postAuth(`/tasks/${task?.id}/duplicate`, inheritOptions)
+    if (task?.id) {
+      const res = await duplicateTask(task.id, inheritOptions)
+      if (res?.isSuccess) {
+        dispatch(projectSlice.actions.setDuplicateTasks(res.data))
+        onCloseModal()
+      }
       onCloseModal()
     }
-    onCloseModal()
   }
   return (
     <>

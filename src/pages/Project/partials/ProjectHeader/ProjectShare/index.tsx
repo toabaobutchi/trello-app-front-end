@@ -5,13 +5,12 @@ import { useState } from 'react'
 import Flex from '@comps/StyledComponents/Flex'
 import Input from '@comps/Input'
 import SelectList from '@comps/SelectList'
-import HttpClient from '@utils/HttpClient'
 import { useNavigate, useParams } from 'react-router-dom'
-import { InputChange, ProjectPageParams } from '@utils/types'
-import { HttpStatusCode } from 'axios'
 import shareImage from '@assets/share-project.jpg'
 import Tab from '@comps/Tab'
 import ShareProjectByOtherProject from './ShareProjectByOtherProject'
+import { inviteToProjectByEmail } from '@services/project.services'
+import { InputChange, ProjectPageParams } from '@utils/types'
 
 const roles = [
   { value: 'admin', display: 'Admin' },
@@ -32,15 +31,12 @@ const tabs = [
 
 const initActiveTab = 'share-by-email'
 
-const http = new HttpClient()
 type InvitationType = {
   email: string
   permission: string
 }
 function ProjectShare() {
-  // const [modalOpen, setModalOpen] = useState(false)
   const [shareActiveTab, setShareActiveTab] = useState(initActiveTab)
-  // const handleToggleModal = () => setModalOpen(!modalOpen)
   const [invitation, setInvitation] = useState<InvitationType>({
     email: '',
     permission: 'member'
@@ -51,9 +47,8 @@ function ProjectShare() {
   const handleShareProject = async () => {
     const { email, permission } = invitation
     if (!email || !permission) return
-    const res = await http.postAuth(`/projects/${params.projectId}/invite`, invitation)
-    if (res?.status === HttpStatusCode.Ok) {
-      // setModalOpen(false)
+    const res = await inviteToProjectByEmail(params.projectId, invitation)
+    if (res?.isSuccess) {
       setInvitation({ email: '', permission: 'member' })
     }
   }
@@ -99,22 +94,6 @@ function ProjectShare() {
                 <i className='fa-solid fa-paper-plane'></i> Share
               </Button>
             </Flex>
-
-            {/* <Flex $alignItem='center' $gap='1rem' className='my-1'>
-              <p>Or</p>
-              <ButtonGroup
-                openAction
-                actionButton={
-                  <>
-                    <SelectList size='small' items={roles} selectedValue='member' />
-                  </>
-                }
-              >
-                <Button variant='text' theme='default'>
-                  <i className='fa-solid fa-feather'></i> Create a link for
-                </Button>
-              </ButtonGroup>
-            </Flex> */}
           </Tab.Content>
           <Tab.Content show={shareActiveTab === 'share-by-friend'}>
             <ShareProjectByOtherProject />

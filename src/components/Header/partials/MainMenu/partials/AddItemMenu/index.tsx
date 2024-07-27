@@ -1,13 +1,9 @@
 import { boardMenu, joinBoardMenu, mainMenu, workspaceMenu } from './actions'
 import MenuHeaderWithAction from '@comps/MenuHeaderWithAction'
 import { EActionType, State, reducer } from './reducer'
-import { ToastContainer, toast } from 'react-toastify'
 import FloatLabelInput from '@comps/FloatLabelInput'
-import 'react-toastify/dist/ReactToastify.css'
-import useAccount from '@hooks/useAccount'
-import HttpClient from '@utils/HttpClient'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@redux/store'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@redux/store'
 import TextArea from '@comps/TextArea'
 import config from '@confs/app.config'
 import { useReducer } from 'react'
@@ -17,11 +13,8 @@ import { addWorkspace } from '@redux/WorkspaceSlice'
 import CreateBoardModal from './partials/CreateBoardModal'
 import MainMenu from './partials/MainMenu'
 
-const http = new HttpClient()
-
 function AddItemMenu() {
   const [state, dispatch] = useReducer(reducer, { anchorEl: null } as State)
-  const workspaceList = useSelector((state: RootState) => state.workspaces.workspaceList)
   const reduxDispatch = useDispatch<AppDispatch>()
 
   const handleChangeMainMenu = {
@@ -79,7 +72,7 @@ function AddItemMenu() {
   const handleSubmit = {
     async workspace() {
       if (!state?.workspace?.title?.trim()) {
-        toast.error('Please enter a workspace title')
+        console.error('Please enter a workspace title')
       } else {
         // call API to add workspace
         const { title, description } = state.workspace
@@ -201,8 +194,6 @@ function AddItemMenu() {
           Send resquest
         </Button>
       </Menu>
-
-      <ToastContainer />
     </>
   )
 }

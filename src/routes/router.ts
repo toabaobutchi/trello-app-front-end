@@ -1,7 +1,8 @@
+import { getInvitedProjects } from '@services/invitation.services'
 import { getProjectForDisplaying } from '@services/project.services'
+import { getRecycleBin } from '@services/task.services'
 import { getWorkspaceWithProjects } from '@services/workspace.services'
 import { getSlug } from '@utils/functions'
-import HttpClient from '@utils/HttpClient'
 import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
 import { LoaderFunctionArgs } from 'react-router-dom'
 
@@ -23,8 +24,6 @@ const routeLinks = {
   },
   projectInvitation: '/invited-projects'
 }
-
-const http = new HttpClient()
 
 export const linkCreator = {
   workspaces(routeParams: WorkspacePageParams) {
@@ -52,12 +51,12 @@ export const loader = {
     return res
   },
   invitation: async () => {
-    const res = await http.getAuth(`/invited-projects`)
+    const res = await getInvitedProjects()
     return res
   },
   recycleBin: async ({ params }: LoaderFunctionArgs) => {
     const { projectId } = params as ProjectPageParams
-    const res = await http.getAuth(`/projects/${projectId}/recycle-bin`)
+    const res = await getRecycleBin(projectId)
     return res
   },
   projectView: async ({ params }: LoaderFunctionArgs) => {

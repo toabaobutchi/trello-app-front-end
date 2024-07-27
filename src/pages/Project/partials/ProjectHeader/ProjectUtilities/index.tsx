@@ -2,7 +2,7 @@ import Button from '@comps/Button'
 import Menu from '@comps/Menu'
 import MenuItem from '@comps/MenuItem'
 import useMenu from '@hooks/useMenu'
-import routeLinks, { linkCreator } from '@routes/router'
+import { linkCreator } from '@routes/router'
 import { ProjectPageParams } from '@utils/types'
 import { useNavigate, useParams } from 'react-router-dom'
 

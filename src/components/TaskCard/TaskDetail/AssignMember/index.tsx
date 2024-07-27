@@ -1,16 +1,15 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import { AssignByTaskModel, AssignByTaskResponse, TaskDetailForBoard } from '@utils/types'
+import { AssignByTaskModel, TaskDetailForBoard } from '@utils/types'
 import { useContext, useMemo, useState } from 'react'
 import './AssignMember.scss'
 import AssignmentMemberItem from './AssignmentMemberItem'
-import HttpClient from '@utils/HttpClient'
-import { HttpStatusCode } from 'axios'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
+import { assignMembersToTask } from '@services/assignment.services'
 
 type AssignMemberProps = {
   task: TaskDetailForBoard
@@ -20,8 +19,6 @@ type SelectedMember = {
   id: string
   isSelected?: boolean
 }
-
-const http = new HttpClient()
 
 function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
   const { members, board } = useProjectSelector()
@@ -58,9 +55,9 @@ function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
       const model: AssignByTaskModel = {
         assignmentIds: selectedMemberIds
       }
-      const res = await http.postAuth(`/assignments/assign-to-task/${task.id}`, model)
-      if (res?.status === HttpStatusCode.Ok) {
-        const data = res?.data as AssignByTaskResponse
+      const res = await assignMembersToTask(task.id, model)
+      if (res?.isSuccess) {
+        const data = res.data
         dispatch(projectSlice.actions.addAssignmentToTask(data))
         context?.setTask?.(
           prev => ({ ...prev, taskAssignmentIds: prev?.taskAssignmentIds?.concat(data.assignmentIds) } as typeof prev)
@@ -71,7 +68,6 @@ function AssignMember({ task, onCloseModal = () => {} }: AssignMemberProps) {
         }
       }
     }
-
     onCloseModal()
   }
   return (

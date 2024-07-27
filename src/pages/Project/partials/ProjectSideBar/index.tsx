@@ -3,14 +3,12 @@ import LoadingLayout from '@layouts/LoadingLayout'
 import { AppDispatch, RootState } from '@redux/store'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
 import { linkCreator } from '@routes/router'
-import HttpClient from '@utils/HttpClient'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import ProjectSideBarItem from './ProjectSideBarItem'
 import './ProjectSideBar.scss'
-
-const http = new HttpClient()
+import { getWorkspaceWithProjects } from '@services/workspace.services'
 
 function ProjectSideBar() {
   const workspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
@@ -19,10 +17,10 @@ function ProjectSideBar() {
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {
     if (!workspace?.id && board?.id) {
-      http
-        .getAuth(`/${board?.context.toLowerCase() === 'owner' ? 'w' : 'sw'}/${board.workspaceId}/projects`)
+      getWorkspaceWithProjects(board.context, board.workspaceId)
         .then(res => {
-          if (res?.status === 200) dispatch(workspaceSlice.actions.setActiveWorkspace(res?.data))
+          if (res?.isSuccess) dispatch(workspaceSlice.actions.setActiveWorkspace(res.data))
+          else console.log('Can not get active workspace')
         })
         .catch(err => {
           console.error('Can not fetch workspace', err)

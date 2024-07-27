@@ -3,21 +3,17 @@ import { InvitedProjectResponse } from '@utils/types'
 import './InvitedProjectCard.scss'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents'
-import HttpClient from '@utils/HttpClient'
+import { handleInvitation } from '@services/invitation.services'
 
-const http = new HttpClient()
 
 function InvitedProjectCard({ invitedProject }: { invitedProject: InvitedProjectResponse }) {
-  const handleInvitation = async (action: 'accept' | 'reject') => {
-    const res = await http.postAuth(`/invitations/${invitedProject.invitationId}/${action}`, {})
-    return res
-  }
   const handleAccept = async () => {
-    const res = await handleInvitation('accept')
+    const res = await handleInvitation(invitedProject.invitationId, 'accept')
     console.log(res)
   }
   const handleReject = async () => {
-    const res = await handleInvitation('reject')
+    // chinh sua kieu response cho ham service
+    const res = await handleInvitation(invitedProject.invitationId, 'reject')
     console.log(res)
   }
   return (

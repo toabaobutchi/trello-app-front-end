@@ -1,7 +1,6 @@
 import Tab, { TabNav } from '@comps/Tab'
 import useTab from '@hooks/useTab'
 import { getDateString } from '@utils/functions'
-import HttpClient from '@utils/HttpClient'
 import { AssignmentProfileResponse, AssignmentResponse, ProjectMemberPageParams } from '@utils/types'
 import { useEffect, useState } from 'react'
 import JoinedTasksTable from './JoinedTasksTable'
@@ -9,6 +8,7 @@ import { useParams } from 'react-router-dom'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import './ProjectMemberProfile.scss'
 import Flex from '@comps/StyledComponents'
+import { getAssignmentProfile } from '@services/assignment.services'
 
 const tabs: TabNav[] = [
   {
@@ -22,7 +22,6 @@ const tabs: TabNav[] = [
 ]
 
 const initTabs = 'joinedTasks'
-const http = new HttpClient()
 function ProjectMemberProfile() {
   const { activeTab, handleTabClick } = useTab(initTabs)
   const [profile, setProfile] = useState<AssignmentProfileResponse>()
@@ -30,13 +29,15 @@ function ProjectMemberProfile() {
   const { members } = useProjectSelector()
   const [memberInfo, setMemberInfo] = useState<AssignmentResponse>()
   useEffect(() => {
-    http.getAuth(`/assignments/${memberId}/profile`).then(res => {
-      if (res?.status === 200) {
-        const data = res?.data as AssignmentProfileResponse
-        setProfile(data)
-        setMemberInfo(() => members.find(m => m.id === data.id))
-      }
-    })
+    if (memberId) {
+      getAssignmentProfile(memberId).then(res => {
+        if (res?.isSuccess) {
+          const data = res?.data
+          setProfile(data)
+          setMemberInfo(() => members.find(m => m.id === data.id))
+        }
+      })
+    }
   }, [memberId, members])
   return (
     <>

@@ -27,7 +27,7 @@ const updateWorkspace = async (workspaceId: string | number, model: WorkspaceUpd
 }
 
 const getWorkspaceWithProjects = async (ownerShip: string, workspaceId: string) => {
-  const prefixPath = ownerShip === 'owner' ? 'w' : 'sw'
+  const prefixPath = ownerShip.toLowerCase() === 'owner' ? 'w' : 'sw'
   const res = await http.get<WorkspaceResponseWithRelatedProjects>(`/${prefixPath}/${workspaceId}/projects`)
   return res
 }
