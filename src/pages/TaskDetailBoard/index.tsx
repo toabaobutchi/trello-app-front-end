@@ -2,8 +2,8 @@ import Button from '@comps/Button'
 import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
-import TaskDetail from '@comps/TaskCard/TaskDetail'
-import DuplicateTask from '@comps/TaskCard/TaskDetail/DuplicateTask'
+import TaskDetail from '@pages/TaskDetailBoard/TaskDetail'
+import DuplicateTask from '@pages/TaskDetailBoard/TaskDetail/DuplicateTask'
 import { TaskDetailForBoard } from '@utils/types'
 import { HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
@@ -13,7 +13,7 @@ import { useProjectSelector } from '@hooks/useProjectSelector'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useModal } from '@hooks/useModal'
-import AssignMember from '@comps/TaskCard/TaskDetail/AssignMember'
+import AssignMember from '@pages/TaskDetailBoard/TaskDetail/AssignMember'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { getTaskDetail, joinTask, markTask } from '@services/task.services'
@@ -180,7 +180,7 @@ function TaskDetailBoard() {
             <TaskDetail />
           </LoadingLayout>
         </Modal>
-        
+
         {/* duplicate modal */}
         <Modal
           layout={{ header: { title: 'Duplicate task', closeIcon: true } }}
