@@ -426,7 +426,7 @@ function BoardContent() {
           items={listState?.map(l => l?.id) ?? []}
           strategy={horizontalListSortingStrategy}
         >
-          <Flex $gap='1.5rem' className='column-list'>
+          <Flex $gap='1.5rem' className='column-list page-slide'>
             {listState?.map(column => (
               <SortableColumn remoteDragging={remoteDragging} key={column.id} column={column} />
             ))}

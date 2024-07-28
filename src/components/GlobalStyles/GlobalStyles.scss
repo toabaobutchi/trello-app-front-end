@@ -213,3 +213,17 @@ html.dark {
   background-color: var(--clicked-menu-color) !important;
   color: var(--primary-color) !important;
 }
+.page-slide {
+  animation: pageSlide 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes pageSlide {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

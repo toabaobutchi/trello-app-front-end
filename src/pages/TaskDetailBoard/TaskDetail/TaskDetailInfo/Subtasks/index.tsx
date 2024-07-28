@@ -29,7 +29,6 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
         hubs.project.receive.checkSubtask,
         (_assignmentId: string, taskid: string, subtaskId: number, status: boolean) => {
           if (taskId !== taskid) return
-          console.log('ReceiveCheckSubtask')
           setSubtasks(prev => {
             const newSubtasks = [...prev]
             const updatedSubtask = newSubtasks.find(subtask => subtask.id === subtaskId)

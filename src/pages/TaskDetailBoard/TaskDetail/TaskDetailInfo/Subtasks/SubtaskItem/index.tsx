@@ -23,15 +23,19 @@ function SubtaskItem({
 }: SubtaskItemProps) {
   const menu = useMenu<HTMLSpanElement>()
   const [subtaskName, setSubtaskName] = useState<string>()
+
   const handleDeleteSubtask = () => {
     onDeleteSubtask(subTask.id)
   }
+
   const handleToggleChangeSubtaskName = () => {
     setSubtaskName(subtaskName !== undefined ? undefined : subTask.title)
   }
+
   const handleChangeSubtaskName = (e: InputChange) => {
     setSubtaskName(e.target.value)
   }
+
   const handleSubmitSubtaskName = async () => {
     if (subtaskName) {
       // submit
@@ -39,13 +43,15 @@ function SubtaskItem({
       if (res?.isSuccess) {
         const updatedSubtaskName = res.data
         onChangeSubTaskName(subTask.id, updatedSubtaskName)
+        handleToggleChangeSubtaskName()
       }
-      handleToggleChangeSubtaskName()
     }
   }
+
   const handleTrigger = handleTriggerKeyPress(() => {
     handleSubmitSubtaskName()
   }, 'Enter')
+
   return (
     <>
       <Flex key={subTask?.id} $alignItem='center' $justifyContent='space-between' className='subtasks-item'>
@@ -57,7 +63,7 @@ function SubtaskItem({
             checked={subTask?.isCompleted}
             id={`subtaskStatus-${subTask?.id}`}
           />
-          {!subtaskName ? (
+          {subtaskName === undefined ? (
             <label htmlFor={`subtaskStatus-${subTask?.id}`}>{subTask?.title}</label>
           ) : (
             <>

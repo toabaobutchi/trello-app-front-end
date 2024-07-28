@@ -1,5 +1,11 @@
 import { cloneDeep } from 'lodash'
-import { FilterType, ListResponseForBoard, ProjectResponseForBoard, TaskResponseForBoard } from './types'
+import {
+  AssignmentResponse,
+  FilterType,
+  ListResponseForBoard,
+  ProjectResponseForBoard,
+  TaskResponseForBoard
+} from './types'
 
 export const isOutClick = (parent: HTMLElement, child: HTMLElement | null) => {
   return parent && !parent.contains(child as Node)
@@ -224,4 +230,15 @@ export function isInToday(date: number) {
     today.getMonth() === taskDate.getMonth() &&
     today.getDate() === taskDate.getDate()
   )
+}
+
+export const getTaskAssignments = (
+  taskAssignmentIds?: string[],
+  members?: AssignmentResponse[]
+): AssignmentResponse[] => {
+  if (!taskAssignmentIds || !members) {
+    return []
+  }
+  const assignments = members.filter(m => taskAssignmentIds.includes(m.id))
+  return assignments
 }

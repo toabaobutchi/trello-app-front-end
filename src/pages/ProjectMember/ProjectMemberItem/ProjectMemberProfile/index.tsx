@@ -41,7 +41,7 @@ function ProjectMemberProfile() {
   }, [memberId, members])
   return (
     <>
-      <div className='member-info-full w-full mb-1 flex-1'>
+      <div className='member-info-full w-full mb-1 flex-1 page-slide'>
         <Flex $alignItem='center' $gap='1rem' className='text-primary mb-1 py-1'>
           <img src={memberInfo?.avatar} alt='avatar' className='member-info-full-avatar' />
           <div>

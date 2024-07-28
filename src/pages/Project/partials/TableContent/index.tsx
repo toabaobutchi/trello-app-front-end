@@ -28,7 +28,7 @@ function TableContent() {
   const handleToggleHighLight = () => setHighlightRow(!highlightRow)
   return (
     <>
-      <div className='table-content mt-1'>
+      <div className='table-content mt-1 page-slide'>
         <Flex $alignItem='center' $gap='0.5rem' className='mb-1'>
           <SwitchButton
             inputAttributes={{

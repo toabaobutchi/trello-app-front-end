@@ -29,7 +29,7 @@ function Workspaces() {
   }
   return (
     <>
-      <div className='workspaces-container'>
+      <div className='workspaces-container page-slide'>
         <WorkspaceHeader workspace={workspace} />
         <div className='card-list project-list'>
           {workspace?.projects?.map(project => (
