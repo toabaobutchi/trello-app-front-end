@@ -1,5 +1,5 @@
-import Header from '@comps/Header'
-import SideBar from '@comps/SideBar'
+import Header from '@layouts/Header'
+import SideBar from '@layouts/SideBar'
 import Flex from '@comps/StyledComponents/Flex'
 import { fetchWorkspaces } from '@redux/WorkspaceSlice'
 import { AppDispatch } from '@redux/store'

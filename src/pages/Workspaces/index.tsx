@@ -10,7 +10,7 @@ import WorkspaceHeader from './partials/WorkspaceHeader'
 import emptyWorkspaceImage from '@assets/empty-workspace.svg'
 import Flex from '@comps/StyledComponents/Flex'
 import Button from '@comps/Button'
-import CreateBoardModal from '@comps/Header/partials/MainMenu/partials/AddItemMenu/partials/CreateBoardModal'
+import CreateBoardModal from '@layouts/Header/partials/MainMenu/partials/AddItemMenu/partials/CreateBoardModal'
 
 function Workspaces() {
   const dispatch = useDispatch()
