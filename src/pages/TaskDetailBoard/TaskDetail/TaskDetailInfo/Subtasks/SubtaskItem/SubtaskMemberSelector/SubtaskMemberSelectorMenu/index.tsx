@@ -1,15 +1,16 @@
 import Tab, { TabNav } from '@comps/Tab'
 import './SubtaskMemberSelectorMenu.scss'
 import { useContext, useEffect, useState } from 'react'
-import { TaskDetailContext, TaskDetailContextType } from '@pages/TaskDetailBoard/context'
-import { AssignmentResponse, TaskDetailForBoard } from '@utils/types'
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
+import { AssignmentResponse } from '@utils/types'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import { getTaskAssignments } from '@utils/functions'
+import { getRestAssignments, getTaskAssignments } from '@utils/functions'
 import Flex from '@comps/StyledComponents'
 import Button from '@comps/Button'
 
 type SubtaskMemberSelectorMenuProps = {
   onSelect?: (selectedAssignmentId: string) => void
+  onJoin?: () => void
 }
 
 const tabs: TabNav[] = [
@@ -25,16 +26,19 @@ const tabs: TabNav[] = [
 
 const initTab = 'task-members'
 
-function SubtaskMemberSelectorMenu({ onSelect = () => {} }: SubtaskMemberSelectorMenuProps) {
+function SubtaskMemberSelectorMenu({ onSelect = () => {}, onJoin = () => {} }: SubtaskMemberSelectorMenuProps) {
   const context = useContext(TaskDetailContext)
   const { members } = useProjectSelector()
   const [taskMembers, setTaskMembers] = useState<AssignmentResponse[]>([])
+  const [restMembers, setRestMembers] = useState<AssignmentResponse[]>([])
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('')
+  const [activeTab, setActiveTab] = useState(initTab)
+
   useEffect(() => {
     setTaskMembers(getTaskAssignments(context?.task?.taskAssignmentIds, members))
+    setRestMembers(getRestAssignments(context?.task?.taskAssignmentIds, members))
   }, [members, context?.task?.taskAssignmentIds])
 
-  const [activeTab, setActiveTab] = useState(initTab)
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue)
   }
@@ -43,6 +47,9 @@ function SubtaskMemberSelectorMenu({ onSelect = () => {} }: SubtaskMemberSelecto
   }
   const handleConfirmAssignMemberToSubtask = () => {
     onSelect(selectedAssignmentId)
+  }
+  const handleJoinSubtask = () => {
+    onJoin()
   }
   return (
     <>
@@ -58,11 +65,20 @@ function SubtaskMemberSelectorMenu({ onSelect = () => {} }: SubtaskMemberSelecto
             />
           ))}
         </Tab.Content>
-        <Tab.Content show={activeTab === tabs[1].value}>Project members</Tab.Content>
+        <Tab.Content show={activeTab === tabs[1].value}>
+          {restMembers?.map(item => (
+            <SubtaskAssignmentItem
+              key={item.id}
+              onSelect={handleSelectAssignment}
+              assignment={item}
+              selected={selectedAssignmentId === item.id}
+            />
+          ))}
+        </Tab.Content>
       </Tab>
 
       <Flex $alignItem='center' $justifyContent='end' $gap='0.5rem'>
-        <Button variant='filled' theme='success'>
+        <Button onClick={handleJoinSubtask} variant='filled' theme='success'>
           Join
         </Button>
         <Button onClick={handleConfirmAssignMemberToSubtask} variant='filled' disabled={!selectedAssignmentId}>

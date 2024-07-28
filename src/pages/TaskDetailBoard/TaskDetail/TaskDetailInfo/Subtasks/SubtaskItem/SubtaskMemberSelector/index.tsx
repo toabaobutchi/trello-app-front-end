@@ -24,6 +24,15 @@ function SubtaskMemberSelector({ assignmentId }: { assignmentId?: string }) {
   // gọi api để thêm vào
   const handleSelectSubtaskAssignment = (selectedAssignmentId: string) => {
     console.log('selectedAssignmentId', selectedAssignmentId)
+
+    handleToggleSubtaskAssignmentModal()
+  }
+
+  const handleJoinSubtask = () => {
+    console.log('Join subtask')
+
+    handleToggleSubtaskAssignmentModal()
+
   }
 
   return (
@@ -46,7 +55,7 @@ function SubtaskMemberSelector({ assignmentId }: { assignmentId?: string }) {
         onClose={handleToggleSubtaskAssignmentModal}
         className='subtask-assignment-modal'
       >
-        <SubtaskMemberSelectorMenu onSelect={handleSelectSubtaskAssignment} />
+        <SubtaskMemberSelectorMenu onJoin={handleJoinSubtask} onSelect={handleSelectSubtaskAssignment} />
       </Modal>
     </>
   )

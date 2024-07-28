@@ -242,3 +242,13 @@ export const getTaskAssignments = (
   const assignments = members.filter(m => taskAssignmentIds.includes(m.id))
   return assignments
 }
+export const getRestAssignments = (
+  taskAssignmentIds?: string[],
+  members?: AssignmentResponse[]
+): AssignmentResponse[] => {
+  if (!taskAssignmentIds || !members) {
+    return []
+  }
+  const assignments = members.filter(m => !taskAssignmentIds.includes(m.id))
+  return assignments
+}
