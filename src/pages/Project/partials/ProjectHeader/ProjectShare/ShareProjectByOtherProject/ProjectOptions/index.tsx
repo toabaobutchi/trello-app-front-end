@@ -180,7 +180,7 @@ const ProjectOptions = ({ project, onChange = () => {} }: ProjectOptionsProps) =
             })}
             {selectBox.assignments && selectBox.assignments.length <= 0 && (
               <>
-                <span className='text-danger'>No assignees found</span>
+                <span className='text-danger mt-1'>No assignees found (All are in this project)</span>
               </>
             )}
           </>
