@@ -2,7 +2,13 @@ import './Subtasks.scss'
 import { useContext, useEffect, useState } from 'react'
 import AddSubtask from './AddSubtask'
 import SubtaskItem from './SubtaskItem'
-import { AssignByTaskResponse, AssignSubtaskResponse, JoinSubtaskResponse, SubtaskForBoard } from '@utils/types'
+import {
+  AssignByTaskResponse,
+  AssignSubtaskResponse,
+  JoinSubtaskResponse,
+  SubtaskForBoard,
+  UnassignSubtaskResponse
+} from '@utils/types'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
 import { useDispatch } from 'react-redux'
@@ -121,6 +127,21 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
 
         // cập nhật lại context bên ngoài - tự động cập nhật lại bên trong
         handleChangeSubtaskUI(data)
+      })
+
+      hubConnection.on(hubs.project.receive.unassignSubtask, (_assignmentId: string, data: UnassignSubtaskResponse) => {
+        if (data.taskId === taskId) {
+          context?.setTask?.(prev => {
+            const taskDetail = { ...prev } as typeof prev
+            const unassignedSubtask = taskDetail?.subTasks?.find(s => s.id === data.subtaskId)
+            if (unassignedSubtask) {
+              unassignedSubtask.assignmentId = undefined
+              return taskDetail
+            } else {
+              return prev
+            }
+          })
+        }
       })
     }
   }, [hubConnection, taskId])

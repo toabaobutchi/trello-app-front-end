@@ -6,7 +6,7 @@ import { AssignByTaskResponse, AssignmentResponse, AssignSubtaskResponse, JoinSu
 import { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import SubtaskMemberSelectorMenu from './SubtaskMemberSelectorMenu'
-import { assignSubtask, joinSubtask } from '@services/subtask.services'
+import { assignSubtask, joinSubtask, unassignSubtask } from '@services/subtask.services'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
@@ -93,6 +93,32 @@ function SubtaskMemberSelector({ assignmentId, subtaskId }: SubtaskMemberSelecto
     }
     handleToggleSubtaskAssignmentModal()
   }
+
+  const handleUnassignSubtask = async () => {
+    if (assignment) {
+      const res = await unassignSubtask(subtaskId, assignment.id)
+      if (res?.isSuccess) {
+        const data = res.data
+
+        // cập nhật lại giao diện
+        context?.setTask?.(prev => {
+          const taskDetail = { ...prev } as typeof prev
+          const unassignedSubtask = taskDetail?.subTasks?.find(s => s.id === data.subtaskId)
+          if (unassignedSubtask) {
+            unassignedSubtask.assignmentId = undefined
+            return taskDetail
+          } else {
+            return prev
+          }
+        })
+
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.unassignSubtask, data)
+        }
+      }
+    }
+  }
+
   const handleToggle = () => {
     if (!assignment) handleToggleSubtaskAssignmentModal()
   }
@@ -112,7 +138,7 @@ function SubtaskMemberSelector({ assignmentId, subtaskId }: SubtaskMemberSelecto
                 }}
                 useArrow={false}
               >
-                <Button variant='filled' theme='danger'>
+                <Button onClick={handleUnassignSubtask} variant='filled' theme='danger'>
                   <i className='fa-solid fa-user-minus'></i> Unassign
                 </Button>
               </DropdownMenu>
