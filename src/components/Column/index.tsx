@@ -22,6 +22,8 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
+  const overFlowWIP =
+    column?.wipLimit !== undefined && column?.wipLimit > 0 && (column.tasks?.length ?? 0) >= column?.wipLimit
   return (
     <>
       <div
@@ -42,23 +44,21 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
             <p className='row gap-1'>
               {column?.name} <span className='column-header-task-count'>{column?.tasks?.length}</span>
             </p>
-            {Boolean(column?.wipLimit) && (
+            {Boolean((column?.wipLimit ?? 0) > 0) && (
               <p className='text-danger wip-limit'>
                 <i className='fa-solid fa-lock'></i> WIP Limit: {column?.wipLimit}
               </p>
             )}
           </div>
           <Flex $alignItem='center' $gap='0.25rem'>
-            <AddTaskAbove column={column} />
+            {!overFlowWIP && <AddTaskAbove column={column} />}
             <ColumnOptionMenu list={column} />
           </Flex>
         </Flex>
         <div onPointerDown={e => e.stopPropagation()} className='column-body'>
           {children}
         </div>
-        <div className='column-footer'>
-          <AddTask column={props?.column} />
-        </div>
+        <div className='column-footer'>{!overFlowWIP && <AddTask column={props?.column} />}</div>
       </div>
     </>
   )

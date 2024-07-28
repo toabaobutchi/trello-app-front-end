@@ -517,6 +517,7 @@ export type InvitedProjectResponse = {
   inviterEmail: string
   invitedAt: number
   invitationId: string
+  slug: string
 }
 
 export type DeleterReponse = {

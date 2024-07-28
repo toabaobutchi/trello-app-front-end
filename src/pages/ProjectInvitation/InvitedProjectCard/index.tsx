@@ -4,17 +4,34 @@ import './InvitedProjectCard.scss'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents'
 import { handleInvitation } from '@services/invitation.services'
+import { useNavigate } from 'react-router-dom'
+import { linkCreator } from '@routes/router'
 
-
-function InvitedProjectCard({ invitedProject }: { invitedProject: InvitedProjectResponse }) {
+function InvitedProjectCard({
+  invitedProject,
+  handleRejectProject = () => {}
+}: {
+  invitedProject: InvitedProjectResponse
+  handleRejectProject: (rejectedProjectId: string) => void
+}) {
+  const navigate = useNavigate()
   const handleAccept = async () => {
     const res = await handleInvitation(invitedProject.invitationId, 'accept')
-    console.log(res)
+    if (res?.isSuccess) {
+      navigate(
+        linkCreator.project({
+          viewMode: 'board',
+          projectId: invitedProject.id,
+          slug: invitedProject.slug,
+          ownerShip: invitedProject.invitedPermission
+        })
+      )
+    }
   }
   const handleReject = async () => {
     // chinh sua kieu response cho ham service
     const res = await handleInvitation(invitedProject.invitationId, 'reject')
-    console.log(res)
+    handleRejectProject(invitedProject.id)
   }
   return (
     <>

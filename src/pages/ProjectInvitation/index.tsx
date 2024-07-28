@@ -5,17 +5,23 @@ import { InvitedProjectResponse } from '@utils/types'
 import InvitedProjectCard from './InvitedProjectCard'
 import Flex from '@comps/StyledComponents'
 import emptyInvitationImagePage from '@assets/empty_invitation.jpg'
+import { useState } from 'react'
 
 function ProjectInvitation() {
   const res = useLoaderData() as AxiosResponse
-  let data = res?.data as InvitedProjectResponse[]
-  data = data.sort(i => -1 * i.createdAt)
+  const data = res?.data as InvitedProjectResponse[]
+  const [invitedProjects, setInvitedProjects] = useState<InvitedProjectResponse[]>(
+    data.sort(i => -1 * i.createdAt) ?? []
+  )
+  const handleReject = (rejectedProjectId: string) => {
+    setInvitedProjects(prev => prev.filter(p => p.id !== rejectedProjectId))
+  }
   return (
     <>
       {data && data.length > 0 && (
         <div className='invited-project-container'>
-          {data.map(item => (
-            <InvitedProjectCard key={item.id} invitedProject={item} />
+          {invitedProjects.map(item => (
+            <InvitedProjectCard key={item.id} invitedProject={item} handleRejectProject={handleReject} />
           ))}
         </div>
       )}

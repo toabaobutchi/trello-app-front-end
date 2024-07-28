@@ -1,7 +1,7 @@
 import { ProjectPageParams, ProjectResponse } from '@utils/types'
 import { useCallback, useEffect, useState } from 'react'
 import ProjectOptions, { ProjectSelectOptions } from './ProjectOptions'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { getJoinedProjects, inviteToProjectByAnotherMember } from '@services/project.services'
@@ -33,6 +33,7 @@ function ShareProjectByOtherProject() {
   const [projects, setProjects] = useState<ProjectResponse[]>([])
   const [projectShareState, setProjectShareState] = useState<ProjectShareState>()
   const { projectId } = useParams() as ProjectPageParams
+  const navigate = useNavigate()
 
   useEffect(() => {
     getJoinedProjects(projectId).then(res => {
@@ -52,6 +53,7 @@ function ShareProjectByOtherProject() {
     const res = await inviteToProjectByAnotherMember(projectId, destructState(projectShareState))
     if (res?.isSuccess) {
       console.log('Invite successfully')
+      navigate(-1)
     } else {
       console.log('Invite failed')
     }
