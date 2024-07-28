@@ -21,6 +21,7 @@ function SubtaskMemberSelector({ assignmentId }: { assignmentId?: string }) {
     ? 'No member has assigned this subtask yet!'
     : `${assignment?.email} (${assignment?.displayName})`
 
+  // gọi api để thêm vào
   const handleSelectSubtaskAssignment = (selectedAssignmentId: string) => {
     console.log('selectedAssignmentId', selectedAssignmentId)
   }

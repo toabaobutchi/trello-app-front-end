@@ -41,6 +41,9 @@ function SubtaskMemberSelectorMenu({ onSelect = () => {} }: SubtaskMemberSelecto
   const handleSelectAssignment = (assignmentId: string) => {
     setSelectedAssignmentId(assignmentId)
   }
+  const handleConfirmAssignMemberToSubtask = () => {
+    onSelect(selectedAssignmentId)
+  }
   return (
     <>
       <div className='subtask-assignment-selector-menu'></div>
@@ -62,7 +65,7 @@ function SubtaskMemberSelectorMenu({ onSelect = () => {} }: SubtaskMemberSelecto
         <Button variant='filled' theme='success'>
           Join
         </Button>
-        <Button variant='filled' disabled={!selectedAssignmentId}>
+        <Button onClick={handleConfirmAssignMemberToSubtask} variant='filled' disabled={!selectedAssignmentId}>
           Assign
         </Button>
       </Flex>
