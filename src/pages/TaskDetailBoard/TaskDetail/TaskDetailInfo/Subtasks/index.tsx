@@ -1,14 +1,14 @@
 import './Subtasks.scss'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import AddSubtask from './AddSubtask'
 import SubtaskItem from './SubtaskItem'
-import { SubtaskForBoard } from '@utils/types'
+import { AssignByTaskResponse, AssignSubtaskResponse, JoinSubtaskResponse, SubtaskForBoard } from '@utils/types'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { addSubtasks, checkSubtask, deleteSubtask } from '@services/subtask.services'
-
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 
 type SubtasksProps = {
   subtasks: SubtaskForBoard[]
@@ -19,6 +19,8 @@ type SubtasksProps = {
 function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
   const [_subtasks, setSubtasks] = useState<SubtaskForBoard[]>([])
   const dispatch = useDispatch()
+  const context = useContext(TaskDetailContext)
+
   useEffect(() => {
     setSubtasks(subtasks)
   }, [subtasks])
@@ -68,6 +70,58 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
           setSubtasks(prev => prev.filter(subtask => subtask.id !== subtaskId))
         }
       )
+      const handleChangeSubtaskUI = (data: JoinSubtaskResponse | AssignSubtaskResponse) => {
+        if (data.taskId === taskId) {
+          // cập nhật lại context bên ngoài - tự động cập nhật lại bên trong
+          context?.setTask?.(prev => {
+            const taskDetail = { ...prev } as typeof prev
+            const joinedSubtask = taskDetail?.subTasks?.find(s => s.id === data.id)
+            if (joinedSubtask) {
+              joinedSubtask.assignmentId = data.assignmentId
+              return taskDetail
+            } else {
+              return prev
+            }
+          })
+        }
+      }
+      hubConnection.on(hubs.project.receive.joinSubtask, (_assignmentId: string, data: JoinSubtaskResponse) => {
+        // if (data.taskId === taskId) {
+        //   // cập nhật lại context bên ngoài - tự động cập nhật lại bên trong
+        //   context?.setTask?.(prev => {
+        //     const taskDetail = { ...prev } as typeof prev
+        //     const joinedSubtask = taskDetail?.subTasks?.find(s => s.id === data.id)
+        //     if (joinedSubtask) {
+        //       joinedSubtask.assignmentId = data.assignmentId
+        //       return taskDetail
+        //     } else {
+        //       return prev
+        //     }
+        //   })
+        // }
+        handleChangeSubtaskUI(data)
+      })
+      hubConnection.on(hubs.project.receive.assignSubtask, (_assignmentId: string, data: AssignSubtaskResponse) => {
+        if (data.isNewAssignment) {
+          // thêm thành viên mới vào task - thay đổi context
+          context?.setTask?.(prev => {
+            const taskDetail = { ...prev } as typeof prev
+            taskDetail?.taskAssignmentIds?.push(data.assignmentId)
+            return taskDetail
+          })
+
+          // thay đổi store bên ngoài - dispatch
+          const payload: AssignByTaskResponse = {
+            assignerId: data.assignerId ?? '',
+            assignmentIds: [data.assignmentId],
+            taskId: data.taskId
+          }
+          dispatch(projectSlice.actions.addAssignmentToTask(payload))
+        }
+
+        // cập nhật lại context bên ngoài - tự động cập nhật lại bên trong
+        handleChangeSubtaskUI(data)
+      })
     }
   }, [hubConnection, taskId])
 

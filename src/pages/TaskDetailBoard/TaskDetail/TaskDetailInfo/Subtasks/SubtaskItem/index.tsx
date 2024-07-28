@@ -86,7 +86,7 @@ function SubtaskItem({
             <i className='fa-regular fa-pen-to-square'></i>
           </span>
 
-          <SubtaskMemberSelector assignmentId={subTask.assignmentId} />
+          <SubtaskMemberSelector subtaskId={subTask.id} assignmentId={subTask.assignmentId} />
           <span ref={menu.anchorRef} onClick={menu.toggleMenu} className='subtasks-item-icon'>
             <i className='fa-regular fa-trash-can'></i>
           </span>

@@ -31,7 +31,9 @@ export const hubs = {
       getOnlineMembers: 'SendGetOnlineMembers',
       deleteList: 'SendDeleteList',
       markTask: 'SendMarkTask',
-      assignMemberToTask: 'SendAssignMemberToTask'
+      assignMemberToTask: 'SendAssignMemberToTask',
+      joinSubtask: 'SendJoinSubtask',
+      assignSubtask: 'SendAssignSubtask'
     },
     receive: {
       startDragList: 'ReceiveStartDragList',
@@ -54,7 +56,9 @@ export const hubs = {
       onlineMembers: 'ReceiveOnlineMembers',
       deleteList: 'ReceiveDeleteList',
       markTask: 'ReceiveMarkTask',
-      assignMemberToTask: 'ReceiveAssignMemberToTask'
+      assignMemberToTask: 'ReceiveAssignMemberToTask',
+      joinSubtask: 'ReceiveJoinSubtask',
+      assignSubtask: 'ReceiveAssignSubtask'
     }
   },
   taskDetail: {

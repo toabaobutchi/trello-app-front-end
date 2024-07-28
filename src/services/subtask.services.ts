@@ -1,5 +1,12 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import { AddSubtasksModel, SubtaskForBoard, SubtaskResponse } from '@utils/types'
+import {
+  AddSubtasksModel,
+  AssignSubtaskResponse,
+  JoinSubtaskResponse,
+  SubtaskForBoard,
+  SubtaskResponse,
+  UnassignSubtaskResponse
+} from '@utils/types'
 
 const addSubtasks = async (model: AddSubtasksModel) => {
   const res = await http.post<AddSubtasksModel, SubtaskForBoard[]>('/subtasks', model)
@@ -23,4 +30,23 @@ const changeSubtaskName = async (subtaskId: string | number, updatedName: string
   return res
 }
 
-export { addSubtasks, deleteSubtask, checkSubtask, changeSubtaskName }
+const joinSubtask = async (subtaskId: string | number) => {
+  const res = await http.postWithoutData<JoinSubtaskResponse>(`/subtasks/${subtaskId}/join`)
+  return res
+}
+
+const assignSubtask = async (subtaskId: string | number, assignmentId: string) => {
+  const res = await http.post<{ assignmentId: string }, AssignSubtaskResponse>(`/subtasks/${subtaskId}/assign`, {
+    assignmentId
+  })
+  return res
+}
+
+const unassignSubtask = async (subtaskId: string | number, assignmentId: string) => {
+  const res = await http.post<{ assignmentId: string }, UnassignSubtaskResponse>(`/subtasks/${subtaskId}/unassign`, {
+    assignmentId
+  })
+  return res
+}
+
+export { addSubtasks, deleteSubtask, checkSubtask, changeSubtaskName, joinSubtask, assignSubtask, unassignSubtask }
