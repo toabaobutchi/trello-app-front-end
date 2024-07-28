@@ -11,7 +11,7 @@ import React, { Suspense } from 'react'
 import routeLinks, { loader } from '@routes/router'
 import TaskDetailBoard from '@pages/TaskDetailBoard'
 import ProjectMember from '@pages/ProjectMember'
-import ProjectShare from '@pages/Project/partials/ProjectHeader/ProjectShare'
+import ProjectShare from '@pages/ProjectShare'
 import ProjectMemberProfile from '@pages/ProjectMember/ProjectMemberItem/ProjectMemberProfile'
 const Home = React.lazy(() => import('@pages/Home'))
 const Error = React.lazy(() => import('@pages/Error'))
