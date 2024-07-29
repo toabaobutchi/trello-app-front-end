@@ -78,7 +78,14 @@ const router = createBrowserRouter([
           // change log
           {
             path: routeLinks.project.changeLog,
-            element: <ChangeLog />
+            element: <ChangeLog />,
+            loader: loader.changeLogs,
+            children: [
+              {
+                path: routeLinks.project.task,
+                element: <TaskDetailBoard />
+              }
+            ]
           },
           // members
           {

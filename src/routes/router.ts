@@ -1,3 +1,4 @@
+import { getChangeLogs } from '@services/changelog.services'
 import { getInvitedProjects } from '@services/invitation.services'
 import { getProjectForDisplaying } from '@services/project.services'
 import { getRecycleBin } from '@services/task.services'
@@ -73,6 +74,18 @@ export const loader = {
   projectView: async ({ params }: LoaderFunctionArgs) => {
     const { projectId, viewMode } = params as ProjectPageParams
     const res = await getProjectForDisplaying(projectId, viewMode ?? 'board')
+    return res
+  },
+  changeLogs: async ({ params, request }: LoaderFunctionArgs) => {
+    const url = request.url
+    const urlObj = new URL(url)
+    const queryParams = new URLSearchParams(urlObj.search)
+    const page = parseInt(queryParams.get('p') ?? '1')
+    const uid = parseInt(queryParams.get('uid') ?? 'all')
+    const date = parseInt(queryParams.get('date') ?? 'all')
+
+    const { projectId } = params as ProjectPageParams
+    const res = await getChangeLogs(projectId)
     return res
   }
 }

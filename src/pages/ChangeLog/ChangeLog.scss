@@ -1,0 +1,35 @@
+.change-logs {
+  padding: 1rem;
+  overflow: hidden;
+  flex: 1;
+  height: 100%;
+}
+
+.change-logs-container {
+  display: flex;
+  // align-items: center;
+  gap: 0.5rem;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem 1rem 3.7rem 1rem;
+  // height: 100%;
+  flex: 1;
+  overflow: auto;
+}
+.change-log-header.page-header {
+  font-size: 1.4rem;
+  padding: 1rem;
+  position: relative;
+  width: 100%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: var(--bold-border-width);
+    background-color: var(--primary-color);
+    top: 100%;
+    left: 0;
+    // transform: translateX(-50%);
+  }
+}

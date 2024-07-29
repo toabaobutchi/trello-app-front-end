@@ -30,7 +30,8 @@ function SelectList({
   const selectListRef = useRef<HTMLDivElement>(null)
   const selectListId = useId()
   const [selectedItem, setSelectedItem] = useState<SelectListItem | undefined>(() => {
-    return items?.find(item => item.value === selectedValue) ?? items?.[0]
+    const selected = items?.find(item => item.value === selectedValue) ?? items?.[0]
+    return selected
   })
 
   useEffect(() => {
@@ -66,7 +67,7 @@ function SelectList({
         style={props?.style}
       >
         <div ref={selectListRef} className='selected-item' onClick={handleToggleSelect}>
-          {selectedItem?.display ?? selectedItem?.value} <i className='fa-solid fa-caret-down'></i>
+          <>{selectedItem?.display || selectedItem?.value}</> <i className='fa-solid fa-caret-down'></i>
         </div>
         {expand && items && (
           <div className='select-list-data-context'>

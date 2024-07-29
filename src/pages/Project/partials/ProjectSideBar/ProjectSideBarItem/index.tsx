@@ -83,6 +83,9 @@ function ProjectSideBarItem({ item }: { item: ProjectCardType }) {
           <NavLink to={linkCreator.projectRecycleBin(params)} className='project-side-bar-item'>
             <i className='fa-regular fa-trash-can'></i>&nbsp; Recycle bin
           </NavLink>
+          <NavLink to={linkCreator.changeLog(params)} className='project-side-bar-item'>
+            <i className='fa-solid fa-timeline'></i>&nbsp; Change logs
+          </NavLink>
         </Expander>
       </Flex>
     </>
