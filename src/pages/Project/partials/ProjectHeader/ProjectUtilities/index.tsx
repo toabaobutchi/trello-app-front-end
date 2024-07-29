@@ -19,6 +19,10 @@ function ProjectUtilities() {
     navigate(linkCreator.projectRecycleBin(params))
     closeMenu()
   }
+  const handleNavigateChangeLog = () => {
+    navigate(linkCreator.changeLog(params))
+    closeMenu()
+  }
   return (
     <>
       <Button onClick={toggleMenu} ref={anchorRef} variant='filled'>
@@ -28,8 +32,8 @@ function ProjectUtilities() {
         <MenuItem className='utils-menu-item' onClick={handleNavigateMemberBoard}>
           <i className='fa-solid fa-users-gear'></i> Members
         </MenuItem>
-        <MenuItem className='utils-menu-item'>
-          <i className='fa-solid fa-timeline fa-fw'></i> Timeline
+        <MenuItem onClick={handleNavigateChangeLog} className='utils-menu-item'>
+          <i className='fa-solid fa-timeline fa-fw'></i> Change logs
         </MenuItem>
         <MenuItem className='utils-menu-item' onClick={handleNavigateRecycleBin}>
           <i className='fa-regular fa-trash-can'></i> Recycle bin

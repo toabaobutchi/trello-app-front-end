@@ -22,8 +22,15 @@ const deleteList = async (listId: string) => {
   return res
 }
 
-const changeListOrder = async (newListOrder: string) => {
-  const res = await http.put<{ newListOrder: string }, string>(`/lists/change-order`, { newListOrder })
+const changeListOrder = async (newListOrder: string, subjectId: string, objectId: string) => {
+  const res = await http.put<{ newListOrder: string; subjectId: string; objectId: string }, string>(
+    `/lists/change-order`,
+    {
+      newListOrder,
+      subjectId,
+      objectId
+    }
+  )
   return res
 }
 

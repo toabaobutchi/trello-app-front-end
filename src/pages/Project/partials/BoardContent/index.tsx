@@ -394,7 +394,7 @@ function BoardContent() {
           setListState(newListState) // tạm thời set lại - ngăn việc tạm dừng UI
 
           // gọi api cập nhật lại
-          changeListOrder(newListOrder).then(res => {
+          changeListOrder(newListOrder, active.id + '', over.id + '').then(res => {
             if (res?.isSuccess) {
               // cập nhật lại thành công
               const updatedListOrder = res.data

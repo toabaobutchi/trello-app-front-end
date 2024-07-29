@@ -22,6 +22,7 @@ const Project = React.lazy(() => import('@pages/Project'))
 const ProjectInvitation = React.lazy(() => import('@pages/ProjectInvitation'))
 const ViewContent = React.lazy(() => import('@pages/Project/partials/ViewContent'))
 const RecycleBin = React.lazy(() => import('@pages/RecycleBin'))
+const ChangeLog = React.lazy(() => import('@pages/ChangeLog'))
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,11 @@ const router = createBrowserRouter([
           {
             path: routeLinks.project.task,
             element: <TaskDetailBoard />
+          },
+          // change log
+          {
+            path: routeLinks.project.changeLog,
+            element: <ChangeLog />
           },
           // members
           {

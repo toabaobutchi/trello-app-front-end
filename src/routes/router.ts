@@ -16,6 +16,7 @@ const routeLinks = {
     task: 'task/:taskId',
     share: 'share-project',
     recycleBin: 'recycle-bin',
+    changeLog: 'change-logs',
     members: {
       index: 'members',
       detail: ':memberId'
@@ -47,6 +48,10 @@ export const linkCreator = {
   shareProject(routeParams: ProjectPageParams) {
     const { ownerShip, projectId, slug } = routeParams
     return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/${routeLinks.project.share}`
+  },
+  changeLog(routeParams: ProjectPageParams) {
+    const { ownerShip, projectId, slug } = routeParams
+    return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/${routeLinks.project.changeLog}`
   }
 }
 
