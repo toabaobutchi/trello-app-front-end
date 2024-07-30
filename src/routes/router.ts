@@ -35,7 +35,7 @@ export const linkCreator = {
   },
   project(routeParams: ProjectPageParams) {
     const { ownerShip, projectId, slug, viewMode } = routeParams
-    return `/projects/${ownerShip}/${getSlug(slug)}/${projectId}/v/${viewMode}`
+    return `/projects/${ownerShip.toLowerCase()}/${getSlug(slug)}/${projectId}/v/${viewMode}`
   },
   projectMember(routeParams: ProjectPageParams, memberId?: string) {
     const { ownerShip, projectId, slug } = routeParams

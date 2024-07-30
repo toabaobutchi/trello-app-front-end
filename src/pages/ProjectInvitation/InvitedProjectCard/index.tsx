@@ -18,20 +18,26 @@ function InvitedProjectCard({
   const handleAccept = async () => {
     const res = await handleInvitation(invitedProject.invitationId, 'accept')
     if (res?.isSuccess) {
-      navigate(
-        linkCreator.project({
-          viewMode: 'board',
-          projectId: invitedProject.id,
-          slug: invitedProject.slug,
-          ownerShip: invitedProject.invitedPermission
-        })
-      )
+      if (res.data.isAccepted) {
+        const data = res.data
+
+        navigate(
+          linkCreator.project({
+            viewMode: 'board',
+            projectId: data.projectId,
+            slug: data.projectSlug,
+            ownerShip: data.context
+          })
+        )
+      }
     }
   }
   const handleReject = async () => {
     // chinh sua kieu response cho ham service
     const res = await handleInvitation(invitedProject.invitationId, 'reject')
-    handleRejectProject(invitedProject.id)
+    if (res?.isSuccess && res.data.isAccepted == false) {
+      handleRejectProject(res.data.projectId)
+    }
   }
   return (
     <>

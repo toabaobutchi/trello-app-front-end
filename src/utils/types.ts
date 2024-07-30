@@ -620,3 +620,18 @@ export type LogDetail = {
   entityType: 'Project' | 'Task' | 'List' | 'Subtask' | 'Assignment' | 'Invitation' | 'TaskAssignment'
   logAction: 'Create' | 'Update' | 'Delete' | 'Join' | 'Unassign' | 'Assign'
 }
+
+export type InvitationResult = {
+  projectId: string
+  invitationId: string
+}
+
+export type AcceptInvitationResult = {
+  isAccepted: true
+  assignmentId: string
+  projectName: string
+  projectSlug: string
+  context: string
+} & InvitationResult
+
+export type RejectInvitationResult = InvitationResult & { isAccepted: false }
