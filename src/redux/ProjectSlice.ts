@@ -9,7 +9,7 @@ import {
   DeletedListResponse,
   DeletedTaskResponse,
   DragOverResult,
-  FilterType,
+  ProjectFilterType,
   JoinTaskResponse,
   ListResponseForBoard,
   MarkedTaskResponse,
@@ -27,7 +27,7 @@ export const projectSlice = createSlice({
       board: {} as ProjectResponseForBoard,
       members: [] as AssignmentResponse[],
       onlineMembers: [] as string[],
-      currentFilters: {} as FilterType,
+      currentFilters: {} as ProjectFilterType,
       table: {}
       // table, chart and calendar
     }
@@ -227,28 +227,8 @@ export const projectSlice = createSlice({
       }
     },
     setFilters: (state, action) => {
-      const filters = action.payload as FilterType
+      const filters = action.payload as ProjectFilterType
       state.activeProject.currentFilters = filters
     }
   }
-  // extraReducers: builder => {
-  // builder.addCase(changeListOrder.fulfilled, (state, action) => {
-  //   const newListOrder = action?.payload?.data as string
-  //   state.activeProject.board.listOrder = newListOrder
-  //   const updatedListOrder = newListOrder.split(',')
-  //   state.activeProject.board!.lists = state.activeProject.board?.lists?.sort(
-  //     (a, b) => (updatedListOrder?.indexOf(a.id) ?? 0) - (updatedListOrder?.indexOf(b.id) ?? 0)
-  //   )
-  // })
-  // }
 })
-
-// export const fetchProjectsForBoard = createAsyncThunk('projects/fetchProjectsForBoard', async (projectId: string) => {
-//   const res = await http.getAuth(`/projects/${projectId}v/board`)
-//   return res
-// })
-
-// export const changeListOrder = createAsyncThunk('projects/changeListOrder', async (newListOrder: string) => {
-//   const res = await http.putAuth(`/lists/change-order`, { newListOrder })
-//   return res
-// })
