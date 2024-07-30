@@ -314,9 +314,16 @@ function BoardContent() {
         data: { current: activeData }
       } = active
       const { id: overId } = over
-
       const activeList = findColumnByCardId(activeId as string)
-      const overList = findColumnByCardId(overId as string)
+
+      // xử lý trường hợp kéo thả vào column rỗng
+      // khi kéo vào column rỗng thì over là column chứ không còn là card
+      let overList: ListResponseForBoard | undefined = undefined
+      if (over?.data?.current?.dragObject == 'Column') {
+        overList = listState?.find(l => l.id === overId)
+      } else overList = findColumnByCardId(overId as string)
+
+      // const overList = findColumnByCardId(overId as string)
 
       if (!activeList || !overList) return
 

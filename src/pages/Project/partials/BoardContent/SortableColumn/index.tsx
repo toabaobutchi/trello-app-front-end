@@ -18,7 +18,7 @@ function SortableColumn({
     id: column.id,
     data: { ...column, dragObject: 'Column' }
   })
-  
+
   const tasks = mapOrder<TaskResponseForBoard>(
     column?.tasks as TaskResponseForBoard[],
     column?.taskOrder?.split(',') as string[],
@@ -29,7 +29,8 @@ function SortableColumn({
     // touchAction: 'none',
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
+    border: isDragging ? '1px solid #4B70F5' : 'unset'
   }
   return (
     <>

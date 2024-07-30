@@ -36,7 +36,8 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
     // touchAction: 'none',
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
+    border: isDragging ? '1px solid #4B70F5' : 'unset'
   }
   const dispatch = useDispatch()
   const { pathname } = useLocation()
