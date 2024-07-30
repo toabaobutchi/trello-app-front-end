@@ -34,7 +34,8 @@ export const hubs = {
       assignMemberToTask: 'SendAssignMemberToTask',
       joinSubtask: 'SendJoinSubtask',
       assignSubtask: 'SendAssignSubtask',
-      unassignSubtask: 'SendUnassignSubtask'
+      unassignSubtask: 'SendUnassignSubtask',
+      duplicateTasks: 'SendDuplicateTasks'
     },
     receive: {
       startDragList: 'ReceiveStartDragList',
@@ -61,7 +62,8 @@ export const hubs = {
       joinSubtask: 'ReceiveJoinSubtask',
       assignSubtask: 'ReceiveAssignSubtask',
       unassignSubtask: 'ReceiveUnassignSubtask',
-      changeLog: 'ReceiveChangeLog'
+      changeLog: 'ReceiveChangeLog',
+      duplicateTasks: 'ReceiveDuplicateTasks'
     }
   },
   taskDetail: {

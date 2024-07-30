@@ -10,8 +10,6 @@ import { assignSubtask, joinSubtask, unassignSubtask } from '@services/subtask.s
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
-import useMenu from '@hooks/useMenu'
-import Menu from '@comps/Menu'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 

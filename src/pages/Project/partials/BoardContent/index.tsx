@@ -10,6 +10,7 @@ import {
   MarkedTaskResponse,
   SubtaskForBoard,
   TaskResponseForBoard,
+  UnassignSubtaskResponse,
   UpdatedTaskResponse
 } from '@utils/types'
 import {
@@ -27,7 +28,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, arrayMove, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import SortableColumn from './SortableColumn'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AddNewList from './AddNewList'
 import TaskCard from '@comps/TaskCard'
 import { useDispatch, useSelector } from 'react-redux'
@@ -39,6 +40,7 @@ import { filterLists } from '@utils/functions'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { changeTaskOrder } from '@services/task.services'
 import { changeListOrder } from '@services/list.services'
+import config from '@confs/app.config'
 
 type ActiveDragItemType = {
   id?: string | number
@@ -64,6 +66,11 @@ export type RemoteDraggingType = {
   dragObject?: 'Column' | 'Card'
 }
 
+export type BlockDragState = {
+  timeOutId?: number
+  isDisabled?: boolean
+}
+
 function BoardContent() {
   const dispatch = useDispatch<AppDispatch>()
   const project = useSelector((state: RootState) => state.project.activeProject)
@@ -71,6 +78,8 @@ function BoardContent() {
   const [listState, setListState] = useState<ListResponseForBoard[]>([])
   const [activeDragItem, setActiveDragItem] = useState<ActiveDragItemType>()
   const [oldColumn, setOldColumn] = useState<ListResponseForBoard>()
+  const remoteDragTimeOutId = useRef<number>()
+  const [blockDragState, setBlockDragState] = useState<BlockDragState>({ isDisabled: false })
 
   //signalR
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
@@ -92,13 +101,31 @@ function BoardContent() {
           dragObjectId: listId,
           dragObject: 'Column'
         })
+
+        // nếu có thêm một request nữa thì reset lại bộ đếm giờ
+        if (remoteDragTimeOutId.current) {
+          clearTimeout(remoteDragTimeOutId.current)
+          remoteDragTimeOutId.current = undefined
+        }
+
+        // chờ 60s sau sẽ tự động tắt
+        remoteDragTimeOutId.current = setTimeout(() => {
+          setRemoteDragging(_prev => undefined)
+          remoteDragTimeOutId.current = undefined
+        }, config.timeOut.drag)
       })
       // ReceiveEndDragList
       projectHub.connection?.on(hubs.project.receive.endDragList, (_assignmentId: string, updatedListOrder: string) => {
         dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
         setTimeout(() => {
           setRemoteDragging(_prev => undefined)
-        }, 500)
+
+          // xoá đi bộ đếm giờ nếu nhận được tín hiệu ngừng dưới 60s
+          if (remoteDragTimeOutId.current) {
+            clearTimeout(remoteDragTimeOutId.current)
+            remoteDragTimeOutId.current = undefined
+          }
+        }, config.timeOut.delayAfterEndDrag)
       })
       // ReceiveStartDragTask
       projectHub.connection?.on(
@@ -110,6 +137,18 @@ function BoardContent() {
             dragObjectId: taskId,
             dragObject: 'Card'
           })
+
+          // nếu có thêm một request nữa thì reset lại bộ đếm giờ
+          if (remoteDragTimeOutId.current) {
+            clearTimeout(remoteDragTimeOutId.current)
+            remoteDragTimeOutId.current = undefined
+          }
+
+          // chờ 60s sau sẽ tự động tắt
+          remoteDragTimeOutId.current = setTimeout(() => {
+            setRemoteDragging(_prev => undefined)
+            remoteDragTimeOutId.current = undefined
+          }, config.timeOut.drag)
         }
       )
       // ReceiveEndDragTask
@@ -120,7 +159,13 @@ function BoardContent() {
           // setRemoteDragging(undefined)
           setTimeout(() => {
             setRemoteDragging(_prev => undefined)
-          }, 500)
+
+            // xoá đi bộ đếm giờ nếu nhận được tín hiệu ngừng dưới 60s
+            if (remoteDragTimeOutId.current) {
+              clearTimeout(remoteDragTimeOutId.current)
+              remoteDragTimeOutId.current = undefined
+            }
+          }, config.timeOut.delayAfterEndDrag)
         }
       )
       // ReceiveUpdateTaskInfo
@@ -170,6 +215,12 @@ function BoardContent() {
         hubs.project.receive.assignMemberToTask,
         (_assignmentId: string, data: AssignByTaskResponse) => {
           dispatch(projectSlice.actions.addAssignmentToTask(data))
+        }
+      )
+      projectHub.connection?.on(
+        hubs.project.receive.duplicateTasks,
+        (_assignmentId: string, data: TaskResponseForBoard) => {
+          dispatch(projectSlice.actions.setDuplicateTasks(data))
         }
       )
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -256,6 +307,23 @@ function BoardContent() {
       data: e?.active?.data?.current,
       dragObject: e?.active?.data?.current?.dragObject // `dragObject` được đặt trong mỗi TaskCard hoặc SortableColumn
     })
+
+    // sau 60s mà chưa clear cái timeout này thì sẽ block người dùng
+    const timeOutId = setTimeout(() => {
+      setBlockDragState(prev => ({ ...prev, isDisabled: true }))
+
+      // roll back UI
+      setListState(filterLists(project?.board?.lists, project?.currentFilters))
+
+      // sau 60s sẽ mở lại
+      setTimeout(() => {
+        setBlockDragState(prev => ({ ...prev, isDisabled: false }))
+      }, config.timeOut.dragBlock)
+    }, config.timeOut.drag)
+
+    // set timeout id
+    setBlockDragState(prev => ({ ...prev, timeOutId: timeOutId }))
+
     if (e?.active?.data?.current?.dragObject === 'Card') {
       setOldColumn(findColumnByCardId(e?.active?.id as string))
       if (projectHub.isConnected) {
@@ -304,6 +372,12 @@ function BoardContent() {
   }
 
   const handleDragEnd = (e: DragEndEvent) => {
+    // clear timeout nếu như `isDisabled = false`
+    if (!blockDragState.isDisabled) {
+      clearTimeout(blockDragState.timeOutId)
+      setBlockDragState(prev => ({ ...prev, timeOutId: undefined }))
+    }
+
     const { active, over } = e
     if (!active || !over) return
 
@@ -429,13 +503,18 @@ function BoardContent() {
     <>
       <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} sensors={sensors}>
         <SortableContext
-          disabled={remoteDragging?.isDragging}
+          disabled={remoteDragging?.isDragging || blockDragState.isDisabled}
           items={listState?.map(l => l?.id) ?? []}
           strategy={horizontalListSortingStrategy}
         >
           <Flex $gap='1.5rem' className='column-list page-slide'>
             {listState?.map(column => (
-              <SortableColumn remoteDragging={remoteDragging} key={column.id} column={column} />
+              <SortableColumn
+                blockDragState={blockDragState}
+                remoteDragging={remoteDragging}
+                key={column.id}
+                column={column}
+              />
             ))}
             <AddNewList />
           </Flex>

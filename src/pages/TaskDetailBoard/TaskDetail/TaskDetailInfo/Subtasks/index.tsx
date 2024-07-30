@@ -92,19 +92,6 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
         }
       }
       hubConnection.on(hubs.project.receive.joinSubtask, (_assignmentId: string, data: JoinSubtaskResponse) => {
-        // if (data.taskId === taskId) {
-        //   // cập nhật lại context bên ngoài - tự động cập nhật lại bên trong
-        //   context?.setTask?.(prev => {
-        //     const taskDetail = { ...prev } as typeof prev
-        //     const joinedSubtask = taskDetail?.subTasks?.find(s => s.id === data.id)
-        //     if (joinedSubtask) {
-        //       joinedSubtask.assignmentId = data.assignmentId
-        //       return taskDetail
-        //     } else {
-        //       return prev
-        //     }
-        //   })
-        // }
         handleChangeSubtaskUI(data)
       })
       hubConnection.on(hubs.project.receive.assignSubtask, (_assignmentId: string, data: AssignSubtaskResponse) => {

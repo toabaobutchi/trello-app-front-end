@@ -12,6 +12,7 @@ import { duplicateTask } from '@services/task.services'
 import SelectList from '@comps/SelectList'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { getDateString } from '@utils/functions'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 export type InheritOptions = {
   priority?: boolean
@@ -31,14 +32,7 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
   })
   const dispatch = useDispatch()
   const { board } = useProjectSelector()
-  // const [isOverWip, setIsOverWip] = useState(() => {
-  //   // lấy list từ task
-  //   const initList = board.lists?.find(l => l.id === task?.listId)
-  //   if (initList) {
-  //     return Boolean(initList?.wipLimit && initList?.tasks?.length && initList.wipLimit >= initList?.tasks?.length)
-  //   }
-  //   return false
-  // })
+  const [projectHub] = useState(new ProjectHub())
 
   const isOverWip = () => {
     // lấy list từ task
@@ -68,6 +62,11 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
       const res = await duplicateTask(task.id, inheritOptions)
       if (res?.isSuccess) {
         dispatch(projectSlice.actions.setDuplicateTasks(res.data))
+
+        // gửi thông báo đến các thành viên khác
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.duplicateTasks, res.data)
+        }
         onCloseModal()
       }
       onCloseModal()
