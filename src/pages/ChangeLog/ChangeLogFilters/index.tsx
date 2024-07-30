@@ -4,7 +4,7 @@ import { SelectListItem } from '@utils/types'
 import { useRef } from 'react'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { useSearchParams } from 'react-router-dom'
-import { getDateString } from '@utils/functions'
+import { getDateString, getMiliseconds } from '@utils/functions'
 import Flex from '@comps/StyledComponents'
 import Button from '@comps/Button'
 
@@ -47,7 +47,9 @@ function ChangeLogFilters() {
 
   const handleChangeDateFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchParams = new URLSearchParams(searchParams)
-    newSearchParams.set('d', new Date(e.target.value).getTime().toString())
+    const selectedDate = new Date(e.target.value)
+    const miliseconds = getMiliseconds(selectedDate)
+    newSearchParams.set('d', miliseconds.toString())
     newSearchParams.set('p', '1')
     setSearchParams(newSearchParams)
   }
@@ -75,7 +77,7 @@ function ChangeLogFilters() {
     <>
       <div className='change-logs-filters row gap-2 w-full'>
         <Flex $alignItem='center' $gap='0.5rem' className='change-logs-page'>
-          {Boolean(parseInt(page ?? '0')) && (
+          {Boolean(parseInt(page ?? '1') - 1) && (
             <Button onClick={handleGetPrevious} variant='text' theme='default'>
               <i className='fa-solid fa-chevron-left'></i> Previous
             </Button>

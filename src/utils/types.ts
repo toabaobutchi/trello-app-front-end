@@ -617,7 +617,3 @@ export type LogDetail = {
   entityType: 'Project' | 'Task' | 'List' | 'Subtask' | 'Assignment' | 'Invitation' | 'TaskAssignment'
   logAction: 'Create' | 'Update' | 'Delete' | 'Join' | 'Unassign' | 'Assign'
 }
-
-export type ChangeLogQuery = {
-  page: number
-}

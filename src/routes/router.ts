@@ -5,6 +5,7 @@ import { getRecycleBin } from '@services/task.services'
 import { getWorkspaceWithProjects } from '@services/workspace.services'
 import { getSlug } from '@utils/functions'
 import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
+import { parseInt } from 'lodash'
 import { LoaderFunctionArgs } from 'react-router-dom'
 
 const routeLinks = {
@@ -81,11 +82,15 @@ export const loader = {
     const urlObj = new URL(url)
     const queryParams = new URLSearchParams(urlObj.search)
     const page = parseInt(queryParams.get('p') ?? '1')
-    const uid = parseInt(queryParams.get('uid') ?? 'all')
-    const date = parseInt(queryParams.get('date') ?? 'all')
+    let uid = queryParams.get('uid')
+    const date = queryParams.get('d')
+
+    if (uid && uid === 'all') {
+      uid = null
+    }
 
     const { projectId } = params as ProjectPageParams
-    const res = await getChangeLogs(projectId)
+    const res = await getChangeLogs(projectId, date ? parseInt(date) : undefined, uid ?? undefined, page)
     return res
   }
 }

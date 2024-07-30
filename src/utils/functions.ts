@@ -252,3 +252,8 @@ export const getRestAssignments = (
   const assignments = members.filter(m => !taskAssignmentIds.includes(m.id))
   return assignments
 }
+
+export const getMiliseconds = (date: Date): number => {
+  const offset = date.getTimezoneOffset() / -60
+  return date.getTime() + offset * 60 * 60 * 1000
+}
