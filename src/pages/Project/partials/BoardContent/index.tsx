@@ -6,6 +6,7 @@ import {
   CreateListResponse,
   CreateTaskResponse,
   DragOverResult,
+  JoinTaskResponse,
   ListResponseForBoard,
   MarkedTaskResponse,
   SubtaskForBoard,
@@ -223,6 +224,9 @@ function BoardContent() {
           dispatch(projectSlice.actions.setDuplicateTasks(data))
         }
       )
+      projectHub.connection?.on(hubs.project.receive.joinTask, (_assignmentId: string, data: JoinTaskResponse) => {
+        dispatch(projectSlice.actions.joinTask(data))
+      })
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [projectHub, dispatch, project?.board?.id])

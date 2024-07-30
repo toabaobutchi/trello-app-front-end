@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import {
   AssignByTaskResponse,
   AssignmentResponse,
+  JoinTaskResponse,
   SubtaskForBoard,
   TaskDetailForBoard,
   UpdatedTaskResponse
@@ -77,6 +78,16 @@ function TaskDetailInfo() {
           }
         }
       )
+
+      projectHub.connection?.on(hubs.project.receive.joinTask, (_assignmentId: string, data: JoinTaskResponse) => {
+        // dispatch(projectSlice.actions.joinTask(data))
+        if (data.taskId === taskDetail.id) {
+          context?.setTask?.(
+            prev =>
+              ({ ...prev, taskAssignmentIds: prev?.taskAssignmentIds?.concat([data.assignmentId]) } as typeof prev)
+          )
+        }
+      })
     }
   }, [projectHub, taskDetail?.id, context])
   // lấy thông tin creator

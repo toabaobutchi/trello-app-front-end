@@ -108,6 +108,12 @@ function TaskDetailBoard() {
         setIsJoined(true)
         const data = res.data
         dispatch(projectSlice.actions.joinTask(data))
+
+        // call to hub
+        if (projectHub.isConnected) {
+          // SendJoinTask
+          projectHub.connection?.send(hubs.project.send.joinTask, data)
+        }
       }
     }
   }
