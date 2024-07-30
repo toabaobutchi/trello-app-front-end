@@ -9,12 +9,16 @@ import FloatLabelInput from '@comps/FloatLabelInput'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { duplicateTask } from '@services/task.services'
+import SelectList from '@comps/SelectList'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import { getDateString } from '@utils/functions'
 
 export type InheritOptions = {
   priority?: boolean
   dueDate?: boolean
   description?: boolean
   duplicateTaskCount?: number
+  listId?: string
 }
 
 function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailForBoard; onCloseModal?: () => void }) {
@@ -22,18 +26,44 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
     priority: true,
     description: true,
     dueDate: true,
-    duplicateTaskCount: 1
+    duplicateTaskCount: 1,
+    listId: task?.listId
   })
   const dispatch = useDispatch()
+  const { board } = useProjectSelector()
+  // const [isOverWip, setIsOverWip] = useState(() => {
+  //   // lấy list từ task
+  //   const initList = board.lists?.find(l => l.id === task?.listId)
+  //   if (initList) {
+  //     return Boolean(initList?.wipLimit && initList?.tasks?.length && initList.wipLimit >= initList?.tasks?.length)
+  //   }
+  //   return false
+  // })
+
+  const isOverWip = () => {
+    // lấy list từ task
+    const initList = board.lists?.find(l => l.id === inheritOptions?.listId)
+    if (initList) {
+      return Boolean(
+        initList?.wipLimit &&
+          initList?.tasks?.length &&
+          initList.wipLimit < initList.tasks.length + (inheritOptions.duplicateTaskCount ?? 1)
+      )
+    }
+    return false
+  }
+
   const handleCheckOptions = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInheritOptions({ ...inheritOptions, [e.target.name]: e.target.checked })
   }
   const handleChangeDuplicateCount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInheritOptions({ ...inheritOptions, duplicateTaskCount: parseInt(e.target.value) })
   }
+  const handleSelectList = ({ value }: { value: string }) => {
+    setInheritOptions({ ...inheritOptions, listId: value })
+  }
   const handleDuplicateTask = async () => {
     // Duplicate task logic goes here
-    // const res = await http.postAuth(`/tasks/${task?.id}/duplicate`, inheritOptions)
     if (task?.id) {
       const res = await duplicateTask(task.id, inheritOptions)
       if (res?.isSuccess) {
@@ -83,7 +113,7 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
             Inherit task due date{' '}
             <span>
               {task?.dueDate ? (
-                <>{new Date(task?.dueDate).toLocaleDateString()}</>
+                <>{getDateString(new Date(task?.dueDate))}</>
               ) : (
                 <span className='text-light'>[Not set]</span>
               )}
@@ -118,6 +148,24 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
           }}
           onChange={handleChangeDuplicateCount}
         />
+        <Flex $alignItem='center' $gap='0.25rem'>
+          <p>Place in list </p>
+          <SelectList
+            size='small'
+            className='duplicate-options-select-list'
+            items={board.lists?.map(l => {
+              return { value: l.id, display: l.name }
+            })}
+            selectedValue={inheritOptions.listId}
+            onChoose={handleSelectList}
+          />
+        </Flex>
+        {isOverWip() && (
+          <p className='text-danger mt-1'>
+            The duplicate count {inheritOptions.duplicateTaskCount} is violate WIP limit. Please try to decrease
+            duplicate count or select another list to place in!
+          </p>
+        )}
         <Flex $alignItem='center' $justifyContent='end' $gap='1rem'>
           <Button onClick={onCloseModal} size='large' theme='danger'>
             <i className='fa-solid fa-xmark'></i> Cancel

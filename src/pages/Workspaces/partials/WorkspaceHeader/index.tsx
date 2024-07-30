@@ -13,7 +13,6 @@ function WorkspaceHeader({ workspace }: { workspace: WorkspaceResponseWithRelate
       return account
     } else return workspace?.owner
   })
-  console.log(account)
   return (
     <>
       <Flex $alignItem='center' $gap='1rem' className='page-header workspace-header'>

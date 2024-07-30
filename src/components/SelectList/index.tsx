@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import './SelectList.scss'
 import useClickTracker from '@hooks/useClickTracker'
 import { CustomizablePropType } from '@utils/types'
@@ -75,7 +75,7 @@ function SelectList({
               return (
                 <div
                   key={item.value}
-                  className='select-list-data-context-item'
+                  className={`select-list-data-context-item ${item.value === selectedItem?.value ? 'selected-context-item' : ''}`}
                   onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                     e.stopPropagation()
                     handleSelect(item)

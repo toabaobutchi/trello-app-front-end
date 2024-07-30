@@ -324,9 +324,12 @@ export type ProjectFilterType = {
   priorities?: SelectListItem[]
   members?: SelectListItem[]
   noAssigneesFilter?: boolean
-  assignToMe?: boolean
+  assignToMe?: string
   dueDate?: number
-  overDueFilter?: boolean
+  overdue?: boolean
+  completed?: boolean
+  needHelp?: boolean
+  dueSoon?: boolean
 }
 
 // export type TaskResponseForTable = {

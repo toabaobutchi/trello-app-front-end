@@ -41,17 +41,20 @@ const items = [
 const initValue: ProjectFilterType = {
   priorities: [],
   dueDate: undefined,
-  overDueFilter: false,
   noAssigneesFilter: false,
-  assignToMe: false,
-  members: undefined
+  assignToMe: undefined,
+  members: undefined,
+  needHelp: false,
+  overdue: false,
+  completed: false,
+  dueSoon: false
 }
 
 const ProjectFilterMenu = memo(() => {
   const [filter, setFilter] = useState<ProjectFilterType>(initValue)
   const [modalOpen, setModalOpen] = useState(false)
   const dispatch = useDispatch()
-  const { members } = useProjectSelector()
+  const { members, board } = useProjectSelector()
   const handleToggleModal = () => setModalOpen(!modalOpen)
 
   const handleSelectPriority = (items: SelectListItem[]) => {
@@ -75,11 +78,9 @@ const ProjectFilterMenu = memo(() => {
     }))
   }
   const handleSelectAssignToMeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked
-
     setFilter(prev => ({
       ...prev,
-      assignToMe: e.target.checked
+      assignToMe: e.target.value
     }))
   }
   const handleChangeDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +94,16 @@ const ProjectFilterMenu = memo(() => {
       ...prev,
       members
     }))
+  }
+  const handleSelectTag = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked
+    const elementName = e.target.name
+    if (elementName) {
+      setFilter(prev => ({
+        ...prev,
+        [elementName]: checked
+      }))
+    }
   }
 
   // const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
@@ -109,9 +120,9 @@ const ProjectFilterMenu = memo(() => {
     (filter?.priorities?.length ?? 0) > 0 ||
     filter?.dueDate !== undefined ||
     filter?.noAssigneesFilter ||
-    filter?.assignToMe ||
+    Boolean(filter?.assignToMe) ||
     (filter?.members?.length ?? 0) > 0
-  
+
   return (
     <>
       <ButtonGroup
@@ -177,7 +188,8 @@ const ProjectFilterMenu = memo(() => {
               type: 'checkbox',
               id: 'filter-assign-to-me',
               name: 'filterAssignToMe',
-              checked: filter?.assignToMe
+              checked: Boolean(filter?.assignToMe),
+              value: board.assignmentId
             }}
             onChange={handleSelectAssignToMeFilter}
           />
@@ -235,37 +247,41 @@ const ProjectFilterMenu = memo(() => {
         <Flex className='w-full my-1' $alignItem='center' $flexWrap='wrap' $gap='0.5rem'>
           <Input.CheckBox
             id='filter-overdue'
-            checked={filter?.noAssigneesFilter}
+            checked={filter?.overdue}
             borderTheme={{ normal: 'light', onChecked: 'danger', applyToForeground: true }}
             label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
-            // onChange={handleSelectNoAssigneeFilter}
+            name='overdue'
+            onChange={handleSelectTag}
           >
             Overdue <i className='fa-regular fa-calendar-xmark'></i>
           </Input.CheckBox>
           <Input.CheckBox
             id='filter-duesoon'
-            checked={filter?.noAssigneesFilter}
+            checked={filter?.dueSoon}
             borderTheme={{ normal: 'light', onChecked: 'warning', applyToForeground: true }}
             label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
-            // onChange={handleSelectNoAssigneeFilter}
+            name='dueSoon'
+            onChange={handleSelectTag}
           >
             Duesoon <i className='fa-solid fa-hourglass-half'></i>
           </Input.CheckBox>
           <Input.CheckBox
             id='filter-completed'
-            checked={filter?.noAssigneesFilter}
+            checked={filter?.completed}
             borderTheme={{ normal: 'light', onChecked: 'success', applyToForeground: true }}
             label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
-            // onChange={handleSelectNoAssigneeFilter}
+            name='completed'
+            onChange={handleSelectTag}
           >
             Completed <i className='fa-solid fa-check'></i>
           </Input.CheckBox>
           <Input.CheckBox
             id='filter-needhelp'
-            checked={filter?.noAssigneesFilter}
+            checked={filter?.needHelp}
             borderTheme={{ normal: 'light', onChecked: 'danger', applyToForeground: true }}
             label={{ style: { padding: '0.25rem 0.5rem', borderRadius: '13px' } }}
-            // onChange={handleSelectNoAssigneeFilter}
+            name='needHelp'
+            onChange={handleSelectTag}
           >
             Need help <i className='fa-regular fa-circle-question'></i>
           </Input.CheckBox>

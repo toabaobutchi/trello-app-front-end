@@ -3,6 +3,7 @@ import {
   AssignmentResponse,
   FilterType,
   ListResponseForBoard,
+  ProjectFilterType,
   ProjectResponseForBoard,
   TaskResponseForBoard
 } from './types'
@@ -107,23 +108,43 @@ export const getDateTimeString = (date: Date) => {
   )} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`.replace(' ', 'T')
 }
 
-export const filterLists = (lists?: ListResponseForBoard[], filters?: FilterType) => {
+export const filterLists = (lists?: ListResponseForBoard[], filters?: ProjectFilterType) => {
   if (!lists) return []
-  if (!filters?.isFiltering) return lists
-  const { priorities, noAssigneesFilter, dueDate, overDueFilter } = filters
+  if (!filters) return lists
+
+  const { priorities, noAssigneesFilter, dueDate, members, assignToMe, overdue, dueSoon, needHelp, completed } = filters
+
   const newList = cloneDeep(lists)
   newList?.forEach(list => {
     list!.tasks = list?.tasks?.filter(task => {
       if (
         priorities &&
-        priorities.length > 0 &&
-        priorities.findIndex(priority => priority.value === (task.priority ?? '')) === -1
+        priorities.length > 0 && // có lọc theo độ ưu tiên
+        priorities.findIndex(priority => priority.value === (task.priority ?? '')) === -1 // nếu không tìm thấy thì không cần tiếp tục
       )
         return false
-      // if (members && members.findIndex(member => member.value === task.) === -1) return false
-      if (noAssigneesFilter && task.assigneeCount !== 0) return false
+
+      // lọc theo thành viên nhóm
+      const memberIds = members?.map(m => m.value)
+      if (memberIds && !task.taskAssignmentIds.some(id => memberIds.includes(id))) return false
+
+      // lọc theo các task đã giao cho tôi
+      if (assignToMe && !task.taskAssignmentIds.includes(assignToMe)) return false
+
+      // có lọc theo tuỳ chọn task không có thành viên thực hiện
+      if (noAssigneesFilter && task.taskAssignmentIds.length > 0) return false
+
+      // có lọc theo thời gian đến hạn, bỏ qua các task không có `dueDate`
       if (dueDate && task.dueDate && task.dueDate > dueDate) return false
-      if (overDueFilter && task.dueDate && new Date(task.dueDate) > new Date()) return false
+
+      if (overdue && task.dueDate && !(isOverdue(task.dueDate) === DateCompareState.Overdue)) return false
+      
+      if (dueSoon && task.dueDate && !(isOverdue(task.dueDate) === DateCompareState.DueSoon)) return false
+
+      if (completed && !task.isCompleted) return false
+
+      if (needHelp && !task.isMarkedNeedHelp) return false
+
       return true
     })
   })
