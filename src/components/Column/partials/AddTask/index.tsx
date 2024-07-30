@@ -8,6 +8,7 @@ import { CreateTaskModel, InputChange, ListResponseForBoard } from '@utils/types
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNewTask } from '@services/task.services'
+import { handleTriggerKeyPress } from '@utils/functions'
 
 function AddTask({ column }: { column?: ListResponseForBoard }) {
   const [isAddingTask, setIsAddingTask] = useState(false)
@@ -65,13 +66,16 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
       }
     }
   }
+  const handleTrigger = handleTriggerKeyPress(e => {
+    handleAddTask()
+  }, 'Enter')
   return (
     <>
       <Flex ref={addTaskInputContainerRef} $flexDirection='column' $gap='1rem'>
         <FloatLabelInput
           style={{ width: '100%' }}
           label='Task name'
-          input={{ autoFocus: true, value: addTask, id: 'add-task-input' }}
+          input={{ autoFocus: true, value: addTask, id: 'add-task-input', onKeyDown: handleTrigger.handler }}
           onChange={handleChangeTaskName}
         />
         <Flex $alignItem='center' $gap='0.5rem'>

@@ -320,11 +320,11 @@ export type ListChangeResponse = {
   updatedAt: number
 }
 
-export type FilterType = {
-  isFiltering?: boolean
+export type ProjectFilterType = {
   priorities?: SelectListItem[]
   members?: SelectListItem[]
   noAssigneesFilter?: boolean
+  assignToMe?: boolean
   dueDate?: number
   overDueFilter?: boolean
 }

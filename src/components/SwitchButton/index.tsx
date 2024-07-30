@@ -41,7 +41,11 @@ function SwitchButton({
       >
         <input {...attrs} checked={selected} onChange={handleCheck} />
         <label htmlFor={inputAttributes?.id} style={label?.style}>
-          <span className='slider'>{selected ? icon?.checked : icon?.unchecked}</span>
+          <span className='slider'>
+            {selected
+              ? icon?.checked ?? <i className='fa-solid fa-check'></i>
+              : icon?.unchecked ?? <i className='fa-solid fa-xmark'></i>}
+          </span>
         </label>
       </div>
     </>

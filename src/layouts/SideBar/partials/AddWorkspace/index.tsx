@@ -35,7 +35,7 @@ function AddWorkspace() {
               onChange={handleChangeWorkspaceName}
               onKeyDown={triggerSubmit.handler}
             />
-            <button>
+            <button onClick={handleSubmit}>
               <i className='fa-solid fa-plus'></i>
             </button>
           </div>

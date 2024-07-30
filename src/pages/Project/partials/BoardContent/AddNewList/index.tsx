@@ -10,6 +10,7 @@ import { RootState } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { createList } from '@services/list.services'
+import { handleTriggerKeyPress } from '@utils/functions'
 
 function AddNewList() {
   const [isAddingList, setIsAddingList] = useState(false)
@@ -73,6 +74,10 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
       console.log('Can not create list')
     }
   }
+
+  const handleTrigger = handleTriggerKeyPress(() => {
+    handleSubmit()
+  }, 'Enter')
   return (
     <>
       <div ref={containerRef} className='add-new-list-input-container'>
@@ -80,7 +85,7 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
           <FloatLabelInput
             onChange={handleChangeListName}
             label='List name'
-            input={{ id: 'add-new-list-input', value: listName, autoFocus: true }}
+            input={{ id: 'add-new-list-input', value: listName, autoFocus: true, onKeyDown: handleTrigger.handler }}
             style={{ width: '100%', fontSize: '1.1rem' }}
           />
           <Flex $alignItem='center' $gap='0.5rem'>
