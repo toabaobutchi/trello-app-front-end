@@ -50,13 +50,13 @@ function ChangeLogFilters() {
     const selectedDate = new Date(e.target.value)
     const miliseconds = getMiliseconds(selectedDate)
     newSearchParams.set('d', miliseconds.toString())
-    newSearchParams.set('p', '1')
+    newSearchParams.delete('p')
     setSearchParams(newSearchParams)
   }
   const handleChooseMemberFilter = ({ value }: { value: string }) => {
     const newSearchParams = new URLSearchParams(searchParams)
     newSearchParams.set('uid', value)
-    newSearchParams.set('p', '1')
+    newSearchParams.delete('p')
     setSearchParams(newSearchParams)
   }
   const handleLoadMore = () => {

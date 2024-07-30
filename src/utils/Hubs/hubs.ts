@@ -60,7 +60,8 @@ export const hubs = {
       assignMemberToTask: 'ReceiveAssignMemberToTask',
       joinSubtask: 'ReceiveJoinSubtask',
       assignSubtask: 'ReceiveAssignSubtask',
-      unassignSubtask: 'ReceiveUnassignSubtask'
+      unassignSubtask: 'ReceiveUnassignSubtask',
+      changeLog: 'ReceiveChangeLog'
     }
   },
   taskDetail: {
