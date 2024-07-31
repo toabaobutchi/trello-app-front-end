@@ -2,19 +2,53 @@ import Button from '@comps/Button'
 import './MemberTable.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import { useContext, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { AssignmentResponse } from '@utils/types'
+import { unassignTaskAssignment } from '@services/assignment.services'
+import TaskMemberItem from './TaskMemberItem'
+import { projectSlice } from '@redux/ProjectSlice'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 function MemberTable() {
-  const taskDetail = useContext(TaskDetailContext)?.task
+  const context = useContext(TaskDetailContext)
+  const taskDetail = context?.task
   const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
+  const dispatch = useDispatch()
+  const [projectHub] = useState(new ProjectHub())
+
   // su dung useEffect de thay doi
   const [taskMembers, setTaskMembers] = useState<AssignmentResponse[]>([])
   useEffect(() => {
     setTaskMembers(projectMembers.filter(m => taskDetail?.taskAssignmentIds?.includes(m.id)))
   }, [taskDetail?.taskAssignmentIds, projectMembers])
+
+  const handleUnassign = async (assignmentId: string) => {
+    if (taskDetail?.id) {
+      const res = await unassignTaskAssignment(taskDetail?.id, { assignmentId })
+      if (res?.isSuccess) {
+        // cập nhật lại context của bảng task
+        const data = res.data
+        context?.setTask?.(
+          prev =>
+            ({
+              ...prev,
+              taskAssignmentIds: prev?.taskAssignmentIds?.filter(tmId => tmId !== data.taskId)
+            } as typeof prev)
+        )
+
+        // dispatch
+        dispatch(projectSlice.actions.removeTaskAssignment(data))
+
+        // call to hub
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.unassignTaskAssignment, data)
+        }
+      }
+    }
+  }
+
   return (
     <>
       <p className='mb-1 text-primary'>Task member</p>
@@ -25,22 +59,7 @@ function MemberTable() {
         style={{ marginTop: '0.5rem', padding: '0 0.25rem' }}
       >
         {taskMembers?.map(tm => {
-          return (
-            <div key={tm.id} className='member-info'>
-              <Flex $alignItem='center' $gap='1rem'>
-                <img src={tm.avatar} alt='avatar' />
-                <div>
-                  <p className='member-info-title'>
-                    {tm?.email} ({tm.displayName})
-                  </p>
-                  <p className='member-info-role'>{tm.permission}</p>
-                </div>
-              </Flex>
-              <Button theme='danger'>
-                <i className='fa-regular fa-trash-can'></i>
-              </Button>
-            </div>
-          )
+          return <TaskMemberItem taskMember={tm} onUnassign={handleUnassign} />
         })}
       </Flex>
     </>

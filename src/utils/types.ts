@@ -635,3 +635,12 @@ export type AcceptInvitationResult = {
 } & InvitationResult
 
 export type RejectInvitationResult = InvitationResult & { isAccepted: false }
+
+export type DeleteTaskAssignmentModel = {
+  assignmentId: string
+}
+
+export type DeletedTaskAssignmentResponse = {
+  assignmentId: string
+  taskId: string
+}

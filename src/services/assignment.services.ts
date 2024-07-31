@@ -1,5 +1,12 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import { AssignByTaskModel, AssignByTaskResponse, AssignmentProfileResponse, AssignmentResponse } from '@utils/types'
+import {
+  AssignByTaskModel,
+  AssignByTaskResponse,
+  AssignmentProfileResponse,
+  AssignmentResponse,
+  DeletedTaskAssignmentResponse,
+  DeleteTaskAssignmentModel
+} from '@utils/types'
 
 const getAssignmentsInProject = async (projectId: string, exceptMe: boolean = false) => {
   const res = await http.get<AssignmentResponse[]>(
@@ -23,4 +30,18 @@ const getAssignmentsFromAnotherProject = async (projectId: string) => {
   return res
 }
 
-export { getAssignmentsInProject, getAssignmentProfile, assignMembersToTask, getAssignmentsFromAnotherProject }
+const unassignTaskAssignment = async (taskId: string, model: DeleteTaskAssignmentModel) => {
+  const res = await http.post<DeleteTaskAssignmentModel, DeletedTaskAssignmentResponse>(
+    `/assignments/unassign-from-task/${taskId}`,
+    model
+  )
+  return res
+}
+
+export {
+  getAssignmentsInProject,
+  getAssignmentProfile,
+  assignMembersToTask,
+  getAssignmentsFromAnotherProject,
+  unassignTaskAssignment
+}

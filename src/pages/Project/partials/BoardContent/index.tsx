@@ -5,6 +5,7 @@ import {
   ChangeTaskOrderResponse,
   CreateListResponse,
   CreateTaskResponse,
+  DeletedTaskAssignmentResponse,
   DragOverResult,
   JoinTaskResponse,
   ListResponseForBoard,
@@ -227,6 +228,12 @@ function BoardContent() {
       projectHub.connection?.on(hubs.project.receive.joinTask, (_assignmentId: string, data: JoinTaskResponse) => {
         dispatch(projectSlice.actions.joinTask(data))
       })
+      projectHub.connection?.on(
+        hubs.project.receive.unassignTaskAssignment,
+        (_assignmentId: string, data: DeletedTaskAssignmentResponse) => {
+          dispatch(projectSlice.actions.removeTaskAssignment(data))
+        }
+      )
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [projectHub, dispatch, project?.board?.id])

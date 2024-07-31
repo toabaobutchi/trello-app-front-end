@@ -16,7 +16,8 @@ import {
   ProjectResponseForBoard,
   TaskResponseForBoard,
   UpdatedListResponse,
-  UpdatedTaskResponse
+  UpdatedTaskResponse,
+  DeletedTaskAssignmentResponse
 } from '@utils/types'
 
 export const projectSlice = createSlice({
@@ -33,6 +34,19 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    removeTaskAssignment: (state, action) => {
+      const data = action.payload as DeletedTaskAssignmentResponse
+      if (data) {
+        const list = state.activeProject.board.lists?.find(l => l.id === data.assignmentId)
+        if (list) {
+          const index = list.tasks?.findIndex(t => t.id === data.taskId) ?? -1
+          if (index > -1 && list.tasks) {
+            list.tasks.splice(index, 1)
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     addAssignmentToTask: (state, action) => {
       const data = action.payload as AssignByTaskResponse
       if (data) {
