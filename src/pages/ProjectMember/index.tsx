@@ -20,20 +20,20 @@ function ProjectMember() {
               <ProjectMemberItem key={member.id} member={member} />
             ))}
           </Flex>
-          {outlet || (
-            <p className='flex-1 row gap-1 bold'>
-              <span className='text-warning'>
-                <i className='fa-solid fa-lightbulb'></i> Tip:
-              </span>{' '}
-              Click on folder icon{' '}
-              <Button variant='text' theme='primary' size='small'>
-                <i className='fa-solid fa-folder'></i>
-              </Button>{' '}
-              to see more about a member
-            </p>
-          )}
         </Flex>
       </Flex>
+      {outlet || (
+        <p className='flex-1 row gap-1 bold'>
+          <span className='text-warning'>
+            <i className='fa-solid fa-lightbulb'></i> Tip:
+          </span>{' '}
+          Click on folder icon{' '}
+          <Button variant='text' theme='primary' size='small'>
+            <i className='fa-solid fa-folder'></i>
+          </Button>{' '}
+          to see more about a member
+        </p>
+      )}
     </>
   )
 }
