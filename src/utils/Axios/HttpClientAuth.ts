@@ -109,6 +109,7 @@ class HttpClientAuth {
   setLoginData(res: AuthResponse) {
     localStorage.setItem('access_token', res.accessToken)
     HttpClientAuth.account = res.user
+    localStorage.setItem('account', btoa(JSON.stringify(res.user)))
   }
 
   isSuccessResponse(response: AxiosResponse) {

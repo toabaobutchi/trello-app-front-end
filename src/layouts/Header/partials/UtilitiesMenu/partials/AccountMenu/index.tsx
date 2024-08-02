@@ -1,53 +1,43 @@
-import { useSelector } from 'react-redux'
-import FixedMenu from '@comps/FixedMenu'
-import MenuGroup from '@comps/MenuGroup'
-import MenuItem from '@comps/MenuItem'
+import { useEffect, useRef, useState } from 'react'
 import './AccountMenu.scss'
-import config from '@confs/app.config'
-import { RootState } from '@redux/store'
+import { AccountType } from '@utils/types'
+import ThemeToggleButton from '../ThemeToggleButton'
+import useClickTracker from '@hooks/useClickTracker'
 
 function AccountMenu() {
-  const account = useSelector((state: RootState) => state.login)
+  const token = localStorage.getItem('account')
+  const account = JSON.parse(atob(token ?? '')) as AccountType
+  const [openMenu, setOpenMenu] = useState(false)
+  const handleToggle = () => setOpenMenu(!openMenu)
+  const container = useRef<HTMLDivElement>(null)
+  const { outClick } = useClickTracker(container.current)
+  useEffect(() => {
+    if (outClick.isOutClick) {
+      setOpenMenu(false)
+    }
+  }, [outClick])
   return (
     <>
-      <FixedMenu
-        side='right'
-        title={{
-          content: <img style={{ maxWidth: '100%', objectFit: 'cover', height: 'auto', borderRadius: '50%'  }} src={account.accountInfo?.avatar} alt="avatar image" />,
-          className: 'utils-menu-user',
-          style: { padding: 0  }
-        }}
-        style={{ top: config.header.height, right: '0.3%' }}
-        width='330px'
-      >
-        <MenuGroup title={{ content: 'Account', style: { textTransform: 'uppercase' } }} divisor expandGroup={null}>
-          <MenuItem>
-            <div className='account-info'>
-              <span className='account-info-avatar'><img src={account.accountInfo?.avatar} alt="avatar image" /></span>
-              <div className='account-info-item'>
-                <p className='account-info-display-name'>{account.accountInfo?.displayName}</p>
-                <p className='account-info-email'>{account.accountInfo?.email}</p>
-              </div>
-            </div>
-          </MenuItem>
-          <MenuItem>Switch accounts</MenuItem>
-          <MenuItem>Manage account</MenuItem>
-        </MenuGroup>
-        <MenuGroup title={{ content: 'Trello', style: { textTransform: 'uppercase' } }} divisor expandGroup={null}>
-          <MenuItem>Profile and visibility</MenuItem>
-          <MenuItem>Activity</MenuItem>
-          <MenuItem>Card</MenuItem>
-          <MenuItem>Setting</MenuItem>
-          <MenuItem>Theme</MenuItem>
-        </MenuGroup>
-        <MenuGroup divisor expandGroup={null}>
-          <MenuItem>Help</MenuItem>
-          <MenuItem>Shortcut</MenuItem>
-        </MenuGroup>
-        <MenuGroup expandGroup={null}>
-          <MenuItem>Log out</MenuItem>
-        </MenuGroup>
-      </FixedMenu>
+      <div className='posr' ref={container}>
+        <div className={`account-info ${openMenu ? 'open-account-menu' : ''}`} onClick={handleToggle}>
+          <span className='account-info-avatar'>
+            <img src={account?.avatar} alt='avatar image' />
+          </span>
+          <div className='account-info-item'>
+            <p className='account-info-display-name'>{account?.displayName}</p>
+            <i className='fa-solid fa-angle-down'></i>
+          </div>
+        </div>
+        <div className={`account-menu ${openMenu ? 'open' : ''} menu-content-box-shadow`}>
+          <div className='account-menu-item'>
+            <p className='account-menu-item-header-text'>Theme</p>
+            <ThemeToggleButton />
+          </div>
+          <div className='account-menu-item'>
+            <i className='fa-solid fa-right-from-bracket'></i>&nbsp; Logout
+          </div>
+        </div>
+      </div>
     </>
   )
 }

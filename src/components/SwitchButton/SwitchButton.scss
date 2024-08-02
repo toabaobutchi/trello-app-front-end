@@ -1,6 +1,7 @@
 .switch-btn {
   --checked-theme: var(--success-color);
   --unchecked-theme: var(--light-color);
+  --slider-radius: 10px;
   // --switch-foreground: var(--secondary-color);
 
   display: flex;
@@ -126,6 +127,7 @@
   }
   &.medium-switch-btn {
     label {
+      --slider-radius: 14px;
       height: var(--medium-switch-height);
 
       .slider {
@@ -148,7 +150,7 @@
   label {
     cursor: pointer;
     position: relative;
-    border-radius: 10px;
+    border-radius: var(--slider-radius);
     border: var(--thin-border-width) solid var(--light-color);
     background-color: var(--unchecked-theme);
     display: block;

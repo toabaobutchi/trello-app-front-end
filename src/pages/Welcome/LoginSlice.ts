@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AccountType, AuthResponse, LoginInfo } from '@utils/types'
+import HttpClientAuth from '@utils/Axios/HttpClientAuth'
+import { AccountType, AuthResponse } from '@utils/types'
 
 export const loginSlice = createSlice({
   name: 'login',
   initialState: {
-    accountInfo: undefined as unknown as AccountType
-  } as LoginInfo,
+    accountInfo: HttpClientAuth.account
+  },
   reducers: {
     setAccessToken: (state, action) => {
       const data = action.payload as AuthResponse

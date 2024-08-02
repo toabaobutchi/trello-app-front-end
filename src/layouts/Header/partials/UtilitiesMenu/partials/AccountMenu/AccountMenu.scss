@@ -1,13 +1,31 @@
 .account-info {
+  --account-box-radius: 30px;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   color: var(--text-primary-color);
   font-weight: 450;
+  border-radius: var(--account-box-radius);
+  border: var(--thin-border-width) solid var(--light-color);
+  padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+  cursor: pointer;
+  position: relative;
+
+  &:hover,
+  &.open-account-menu {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 
   &-avatar {
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
 
     img {
       max-width: 100%;
@@ -22,4 +40,43 @@
     color: var(--secondary-color);
     font-weight: 400;
   }
+}
+
+.account-menu {
+  position: fixed;
+  top: var(--header-height);
+  right: 1rem;
+  padding: 1rem;
+  width: max-content;
+  background-color: #fff;
+  transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(100%);
+  scale: 0;
+
+  border-radius: var(--primary-radius);
+  border: var(--thin-border-width) solid var(--light-color);
+  min-width: 200px;
+  max-width: 100vw;
+  z-index: var(--menu-z-index);
+
+  &-item {
+    padding: 0.5rem;
+    cursor: pointer;
+
+    &-header-text {
+      color: var(--secondary-color);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.account-menu.open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+  scale: 1;
 }

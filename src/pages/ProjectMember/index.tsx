@@ -20,8 +20,6 @@ function ProjectMember() {
               <ProjectMemberItem key={member.id} member={member} />
             ))}
           </Flex>
-        </Flex>
-      </Flex>
       {outlet || (
         <p className='flex-1 row gap-1 bold'>
           <span className='text-warning'>
@@ -34,6 +32,8 @@ function ProjectMember() {
           to see more about a member
         </p>
       )}
+        </Flex>
+      </Flex>
     </>
   )
 }

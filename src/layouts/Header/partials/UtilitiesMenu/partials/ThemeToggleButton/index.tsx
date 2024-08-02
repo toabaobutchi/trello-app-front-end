@@ -2,7 +2,7 @@ import Flex from '@comps/StyledComponents'
 import SwitchButton from '@comps/SwitchButton'
 import { useState } from 'react'
 
-function InformationMenu() {
+function ThemeToggleButton() {
   const [theme, setTheme] = useState(() => {
     const currentTheme = localStorage.getItem('theme') || 'light'
     return currentTheme === 'light'
@@ -29,22 +29,12 @@ function InformationMenu() {
             unchecked: <i className='fa-solid fa-moon text-warning'></i>
           }}
         />
-        {/* <label htmlFor='theme-toggle-button'>
-          {theme ? (
-            <>
-              <i className='fa-solid fa-sun'></i>
-            </>
-          ) : (
-            <>
-              <span className='text-warning'>
-                <i className='fa-solid fa-moon'></i>
-              </span>
-            </>
-          )}
-        </label> */}
+        <label htmlFor='theme-toggle-button' className='cpointer'>
+          &nbsp; {theme ? 'Light' : 'Dark'}
+        </label>
       </Flex>
     </>
   )
 }
 
-export default InformationMenu
+export default ThemeToggleButton
