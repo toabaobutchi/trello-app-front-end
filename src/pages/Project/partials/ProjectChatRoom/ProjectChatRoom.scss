@@ -1,0 +1,53 @@
+.chat-room-toggle-buton {
+  position: fixed;
+  bottom: 5%;
+  right: 2%;
+  width: 50px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  // padding: 1rem 1.3rem;
+  font-size: 1.5rem;
+  background-color: var(--primary-color);
+  color: var(--theme-bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: rgba(56, 56, 56, 0.3) 0px 0px 1rem 3px;
+    scale: 1.1;
+  }
+}
+
+.chat-room-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  width: 0;
+  max-width: 100%;
+  background-color: var(--theme-bg-color);
+  box-shadow: var(--list-box-shadow);
+  transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &.expanded {
+    padding: 1rem;
+    width: 600px;
+  }
+
+  .chat-room-header {
+    font-size: 1.6rem;
+    font-weight: bold;
+    padding: 0.5rem 0;
+    border-bottom: var(--thin-border-width) solid var(--light-color);
+
+    &-close-btn {
+      cursor: pointer;
+
+      &:hover {
+        color: var(--danger-color);
+      }
+    }
+  }
+}

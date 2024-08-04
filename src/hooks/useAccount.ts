@@ -1,7 +1,7 @@
-import { RootState } from '@redux/store'
-import { useSelector } from 'react-redux'
+import { AccountType } from '@utils/types'
 
 export default function useAccount() {
-  const account = useSelector((state: RootState) => state.login)
-  return account;
+  const token = localStorage.getItem('account')
+  const account = JSON.parse(atob(token ?? '')) as AccountType
+  return account
 }

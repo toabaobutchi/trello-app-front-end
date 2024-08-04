@@ -12,6 +12,7 @@ import { useProjectSelector } from '@hooks/useProjectSelector'
 import ProjectSideBar from './partials/ProjectSideBar'
 import { getAssignmentsInProject } from '@services/assignment.services'
 import { HttpResponse } from '@utils/Axios/HttpClientAuth'
+import ProjectChatRoom from './partials/ProjectChatRoom'
 
 function Project() {
   const params = useParams() as ProjectPageParams
@@ -81,6 +82,7 @@ function Project() {
               <Outlet />
             </Flex>
           </Suspense>
+          <ProjectChatRoom />
         </Flex>
       )}
     </>

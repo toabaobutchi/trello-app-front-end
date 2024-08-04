@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import './AccountMenu.scss'
-import { AccountType } from '@utils/types'
 import ThemeToggleButton from '../ThemeToggleButton'
 import useClickTracker from '@hooks/useClickTracker'
+import useAccount from '@hooks/useAccount'
 
 function AccountMenu() {
-  const token = localStorage.getItem('account')
-  const account = JSON.parse(atob(token ?? '')) as AccountType
+  const account = useAccount()
   const [openMenu, setOpenMenu] = useState(false)
   const handleToggle = () => setOpenMenu(!openMenu)
   const container = useRef<HTMLDivElement>(null)

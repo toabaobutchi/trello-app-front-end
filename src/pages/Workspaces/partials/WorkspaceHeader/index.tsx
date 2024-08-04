@@ -2,12 +2,11 @@ import Flex from '@comps/StyledComponents/Flex'
 import './WorkspaceHeader.scss'
 import WorkspaceNameEditor from '../WorkspaceNameEditor'
 import { WorkspaceResponseWithRelatedProjects } from '@utils/types'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
 import { useState } from 'react'
+import useAccount from '@hooks/useAccount'
 
 function WorkspaceHeader({ workspace }: { workspace: WorkspaceResponseWithRelatedProjects }) {
-  const account = useSelector((state: RootState) => state.login.accountInfo)
+  const account = useAccount()
   const [creator] = useState(() => {
     if (workspace?.context?.toLowerCase() === 'owner' && !workspace?.owner) {
       return account

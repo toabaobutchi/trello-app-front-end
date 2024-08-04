@@ -25,7 +25,7 @@ function AddNewList() {
           variant='text'
           theme='default'
           size='large'
-          style={{ fontSize: '1.1rem' }}
+          style={{ fontSize: '1.1rem', minWidth: 'max-content' }}
         >
           <i className='fa-solid fa-plus'></i> Add new list ...
         </Button>

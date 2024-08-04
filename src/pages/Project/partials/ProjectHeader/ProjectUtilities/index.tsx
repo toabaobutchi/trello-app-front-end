@@ -5,6 +5,7 @@ import useMenu from '@hooks/useMenu'
 import { linkCreator } from '@routes/router'
 import { ProjectPageParams } from '@utils/types'
 import { useNavigate, useParams } from 'react-router-dom'
+import ProjectChatRoom from '../../ProjectChatRoom'
 
 function ProjectUtilities() {
   const { anchorRef, closeMenu, toggleMenu, open } = useMenu<HTMLButtonElement>()
@@ -26,7 +27,7 @@ function ProjectUtilities() {
   return (
     <>
       <Button onClick={toggleMenu} ref={anchorRef} variant='filled'>
-        <i className='fa-solid fa-screwdriver-wrench'></i> <span className='project-util-button-text'>Utilities</span>
+        <span className='project-util-button-text'>Utilities</span> <i className='fa-solid fa-caret-down'></i>
       </Button>
       <Menu open={open} anchorElement={anchorRef.current} onClose={closeMenu} style={{ width: '300px' }}>
         <MenuItem className='utils-menu-item' onClick={handleNavigateMemberBoard}>
