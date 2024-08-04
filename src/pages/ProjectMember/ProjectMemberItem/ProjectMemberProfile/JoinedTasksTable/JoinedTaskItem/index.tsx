@@ -9,7 +9,7 @@ function JoinedTaskItem({ task }: { task: JoinedTaskResponse }) {
       <div className='joined-task-item'>
         <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' $gap='0.25rem' className='mb-1'>
           <NavLink
-            to={`../task/${task.id}`}
+            to={`task/${task.id}`}
             className={`joined-task-item-name row jcsb w-full ${
               'joined-task-item-name__' + task.priority?.toLowerCase()
             }`}

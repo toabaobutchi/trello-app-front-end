@@ -94,12 +94,15 @@ const router = createBrowserRouter([
             children: [
               {
                 path: routeLinks.project.members.detail,
-                element: <ProjectMemberProfile />
+                element: <ProjectMemberProfile />,
+                children: [
+                  {
+                    path: routeLinks.project.task,
+                    element: <TaskDetailBoard />
+                  }
+                ]
               },
-              {
-                path: routeLinks.project.task,
-                element: <TaskDetailBoard />
-              },
+
               {
                 path: routeLinks.project.share,
                 element: <ProjectShare />

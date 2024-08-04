@@ -57,6 +57,8 @@ function ProjectMemberProfile() {
           <Tab.Content show={activeTab === tabs[1].value}>Activities</Tab.Content>
         </Tab>
       </div>
+      {/* dùng để hiển thị task detail hoặc something  */}
+      <Outlet />
     </>
   )
 }

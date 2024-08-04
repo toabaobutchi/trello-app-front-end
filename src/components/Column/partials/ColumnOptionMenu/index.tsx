@@ -37,6 +37,10 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
   const handleCloseMenu = () => {
     dispatch(actions.closeMenu())
   }
+  const handleConfirmDelete = () => {
+    handleCloseMenu()
+    handleToggleDeleteModal()
+  }
   const BackButton = (
     <>
       <Button style={{ fontSize: '1rem' }} onClick={handleBackToMainMenu} variant='text' size='small' theme='secondary'>
@@ -102,7 +106,7 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
         anchorElement={state?.anchorEl as HTMLElement}
         onClose={handleCloseMenu}
       >
-        <MenuItem className='text-danger hover-bg-danger' onClick={handleToggleDeleteModal}>
+        <MenuItem className='text-danger hover-bg-danger' onClick={handleConfirmDelete}>
           <i className='fa-regular fa-trash-can'></i>&nbsp; Delete list
         </MenuItem>
         <MenuItem className='text-warning hover-bg-warning' onClick={handleOpenWIPMenu}>
