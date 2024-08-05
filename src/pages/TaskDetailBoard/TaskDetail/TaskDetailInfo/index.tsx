@@ -21,6 +21,7 @@ import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
 import { updateTask } from '@services/task.services'
+import UpdateStartDateEditor from './UpdateStartDateEditor'
 
 type RemoteUpdatingType = {
   assignmentId: string
@@ -142,9 +143,9 @@ function TaskDetailInfo() {
       }
     }
   }
-  const handleUpdateDueDate = async (dueDate: Date) => {
+  const handleUpdateDueDate = async (dueDate: number) => {
     if (taskDetail?.id) {
-      const res = await updateTask(taskDetail.id, { dueDate: dueDate.getTime() / 1000 })
+      const res = await updateTask(taskDetail.id, { dueDate })
       if (res?.isSuccess) {
         if (res?.status === HttpStatusCode.ResetContent) {
           console.log('Task due date is larger than project due date')
@@ -205,6 +206,12 @@ function TaskDetailInfo() {
             onUpdate={handleUpdatePriority}
             priority={taskDetail?.priority}
           />
+        </Flex>
+        <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
+          <p className='bold'>
+            <i className='fa-regular fa-clock'></i> Start at:
+          </p>
+          <UpdateStartDateEditor startDate={taskDetail?.dueDate} onUpdate={handleUpdateDueDate} />
         </Flex>
         <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
           <p className='bold'>
