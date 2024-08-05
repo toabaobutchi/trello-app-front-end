@@ -1,11 +1,10 @@
+import { ProjectCommentResponse } from '@utils/types'
 import './ProjectChatItem.scss'
 
-function ProjectChatItem() {
+function ProjectChatItem({ comment }: { comment: ProjectCommentResponse }) {
   return (
     <>
-      <div className='project-chat-item'>
-        
-      </div>
+      <div className='project-chat-item'>{comment.content}</div>
     </>
   )
 }

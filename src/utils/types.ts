@@ -644,3 +644,11 @@ export type DeletedTaskAssignmentResponse = {
   assignmentId: string
   taskId: string
 }
+
+export type ProjectCommentResponse = {
+  id: string
+  content: string
+  commentAt: number
+  projectId: string
+  assignmentId?: string
+}
