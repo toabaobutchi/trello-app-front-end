@@ -42,7 +42,7 @@ function Project() {
         projectHub.disconnect()
       }
     }
-  }, [project?.id])
+  }, [params.projectId, project, project.id, projectHub, projectHub.isConnected])
 
   useEffect(() => {
     if (projectHub.isConnected) {

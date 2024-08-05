@@ -1,0 +1,96 @@
+// .project-chat-item-user {
+//   display: flex;
+//   align-items: center;
+//   gap: 0.5rem;
+
+//   &-name {
+//     font-weight: bolder;
+//     color: var(--text-primary-color);
+//   }
+
+//   &-comment-time {
+//     color: var(--secondary-color);
+//     font-size: 0.9rem;
+//   }
+// }
+
+.project-chat-item {
+  margin-bottom: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: start;
+
+  &.self-comment {
+    // justify-content: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  img {
+    width: 30px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+    max-width: 100%;
+    display: inline-block;
+  }
+
+  &-main {
+    padding: 0.25rem 1rem;
+    // flex: 1;
+    width: max-content;
+    // width: max-content;
+    background-color: var(--bright-color);
+    border-radius: 1.2rem;
+    border: var(--thin-border-width) solid var(--light-color);
+  }
+
+  &-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &-comment-time {
+    color: var(--secondary-color);
+    font-size: 0.8rem;
+  }
+
+  &-user {
+    &-name {
+      font-weight: bold;
+      text-decoration: none;
+      color: inherit;
+
+      &:hover {
+        color: var(--primary-color);
+        text-decoration: underline;
+      }
+    }
+
+    &-permission {
+      --permission-fg-color: var(--secondary-color);
+      --permission-bg-color: var(--light-color);
+      font-size: 0.9rem;
+      padding: 0.25rem 0.4rem;
+      border-radius: 1rem;
+      background-color: var(--permission-bg-color);
+      color: var(--permission-fg-color);
+      font-weight: bolder;
+
+      &__admin {
+        --permission-fg-color: var(--primary-color);
+        --permission-bg-color: var(--primary-bg-color);
+      }
+      &__owner {
+        --permission-fg-color: var(--success-color);
+        --permission-bg-color: var(--success-bg-color);
+      }
+      &__member {
+        --permission-fg-color: var(--purple-color);
+        --permission-bg-color: var(--purple-bg-color);
+      }
+    }
+  }
+}

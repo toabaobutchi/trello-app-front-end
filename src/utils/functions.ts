@@ -138,7 +138,7 @@ export const filterLists = (lists?: ListResponseForBoard[], filters?: ProjectFil
       if (dueDate && task.dueDate && task.dueDate > dueDate) return false
 
       if (overdue && task.dueDate && !(isOverdue(task.dueDate) === DateCompareState.Overdue)) return false
-      
+
       if (dueSoon && task.dueDate && !(isOverdue(task.dueDate) === DateCompareState.DueSoon)) return false
 
       if (completed && !task.isCompleted) return false
@@ -277,4 +277,12 @@ export const getRestAssignments = (
 export const getMiliseconds = (date: Date): number => {
   const offset = date.getTimezoneOffset() / -60
   return date.getTime() + offset * 60 * 60 * 1000
+}
+
+export const autoDetectLinks = (str: string) => {
+  // Regex để tìm các link
+  const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi
+
+  // Thay thế mỗi link bằng thẻ <a>
+  return str.replace(urlPattern, '<a target="_blank" href="$1">$1</a>')
 }

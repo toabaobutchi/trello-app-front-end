@@ -18,6 +18,19 @@
     box-shadow: rgba(56, 56, 56, 0.3) 0px 0px 1rem 3px;
     scale: 1.1;
   }
+
+  .unread-comments {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    color: var(--theme-bg-color);
+    font-size: 0.8rem;
+    border-radius: 50%;
+    width: 20px;
+    background-color: var(--danger-color);
+    aspect-ratio: 1/1;
+  }
 }
 
 .chat-room-container {
@@ -29,7 +42,7 @@
   max-width: 100%;
   background-color: var(--theme-bg-color);
   box-shadow: var(--list-box-shadow);
-  transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
   // justify-content: space-between;
@@ -60,6 +73,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 1rem 0rem;
 
     &-main {
       flex: 1;

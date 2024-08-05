@@ -11,8 +11,8 @@ const sendComment = async (model: CreateCommentModel) => {
   return res
 }
 
-const getCommentsInProject = async () => {
-  const res = await http.get<ProjectCommentResponse[]>(`/comments/in-project`)
+const getCommentsInProject = async (projectId: string) => {
+  const res = await http.get<ProjectCommentResponse[]>(`/comments/in-project/${projectId}`)
   return res
 }
 
