@@ -1,11 +1,13 @@
+import Button from '@comps/Button'
 import DatePicker from '@comps/DatePicker'
 import Flex from '@comps/StyledComponents'
-import { useState } from 'react'
+import { getDateString } from '@utils/functions'
+import { ResetTaskModel } from '@utils/types'
 
 type UpdateStartDateEditorProps = {
   startDate?: number
   onUpdate?: (date: number) => void
-  onClear?: () => void
+  onClear?: (model: ResetTaskModel) => void
 }
 
 function UpdateStartDateEditor({ startDate, onUpdate = () => {}, onClear = () => {} }: UpdateStartDateEditorProps) {
@@ -14,14 +16,24 @@ function UpdateStartDateEditor({ startDate, onUpdate = () => {}, onClear = () =>
       onUpdate(date)
     }
   }
+  const handleClear = () => {
+    if (onClear) {
+      onClear({ resetStartDate: true })
+    }
+  }
   return (
     <>
       <Flex $alignItem='center' $gap='0.5rem'>
-        <p>
+        <p className='row gap-2'>
           {startDate ? (
-            <>{new Date(startDate).toLocaleDateString()}</>
+            <>
+              {getDateString(new Date(startDate))}{' '}
+              <Button onClick={handleClear} size='small' variant='outlined' theme='danger'>
+                Reset <i className='fa-solid fa-xmark'></i>
+              </Button>
+            </>
           ) : (
-            <span className='text-light'>[Not set (Default is creation time)]</span>
+            <span className='text-secondary'>[Not set (Default is creation time)]</span>
           )}
         </p>
         <DatePicker date={startDate} onDateChange={handleDateChange} id='change-start-date-input' />

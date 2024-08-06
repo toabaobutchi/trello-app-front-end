@@ -89,11 +89,11 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             : ''
         } ${task?.priority ? task?.priority?.toLowerCase() : 'default'}-task-card`}
       >
-        {isInToday(task.createdAt) && (
+        {/* {isInToday(task.createdAt) && (
           <div className='task-card__new'>
             <i className='fa-solid fa-wand-magic-sparkles'></i> New today
           </div>
-        )}
+        )} */}
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-header'>
           <PriorityTag priority={task.priority} />
           <DropdownMenu
@@ -151,6 +151,16 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
               <p className='tag text-purple bg-purple'>
                 <i className='fa-regular fa-circle-question'></i> Need help
               </p>
+            )}
+            {isInToday(task.createdAt) && (
+              <div className='tag text-danger bg-danger'>
+                <i className='fa-solid fa-wand-magic-sparkles'></i> New today
+              </div>
+            )}
+            {(task?.startedAt ?? task?.createdAt) > Date.now() && (
+              <div className='tag text-info bg-info'>
+                <i className="fa-solid fa-business-time"></i> Coming soon
+              </div>
             )}
           </div>
         </div>

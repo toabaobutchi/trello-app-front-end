@@ -1,8 +1,10 @@
 import Button from '@comps/Button'
 import SelectList from '@comps/SelectList'
+import Flex from '@comps/StyledComponents'
 import PriorityTag from '@comps/TaskCard/PriorityTag'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
+import { ResetTaskModel } from '@utils/types'
 import { useState } from 'react'
 
 type UpdatePriorityEditorProps = {
@@ -10,6 +12,7 @@ type UpdatePriorityEditorProps = {
   taskId?: string
   hubConnection?: HubConnection
   onUpdate?: (priority: string) => void
+  onClear?: (model: ResetTaskModel) => void
 }
 const prioritiesSelectList = [
   {
@@ -43,9 +46,16 @@ const prioritiesSelectList = [
         <PriorityTag priority='Low' />
       </>
     )
-  }
+  },
+  { value: 'unset', display: <p className='text-secondary'>Reset</p> }
 ]
-function UpdatePriorityEditor({ priority, taskId, onUpdate = () => {}, hubConnection }: UpdatePriorityEditorProps) {
+function UpdatePriorityEditor({
+  priority,
+  taskId,
+  onUpdate = () => {},
+  hubConnection,
+  onClear = () => {}
+}: UpdatePriorityEditorProps) {
   const [priorityValue, setPriorityValue] = useState<string>()
   const handleToggleEditor = () => {
     setPriorityValue(priorityValue !== undefined ? undefined : priority)
@@ -60,19 +70,26 @@ function UpdatePriorityEditor({ priority, taskId, onUpdate = () => {}, hubConnec
   }
   const handleChoose = ({ value }: { value: string }) => {
     setPriorityValue(undefined)
-    onUpdate(value)
+    if (value !== 'unset') onUpdate(value)
+    else onClear({ resetPriority: true })
   }
   return (
     <>
       {priorityValue === undefined ? (
         <PriorityTag onClick={handleToggleEditor} priority={priority} />
       ) : (
-        <>
-          <SelectList size='small' onChoose={handleChoose} items={prioritiesSelectList} selectedValue={priorityValue} />
+        <Flex $alignItem='center' $gap='0.25rem'>
+          <SelectList
+            className='priorities-select-list'
+            size='small'
+            onChoose={handleChoose}
+            items={prioritiesSelectList}
+            selectedValue={priorityValue}
+          />
           <Button onClick={handleToggleEditor} variant='outlined' theme='danger'>
             <i className='fa-solid fa-xmark'></i> Cancel
           </Button>
-        </>
+        </Flex>
       )}
     </>
   )

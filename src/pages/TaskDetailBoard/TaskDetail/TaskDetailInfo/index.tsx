@@ -6,6 +6,7 @@ import {
   AssignmentResponse,
   DeletedTaskAssignmentResponse,
   JoinTaskResponse,
+  ResetTaskModel,
   SubtaskForBoard,
   TaskDetailForBoard,
   UpdatedTaskResponse
@@ -20,7 +21,7 @@ import UpdateDescriptionEditor from './UpdateDescriptionEditor'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
-import { updateTask } from '@services/task.services'
+import { resetTask, updateTask } from '@services/task.services'
 import UpdateStartDateEditor from './UpdateStartDateEditor'
 
 type RemoteUpdatingType = {
@@ -157,12 +158,41 @@ function TaskDetailInfo() {
       }
     }
   }
+  const handleUpdateStartDate = async (startDate: number) => {
+    if (taskDetail?.id) {
+      const res = await updateTask(taskDetail.id, { startedAt: startDate })
+      if (res?.isSuccess) {
+        if (res?.status === HttpStatusCode.ResetContent) {
+          console.log('Task due date is larger than project due date')
+        } else {
+          const data = res.data
+          updateTaskContext('startedAt', 'startedAt', data)
+          handleSendMessageToDragHub(data)
+        }
+      }
+    }
+  }
   const handleUpdateDescription = async (description: string) => {
     if (taskDetail?.id) {
       const res = await updateTask(taskDetail.id, { description })
       if (res?.isSuccess) {
         const data = res.data
         updateTaskContext('description', 'description', data)
+        handleSendMessageToDragHub(data)
+      }
+    }
+  }
+  const handleReset = async (model: ResetTaskModel) => {
+    if (taskDetail?.id) {
+      const res = await resetTask(taskDetail.id, model)
+      if (res?.isSuccess) {
+        const data = res.data
+        let key
+        if (model.resetPriority) key = 'priority'
+        else if (model.resetDueDate) key = 'dueDate'
+        else if (model.resetStartDate) key = 'startedAt'
+        else key = 'description'
+        updateTaskContext(key as keyof TaskDetailForBoard, key as keyof UpdatedTaskResponse, data)
         handleSendMessageToDragHub(data)
       }
     }
@@ -179,8 +209,8 @@ function TaskDetailInfo() {
           task={taskDetail}
           onUpdateTaskName={handleUpdateName}
         />
-        <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
-          <p className='bold'>
+        <Flex $alignItem='center' className='task-details-basic-info-item'>
+          <p className='bold task-details-basic-info-item-label'>
             <i className='fa-solid fa-user-pen'></i> Created by:
           </p>
           <Flex $alignItem='center' $gap='0.25rem' className='task-details-basic-info-item-creator'>
@@ -190,14 +220,14 @@ function TaskDetailInfo() {
             </span>
           </Flex>
         </Flex>
-        <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
-          <p className='bold'>
+        <Flex $alignItem='center' className='task-details-basic-info-item'>
+          <p className='bold task-details-basic-info-item-label'>
             <i className='fa-solid fa-table-columns'></i> Status (List):
           </p>
           <p>{taskDetail?.listName}</p>
         </Flex>
-        <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
-          <p className='bold'>
+        <Flex $alignItem='center' className='task-details-basic-info-item'>
+          <p className='bold task-details-basic-info-item-label'>
             <i className='fa-solid fa-tag'></i> Priority:
           </p>
           <UpdatePriorityEditor
@@ -205,22 +235,27 @@ function TaskDetailInfo() {
             taskId={taskDetail?.id}
             onUpdate={handleUpdatePriority}
             priority={taskDetail?.priority}
+            onClear={handleReset}
           />
         </Flex>
-        <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
-          <p className='bold'>
+        <Flex $alignItem='center' className='task-details-basic-info-item'>
+          <p className='bold task-details-basic-info-item-label'>
             <i className='fa-regular fa-clock'></i> Start at:
           </p>
-          <UpdateStartDateEditor startDate={taskDetail?.dueDate} onUpdate={handleUpdateDueDate} />
+          <UpdateStartDateEditor
+            startDate={taskDetail?.startedAt}
+            onUpdate={handleUpdateStartDate}
+            onClear={handleReset}
+          />
         </Flex>
-        <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
-          <p className='bold'>
+        <Flex $alignItem='center' className='task-details-basic-info-item'>
+          <p className='bold task-details-basic-info-item-label'>
             <i className='fa-regular fa-clock'></i> Due date:
           </p>
           <UpdateDueDateEditor dueDate={taskDetail?.dueDate} onUpdate={handleUpdateDueDate} />
         </Flex>
-        <Flex $alignItem='center' $gap='1.5rem' className='task-details-basic-info-item'>
-          <p className='bold'>
+        <Flex $alignItem='center' className='task-details-basic-info-item'>
+          <p className='bold task-details-basic-info-item-label'>
             <i className='fa-solid fa-scroll'></i> Description
           </p>
           <UpdateDescriptionEditor

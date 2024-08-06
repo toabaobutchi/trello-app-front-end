@@ -10,6 +10,7 @@ import {
   JoinTaskResponse,
   MarkedTaskResponse,
   MarkTaskModel,
+  ResetTaskModel,
   TaskDetailForBoard,
   TaskResponseForBoard,
   UpdatedTaskResponse,
@@ -60,6 +61,11 @@ const deleteTask = async (taskId: string, moveToTrash: boolean = false) => {
   return res
 }
 
+const resetTask = async (taskId: string, model: ResetTaskModel) => {
+  const res = await http.put<ResetTaskModel, UpdatedTaskResponse>(`/tasks/${taskId}/reset`, model)
+  return res
+}
+
 export {
   changeTaskOrder,
   getRecycleBin,
@@ -69,5 +75,6 @@ export {
   duplicateTask,
   updateTask,
   addNewTask,
-  deleteTask
+  deleteTask,
+  resetTask
 }

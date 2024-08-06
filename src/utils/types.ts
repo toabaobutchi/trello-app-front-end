@@ -50,6 +50,7 @@ export type TaskDetailForBoard = {
   subTasks?: SubtaskForBoard[]
   isCompleted?: boolean
   isReOpened?: boolean
+  startedAt?: number
 }
 
 export type MarkedTaskResponse = {
@@ -106,28 +107,6 @@ export type WorkspaceResponse = {
   ownerId: string
   context: string
 }
-// export type WorkspaceResponseWithRelatedProjects = {
-//   id: number
-//   name: string
-//   description?: string
-//   slug: string
-//   createdAt: number
-//   ownerId: string
-//   context: string
-//   projects: LoadedProjectWithWorkspace[]
-// }
-
-// export type LoadedProjectWithWorkspace = {
-//   id: string
-//   name: string
-//   slug: string
-//   color?: string
-//   description?: string
-//   createdAt: number
-//   memberCount: number
-//   dueDate?: number
-//   context: string
-// }
 
 export type CreateWorkspaceModel = {
   name: string
@@ -261,6 +240,7 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   completedSubTaskCount?: number
   subTaskCount?: number
   isMarkedNeedHelp?: boolean
+  startedAt?: number
 }
 
 export type DeletedTaskResponse = {
@@ -331,20 +311,6 @@ export type ProjectFilterType = {
   needHelp?: boolean
   dueSoon?: boolean
 }
-
-// export type TaskResponseForTable = {
-//   id: string
-//   name: string
-//   description?: string
-//   dueDate?: number
-//   priority?: string
-//   listId: string
-//   listName: string
-//   createdAt: number
-//   taskAssignmentIds: string[]
-//   isMarkedNeedHelp?: boolean
-//   creatorId?: string
-// }
 
 export type ProjectResponseForTable = {
   id: string
@@ -450,6 +416,7 @@ export type UpdatedTaskResponse = {
   description?: string
   dueDate?: number
   priority?: string
+  startedAt?: number
 }
 
 export type SubtaskResponse = {
@@ -575,6 +542,7 @@ export type UpdateTaskModel = {
   dueDate?: number
   priority?: string
   description?: string
+  startedAt?: number
 }
 
 export type UpdateListModel = {
@@ -652,3 +620,19 @@ export type ProjectCommentResponse = {
   projectId: string
   assignmentId?: string
 }
+
+export type ResetTaskModel = {
+  resetPriority?: boolean
+  resetDueDate?: boolean
+  resetStartDate?: boolean
+  resetDescription?: boolean
+}
+
+// export type ResetTaskResponse = {
+//   id: string
+//   listId: string
+//   priority?: string
+//   description?: string
+//   dueDate?: number
+//   startedAt?: number
+// }
