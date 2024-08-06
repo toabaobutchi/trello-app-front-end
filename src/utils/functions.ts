@@ -1,11 +1,11 @@
 import { cloneDeep } from 'lodash'
 import {
   AssignmentResponse,
-  FilterType,
   ListResponseForBoard,
   ProjectFilterType,
   ProjectResponseForBoard,
-  TaskResponseForBoard
+  TaskResponseForBoard,
+  TaskResponseForTable
 } from './types'
 
 export const isOutClick = (parent: HTMLElement, child: HTMLElement | null) => {
@@ -91,7 +91,7 @@ export const sortTask = (tasks?: TaskResponseForBoard[], order?: string) => {
   return tasks
 }
 
-export const mapOrder = <T>(originalArray?: T[], orderArray?: string[], key?: string) => {
+export const mapOrder = <T>(originalArray?: T[], orderArray?: string[], key?: keyof T) => {
   if (!originalArray || !orderArray || !key) return []
   const clonedArray = [...originalArray]
   const orderedArray = clonedArray.sort((a, b) => {
@@ -286,3 +286,25 @@ export const autoDetectLinks = (str: string) => {
   // Thay thế mỗi link bằng thẻ <a>
   return str.replace(urlPattern, '<a target="_blank" href="$1">$1</a>')
 }
+
+export const getTasksInProject = (lists?: ListResponseForBoard[]) => {
+  if (!lists) return []
+  let task = [] as TaskResponseForTable[]
+  lists?.forEach(list => {
+    task = task.concat(
+      list?.tasks?.map(t => ({ ...t, listName: list.name } as TaskResponseForTable)) as TaskResponseForTable[]
+    )
+  })
+  return task
+}
+
+// const transferData = (lists?: ListResponseForBoard[]) => {
+//   if (!lists) return []
+//   let task = [] as TaskResponseForTable[]
+//   lists?.forEach(list => {
+//     task = task.concat(
+//       list?.tasks?.map(t => ({ ...t, listName: list.name } as TaskResponseForTable)) as TaskResponseForTable[]
+//     )
+//   })
+//   return task
+// }

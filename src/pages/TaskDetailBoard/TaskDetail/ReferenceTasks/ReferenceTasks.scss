@@ -1,0 +1,63 @@
+.reference-tasks-container {
+  font-size: 1rem;
+}
+
+.reference-tasks-search {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding: 0.25rem;
+
+  &-box {
+    --x-padding: 1rem;
+    width: 40%;
+    position: relative;
+
+    input {
+      width: 100%;
+      outline: none;
+      border: none;
+      padding: 0.5rem var(--x-padding);
+      font: inherit;
+      color: inherit;
+      transition: 0.25s linear;
+      background-color: var(--bright-color);
+      border-radius: var(--primary-radius);
+      border-bottom: var(--thin-border-width) solid transparent;
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        border-color: var(--primary-color);
+        background-color: transparent;
+        border-radius: 0;
+
+        ~ label {
+          top: 0;
+          left: calc(var(--x-padding) / 2);
+          color: var(--primary-color);
+          padding: 0.15rem;
+          font-weight: bold;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    label {
+      position: absolute;
+      top: 50%;
+      left: var(--x-padding);
+      transform: translateY(-50%);
+      color: var(--secondary-color);
+      font-size: 0.9rem;
+      transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
+      cursor: text;
+    }
+  }
+}
+
+.reference-tasks-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.5rem;
+}

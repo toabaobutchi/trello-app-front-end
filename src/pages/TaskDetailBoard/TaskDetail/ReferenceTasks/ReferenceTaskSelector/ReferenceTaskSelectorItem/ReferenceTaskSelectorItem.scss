@@ -1,0 +1,60 @@
+.reference-task-selector-item {
+  --ref-task-card-color: var(--secondary-color);
+  --ref-task-card-bg-color: var(--bright-color);
+  padding: 0.5rem;
+  border: var(--thin-border-width) solid var(--ref-task-card-color);
+  border-radius: var(--primary-radius);
+  width: max-content;
+
+  &__high {
+    --ref-task-card-color: var(--danger-color);
+    --ref-task-card-bg-color: var(--danger-bg-color);
+  }
+  &__medium {
+    --ref-task-card-color: var(--warning-color);
+    --ref-task-card-bg-color: var(--warning-bg-color);
+  }
+  &__low {
+    --ref-task-card-color: var(--success-color);
+    --ref-task-card-bg-color: var(--success-bg-color);
+  }
+  &__normal {
+    --ref-task-card-color: var(--primary-color);
+    --ref-task-card-bg-color: var(--primary-bg-color);
+  }
+
+  &-select-box {
+    input {
+      position: absolute;
+      visibility: hidden;
+      width: 0;
+
+      &:checked + label {
+        color: var(--success-color);
+      }
+    }
+
+    label {
+      color: var(--secondary-color);
+      cursor: pointer;
+      transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  }
+
+  &-info {
+    &:not(:first-child) {
+      margin-bottom: 0.25rem;
+    }
+    &-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--ref-task-card-color);
+    }
+    &-priority {
+      color: var(--ref-task-card-color);
+      background-color: var(--ref-task-card-bg-color);
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--primary-radius);
+    }
+  }
+}

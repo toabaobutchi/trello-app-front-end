@@ -5,6 +5,7 @@ import ChatBox from './ChatBox'
 import TaskDetailInfo from './TaskDetailInfo'
 import MemberTable from './MemberTable'
 import Attachment from './Attachment'
+import ReferenceTasks from './ReferenceTasks'
 
 const tabs = [
   {
@@ -35,7 +36,7 @@ const tabs = [
     value: 'references',
     display: (
       <>
-        <i className='fa-solid fa-paperclip'></i> Reference to others
+        <i className='fa-solid fa-link'></i> Reference to others
       </>
     )
   }
@@ -63,8 +64,8 @@ const TaskDetail = memo(() => {
             <Tab.Content show={activeTab === 'attachments'}>
               <Attachment />
             </Tab.Content>
-            <Tab.Content show={activeTab === 'othertasks'}>
-              <p>Other tasks</p>
+            <Tab.Content show={activeTab === 'references'}>
+              <ReferenceTasks />
             </Tab.Content>
           </Tab>
         </div>
