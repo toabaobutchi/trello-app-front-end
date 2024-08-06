@@ -30,6 +30,14 @@ const tabs = [
         <i className='fa-solid fa-paperclip'></i> Attachments
       </>
     )
+  },
+  {
+    value: 'references',
+    display: (
+      <>
+        <i className='fa-solid fa-paperclip'></i> Reference to others
+      </>
+    )
   }
 ]
 
@@ -54,6 +62,9 @@ const TaskDetail = memo(() => {
             </Tab.Content>
             <Tab.Content show={activeTab === 'attachments'}>
               <Attachment />
+            </Tab.Content>
+            <Tab.Content show={activeTab === 'othertasks'}>
+              <p>Other tasks</p>
             </Tab.Content>
           </Tab>
         </div>
