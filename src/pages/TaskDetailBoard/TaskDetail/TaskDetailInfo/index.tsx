@@ -252,9 +252,9 @@ function TaskDetailInfo() {
           <p className='bold task-details-basic-info-item-label'>
             <i className='fa-regular fa-clock'></i> Due date:
           </p>
-          <UpdateDueDateEditor dueDate={taskDetail?.dueDate} onUpdate={handleUpdateDueDate} />
+          <UpdateDueDateEditor dueDate={taskDetail?.dueDate} onUpdate={handleUpdateDueDate} onClear={handleReset} />
         </Flex>
-        <Flex $alignItem='center' className='task-details-basic-info-item'>
+        <Flex className='task-details-basic-info-item'>
           <p className='bold task-details-basic-info-item-label'>
             <i className='fa-solid fa-scroll'></i> Description
           </p>

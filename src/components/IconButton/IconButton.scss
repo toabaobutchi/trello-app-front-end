@@ -1,0 +1,99 @@
+.icon-button {
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  display: inline-block;
+  color: var(--secondary-color);
+  border: var(--thin-border-width) solid var(--light-color);
+  cursor: pointer;
+  outline: none;
+  font: inherit;
+  background-color: transparent;
+  transition: 0.25s linear;
+
+  &.icon-button__small {
+    padding: 0.2rem 0.5rem;
+  }
+  &.icon-button__medium {
+    padding: 0.5rem 0.7rem;
+  }
+  &.icon-button__large {
+    padding: 0.5rem 1rem;
+  }
+  &.icon-button__circle {
+    border-radius: 50%;
+  }
+  &.icon-button__square {
+    border-radius: var(--primary-radius);
+  }
+  &.icon-button__primary {
+    color: var(--primary-color);
+
+    &:hover {
+      background-color: var(--primary-bg-color);
+      border-color: var(--primary-color);
+    }
+  }
+  &.icon-button__success {
+    color: var(--success-color);
+
+    &:hover {
+      background-color: var(--success-bg-color);
+      border-color: var(--success-color);
+    }
+  }
+  &.icon-button__danger {
+    color: var(--danger-color);
+
+    &:hover {
+      background-color: var(--danger-bg-color);
+      border-color: var(--danger-color);
+    }
+  }
+  &.icon-button__warning {
+    color: var(--warning-color);
+
+    &:hover {
+      background-color: var(--warning-bg-color);
+      border-color: var(--warning-color);
+    }
+  }
+  &.icon-button__info {
+    color: var(--info-color);
+
+    &:hover {
+      background-color: var(--info-bg-color);
+      border-color: var(--info-color);
+    }
+  }
+  &.icon-button__dark {
+    color: var(--dark-color);
+
+    &:hover {
+      background-color: var(--dark-bg-color);
+      border-color: var(--dark-color);
+    }
+  }
+  &.icon-button__light {
+    color: var(--secondary-color);
+
+    &:hover {
+      background-color: var(--bright-color);
+      border-color: var(--light-color);
+    }
+  }
+  &.icon-button__dashed-border {
+    border-style: dashed;
+
+    &:hover {
+      border-style: solid;
+    }
+  }
+  &.icon-button__blur {
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

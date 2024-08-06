@@ -1,3 +1,4 @@
+import { ThemeType } from '@utils/types'
 import './Tooltip.v2.scss'
 
 type TooltipProps = {
@@ -5,7 +6,7 @@ type TooltipProps = {
   content?: string
   position?: 'top' | 'bottom' | 'left' | 'right'
   arrow?: boolean
-  theme?: 'light' | 'primary' | 'dark' | 'secondary' | 'info' | 'danger' | 'warning'
+  theme?: ThemeType
   delay?: string
 }
 
@@ -25,7 +26,7 @@ function Tooltip({
             '--tooltip-delay': delay
           } as React.CSSProperties
         }
-        className={`tooltip-container ${position}-tooltip ${arrow ? ' arrow-tooltip' : ''} ${theme}-tooltip`}
+        className={`tooltip-container ${position}-tooltip ${arrow ? ' arrow-tooltip' : ''} tooltip__${theme}`}
         data-tooltip-content={content}
       >
         {children}

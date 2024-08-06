@@ -109,3 +109,26 @@
   --tooltip-opacity: 1;
   z-index: 100;
 }
+
+.tooltip__dark {
+  --tooltip-bg-color: #333;
+  --tooltip-fg-color: #fff;
+}
+
+.tooltip__light {
+  --tooltip-bg-color: #fff;
+  --tooltip-fg-color: #333;
+}
+
+.tooltip__primary {
+  --tooltip-fg-color: var(--primary-color);
+}
+.tooltip__danger {
+  --tooltip-fg-color: var(--danger-color);
+}
+.tooltip__warning {
+  --tooltip-fg-color: var(--warning-color);
+}
+.tooltip__success {
+  --tooltip-fg-color: var(--success-color);
+}

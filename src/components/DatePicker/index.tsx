@@ -2,6 +2,7 @@ import Flex from '@comps/StyledComponents'
 import { useRef, useState } from 'react'
 import './DatePicker.scss'
 import { getDateTimeString, getMiliseconds } from '@utils/functions'
+import Tooltip from '@comps/Tooltip-v2'
 
 type DatePickerProps = {
   onDateChange?: (date: number) => void
@@ -38,9 +39,11 @@ function DatePicker({ date, onDateChange = () => {}, ...props }: DatePickerProps
           className={`date-picker-input ${props?.className ?? ''}`}
           value={getDateTimeString(new Date(value))}
         />
-        <label onClick={handleTogglePicker} htmlFor={props?.id} className='change-date-button'>
-          <i className='fa-regular fa-calendar-plus'></i>
-        </label>
+        <Tooltip content='Add a date' position='top' arrow>
+          <label onClick={handleTogglePicker} htmlFor={props?.id} className='change-date-button'>
+            <i className='fa-regular fa-calendar-plus'></i>
+          </label>
+        </Tooltip>
       </Flex>
     </>
   )

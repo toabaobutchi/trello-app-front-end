@@ -1,12 +1,20 @@
 .change-date-button {
-  border: var(--thin-border-width) solid var(--light-color);
+  border: var(--thin-border-width) dashed var(--light-color);
   outline: none;
-  border-radius: var(--primary-radius);
-  font-size: 1rem;
-  padding: 0.5rem 0.75rem;
+  // border-radius: var(--primary-radius);
+  border-radius: 50%;
+  font: inherit;
+  padding: 0.25rem 0.5rem;
   cursor: pointer;
   color: var(--primary-color);
   display: inline-block;
+  transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &:hover {
+    border-style: solid;
+    border-color: var(--primary-color);
+    background-color: var(--primary-bg-color);
+  }
 }
 
 .date-picker-input {

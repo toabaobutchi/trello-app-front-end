@@ -1,7 +1,9 @@
 import Button from '@comps/Button'
 import DatePicker from '@comps/DatePicker'
+import IconButton from '@comps/IconButton'
 import Flex from '@comps/StyledComponents'
-import { getDateString } from '@utils/functions'
+import Tooltip from '@comps/Tooltip-v2'
+import { getDateString, getDateTimeString } from '@utils/functions'
 import { ResetTaskModel } from '@utils/types'
 
 type UpdateStartDateEditorProps = {
@@ -28,9 +30,11 @@ function UpdateStartDateEditor({ startDate, onUpdate = () => {}, onClear = () =>
           {startDate ? (
             <>
               {getDateString(new Date(startDate))}{' '}
-              <Button onClick={handleClear} size='small' variant='outlined' theme='danger'>
-                Reset <i className='fa-solid fa-xmark'></i>
-              </Button>
+              <Tooltip content='Reset start date' position='top' arrow>
+                <IconButton onClick={handleClear} dashedBorder size='small' theme='danger' blurWhenNotHover>
+                  <i className='fa-solid fa-xmark'></i>
+                </IconButton>
+              </Tooltip>
             </>
           ) : (
             <span className='text-secondary'>[Not set (Default is creation time)]</span>
