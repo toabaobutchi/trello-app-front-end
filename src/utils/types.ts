@@ -654,3 +654,9 @@ export type ReferenceTasks = {
   dependencies: RelatedTaskResponse[]
   childTasks: RelatedTaskResponse[]
 }
+
+export type DeletedRelationshipResponse = {
+  taskId: string
+  relationshipType: string
+  relationshipId: string
+}

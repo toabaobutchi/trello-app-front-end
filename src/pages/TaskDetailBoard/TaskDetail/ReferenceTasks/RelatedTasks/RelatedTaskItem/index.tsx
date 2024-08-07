@@ -8,9 +8,13 @@ import { NavLink } from 'react-router-dom'
 
 type RelatedTaskItemProps = {
   task: RelatedTaskResponse
+  onDelete?: (refTaskId: string) => void
 }
 
-function RelatedTaskItem({ task }: RelatedTaskItemProps) {
+function RelatedTaskItem({ task, onDelete = () => {} }: RelatedTaskItemProps) {
+  const handleDelete = () => {
+    onDelete(task.id)
+  }
   return (
     <>
       <div
@@ -54,7 +58,7 @@ function RelatedTaskItem({ task }: RelatedTaskItemProps) {
             </Tooltip>
           )}
           <Tooltip position='top' arrow content='Remove this task'>
-            <Button variant='text' theme='danger' className='delete-related-task-btn'>
+            <Button onClick={handleDelete} variant='text' theme='danger' className='delete-related-task-btn'>
               <i className='fa-regular fa-trash-can'></i>
             </Button>
           </Tooltip>

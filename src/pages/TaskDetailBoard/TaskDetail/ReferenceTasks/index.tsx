@@ -6,7 +6,7 @@ import RelatedTasks from './RelatedTasks'
 import { useModal } from '@hooks/useModal'
 import Modal from '@comps/Modal'
 import ReferenceTaskSelector from './ReferenceTaskSelector'
-import { addChildrenTasks, addDependencies, getRelatedTasks } from '@services/task.services'
+import { addChildrenTasks, addDependencies, deleteRelatedTask, getRelatedTasks } from '@services/task.services'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { ReferenceTasks as RefTasks } from '@utils/types'
 
@@ -76,6 +76,23 @@ function ReferenceTasks() {
       }
     }
   }
+  const handleDelete = async (refTaskId: string) => {
+    if (context?.task?.id) {
+      const res = await deleteRelatedTask(
+        context?.task?.id,
+        refTaskId,
+        activeTab === tabs[0].value ? 'dependencies' : 'children'
+      )
+      if (res?.isSuccess) {
+        const data = res.data
+        if (data.relationshipType === 'Dependencies') {
+          setRefTasks(prev => ({ ...prev, dependencies: prev.dependencies.filter(t => t.id !== refTaskId) }))
+        } else {
+          setRefTasks(prev => ({ ...prev, childTasks: prev.childTasks.filter(t => t.id !== refTaskId) }))
+        }
+      }
+    }
+  }
   const activeDataSource = activeTab === tabs[0].value ? refTasks.dependencies : refTasks.childTasks
   return (
     <>
@@ -89,7 +106,9 @@ function ReferenceTasks() {
           </div>
         </div>
         <Tab tabs={tabs} onTabClick={handleTabClick} activeTab={activeTab}>
-          <Tab.Content show>{refTasks && <RelatedTasks tasks={activeDataSource} />}</Tab.Content>
+          <Tab.Content show>
+            {refTasks && <RelatedTasks onDelete={handleDelete} tasks={activeDataSource} />}
+          </Tab.Content>
         </Tab>
         <div className='reference-tasks-actions mt-1'>
           <Button onClick={handleToggleTaskSelectorModal}>

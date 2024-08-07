@@ -4,7 +4,8 @@
   padding: 0.5rem 1rem;
   border: var(--thin-border-width) solid var(--ref-task-card-color);
   border-radius: var(--primary-radius);
-  width: max-content;
+  // width: max-content;
+  font-size: 0.9rem;
 
   &__high {
     --ref-task-card-color: var(--danger-color);

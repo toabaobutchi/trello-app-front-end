@@ -5,6 +5,7 @@ import {
   ChangeTaskOrderResponse,
   CreateTaskModel,
   CreateTaskResponse,
+  DeletedRelationshipResponse,
   DeletedTaskResponse,
   InTrashTaskResponse,
   JoinTaskResponse,
@@ -91,6 +92,11 @@ const addChildrenTasks = async (taskId: string, children: string[]) => {
   return res
 }
 
+const deleteRelatedTask = async (taskId: string, refId: string, relationship: 'dependencies' | 'children') => {
+  const res = await http.delete<DeletedRelationshipResponse>(`tasks/${taskId}/${relationship}/${refId}`)
+  return res
+}
+
 export {
   changeTaskOrder,
   getRecycleBin,
@@ -105,5 +111,6 @@ export {
   getDependenciesTasks,
   addDependencies,
   getRelatedTasks,
-  addChildrenTasks
+  addChildrenTasks,
+  deleteRelatedTask
 }
