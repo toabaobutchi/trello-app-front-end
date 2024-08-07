@@ -1,11 +1,14 @@
 import Tab, { TabNav } from '@comps/Tab'
 import './ReferenceTasks.scss'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Button from '@comps/Button'
 import RelatedTasks from './RelatedTasks'
 import { useModal } from '@hooks/useModal'
 import Modal from '@comps/Modal'
 import ReferenceTaskSelector from './ReferenceTaskSelector'
+import { addDependencies, getRelatedTasks } from '@services/task.services'
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
+import { ReferenceTasks as RefTasks } from '@utils/types'
 
 const tabs: TabNav[] = [
   {
@@ -27,14 +30,40 @@ const tabs: TabNav[] = [
 ]
 
 const initTab = 'dependencies'
+const initRefTask: RefTasks = {
+  childTasks: [],
+  dependencies: []
+}
 
 function ReferenceTasks() {
   const [activeTab, setActiveTab] = useState(initTab)
   const [taskSelectorModal, handleToggleTaskSelectorModal] = useModal()
+  const context = useContext(TaskDetailContext)
+  const [refTasks, setRefTasks] = useState<RefTasks>(initRefTask)
   //FIXME Loc ra cac task da phu thuoc thi ko chon nua
+  useEffect(() => {
+    if (context?.task) {
+      const task = context.task
+      getRelatedTasks(task.id).then(res => {
+        if (res?.isSuccess) {
+          setRefTasks(res.data)
+        }
+      })
+    }
+  }, [context?.task])
+
   const handleTabClick = (value: string) => {
     setActiveTab(value)
-    // load data from `value`
+  }
+  const handleAddRelatedTasks = async (taskIds: string[]) => {
+    if (taskIds?.length > 0 && context?.task?.id && activeTab === tabs[0].value) {
+      const res = await addDependencies(context?.task?.id, taskIds)
+      if (res?.isSuccess) {
+        const data = res.data
+        // add dependencies
+        setRefTasks(prev => ({ ...prev, dependencies: [...(prev?.dependencies ?? []), ...data] }))
+      }
+    }
   }
   return (
     <>
@@ -49,7 +78,9 @@ function ReferenceTasks() {
         </div>
         <Tab tabs={tabs} onTabClick={handleTabClick} activeTab={activeTab}>
           <Tab.Content show>
-            <RelatedTasks />
+            {refTasks && (
+              <RelatedTasks tasks={activeTab === tabs[0].value ? refTasks.dependencies : refTasks.childTasks} />
+            )}
           </Tab.Content>
         </Tab>
         <div className='reference-tasks-actions'>
@@ -66,7 +97,7 @@ function ReferenceTasks() {
             open={taskSelectorModal}
             onClose={handleToggleTaskSelectorModal}
           >
-            <ReferenceTaskSelector />
+            <ReferenceTaskSelector onConfirmSelect={handleAddRelatedTasks} />
           </Modal>
         </div>
       </div>

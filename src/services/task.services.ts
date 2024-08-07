@@ -10,6 +10,8 @@ import {
   JoinTaskResponse,
   MarkedTaskResponse,
   MarkTaskModel,
+  ReferenceTasks,
+  RelatedTaskResponse,
   ResetTaskModel,
   TaskDetailForBoard,
   TaskResponseForBoard,
@@ -66,6 +68,22 @@ const resetTask = async (taskId: string, model: ResetTaskModel) => {
   return res
 }
 
+const getDependenciesTasks = async (taskId: string) => {
+  const res = await http.get<RelatedTaskResponse[]>(`/tasks/${taskId}/dependencies`)
+  return res
+}
+const getRelatedTasks = async (taskId: string) => {
+  const res = await http.get<ReferenceTasks>(`/tasks/${taskId}/related-tasks`)
+  return res
+}
+
+const addDependencies = async (taskId: string, dependencies: string[]) => {
+  const res = await http.post<{ dependencies: string[] }, RelatedTaskResponse[]>(`/tasks/${taskId}/add-dependencies`, {
+    dependencies
+  })
+  return res
+}
+
 export {
   changeTaskOrder,
   getRecycleBin,
@@ -76,5 +94,8 @@ export {
   updateTask,
   addNewTask,
   deleteTask,
-  resetTask
+  resetTask,
+  getDependenciesTasks,
+  addDependencies,
+  getRelatedTasks
 }

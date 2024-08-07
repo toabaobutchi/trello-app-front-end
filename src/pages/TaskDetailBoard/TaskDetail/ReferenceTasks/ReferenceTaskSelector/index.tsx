@@ -12,7 +12,11 @@ type SelectedTask = {
   isSelected: boolean
 }
 
-function ReferenceTaskSelector() {
+type ReferenceTaskSelectorProps = {
+  onConfirmSelect?: (taskIds: string[]) => void
+}
+
+function ReferenceTaskSelector({ onConfirmSelect = () => {} }: ReferenceTaskSelectorProps) {
   const { board } = useProjectSelector()
   const [tasks, setTasks] = useState<TaskResponseForTable[]>([])
   const [selectedTasks, setSelectedTasks] = useState<SelectedTask[]>([])
@@ -29,7 +33,17 @@ function ReferenceTaskSelector() {
     })
   }
   const handleSubmitTasks = async () => {
-    console.log(selectedTasks.filter(t => t.isSelected))
+    const selectedTasksToAdd = selectedTasks.filter(t => t.isSelected)
+    onConfirmSelect(selectedTasksToAdd.map(s => s.id))
+    // if (selectedTasksToAdd?.length > 0 && context?.task?.id) {
+    //   const res = await addDependencies(
+    //     context?.task?.id,
+    //     selectedTasksToAdd.map(s => s.id)
+    //   )
+    //   if (res?.isSuccess) {
+    //     // add dependencies
+    //   }
+    // }
   }
   const context = useContext(TaskDetailContext)
   useEffect(() => {

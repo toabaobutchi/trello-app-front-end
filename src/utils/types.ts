@@ -636,3 +636,21 @@ export type ResetTaskModel = {
 //   dueDate?: number
 //   startedAt?: number
 // }
+
+export type RelatedTaskResponse = {
+  id: string
+  name: string
+  listId: string
+  createdAt: number
+  startedAt?: number
+  dueDate?: number
+  priority?: string
+  isCompleted?: boolean
+  isReOpened?: boolean
+  isMarkedNeedHelp?: boolean
+}
+
+export type ReferenceTasks = {
+  dependencies: RelatedTaskResponse[]
+  childTasks: RelatedTaskResponse[]
+}

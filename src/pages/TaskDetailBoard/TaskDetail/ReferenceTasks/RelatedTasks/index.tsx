@@ -1,10 +1,16 @@
+import { RelatedTaskResponse } from '@utils/types'
 import './RelatedTasks.scss'
 
-function RelatedTasks() {
-  return <>
-    <div className="related-tasks">
-    </div>
-  </>
+type RelatedTasksProps = {
+  tasks?: RelatedTaskResponse[]
 }
 
-export default RelatedTasks;
+function RelatedTasks({ tasks }: RelatedTasksProps) {
+  return (
+    <>
+      <div className='related-tasks'></div>
+    </>
+  )
+}
+
+export default RelatedTasks
