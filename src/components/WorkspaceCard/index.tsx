@@ -26,7 +26,7 @@ function WorkspaceCard({ workspace }: { workspace: WorkspaceResponse }) {
         <div className='workspace-card__content'>
           <p className='workspace-card__content__description'>{workspace.description}</p>
           <p className='workspace-card__content__creation-time'>
-            <b>Created at:</b> {getDateString(new Date(workspace.createdAt * 1000), true)}
+            <b>Created at:</b> {getDateString(new Date(workspace.createdAt), true)}
           </p>
         </div>
         <div className='workspace-card__footer'>

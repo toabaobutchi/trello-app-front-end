@@ -8,7 +8,13 @@ type RelatedTasksProps = {
 function RelatedTasks({ tasks }: RelatedTasksProps) {
   return (
     <>
-      <div className='related-tasks'></div>
+      <div className='related-tasks'>
+        {tasks?.map(task => (
+          <div className='related-tasks-item' key={task.id}>
+            {task.name}
+          </div>
+        ))}
+      </div>
     </>
   )
 }

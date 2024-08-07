@@ -62,9 +62,11 @@ function ReferenceTasks() {
         const data = res.data
         // add dependencies
         setRefTasks(prev => ({ ...prev, dependencies: [...(prev?.dependencies ?? []), ...data] }))
+        handleToggleTaskSelectorModal()
       }
     }
   }
+  const activeDataSource = activeTab === tabs[0].value ? refTasks.dependencies : refTasks.childTasks
   return (
     <>
       <div className='reference-tasks-container'>
@@ -77,11 +79,7 @@ function ReferenceTasks() {
           </div>
         </div>
         <Tab tabs={tabs} onTabClick={handleTabClick} activeTab={activeTab}>
-          <Tab.Content show>
-            {refTasks && (
-              <RelatedTasks tasks={activeTab === tabs[0].value ? refTasks.dependencies : refTasks.childTasks} />
-            )}
-          </Tab.Content>
+          <Tab.Content show>{refTasks && <RelatedTasks tasks={activeDataSource} />}</Tab.Content>
         </Tab>
         <div className='reference-tasks-actions'>
           <Button onClick={handleToggleTaskSelectorModal}>
@@ -97,7 +95,7 @@ function ReferenceTasks() {
             open={taskSelectorModal}
             onClose={handleToggleTaskSelectorModal}
           >
-            <ReferenceTaskSelector onConfirmSelect={handleAddRelatedTasks} />
+            <ReferenceTaskSelector usedTasks={refTasks} onConfirmSelect={handleAddRelatedTasks} />
           </Modal>
         </div>
       </div>
