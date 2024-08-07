@@ -70,7 +70,7 @@ function ReferenceTasks() {
         if (res?.isSuccess) {
           const data = res.data
           // add dependencies
-          setRefTasks(prev => ({ ...prev, childTasks: [...(prev?.dependencies ?? []), ...data] }))
+          setRefTasks(prev => ({ ...prev, childTasks: [...(prev?.childTasks ?? []), ...data] }))
           handleToggleTaskSelectorModal()
         }
       }
