@@ -6,7 +6,7 @@ import RelatedTasks from './RelatedTasks'
 import { useModal } from '@hooks/useModal'
 import Modal from '@comps/Modal'
 import ReferenceTaskSelector from './ReferenceTaskSelector'
-import { addDependencies, getRelatedTasks } from '@services/task.services'
+import { addChildrenTasks, addDependencies, getRelatedTasks } from '@services/task.services'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { ReferenceTasks as RefTasks } from '@utils/types'
 
@@ -56,13 +56,23 @@ function ReferenceTasks() {
     setActiveTab(value)
   }
   const handleAddRelatedTasks = async (taskIds: string[]) => {
-    if (taskIds?.length > 0 && context?.task?.id && activeTab === tabs[0].value) {
-      const res = await addDependencies(context?.task?.id, taskIds)
-      if (res?.isSuccess) {
-        const data = res.data
-        // add dependencies
-        setRefTasks(prev => ({ ...prev, dependencies: [...(prev?.dependencies ?? []), ...data] }))
-        handleToggleTaskSelectorModal()
+    if (taskIds?.length > 0 && context?.task?.id) {
+      if (activeTab === tabs[0].value) {
+        const res = await addDependencies(context?.task?.id, taskIds)
+        if (res?.isSuccess) {
+          const data = res.data
+          // add dependencies
+          setRefTasks(prev => ({ ...prev, dependencies: [...(prev?.dependencies ?? []), ...data] }))
+          handleToggleTaskSelectorModal()
+        }
+      } else {
+        const res = await addChildrenTasks(context?.task?.id, taskIds)
+        if (res?.isSuccess) {
+          const data = res.data
+          // add dependencies
+          setRefTasks(prev => ({ ...prev, childTasks: [...(prev?.dependencies ?? []), ...data] }))
+          handleToggleTaskSelectorModal()
+        }
       }
     }
   }

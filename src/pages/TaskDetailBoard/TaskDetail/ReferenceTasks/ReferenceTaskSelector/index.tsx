@@ -22,12 +22,13 @@ function ReferenceTaskSelector({ usedTasks, onConfirmSelect = () => {} }: Refere
   const [tasks, setTasks] = useState<TaskResponseForTable[]>([])
   const [selectedTasks, setSelectedTasks] = useState<SelectedTask[]>([])
   const context = useContext(TaskDetailContext)
+
   const usedTaskIds = useMemo(() => {
-    console.log('Get used task ids')
     const depTasks = usedTasks?.dependencies.map(dt => dt.id) || []
     const childTasks = usedTasks?.childTasks.map(ct => ct.id) || []
     return [...depTasks, ...childTasks]
   }, [usedTasks])
+
   const handleSelectTasks = (taskId: string, checked: boolean) => {
     setSelectedTasks(prev => {
       const newSelectedTasks = [...prev]

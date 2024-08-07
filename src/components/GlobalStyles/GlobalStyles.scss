@@ -110,13 +110,17 @@ html {
 html.dark {
   --theme-bg-color: #222;
   --light-color: #444;
-  --primary-color: #005383;
-  // app config colors
+  --primary-color: #006aa8;
   --text-primary-color: #ababab;
-  // --text-secondary-color: #44546f;
   --text-secondary-color: #777;
   --input-bg-color: #363636;
   --side-bar-item-hover-color: #ffffffeb;
+  --board-bg-color: #292929;
+  --list-bg-color: #353535;
+  --task-card-bg-color: #292929;
+  --bright-color: #2f2f2f;
+  --text-secondary-color: #838383;
+  --task-count-bg-color: #292929;
   background-color: #222;
 
   input,

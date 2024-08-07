@@ -84,6 +84,13 @@ const addDependencies = async (taskId: string, dependencies: string[]) => {
   return res
 }
 
+const addChildrenTasks = async (taskId: string, children: string[]) => {
+  const res = await http.post<{ children: string[] }, RelatedTaskResponse[]>(`/tasks/${taskId}/add-children`, {
+    children
+  })
+  return res
+}
+
 export {
   changeTaskOrder,
   getRecycleBin,
@@ -97,5 +104,6 @@ export {
   resetTask,
   getDependenciesTasks,
   addDependencies,
-  getRelatedTasks
+  getRelatedTasks,
+  addChildrenTasks
 }
