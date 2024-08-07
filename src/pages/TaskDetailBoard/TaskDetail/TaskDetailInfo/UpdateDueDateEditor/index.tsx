@@ -4,6 +4,7 @@ import DatePicker from '@comps/DatePicker'
 import Tooltip from '@comps/Tooltip-v2'
 import IconButton from '@comps/IconButton'
 import { ResetTaskModel } from '@utils/types'
+import { getDateString } from '@utils/functions'
 
 type UpdateDueDateEditorProps = {
   dueDate?: number
@@ -26,7 +27,7 @@ function UpdateDueDateEditor({ dueDate, onUpdate = () => {}, onClear = () => {} 
         <p>
           {dueDate ? (
             <Flex $alignItem='center' $gap='0.5rem'>
-              <p>{new Date(dueDate).toLocaleDateString()}</p>
+              <p>{getDateString(new Date(dueDate))}</p>
               <Tooltip content='Reset start date' position='top' arrow>
                 <IconButton onClick={handleClear} dashedBorder size='small' theme='danger' blurWhenNotHover>
                   <i className='fa-solid fa-xmark'></i>

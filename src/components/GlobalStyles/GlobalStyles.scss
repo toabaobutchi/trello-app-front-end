@@ -135,6 +135,15 @@ html.dark {
   }
 }
 
+.warning-box {
+  background-color: var(--warning-bg-color);
+  color: var(--warning-color);
+  border: var(--normal-border-width) solid var(--warning-color);
+  border-radius: var(--primary-radius);
+  font: inherit;
+  padding: 0.5rem 1rem;
+}
+
 #root {
   display: flex;
   align-items: center;

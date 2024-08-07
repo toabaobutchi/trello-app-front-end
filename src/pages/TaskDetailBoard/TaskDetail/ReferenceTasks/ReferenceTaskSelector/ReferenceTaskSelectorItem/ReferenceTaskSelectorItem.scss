@@ -1,7 +1,7 @@
 .reference-task-selector-item {
   --ref-task-card-color: var(--secondary-color);
   --ref-task-card-bg-color: var(--bright-color);
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   border: var(--thin-border-width) solid var(--ref-task-card-color);
   border-radius: var(--primary-radius);
   width: max-content;

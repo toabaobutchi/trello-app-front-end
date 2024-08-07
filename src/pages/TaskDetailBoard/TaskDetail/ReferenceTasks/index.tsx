@@ -91,7 +91,7 @@ function ReferenceTasks() {
         <Tab tabs={tabs} onTabClick={handleTabClick} activeTab={activeTab}>
           <Tab.Content show>{refTasks && <RelatedTasks tasks={activeDataSource} />}</Tab.Content>
         </Tab>
-        <div className='reference-tasks-actions'>
+        <div className='reference-tasks-actions mt-1'>
           <Button onClick={handleToggleTaskSelectorModal}>
             <i className='fa-solid fa-plus'></i> {activeTab === 'dependencies' ? 'Add new dependency' : 'Add new task'}
           </Button>

@@ -48,19 +48,23 @@ function ReferenceTaskSelector({ usedTasks, onConfirmSelect = () => {} }: Refere
   }
 
   useEffect(() => {
-    setTasks(getTasksInProject(board.lists))
-  }, [board])
+    const tasks = getTasksInProject(board.lists)
+    setTasks(tasks.filter(t => !usedTaskIds.includes(t.id) && t.id !== context?.task?.id))
+  }, [board, usedTaskIds, context])
   return (
     <>
       <div className='reference-tasks-selector'>
         {tasks.map(task => {
           // loại ra task đang xem và các task đã sử dụng như dependency và children, chỉ giữ lại các task chưa có quan hệ
-          if (task.id !== context?.task?.id && !usedTaskIds.includes(task.id)) {
-            return <ReferenceTaskSelectorItem key={task.id} onTaskSelect={handleSelectTasks} task={task} />
-          }
+          return <ReferenceTaskSelectorItem key={task.id} onTaskSelect={handleSelectTasks} task={task} />
         })}
       </div>
-      <Flex $alignItem='center' $justifyContent='end'>
+      {tasks.length <= 0 && (
+        <p className='warning-box'>
+          <i className='fa-solid fa-triangle-exclamation'></i> No task can be used as dependencies or children
+        </p>
+      )}
+      <Flex $alignItem='center' $justifyContent='end' className='mt-1'>
         <Button onClick={handleSubmitTasks}>Add</Button>
       </Flex>
     </>
