@@ -1,10 +1,10 @@
 import { getDateString } from '@utils/functions'
-import { TaskResponseForTable } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types'
 import './ReferenceTaskSelectorItem.scss'
 import { useState } from 'react'
 
 type ReferenceTaskSelectorItemProps = {
-  task: TaskResponseForTable
+  task: TaskResponseForBoard
   onTaskSelect?: (taskId: string, checked: boolean) => void
 }
 

@@ -1,0 +1,30 @@
+.task-dependencies {
+  padding: 0.5rem;
+  padding-bottom: 0;
+  margin-top: 0.5rem;
+  border-top: var(--thin-border-width) solid var(--light-color);
+
+  &-title {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.25rem;
+  }
+}
+
+.task-dependency {
+  font-size: 0.9rem;
+  text-decoration: none;
+  // font-weight: bold;
+  display: block;
+  color: var(--warning-color);
+  padding-left: 0.5rem;
+
+  &:hover {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+  &__completed {
+    color: var(--success-color);
+  }
+}

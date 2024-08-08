@@ -25,8 +25,12 @@ const updateProject = async (projectId: string, data: UpdateProjectModel) => {
   return res
 }
 
+// const getProjectForDisplaying = async (projectId: string, viewMode: string) => {
+//   const res = await http.get<ProjectResponseForBoard>(`/v2/projects/${projectId}/v/${viewMode}`)
+//   return res
+// }
 const getProjectForDisplaying = async (projectId: string, viewMode: string) => {
-  const res = await http.get<ProjectResponseForBoard>(`/v2/projects/${projectId}/v/${viewMode}`)
+  const res = await http.get<ProjectResponseForBoard>(`/v3/projects/${projectId}/v/${viewMode}`)
   return res
 }
 

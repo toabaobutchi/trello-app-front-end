@@ -298,13 +298,7 @@ export const getTasksInProject = (lists?: ListResponseForBoard[]) => {
   return task
 }
 
-// const transferData = (lists?: ListResponseForBoard[]) => {
-//   if (!lists) return []
-//   let task = [] as TaskResponseForTable[]
-//   lists?.forEach(list => {
-//     task = task.concat(
-//       list?.tasks?.map(t => ({ ...t, listName: list.name } as TaskResponseForTable)) as TaskResponseForTable[]
-//     )
-//   })
-//   return task
-// }
+export const getFlatTasks = (project?: ProjectResponseForBoard) => {
+  if (!project) return []
+  return project.lists?.flatMap<TaskResponseForBoard>(l => l?.tasks ?? [])
+}

@@ -54,7 +54,7 @@
   --overlay-color: #0000001f;
   --clicked-menu-color: #0c66e417;
   --primary-hover-color: #0c66e417;
-  --table-header-bg-color: #0c66e417;
+  --table-header-bg-color: var(--theme-bg-color, #fff);
   --side-bar-item-hover-color: #0c66e421;
 
   // tooltip colors
@@ -103,7 +103,7 @@ html {
   font-optical-sizing: auto;
   color: var(--text-primary-color);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: normal;
   scroll-behavior: smooth;
 }
 

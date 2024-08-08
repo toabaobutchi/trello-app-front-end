@@ -236,3 +236,7 @@
 .non-underline {
   text-decoration: none;
 }
+
+.border-top {
+  border-top: var(--thin-border-width) solid var(--light-color);
+}

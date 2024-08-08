@@ -43,8 +43,8 @@
       position: relative;
 
       &::after {
-        // width: 90%;
-        animation: toggleBorderInf 2s linear infinite alternate;
+        width: 90%;
+        // animation: toggleBorderInf 2s linear infinite alternate;
       }
     }
   }

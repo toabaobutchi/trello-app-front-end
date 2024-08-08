@@ -1,0 +1,24 @@
+.table-header-sort {
+  position: relative;
+
+  &-menu {
+    position: absolute;
+    transform: translateX(-50%) scale(0);
+    transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: top center;
+    border-radius: var(--primary-radius);
+    font-weight: normal;
+    opacity: 0;
+    padding: 0.5rem;
+    top: 100%;
+    left: 50%;
+    min-width: 100%;
+    width: max-content;
+
+    &.expanded {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+      background-color: var(--theme-bg-color);
+    }
+  }
+}

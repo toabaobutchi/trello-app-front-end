@@ -1,7 +1,7 @@
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
-import { getTasksInProject } from '@utils/functions'
-import { ReferenceTasks, TaskResponseForTable } from '@utils/types'
+import { getFlatTasks } from '@utils/functions'
+import { ReferenceTasks, TaskResponseForBoard } from '@utils/types'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import ReferenceTaskSelectorItem from './ReferenceTaskSelectorItem'
 import Button from '@comps/Button'
@@ -19,7 +19,7 @@ type ReferenceTaskSelectorProps = {
 
 function ReferenceTaskSelector({ usedTasks, onConfirmSelect = () => {} }: ReferenceTaskSelectorProps) {
   const { board } = useProjectSelector()
-  const [tasks, setTasks] = useState<TaskResponseForTable[]>([])
+  const [tasks, setTasks] = useState<TaskResponseForBoard[]>([])
   const [selectedTasks, setSelectedTasks] = useState<SelectedTask[]>([])
   const context = useContext(TaskDetailContext)
 
@@ -48,8 +48,8 @@ function ReferenceTaskSelector({ usedTasks, onConfirmSelect = () => {} }: Refere
   }
 
   useEffect(() => {
-    const tasks = getTasksInProject(board.lists)
-    setTasks(tasks.filter(t => !usedTaskIds.includes(t.id) && t.id !== context?.task?.id))
+    const tasks = getFlatTasks(board)
+    setTasks(tasks?.filter(t => !usedTaskIds.includes(t.id) && t.id !== context?.task?.id) || [])
   }, [board, usedTaskIds, context])
   return (
     <>

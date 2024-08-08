@@ -241,7 +241,13 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   subTaskCount?: number
   isMarkedNeedHelp?: boolean
   startedAt?: number
+  dependencyIds?: string[]
 }
+// export type TaskDependenciesResponseForBoard = {
+//   id: string
+//   name: string
+//   listId: string
+// }
 
 export type DeletedTaskResponse = {
   id: string

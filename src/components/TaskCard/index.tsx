@@ -18,6 +18,8 @@ import { useProjectSelector } from '@hooks/useProjectSelector'
 import DeleteTaskMenu from './DeleteTaskMenu'
 import { useModal } from '@hooks/useModal'
 import { joinTask } from '@services/task.services'
+import TaskCardTags from './TaskCardTags'
+import TaskDependencies from './TaskDependencies'
 
 const displayAvatarCount = 3
 
@@ -89,11 +91,6 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             : ''
         } ${task?.priority ? task?.priority?.toLowerCase() : 'default'}-task-card`}
       >
-        {/* {isInToday(task.createdAt) && (
-          <div className='task-card__new'>
-            <i className='fa-solid fa-wand-magic-sparkles'></i> New today
-          </div>
-        )} */}
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-header'>
           <PriorityTag priority={task.priority} />
           <DropdownMenu
@@ -131,38 +128,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
           <div className={`task-card-body-name ${task.isCompleted ? 'task-card-body-name__completed' : ''}`}>
             {task.name}
           </div>
-          <div className='task-card-body-tags row gap-1'>
-            {isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.DueSoon && (
-              <p className='tag text-warning bg-warning'>
-                <i className='fa-solid fa-hourglass-half'></i> Duesoon
-              </p>
-            )}
-            {isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.Overdue && (
-              <p className='tag text-danger bg-danger'>
-                <i className='fa-regular fa-calendar-xmark'></i> Overdue
-              </p>
-            )}
-            {task?.isCompleted && (
-              <p className='tag text-success bg-success'>
-                <i className='fa-solid fa-check'></i> Completed
-              </p>
-            )}
-            {task?.isMarkedNeedHelp && (
-              <p className='tag text-purple bg-purple'>
-                <i className='fa-regular fa-circle-question'></i> Need help
-              </p>
-            )}
-            {isInToday(task.createdAt) && (
-              <div className='tag text-danger bg-danger'>
-                <i className='fa-solid fa-wand-magic-sparkles'></i> New today
-              </div>
-            )}
-            {(task?.startedAt ?? task?.createdAt) > Date.now() && (
-              <div className='tag text-info bg-info'>
-                <i className="fa-solid fa-business-time"></i> Coming soon
-              </div>
-            )}
-          </div>
+          <TaskCardTags task={task} />
         </div>
         <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>
           <Flex $alignItem='center' $gap='1rem'>
@@ -187,7 +153,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             }`}
           >
             <i className='fa-regular fa-clock'></i>{' '}
-            {task?.dueDate ? getDateString(new Date(task.dueDate * 1000)) : <span className='text-light'>Not set</span>}
+            {task?.dueDate ? getDateString(new Date(task.dueDate)) : <span className='text-light'>Not set</span>}
           </div>
         </Flex>
         <Flex
@@ -205,6 +171,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
             </div>
           ))}
         </Flex>
+        {task.dependencyIds && task.dependencyIds.length > 0 && <TaskDependencies dependencyIds={task.dependencyIds} />}
       </div>
     </>
   )
