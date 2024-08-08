@@ -77,7 +77,7 @@ function Project() {
               </>
             }
           >
-            <Flex className='w-full' style={{ overflow: 'hidden' }} $gap='0.5rem'>
+            <Flex className='w-full flex-1' style={{ overflow: 'hidden' }} $gap='0.5rem'>
               <ProjectSideBar />
               <Outlet />
             </Flex>

@@ -36,7 +36,15 @@ const tabs = [
     value: 'references',
     display: (
       <>
-        <i className='fa-solid fa-link'></i> Reference to others
+        <i className='fa-solid fa-link'></i> References
+      </>
+    )
+  },
+  {
+    value: 'changelogs',
+    display: (
+      <>
+        <i className="fa-regular fa-file-lines"></i> Change logs
       </>
     )
   }

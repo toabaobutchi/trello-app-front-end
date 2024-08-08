@@ -54,18 +54,20 @@
 
 .tooltip-container.right-tooltip::before {
   right: 0;
-  transform: translateX(100%) translateY(-50%) scale(var(--scale));
+  transform: translateX(calc(100% + var(--arrow-size, 0px))) translateY(-50%) scale(var(--scale));
   transform-origin: left center;
 }
 
 .tooltip-container.left-tooltip::before {
   left: 0;
-  transform: translateX(-100%) translateY(-50%) scale(var(--scale));
+  transform: translateX(calc(-100% - var(--arrow-size, 0px))) translateY(-50%) scale(var(--scale));
   transform-origin: right center;
 }
+
 .arrow-tooltip::after {
   border: var(--arrow-size, 10px) solid transparent;
 }
+
 .tooltip-container.top-tooltip.arrow-tooltip::after,
 .tooltip-container.bottom-tooltip.arrow-tooltip::after {
   left: 50%;
@@ -92,14 +94,14 @@
 .tooltip-container.right-tooltip.arrow-tooltip::after {
   border-right-color: var(--tooltip-bg-color);
   right: 0;
-  transform: translateX(95%) translateY(-50%) scale(var(--scale));
+  transform: translateX(60%) translateY(-50%) scale(var(--scale));
   transform-origin: right center;
 }
 
 .tooltip-container.left-tooltip.arrow-tooltip::after {
   border-left-color: var(--tooltip-bg-color);
   left: 0;
-  transform: translateX(-95%) translateY(-50%) scale(var(--scale));
+  transform: translateX(-60%) translateY(-50%) scale(var(--scale));
   transform-origin: left center;
 }
 

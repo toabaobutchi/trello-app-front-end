@@ -33,6 +33,11 @@ function RelatedTaskItem({ task, onDelete = () => {} }: RelatedTaskItemProps) {
             >
               {task.priority ? task.priority + ' Priority' : 'Priority not set'}
             </div>
+            {task.isCompleted && (
+              <p className='related-tasks-item-tag text-success bg-success'>
+                <i className='fa-solid fa-check'></i> Completed
+              </p>
+            )}
           </Flex>
           <Flex $flexDirection='column'>
             <div className='related-tasks-item-info-start-date'>
@@ -57,7 +62,7 @@ function RelatedTaskItem({ task, onDelete = () => {} }: RelatedTaskItemProps) {
               </Button>
             </Tooltip>
           )}
-          <Tooltip position='top' arrow content='Remove this task'>
+          <Tooltip position='left' arrow content='Remove this task'>
             <Button onClick={handleDelete} variant='text' theme='danger' className='delete-related-task-btn'>
               <i className='fa-regular fa-trash-can'></i>
             </Button>

@@ -10,6 +10,9 @@ import { unassignTaskAssignment } from '@services/assignment.services'
 import TaskMemberItem from './TaskMemberItem'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
+import Modal from '@comps/Modal'
+import AssignMember from '../AssignMember'
+import { useModal } from '@hooks/useModal'
 
 function MemberTable() {
   const context = useContext(TaskDetailContext)
@@ -17,6 +20,7 @@ function MemberTable() {
   const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
   const dispatch = useDispatch()
   const [projectHub] = useState(new ProjectHub())
+  const [assignModal, handleToggleAssignModal] = useModal()
 
   // su dung useEffect de thay doi
   const [taskMembers, setTaskMembers] = useState<AssignmentResponse[]>([])
@@ -51,7 +55,6 @@ function MemberTable() {
 
   return (
     <>
-      <p className='mb-1 text-primary'>Task member</p>
       <Flex
         $alignItem='center'
         $flexDirection='column'
@@ -61,6 +64,24 @@ function MemberTable() {
         {taskMembers?.map(tm => {
           return <TaskMemberItem taskMember={tm} onUnassign={handleUnassign} />
         })}
+        {taskMembers && taskMembers.length <= 0 && (
+          <>
+            <p className='text-warning mb-1'>
+              <i className='fa-solid fa-users-slash'></i> This task has no assignees
+            </p>
+            <Button onClick={handleToggleAssignModal} variant='filled'>
+              <i className='fa-solid fa-user-plus'></i> Add assignees{' '}
+            </Button>
+            <Modal
+              open={assignModal}
+              layout={{ header: { closeIcon: true, title: 'Assign to new members' } }}
+              onClose={handleToggleAssignModal}
+              style={{ width: '30%' }}
+            >
+              {taskDetail && <AssignMember task={taskDetail} onCloseModal={handleToggleAssignModal} />}
+            </Modal>
+          </>
+        )}
       </Flex>
     </>
   )
