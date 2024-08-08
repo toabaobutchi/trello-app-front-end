@@ -40,7 +40,7 @@ function ReferenceTasks() {
   const [taskSelectorModal, handleToggleTaskSelectorModal] = useModal()
   const context = useContext(TaskDetailContext)
   const [refTasks, setRefTasks] = useState<RefTasks>(initRefTask)
-  //FIXME Loc ra cac task da phu thuoc thi ko chon nua
+
   useEffect(() => {
     if (context?.task) {
       const task = context.task
