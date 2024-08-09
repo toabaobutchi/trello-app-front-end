@@ -13,7 +13,8 @@ export function useModal(
   }
 ) {
   const [modalOpen, setModalOpen] = useState(initState)
-  const handleToggle = () => {
+  const handleToggle = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
     setModalOpen(prevState => !prevState)
     if (!modalOpen) options.whenOpen()
     if (modalOpen) options.whenClose()

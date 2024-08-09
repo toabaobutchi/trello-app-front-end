@@ -39,6 +39,9 @@ function DeleteTaskMenu({ task, openModal, onClose }: DeleteTaskMenuProps) {
         <p style={{ fontSize: '1.1rem' }}>
           Are you sure you want to delete this task (<b className='text-danger'>{task.name}</b>)?
         </p>
+        <p style={{ fontSize: '1.1rem' }}>
+          All references to (<b className='text-danger'>{task.name}</b>) will be removed!
+        </p>
         <Flex $alignItem='center' $justifyContent='end' $gap='0.5rem' className='mt-2'>
           <Button variant='text' theme='danger' onClick={handleDeletePermantly}>
             <i className='fa-regular fa-trash-can'></i> Permantly delete
@@ -54,5 +57,4 @@ function DeleteTaskMenu({ task, openModal, onClose }: DeleteTaskMenuProps) {
     </>
   )
 }
-
 export default DeleteTaskMenu

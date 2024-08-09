@@ -19,13 +19,14 @@ interface ModalProps extends React.ComponentProps<'div'> {
 }
 
 function Modal({ open = false, layout = undefined, children = '', onClose = () => {}, ...props }: ModalProps) {
-  // const handleStopPropagation = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()
+  // chuc nang xoa task
+  const handleStopPropagation = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()
   return (
     <>
       {open && (
         <div
           className={`modal${layout?.theme ? ' ' + layout.theme + '-modal' : ' default-modal'}`}
-          // onClick={handleStopPropagation}
+          onClick={handleStopPropagation}
         >
           <div className='overlay' onClick={onClose}></div>
           <div className={`modal-main menu-content-box-shadow ${props?.className ?? ''}`.trim()} style={props?.style}>

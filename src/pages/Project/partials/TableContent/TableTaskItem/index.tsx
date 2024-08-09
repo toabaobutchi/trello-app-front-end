@@ -14,6 +14,7 @@ import { joinTask } from '@services/task.services'
 import { useEffect, useState } from 'react'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import DeleteTaskMenu from '@comps/TaskCard/DeleteTaskMenu'
 
 type TableTaskItemProps = {
   task: TaskResponseForTable
@@ -24,6 +25,7 @@ const NotSet = () => <span className='text-light'>[ Not set ]</span>
 
 function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
   const [joinTaskModal, handleToggleJoinTaskModal] = useModal()
+  const [deleteModal, handleToggleDeleteModal] = useModal()
   const dispatch = useDispatch()
   const { members, board } = useProjectSelector()
   const [projectHub] = useState(new ProjectHub())
@@ -81,7 +83,11 @@ function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
           <TaskCardTags task={task} />
         </td>
         <td>
-          <TableTaskItemMenu isJoined={isJoined} onJoinTask={handleToggleJoinTaskModal} />
+          <TableTaskItemMenu
+            isJoined={isJoined}
+            onDeleteTask={handleToggleDeleteModal}
+            onJoinTask={handleToggleJoinTaskModal}
+          />
         </td>
       </tr>
       {!isJoined && (
@@ -111,6 +117,7 @@ function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
           Join task <span className='text-primary fw-bold'>{task?.name}</span>
         </Modal>
       )}
+      <DeleteTaskMenu task={task} openModal={deleteModal} onClose={handleToggleDeleteModal} />
     </>
   )
 }

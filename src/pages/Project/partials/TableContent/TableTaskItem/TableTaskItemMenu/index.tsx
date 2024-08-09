@@ -6,11 +6,17 @@ import useClickTracker from '@hooks/useClickTracker'
 
 type TableTaskItemMenuProps = {
   onJoinTask?: () => void
+  onDeleteTask?: () => void
   isJoined?: boolean
 }
 
-function TableTaskItemMenu({ isJoined = false, onJoinTask = () => {} }: TableTaskItemMenuProps) {
+function TableTaskItemMenu({
+  isJoined = false,
+  onJoinTask = () => {},
+  onDeleteTask = () => {}
+}: TableTaskItemMenuProps) {
   const [click, setClick] = useState(false)
+
   const handleToggleClick = () => setClick(!click)
   const container = useRef<HTMLDivElement>(null)
   const { outClick } = useClickTracker(container?.current)
@@ -44,7 +50,11 @@ function TableTaskItemMenu({ isJoined = false, onJoinTask = () => {} }: TableTas
           <MenuItem className='table-task-item-actions-menu-item'>
             <i className='fa-solid fa-user-plus'></i>&nbsp; Assign
           </MenuItem>
-          <MenuItem className='table-task-item-actions-menu-item border-top text-danger' size='small'>
+          <MenuItem
+            onClick={onDeleteTask}
+            className='table-task-item-actions-menu-item border-top text-danger'
+            size='small'
+          >
             <i className='fa-solid fa-trash-alt'></i>&nbsp; Delete
           </MenuItem>
         </div>

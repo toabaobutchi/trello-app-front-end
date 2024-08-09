@@ -31,9 +31,12 @@
         border-bottom: var(--normal-border-width) solid var(--primary-color);
 
         th {
-          // padding: var(--theader-padding);
+          // padding: var(--theader-padding);]
+          position: sticky;
+          top: 0;
           font-size: 1.1rem;
           cursor: pointer;
+          background-color: var(--theme-bg-color);
 
           &:hover {
             background-color: var(--bright-color);

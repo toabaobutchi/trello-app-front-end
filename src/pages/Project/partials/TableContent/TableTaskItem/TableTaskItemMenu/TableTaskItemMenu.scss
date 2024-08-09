@@ -4,8 +4,8 @@
   &-dropdown {
     position: absolute;
     top: 100%;
-    left: 0%;
-    transform: translateX(-50%) scale(0);
+    right: 0%;
+    transform: translateX(0) scale(0);
     opacity: 0;
     min-width: 100%;
     width: max-content;
@@ -19,7 +19,7 @@
 
     &.expanded {
       opacity: 1;
-      transform: translateX(-50%) scale(1);
+      transform: translateX(0) scale(1);
     }
   }
 }
