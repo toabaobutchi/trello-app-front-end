@@ -6,9 +6,10 @@ import useClickTracker from '@hooks/useClickTracker'
 
 type TableTaskItemMenuProps = {
   onJoinTask?: () => void
+  isJoined?: boolean
 }
 
-function TableTaskItemMenu({ onJoinTask = () => {} }: TableTaskItemMenuProps) {
+function TableTaskItemMenu({ isJoined = false, onJoinTask = () => {} }: TableTaskItemMenuProps) {
   const [click, setClick] = useState(false)
   const handleToggleClick = () => setClick(!click)
   const container = useRef<HTMLDivElement>(null)
@@ -35,9 +36,11 @@ function TableTaskItemMenu({ onJoinTask = () => {} }: TableTaskItemMenuProps) {
           <MenuItem className='table-task-item-actions-menu-item'>
             <i className='fa-solid fa-wrench'></i>&nbsp; Details & Edit
           </MenuItem>
-          <MenuItem className='table-task-item-actions-menu-item' onClick={handleJoinTask}>
-            <i className='fa-solid fa-right-to-bracket'></i>&nbsp; Join this task
-          </MenuItem>
+          {!isJoined && (
+            <MenuItem className='table-task-item-actions-menu-item' onClick={handleJoinTask}>
+              <i className='fa-solid fa-right-to-bracket'></i>&nbsp; Join this task
+            </MenuItem>
+          )}
           <MenuItem className='table-task-item-actions-menu-item'>
             <i className='fa-solid fa-user-plus'></i>&nbsp; Assign
           </MenuItem>

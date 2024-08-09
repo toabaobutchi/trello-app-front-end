@@ -11,8 +11,9 @@ import Button from '@comps/Button'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { joinTask } from '@services/task.services'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { hubs, ProjectHub } from '@utils/Hubs'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 type TableTaskItemProps = {
   task: TaskResponseForTable
@@ -24,7 +25,18 @@ const NotSet = () => <span className='text-light'>[ Not set ]</span>
 function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
   const [joinTaskModal, handleToggleJoinTaskModal] = useModal()
   const dispatch = useDispatch()
+  const { members, board } = useProjectSelector()
   const [projectHub] = useState(new ProjectHub())
+  const [isJoined, setIsJoined] = useState(false)
+
+  useEffect(() => {
+    if (task?.id) {
+      const member = members.find(m => m.id === board?.assignmentId)
+      if (!member) setIsJoined(false)
+      else setIsJoined(task?.taskAssignmentIds?.includes(member.id) ?? false)
+    }
+  }, [task?.id, members, task?.taskAssignmentIds, board?.assignmentId])
+
   const handleJoinTask = async () => {
     if (task?.id) {
       const res = await joinTask(task?.id)
@@ -69,34 +81,36 @@ function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
           <TaskCardTags task={task} />
         </td>
         <td>
-          <TableTaskItemMenu onJoinTask={handleToggleJoinTaskModal} />
+          <TableTaskItemMenu isJoined={isJoined} onJoinTask={handleToggleJoinTaskModal} />
         </td>
       </tr>
-      <Modal
-        style={{ width: '30%' }}
-        layout={{
-          header: {
-            title: 'Join task',
-            closeIcon: true
-          },
-          footer: (
-            <>
-              <Flex $alignItem='center' $gap='1rem'>
-                <Button onClick={handleToggleJoinTaskModal} variant='filled' theme='danger'>
-                  Cancel
-                </Button>
-                <Button onClick={handleJoinTask} variant='filled' theme='primary'>
-                  Join
-                </Button>
-              </Flex>
-            </>
-          )
-        }}
-        open={joinTaskModal}
-        onClose={handleToggleJoinTaskModal}
-      >
-        Join task <span className='text-primary fw-bold'>{task?.name}</span>
-      </Modal>
+      {!isJoined && (
+        <Modal
+          style={{ width: '30%' }}
+          layout={{
+            header: {
+              title: 'Join task',
+              closeIcon: true
+            },
+            footer: (
+              <>
+                <Flex $alignItem='center' $gap='1rem'>
+                  <Button onClick={handleToggleJoinTaskModal} variant='filled' theme='danger'>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleJoinTask} variant='filled' theme='primary'>
+                    Join
+                  </Button>
+                </Flex>
+              </>
+            )
+          }}
+          open={joinTaskModal}
+          onClose={handleToggleJoinTaskModal}
+        >
+          Join task <span className='text-primary fw-bold'>{task?.name}</span>
+        </Modal>
+      )}
     </>
   )
 }

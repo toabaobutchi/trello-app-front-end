@@ -123,6 +123,7 @@ function ReferenceTasks() {
             }}
             open={taskSelectorModal}
             onClose={handleToggleTaskSelectorModal}
+            style={{ maxHeight: '600px', overflowY: 'auto' }}
           >
             <ReferenceTaskSelector usedTasks={refTasks} onConfirmSelect={handleAddRelatedTasks} />
           </Modal>
