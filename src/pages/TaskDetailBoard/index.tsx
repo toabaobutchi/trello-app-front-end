@@ -100,6 +100,7 @@ function TaskDetailBoard() {
       }
     }
   }
+  
   const handleJoinTask = async () => {
     if (taskId) {
       const res = await joinTask(taskId)
@@ -108,6 +109,20 @@ function TaskDetailBoard() {
         setIsJoined(true)
         const data = res.data
         dispatch(projectSlice.actions.joinTask(data))
+
+        // set task assignments
+        const newAssignment = members.find(m => m.id === data.assignmentId)?.id
+        const newTaskAssignments = [...(taskDetail?.taskAssignmentIds ?? [])]
+        if (newAssignment) {
+          newTaskAssignments.push(newAssignment)
+        }
+        setTaskDetail(
+          prev =>
+            ({
+              ...prev,
+              taskAssignmentIds: newTaskAssignments
+            } as TaskDetailForBoard)
+        )
 
         // call to hub
         if (projectHub.isConnected) {

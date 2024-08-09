@@ -13,11 +13,12 @@ import { hubs, ProjectHub } from '@utils/Hubs'
 import Modal from '@comps/Modal'
 import AssignMember from '../AssignMember'
 import { useModal } from '@hooks/useModal'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 function MemberTable() {
   const context = useContext(TaskDetailContext)
   const taskDetail = context?.task
-  const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
+  const { members: projectMembers } = useProjectSelector()
   const dispatch = useDispatch()
   const [projectHub] = useState(new ProjectHub())
   const [assignModal, handleToggleAssignModal] = useModal()

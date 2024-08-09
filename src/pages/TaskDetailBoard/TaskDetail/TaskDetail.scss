@@ -78,8 +78,8 @@
 }
 
 .priorities-select-list {
+  border: none;
   .selected-item {
-    border: none;
     padding: 0 !important;
     color: var(--text-secondary-color);
   }

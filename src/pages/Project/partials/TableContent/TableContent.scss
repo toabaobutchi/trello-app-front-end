@@ -10,24 +10,27 @@
   font-size: 1.1rem;
   padding: 1rem;
   width: 100%;
-  // height: 100%;
+  height: 90%;
   flex: 1;
+  overflow: hidden;
 
   &-wrapper {
-    max-height: 800px;
     overflow-y: auto;
+    padding-bottom: 3.7rem;
+    height: 100%;
     width: 100%;
 
     table {
       width: 100%;
       border-collapse: collapse;
+      height: 100%;
 
-       thead > tr {
+      thead > tr {
         background-color: var(--table-header-bg-color);
         color: var(--text-secondary-color);
         border-bottom: var(--normal-border-width) solid var(--primary-color);
 
-         th {
+        th {
           // padding: var(--theader-padding);
           font-size: 1.1rem;
           cursor: pointer;
@@ -38,7 +41,7 @@
 
           .table-header-sort-title {
             padding: var(--theader-padding);
-          } 
+          }
         }
       }
 
