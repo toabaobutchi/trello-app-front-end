@@ -29,7 +29,7 @@ function TaskDetailBoard() {
   const [assignModal, handleToggleAssignModal] = useModal()
   const { taskId } = useParams()
   const [projectHub] = useState(new ProjectHub())
-  
+
   useEffect(() => {
     if (taskDetail?.id) {
       const member = members.find(m => m.id === board?.assignmentId)
@@ -101,7 +101,7 @@ function TaskDetailBoard() {
       }
     }
   }
-  
+
   const handleJoinTask = async () => {
     if (taskId) {
       const res = await joinTask(taskId)
@@ -138,7 +138,8 @@ function TaskDetailBoard() {
     <>
       <TaskDetailContext.Provider value={{ task: taskDetail, setTask: setTaskDetail }}>
         <Modal
-          style={{ width: '70%' }}
+          className='task-detail-modal'
+          // style={{ width: '80%' }}
           layout={{
             header: {
               closeIcon: true,

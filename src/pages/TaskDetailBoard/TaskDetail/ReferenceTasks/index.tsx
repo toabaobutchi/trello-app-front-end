@@ -26,7 +26,7 @@ const tabs: TabNav[] = [
     value: 'denpendedTasks',
     display: (
       <>
-        <i className='fa-solid fa-puzzle-piece'></i> Denpend on this
+        <i className='fa-solid fa-puzzle-piece'></i> Depend on this
       </>
     )
   }
@@ -61,7 +61,7 @@ function ReferenceTasks() {
     if (projectHub.isConnected && context?.task?.id) {
       projectHub.connection?.on(
         hubs.project.receive.addTaskDependencies,
-        (taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+        (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
           if (taskId === context?.task?.id) {
             setRefTasks(prev => ({ ...prev, dependencies: [...(prev?.dependencies ?? []), ...relatedTasks] }))
           }
@@ -70,7 +70,7 @@ function ReferenceTasks() {
 
       projectHub.connection?.on(
         hubs.project.receive.addChildrenTasks,
-        (taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+        (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
           if (taskId === context?.task?.id) {
             setRefTasks(prev => ({ ...prev, childTasks: [...(prev?.childTasks ?? []), ...relatedTasks] }))
           }
@@ -82,6 +82,7 @@ function ReferenceTasks() {
   const handleTabClick = (value: string) => {
     setActiveTab(value)
   }
+
   const handleAddRelatedTasks = async (taskIds: string[]) => {
     if (taskIds?.length > 0 && context?.task?.id) {
       if (activeTab === tabs[0].value) {

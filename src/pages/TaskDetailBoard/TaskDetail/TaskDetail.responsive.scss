@@ -1,0 +1,37 @@
+@media screen and (max-width: 1490px) {
+  .task-detail-modal {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 1305px) {
+  .task-detail-modal {
+    width: 98%;
+  }
+}
+@media screen and (max-width: 1196px) {
+  .task-details-additional-info {
+    .tab-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+  }
+}
+@media screen and (max-width: 1080px) {
+  .task-detail-modal {
+    top: 3%;
+    max-height: 96%;
+    overflow-y: auto;
+  }
+  .task-details-additional-info {
+    margin-top: 1rem;
+  }
+  .task-details {
+    --left-tab-task-details: 100%;
+    --right-tab-task-details: 100%;
+    flex-direction: column;
+    // overflow-y: auto;
+  }
+}
