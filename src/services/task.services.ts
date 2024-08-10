@@ -60,7 +60,7 @@ const addNewTask = async (model: CreateTaskModel) => {
   return res
 }
 const deleteTask = async (taskId: string, moveToTrash: boolean = false) => {
-  const res = await http.delete<DeletedTaskResponse>(`/tasks/${taskId}/${moveToTrash ? 'move-to-trash' : ''}`)
+  const res = await http.delete<DeletedTaskResponse>(`/v2/tasks/${taskId}/${moveToTrash ? 'move-to-trash' : ''}`)
   return res
 }
 

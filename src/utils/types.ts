@@ -243,11 +243,6 @@ export interface TaskResponseForBoard extends ResponseForBoard {
   startedAt?: number
   dependencyIds?: string[]
 }
-// export type TaskDependenciesResponseForBoard = {
-//   id: string
-//   name: string
-//   listId: string
-// }
 
 export type DeletedTaskResponse = {
   id: string
@@ -665,4 +660,9 @@ export type DeletedRelationshipResponse = {
   taskId: string
   relationshipType: string
   relationshipId: string
+}
+
+export type DispatchRelatedTaskResponse = {
+  taskId: string
+  relatedTasks: RelatedTaskResponse[]
 }

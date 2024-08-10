@@ -17,7 +17,8 @@ import {
   TaskResponseForBoard,
   UpdatedListResponse,
   UpdatedTaskResponse,
-  DeletedTaskAssignmentResponse
+  DeletedTaskAssignmentResponse,
+  DispatchRelatedTaskResponse
 } from '@utils/types'
 
 export const projectSlice = createSlice({
@@ -34,6 +35,43 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    addFromChildren: (state, action) => {
+      const data = action.payload as DispatchRelatedTaskResponse
+      if (data) {
+        let isChange = false
+        const { taskId, relatedTasks } = data
+        relatedTasks.forEach(task => {
+          const list = state.activeProject.board?.lists?.find(
+            l => (l.tasks?.findIndex(t => t.id === task.id) ?? -1) >= 0
+          )
+          if (list) {
+            const taskToAdd = list.tasks?.find(t => t.id === task.id)
+            if (taskToAdd) {
+              taskToAdd.dependencyIds?.push(taskId)
+              isChange = true
+            }
+          }
+        })
+
+        if (isChange) {
+          state.activeProject.changeId = new Date().getTime()
+        }
+      }
+    },
+    addFromDependencies: (state, action) => {
+      const data = action.payload as DispatchRelatedTaskResponse
+      if (data) {
+        const { taskId, relatedTasks } = data
+        const list = state.activeProject.board?.lists?.find(l => (l.tasks?.findIndex(t => t.id === taskId) ?? -1) >= 0)
+        if (list) {
+          const task = list.tasks?.find(t => t.id === taskId)
+          if (task) {
+            task.dependencyIds = task.dependencyIds?.concat(relatedTasks.map(t => t.id))
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     removeTaskAssignment: (state, action) => {
       const data = action.payload as DeletedTaskAssignmentResponse
       if (data) {

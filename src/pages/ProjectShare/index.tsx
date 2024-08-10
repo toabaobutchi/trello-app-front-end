@@ -50,6 +50,7 @@ function ProjectShare() {
     const res = await inviteToProjectByEmail(params.projectId, invitation)
     if (res?.isSuccess) {
       setInvitation({ email: '', permission: 'member' })
+      handleClose()
     }
   }
   const handleChangeEmail = (e: InputChange) => {

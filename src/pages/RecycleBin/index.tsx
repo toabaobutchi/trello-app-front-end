@@ -13,7 +13,7 @@ function RecycleBin() {
   const handleBack = () => navigate(-1)
   return (
     <>
-      <div className='recycle-bin'>
+      <div className='recycle-bin flex-1'>
         <Flex $alignItem='center' $gap='1rem' className='mb-1'>
           <Button variant='text' theme='default' onClick={handleBack}>
             <i className='fa-solid fa-arrow-left'></i>

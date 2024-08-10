@@ -29,6 +29,7 @@ function TaskDetailBoard() {
   const [assignModal, handleToggleAssignModal] = useModal()
   const { taskId } = useParams()
   const [projectHub] = useState(new ProjectHub())
+  
   useEffect(() => {
     if (taskDetail?.id) {
       const member = members.find(m => m.id === board?.assignmentId)

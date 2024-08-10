@@ -15,11 +15,13 @@ import { HttpResponse } from '@utils/Axios/HttpClientAuth'
 import ProjectChatRoom from './partials/ProjectChatRoom'
 
 function Project() {
+  console.log('Render project')
   const params = useParams() as ProjectPageParams
   const { board: project } = useProjectSelector()
   const response = useLoaderData() as HttpResponse<ProjectResponseForBoard>
   const dispatch = useDispatch()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
+  const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
     if (!project || project?.id !== params.projectId) {
@@ -31,18 +33,22 @@ function Project() {
   }, [params?.projectId])
 
   useEffect(() => {
-    if (project && project.id && project.id === params.projectId) {
-      if (!projectHub.isConnected) {
+    if (project && project.id) {
+      // console.log('Connecting with: ', params?.projectId, project?.id, projectHub.isConnected)
+      if (!projectHub.isConnected || !isConnected) {
         projectHub.connection // kết nối đến hub
+        setIsConnected(true)
       }
     }
 
     return () => {
-      if (projectHub.isConnecting && project?.id && project?.id === params.projectId) {
+      if (projectHub.isConnected && project?.id && project?.id !== params.projectId) {
+        console.log('Disconnecting project hub', params?.projectId, project?.id, projectHub.isConnected)
         projectHub.disconnect()
+        setIsConnected(false)
       }
     }
-  }, [params.projectId, project, project.id, projectHub, projectHub.isConnected])
+  }, [params?.projectId, project?.id, projectHub.isConnected])
 
   useEffect(() => {
     if (projectHub.isConnected) {
@@ -51,7 +57,7 @@ function Project() {
       })
       projectHub.connection?.invoke(hubs.project.send.getOnlineMembers).catch(_ => {})
     }
-  }, [project, project?.id, projectHub.isConnected])
+  }, [project?.id, projectHub.isConnected])
 
   useEffect(() => {
     // tải thành viên của project
@@ -63,8 +69,7 @@ function Project() {
           console.log('Can not get project members', res?.data)
         }
       })
-  }, [project.id, params.projectId, dispatch])
-
+  }, [project?.id, params.projectId])
   return (
     <>
       {project && (
@@ -79,7 +84,7 @@ function Project() {
           >
             <Flex className='w-full flex-1' style={{ overflow: 'hidden' }} $gap='0.5rem'>
               <ProjectSideBar />
-              <Outlet />
+              {isConnected && <Outlet />}
             </Flex>
           </Suspense>
           <ProjectChatRoom />

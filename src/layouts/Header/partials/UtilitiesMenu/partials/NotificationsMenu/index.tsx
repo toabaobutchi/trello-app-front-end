@@ -3,20 +3,20 @@ import MenuHeader from '@comps/MenuHeader'
 import NotificationHeader from '../NotificationHeader'
 import ImageBox from '@comps/ImageBox'
 import config from '@confs/app.config'
-import { useHub } from '@hooks/useHub'
-import { useEffect } from 'react'
+// import { useHub } from '@hooks/useHub'
+// import { useEffect } from 'react'
 import Tooltip from '@comps/Tooltip-v2'
 
 function NotificationMenu() {
   // const account = useSelector((state: RootState) => state.login.accountInfo)
-  const connection = useHub('/notificationHub', 'SubscribeNotification')
-  useEffect(() => {
-    if (connection) {
-      connection.on('ReceiveProjectNotification', notification => {
-        console.log('Received notification', notification)
-      })
-    }
-  }, [connection])
+  // const connection = useHub('/notificationHub', 'SubscribeNotification')
+  // useEffect(() => {
+  //   if (connection) {
+  //     connection.on('ReceiveProjectNotification', notification => {
+  //       console.log('Received notification', notification)
+  //     })
+  //   }
+  // }, [connection])
   return (
     <>
       <FixedMenu

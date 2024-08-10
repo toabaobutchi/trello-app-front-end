@@ -44,7 +44,7 @@ function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remote
   const dispatch = useDispatch()
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const members = useSelector((state: RootState) => state.project.activeProject.members)
+  const { members } = useProjectSelector()
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   const [confirmDeleteModal, handleToggleConfirmDeleteModal] = useModal()
   const taskAssignments = useMemo(() => {

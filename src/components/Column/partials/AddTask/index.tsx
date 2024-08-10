@@ -37,11 +37,13 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
   }
   const addTaskInputContainerRef = useRef<HTMLDivElement>(null)
   const { outClick } = useClickTracker(addTaskInputContainerRef.current as HTMLElement)
+
   useEffect(() => {
     if (outClick.isOutClick) {
       onCancelAddTask()
     }
   }, [onCancelAddTask, outClick])
+
   const handleAddTask = async () => {
     if (!addTask) {
       console.log('Please enter a task name')
@@ -59,14 +61,14 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
         const data = res.data
         onCancelAddTask()
         dispatch(projectSlice.actions.addNewTask(data))
+        
         if (projectHub.isConnected) {
-          // SendAddNewTask
           projectHub.connection?.invoke(hubs.project.send.addNewTask, data)
         }
       }
     }
   }
-  const handleTrigger = handleTriggerKeyPress(e => {
+  const handleTrigger = handleTriggerKeyPress(() => {
     handleAddTask()
   }, 'Enter')
   return (

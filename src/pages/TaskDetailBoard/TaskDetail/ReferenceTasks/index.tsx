@@ -8,7 +8,10 @@ import Modal from '@comps/Modal'
 import ReferenceTaskSelector from './ReferenceTaskSelector'
 import { addChildrenTasks, addDependencies, deleteRelatedTask, getRelatedTasks } from '@services/task.services'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
-import { ReferenceTasks as RefTasks } from '@utils/types'
+import { DispatchRelatedTaskResponse, ReferenceTasks as RefTasks, RelatedTaskResponse } from '@utils/types'
+import { useDispatch } from 'react-redux'
+import { projectSlice } from '@redux/ProjectSlice'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 const tabs: TabNav[] = [
   {
@@ -40,6 +43,8 @@ function ReferenceTasks() {
   const [taskSelectorModal, handleToggleTaskSelectorModal] = useModal()
   const context = useContext(TaskDetailContext)
   const [refTasks, setRefTasks] = useState<RefTasks>(initRefTask)
+  const dispatch = useDispatch()
+  const [projectHub] = useState(new ProjectHub())
 
   useEffect(() => {
     if (context?.task) {
@@ -52,6 +57,28 @@ function ReferenceTasks() {
     }
   }, [context?.task])
 
+  useEffect(() => {
+    if (projectHub.isConnected && context?.task?.id) {
+      projectHub.connection?.on(
+        hubs.project.receive.addTaskDependencies,
+        (taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+          if (taskId === context?.task?.id) {
+            setRefTasks(prev => ({ ...prev, dependencies: [...(prev?.dependencies ?? []), ...relatedTasks] }))
+          }
+        }
+      )
+
+      projectHub.connection?.on(
+        hubs.project.receive.addChildrenTasks,
+        (taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+          if (taskId === context?.task?.id) {
+            setRefTasks(prev => ({ ...prev, childTasks: [...(prev?.childTasks ?? []), ...relatedTasks] }))
+          }
+        }
+      )
+    }
+  }, [projectHub.isConnected, context?.task?.id])
+
   const handleTabClick = (value: string) => {
     setActiveTab(value)
   }
@@ -63,7 +90,19 @@ function ReferenceTasks() {
           const data = res.data
           // add dependencies
           setRefTasks(prev => ({ ...prev, dependencies: [...(prev?.dependencies ?? []), ...data] }))
-          handleToggleTaskSelectorModal()
+
+          // dispatch
+          dispatch(
+            projectSlice.actions.addFromDependencies({
+              taskId: context?.task?.id,
+              relatedTasks: data
+            } as DispatchRelatedTaskResponse)
+          )
+
+          // send to hub
+          if (projectHub.isConnected) {
+            projectHub.connection?.invoke(hubs.project.send.addTaskDependencies, context?.task?.id, data)
+          }
         }
       } else {
         const res = await addChildrenTasks(context?.task?.id, taskIds)
@@ -71,11 +110,25 @@ function ReferenceTasks() {
           const data = res.data
           // add dependencies
           setRefTasks(prev => ({ ...prev, childTasks: [...(prev?.childTasks ?? []), ...data] }))
-          handleToggleTaskSelectorModal()
+
+          // dispatch
+          dispatch(
+            projectSlice.actions.addFromChildren({
+              taskId: context?.task?.id,
+              relatedTasks: data
+            } as DispatchRelatedTaskResponse)
+          )
+
+          // send to hub
+          if (projectHub.isConnected) {
+            projectHub.connection?.invoke(hubs.project.send.addChildrenTasks, context?.task?.id, data)
+          }
         }
       }
+      handleToggleTaskSelectorModal()
     }
   }
+
   const handleDelete = async (refTaskId: string) => {
     if (context?.task?.id) {
       const res = await deleteRelatedTask(

@@ -6,10 +6,12 @@ import {
   CreateListResponse,
   CreateTaskResponse,
   DeletedTaskAssignmentResponse,
+  DispatchRelatedTaskResponse,
   DragOverResult,
   JoinTaskResponse,
   ListResponseForBoard,
   MarkedTaskResponse,
+  RelatedTaskResponse,
   SubtaskForBoard,
   TaskResponseForBoard,
   UnassignSubtaskResponse,
@@ -94,6 +96,7 @@ function BoardContent() {
 
   // signalr listeners
   useEffect(() => {
+    console.log('Board content', project?.board?.id, projectHub.isConnected)
     if (project?.board?.id && projectHub.isConnected) {
       // ReceiveStartDragList
       projectHub.connection?.on(hubs.project.receive.startDragList, (assignmentId: string, listId: string) => {
@@ -234,9 +237,32 @@ function BoardContent() {
           dispatch(projectSlice.actions.removeTaskAssignment(data))
         }
       )
+      projectHub.connection?.on(
+        hubs.project.receive.addTaskDependencies,
+        (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+          console.log('addTaskDependencies')
+          dispatch(
+            projectSlice.actions.addFromDependencies({
+              taskId,
+              relatedTasks
+            } as DispatchRelatedTaskResponse)
+          )
+        }
+      )
+      projectHub.connection?.on(
+        hubs.project.receive.addChildrenTasks,
+        (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+          dispatch(
+            projectSlice.actions.addFromChildren({
+              taskId,
+              relatedTasks
+            } as DispatchRelatedTaskResponse)
+          )
+        }
+      )
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
-  }, [projectHub, dispatch, project?.board?.id])
+  }, [projectHub.isConnected, project?.board?.id])
 
   const findColumnByCardId = (cardId: string) => {
     return listState?.find(list => list?.tasks?.map(task => task.id).includes(cardId))
@@ -505,7 +531,6 @@ function BoardContent() {
     setActiveDragItem(undefined) // xoá `activeDragItem` khi dừng kéo thả
     setOldColumn(undefined)
   }
-  // const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const customMouseSensor = useSensor(MyCustomSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
 
