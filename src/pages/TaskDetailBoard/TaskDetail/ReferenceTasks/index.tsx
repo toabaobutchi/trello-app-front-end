@@ -8,7 +8,12 @@ import Modal from '@comps/Modal'
 import ReferenceTaskSelector from './ReferenceTaskSelector'
 import { addChildrenTasks, addDependencies, deleteRelatedTask, getRelatedTasks } from '@services/task.services'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
-import { DispatchRelatedTaskResponse, ReferenceTasks as RefTasks, RelatedTaskResponse } from '@utils/types'
+import {
+  DeletedRelationshipResponse,
+  DispatchRelatedTaskResponse,
+  ReferenceTasks as RefTasks,
+  RelatedTaskResponse
+} from '@utils/types'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
@@ -76,6 +81,27 @@ function ReferenceTasks() {
           }
         }
       )
+
+      projectHub.connection?.on(
+        hubs.project.receive.removeTaskDependency,
+        (_assignmentId: string, taskId: string, data: DeletedRelationshipResponse) => {
+          if (taskId === context?.task?.id) {
+            setRefTasks(prev => ({
+              ...prev,
+              dependencies: prev.dependencies.filter(t => t.id !== data.relationshipId)
+            }))
+          }
+        }
+      )
+
+      projectHub.connection?.on(
+        hubs.project.receive.removeChildrenTask,
+        (_assignmentId: string, taskId: string, data: DeletedRelationshipResponse) => {
+          if (taskId === context?.task?.id) {
+            setRefTasks(prev => ({ ...prev, childTasks: prev.childTasks.filter(t => t.id !== data.relationshipId) }))
+          }
+        }
+      )
     }
   }, [projectHub.isConnected, context?.task?.id])
 
@@ -140,9 +166,25 @@ function ReferenceTasks() {
       if (res?.isSuccess) {
         const data = res.data
         if (data.relationshipType === 'Dependencies') {
-          setRefTasks(prev => ({ ...prev, dependencies: prev.dependencies.filter(t => t.id !== refTaskId) }))
+          setRefTasks(prev => ({ ...prev, dependencies: prev.dependencies.filter(t => t.id !== data.relationshipId) }))
+
+          // dispatch
+          dispatch(projectSlice.actions.removeFromDependencies(data))
+
+          // send to hub
+          if (projectHub.isConnected) {
+            projectHub.connection?.invoke(hubs.project.send.removeTaskDependency, data)
+          }
         } else {
-          setRefTasks(prev => ({ ...prev, childTasks: prev.childTasks.filter(t => t.id !== refTaskId) }))
+          setRefTasks(prev => ({ ...prev, childTasks: prev.childTasks.filter(t => t.id !== data.relationshipId) }))
+
+          // dispatch
+          dispatch(projectSlice.actions.removeFromChildren(data))
+
+          // send to hub
+          if (projectHub.isConnected) {
+            projectHub.connection?.invoke(hubs.project.send.removeChildrenTask, data)
+          }
         }
       }
     }

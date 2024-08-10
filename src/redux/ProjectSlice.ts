@@ -18,7 +18,8 @@ import {
   UpdatedListResponse,
   UpdatedTaskResponse,
   DeletedTaskAssignmentResponse,
-  DispatchRelatedTaskResponse
+  DispatchRelatedTaskResponse,
+  DeletedRelationshipResponse
 } from '@utils/types'
 
 export const projectSlice = createSlice({
@@ -31,10 +32,39 @@ export const projectSlice = createSlice({
       onlineMembers: [] as string[],
       currentFilters: {} as ProjectFilterType,
       table: {}
-      // table, chart and calendar
     }
   },
   reducers: {
+    removeFromChildren: (state, action) => {
+      const data = action.payload as DeletedRelationshipResponse
+      if (data) {
+        const list = state.activeProject.board?.lists?.find(
+          l => (l.tasks?.findIndex(t => t.id === data.relationshipId) ?? -1) >= 0
+        )
+        if (list) {
+          const task = list.tasks?.find(t => t.id === data.relationshipId)
+          if (task) {
+            task.dependencyIds = task.dependencyIds?.filter(id => id !== data.taskId)
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
+    removeFromDependencies: (state, action) => {
+      const data = action.payload as DeletedRelationshipResponse
+      if (data) {
+        const list = state.activeProject.board?.lists?.find(
+          l => (l.tasks?.findIndex(t => t.id === data.taskId) ?? -1) >= 0
+        )
+        if (list) {
+          const task = list.tasks?.find(t => t.id === data.taskId)
+          if (task) {
+            task.dependencyIds = task.dependencyIds?.filter(id => id !== data.relationshipId)
+            state.activeProject.changeId = new Date().getTime()
+          }
+        }
+      }
+    },
     addFromChildren: (state, action) => {
       const data = action.payload as DispatchRelatedTaskResponse
       if (data) {

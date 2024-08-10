@@ -4,6 +4,7 @@ import {
   ChangeTaskOrderResponse,
   CreateListResponse,
   CreateTaskResponse,
+  DeletedRelationshipResponse,
   DeletedTaskAssignmentResponse,
   DeletedTaskResponse,
   DispatchRelatedTaskResponse,
@@ -205,6 +206,18 @@ function ViewContent() {
         hubs.project.receive.deleteTask,
         (_assignmentId: string, _taskId: string, data: DeletedTaskResponse, _moveToTrash: boolean) => {
           dispatch(projectSlice.actions.deleteTask(data))
+        }
+      )
+      projectHub.connection?.on(
+        hubs.project.receive.removeTaskDependency,
+        (_assignmentId: string, _taskId: string, data: DeletedRelationshipResponse) => {
+          dispatch(projectSlice.actions.removeFromDependencies(data))
+        }
+      )
+      projectHub.connection?.on(
+        hubs.project.receive.removeChildrenTask,
+        (_assignmentId: string, _taskId: string, data: DeletedRelationshipResponse) => {
+          dispatch(projectSlice.actions.removeFromChildren(data))
         }
       )
       // eslint-disable-next-line react-hooks/exhaustive-deps
