@@ -13,6 +13,7 @@ import TaskDetailBoard from '@pages/TaskDetailBoard'
 import ProjectMember from '@pages/ProjectMember'
 import ProjectShare from '@pages/ProjectShare'
 import ProjectMemberProfile from '@pages/ProjectMember/ProjectMemberItem/ProjectMemberProfile'
+import ToastContainer from '@comps/Toast/Container'
 const Home = React.lazy(() => import('@pages/Home'))
 const Error = React.lazy(() => import('@pages/Error'))
 const Welcome = React.lazy(() => import('@pages/Welcome'))
@@ -147,6 +148,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <GlobalStyles>
       <GoogleOAuthProvider clientId={config.googleClientId}>
         <RouterProvider router={router} />
+        <ToastContainer position='top-right' />
       </GoogleOAuthProvider>
     </GlobalStyles>
   </Provider>
