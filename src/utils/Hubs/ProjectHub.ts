@@ -9,15 +9,21 @@ export class ProjectHub extends HubBase {
     super(path ?? '/projectHub')
     this.onlineMembersWhenConnect = []
   }
+  connectToHub(callback?: () => void) {
+    if (this.isConnecting) this.disconnect()
+    this.connect().then(connection => {
+      ProjectHub.connection = connection
+      callback?.()
+      console.log('Connection established', ProjectHub.connection)
+    })
+    return Boolean(ProjectHub.connection)
+  }
   get connection() {
-    if (!ProjectHub.connection) {
-      this.connect().then(connection => {
-        ProjectHub.connection = connection
-        // ProjectHub.connection?.on(hubs.project.receive.subscriber, (assignmentIds: string[]) => {
-        //   this.onlineMembersWhenConnect = assignmentIds
-        // })
-      })
-    }
+    // if (!ProjectHub.connection) {
+    //   this.connect().then(connection => {
+    //     ProjectHub.connection = connection
+    //   })
+    // }
     return ProjectHub.connection
   }
 

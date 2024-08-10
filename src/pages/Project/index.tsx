@@ -1,5 +1,5 @@
-import Flex from '@comps/StyledComponents/Flex'
 import './Project.scss'
+import Flex from '@comps/StyledComponents/Flex'
 import ProjectHeader from './partials/ProjectHeader'
 import { ProjectPageParams, ProjectResponseForBoard } from '@utils/types'
 import { Suspense, useEffect, useState } from 'react'
@@ -15,7 +15,6 @@ import { HttpResponse } from '@utils/Axios/HttpClientAuth'
 import ProjectChatRoom from './partials/ProjectChatRoom'
 
 function Project() {
-  console.log('Render project')
   const params = useParams() as ProjectPageParams
   const { board: project } = useProjectSelector()
   const response = useLoaderData() as HttpResponse<ProjectResponseForBoard>
@@ -28,27 +27,17 @@ function Project() {
       if (response?.isSuccess) {
         const data = response.data
         dispatch(projectSlice.actions.setActiveProjectBoard(data))
+
+        // sau khi tải dữ liệu thì khởi tạo kết nối thời gian thực
+        projectHub.connectToHub(() => {
+          setIsConnected(_prev => true)
+        }) // kết nối đến hub
       }
+    }
+    return () => {
+      setIsConnected(_prev => false)
     }
   }, [params?.projectId])
-
-  useEffect(() => {
-    if (project && project.id) {
-      // console.log('Connecting with: ', params?.projectId, project?.id, projectHub.isConnected)
-      if (!projectHub.isConnected || !isConnected) {
-        projectHub.connection // kết nối đến hub
-        setIsConnected(true)
-      }
-    }
-
-    return () => {
-      if (projectHub.isConnected && project?.id && project?.id !== params.projectId) {
-        console.log('Disconnecting project hub', params?.projectId, project?.id, projectHub.isConnected)
-        projectHub.disconnect()
-        setIsConnected(false)
-      }
-    }
-  }, [params?.projectId, project?.id, projectHub.isConnected])
 
   useEffect(() => {
     if (projectHub.isConnected) {

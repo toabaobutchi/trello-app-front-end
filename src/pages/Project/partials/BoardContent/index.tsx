@@ -96,7 +96,6 @@ function BoardContent() {
 
   // signalr listeners
   useEffect(() => {
-    console.log('Board content', project?.board?.id, projectHub.isConnected)
     if (project?.board?.id && projectHub.isConnected) {
       // ReceiveStartDragList
       projectHub.connection?.on(hubs.project.receive.startDragList, (assignmentId: string, listId: string) => {
@@ -262,7 +261,7 @@ function BoardContent() {
       )
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
-  }, [projectHub.isConnected, project?.board?.id])
+  }, [projectHub.isConnected, projectHub.state, project?.board?.id])
 
   const findColumnByCardId = (cardId: string) => {
     return listState?.find(list => list?.tasks?.map(task => task.id).includes(cardId))
