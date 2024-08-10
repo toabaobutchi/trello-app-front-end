@@ -39,7 +39,7 @@ function MemberTable() {
           prev =>
             ({
               ...prev,
-              taskAssignmentIds: prev?.taskAssignmentIds?.filter(tmId => tmId !== data.taskId)
+              taskAssignmentIds: prev?.taskAssignmentIds?.filter(tmId => tmId !== data.assignmentId)
             } as typeof prev)
         )
 

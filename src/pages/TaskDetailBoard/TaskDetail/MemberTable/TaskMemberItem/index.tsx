@@ -1,11 +1,20 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 import { AssignmentResponse } from '@utils/types'
 
-function TaskMemberItem({ taskMember, onUnassign }: { taskMember: AssignmentResponse, onUnassign: (id: string) => void }) {
+function TaskMemberItem({
+  taskMember,
+  onUnassign
+}: {
+  taskMember: AssignmentResponse
+  onUnassign: (id: string) => void
+}) {
+  const { board: project } = useProjectSelector()
   const handleUnassignTaskAssignment = () => {
     onUnassign(taskMember.id)
   }
+  const isYou = taskMember.id === project.assignmentId
   return (
     <>
       <div key={taskMember.id} className='member-info'>
@@ -18,9 +27,11 @@ function TaskMemberItem({ taskMember, onUnassign }: { taskMember: AssignmentResp
             <p className='member-info-role'>{taskMember.permission}</p>
           </div>
         </Flex>
-        <Button theme='danger' onClick={handleUnassignTaskAssignment}>
-          <i className='fa-regular fa-trash-can'></i>
-        </Button>
+        {!isYou && (
+          <Button theme='danger' onClick={handleUnassignTaskAssignment}>
+            <i className='fa-regular fa-trash-can'></i>
+          </Button>
+        )}
       </div>
     </>
   )

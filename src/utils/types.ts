@@ -666,3 +666,11 @@ export type DispatchRelatedTaskResponse = {
   taskId: string
   relatedTasks: RelatedTaskResponse[]
 }
+
+export type DuplicateTaskModel = {
+  inheritPriority?: boolean
+  inheritDescription?: boolean
+  inheritDueDate?: boolean
+  duplicateTaskCount: number
+  listId: string
+}

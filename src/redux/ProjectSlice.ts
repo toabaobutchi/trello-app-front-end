@@ -105,11 +105,13 @@ export const projectSlice = createSlice({
     removeTaskAssignment: (state, action) => {
       const data = action.payload as DeletedTaskAssignmentResponse
       if (data) {
-        const list = state.activeProject.board.lists?.find(l => l.id === data.assignmentId)
+        const list = state.activeProject.board.lists?.find(
+          l => (l.tasks?.findIndex(t => t.id === data.taskId) ?? -1) >= 0
+        )
         if (list) {
-          const index = list.tasks?.findIndex(t => t.id === data.taskId) ?? -1
-          if (index > -1 && list.tasks) {
-            list.tasks.splice(index, 1)
+          const task = list.tasks?.find(t => t.id === data.taskId)
+          if (task) {
+            task.taskAssignmentIds = task.taskAssignmentIds.filter(id => id !== data.assignmentId)
             state.activeProject.changeId = new Date().getTime()
           }
         }

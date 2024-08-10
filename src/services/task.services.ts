@@ -7,6 +7,7 @@ import {
   CreateTaskResponse,
   DeletedRelationshipResponse,
   DeletedTaskResponse,
+  DuplicateTaskModel,
   InTrashTaskResponse,
   JoinTaskResponse,
   MarkedTaskResponse,
@@ -41,7 +42,14 @@ const joinTask = async (taskId: string) => {
 }
 
 const duplicateTask = async (taskId: string, options: InheritOptions) => {
-  const res = await http.post<InheritOptions, TaskResponseForBoard[]>(`/tasks/${taskId}/duplicate`, options)
+  const model: DuplicateTaskModel = {
+    inheritDescription: options.description,
+    inheritDueDate: options.dueDate,
+    inheritPriority: options.priority,
+    duplicateTaskCount: options.duplicateTaskCount || 1,
+    listId: options.listId ?? ''
+  }
+  const res = await http.post<DuplicateTaskModel, TaskResponseForBoard[]>(`/tasks/${taskId}/duplicate`, model)
   return res
 }
 
