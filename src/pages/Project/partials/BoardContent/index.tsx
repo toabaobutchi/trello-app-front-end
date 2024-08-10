@@ -75,7 +75,7 @@ export type BlockDragState = {
   isDisabled?: boolean
 }
 
-function BoardContent() {
+function BoardContent({ remoteDragging }: { remoteDragging?: RemoteDraggingType }) {
   const dispatch = useDispatch<AppDispatch>()
   const project = useSelector((state: RootState) => state.project.activeProject)
   // dùng để lưu trữ tạm thời để các kéo thả - sau đó cập nhật lại sau
@@ -87,181 +87,181 @@ function BoardContent() {
 
   //signalR
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
-  const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
+  // const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
 
   useEffect(() => {
     const lists = filterLists(project?.board?.lists, project?.currentFilters)
     setListState(_prev => lists as ListResponseForBoard[])
   }, [project?.board?.lists, dispatch, project?.currentFilters, project?.changeId])
 
-  // signalr listeners
-  useEffect(() => {
-    if (project?.board?.id && projectHub.isConnected) {
-      // ReceiveStartDragList
-      projectHub.connection?.on(hubs.project.receive.startDragList, (assignmentId: string, listId: string) => {
-        setRemoteDragging({
-          isDragging: true,
-          subId: assignmentId,
-          dragObjectId: listId,
-          dragObject: 'Column'
-        })
+  // // signalr listeners
+  // useEffect(() => {
+  //   if (project?.board?.id && projectHub.isConnected) {
+  //     // ReceiveStartDragList
+  //     projectHub.connection?.on(hubs.project.receive.startDragList, (assignmentId: string, listId: string) => {
+  //       setRemoteDragging({
+  //         isDragging: true,
+  //         subId: assignmentId,
+  //         dragObjectId: listId,
+  //         dragObject: 'Column'
+  //       })
 
-        // nếu có thêm một request nữa thì reset lại bộ đếm giờ
-        if (remoteDragTimeOutId.current) {
-          clearTimeout(remoteDragTimeOutId.current)
-          remoteDragTimeOutId.current = undefined
-        }
+  //       // nếu có thêm một request nữa thì reset lại bộ đếm giờ
+  //       if (remoteDragTimeOutId.current) {
+  //         clearTimeout(remoteDragTimeOutId.current)
+  //         remoteDragTimeOutId.current = undefined
+  //       }
 
-        // chờ 60s sau sẽ tự động tắt
-        remoteDragTimeOutId.current = setTimeout(() => {
-          setRemoteDragging(_prev => undefined)
-          remoteDragTimeOutId.current = undefined
-        }, config.timeOut.drag)
-      })
-      // ReceiveEndDragList
-      projectHub.connection?.on(hubs.project.receive.endDragList, (_assignmentId: string, updatedListOrder: string) => {
-        dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
-        setTimeout(() => {
-          setRemoteDragging(_prev => undefined)
+  //       // chờ 60s sau sẽ tự động tắt
+  //       remoteDragTimeOutId.current = setTimeout(() => {
+  //         setRemoteDragging(_prev => undefined)
+  //         remoteDragTimeOutId.current = undefined
+  //       }, config.timeOut.drag)
+  //     })
+  //     // ReceiveEndDragList
+  //     projectHub.connection?.on(hubs.project.receive.endDragList, (_assignmentId: string, updatedListOrder: string) => {
+  //       dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
+  //       setTimeout(() => {
+  //         setRemoteDragging(_prev => undefined)
 
-          // xoá đi bộ đếm giờ nếu nhận được tín hiệu ngừng dưới 60s
-          if (remoteDragTimeOutId.current) {
-            clearTimeout(remoteDragTimeOutId.current)
-            remoteDragTimeOutId.current = undefined
-          }
-        }, config.timeOut.delayAfterEndDrag)
-      })
-      // ReceiveStartDragTask
-      projectHub.connection?.on(
-        hubs.project.receive.startDragTask,
-        (assignmentId: string, _updatedListOrder: string, taskId: string) => {
-          setRemoteDragging({
-            isDragging: true,
-            subId: assignmentId,
-            dragObjectId: taskId,
-            dragObject: 'Card'
-          })
+  //         // xoá đi bộ đếm giờ nếu nhận được tín hiệu ngừng dưới 60s
+  //         if (remoteDragTimeOutId.current) {
+  //           clearTimeout(remoteDragTimeOutId.current)
+  //           remoteDragTimeOutId.current = undefined
+  //         }
+  //       }, config.timeOut.delayAfterEndDrag)
+  //     })
+  //     // ReceiveStartDragTask
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.startDragTask,
+  //       (assignmentId: string, _updatedListOrder: string, taskId: string) => {
+  //         setRemoteDragging({
+  //           isDragging: true,
+  //           subId: assignmentId,
+  //           dragObjectId: taskId,
+  //           dragObject: 'Card'
+  //         })
 
-          // nếu có thêm một request nữa thì reset lại bộ đếm giờ
-          if (remoteDragTimeOutId.current) {
-            clearTimeout(remoteDragTimeOutId.current)
-            remoteDragTimeOutId.current = undefined
-          }
+  //         // nếu có thêm một request nữa thì reset lại bộ đếm giờ
+  //         if (remoteDragTimeOutId.current) {
+  //           clearTimeout(remoteDragTimeOutId.current)
+  //           remoteDragTimeOutId.current = undefined
+  //         }
 
-          // chờ 60s sau sẽ tự động tắt
-          remoteDragTimeOutId.current = setTimeout(() => {
-            setRemoteDragging(_prev => undefined)
-            remoteDragTimeOutId.current = undefined
-          }, config.timeOut.drag)
-        }
-      )
-      // ReceiveEndDragTask
-      projectHub.connection?.on(
-        hubs.project.receive.endDragTask,
-        (_assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
-          dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
-          // setRemoteDragging(undefined)
-          setTimeout(() => {
-            setRemoteDragging(_prev => undefined)
+  //         // chờ 60s sau sẽ tự động tắt
+  //         remoteDragTimeOutId.current = setTimeout(() => {
+  //           setRemoteDragging(_prev => undefined)
+  //           remoteDragTimeOutId.current = undefined
+  //         }, config.timeOut.drag)
+  //       }
+  //     )
+  //     // ReceiveEndDragTask
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.endDragTask,
+  //       (_assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
+  //         dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
+  //         // setRemoteDragging(undefined)
+  //         setTimeout(() => {
+  //           setRemoteDragging(_prev => undefined)
 
-            // xoá đi bộ đếm giờ nếu nhận được tín hiệu ngừng dưới 60s
-            if (remoteDragTimeOutId.current) {
-              clearTimeout(remoteDragTimeOutId.current)
-              remoteDragTimeOutId.current = undefined
-            }
-          }, config.timeOut.delayAfterEndDrag)
-        }
-      )
-      // ReceiveUpdateTaskInfo
-      projectHub.connection?.on(
-        hubs.project.receive.updateTaskInfo,
-        (_assignmentId: string, data: UpdatedTaskResponse) => {
-          dispatch(projectSlice.actions.updateTaskInfo(data))
-        }
-      )
-      // ReceiveAddSubtaskResult
-      projectHub.connection?.on(
-        hubs.project.receive.addSubtaskResult,
-        (_assignmentId: string, taskid: string, subtasks: SubtaskForBoard[]) => {
-          dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: subtasks.length }))
-        }
-      )
-      // ReceiveDeleteSubtask
-      projectHub.connection?.on(
-        hubs.project.receive.deleteSubtask,
-        (_assignmentId: string, taskid: string, _subtaskId: number) => {
-          dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 }))
-        }
-      )
-      // ReceiveCheckSubtask
-      projectHub.connection?.on(
-        hubs.project.receive.checkSubtask,
-        (_assignmentId: string, taskid: string, _subtaskId: number, status: boolean) => {
-          dispatch(projectSlice.actions.changeSubtaskStatus({ taskId: taskid, status }))
-        }
-      )
-      // ReceiveAddNewTask
-      projectHub.connection?.on(hubs.project.receive.addNewTask, (_assignmentId: string, data: CreateTaskResponse) => {
-        dispatch(projectSlice.actions.addNewTask(data))
-      })
-      // SendAddNewList
-      projectHub.connection?.on(hubs.project.receive.addNewList, (_assignmentId: string, data: CreateListResponse) => {
-        dispatch(projectSlice.actions.addNewList(data))
-      })
-      // SendDeleteList
-      projectHub.connection?.on(hubs.project.receive.deleteList, (_assignmentId: string, listId: string) => {
-        dispatch(projectSlice.actions.deleteList(listId))
-      })
-      projectHub.connection?.on(hubs.project.receive.markTask, (_assignmentId: string, data: MarkedTaskResponse) => {
-        dispatch(projectSlice.actions.markTask(data))
-      })
-      projectHub.connection?.on(
-        hubs.project.receive.assignMemberToTask,
-        (_assignmentId: string, data: AssignByTaskResponse) => {
-          dispatch(projectSlice.actions.addAssignmentToTask(data))
-        }
-      )
-      projectHub.connection?.on(
-        hubs.project.receive.duplicateTasks,
-        (_assignmentId: string, data: TaskResponseForBoard) => {
-          dispatch(projectSlice.actions.setDuplicateTasks(data))
-        }
-      )
-      projectHub.connection?.on(hubs.project.receive.joinTask, (_assignmentId: string, data: JoinTaskResponse) => {
-        dispatch(projectSlice.actions.joinTask(data))
-      })
-      projectHub.connection?.on(
-        hubs.project.receive.unassignTaskAssignment,
-        (_assignmentId: string, data: DeletedTaskAssignmentResponse) => {
-          dispatch(projectSlice.actions.removeTaskAssignment(data))
-        }
-      )
-      projectHub.connection?.on(
-        hubs.project.receive.addTaskDependencies,
-        (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
-          console.log('addTaskDependencies')
-          dispatch(
-            projectSlice.actions.addFromDependencies({
-              taskId,
-              relatedTasks
-            } as DispatchRelatedTaskResponse)
-          )
-        }
-      )
-      projectHub.connection?.on(
-        hubs.project.receive.addChildrenTasks,
-        (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
-          dispatch(
-            projectSlice.actions.addFromChildren({
-              taskId,
-              relatedTasks
-            } as DispatchRelatedTaskResponse)
-          )
-        }
-      )
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }
-  }, [projectHub.isConnected, projectHub.state, project?.board?.id])
+  //           // xoá đi bộ đếm giờ nếu nhận được tín hiệu ngừng dưới 60s
+  //           if (remoteDragTimeOutId.current) {
+  //             clearTimeout(remoteDragTimeOutId.current)
+  //             remoteDragTimeOutId.current = undefined
+  //           }
+  //         }, config.timeOut.delayAfterEndDrag)
+  //       }
+  //     )
+  //     // ReceiveUpdateTaskInfo
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.updateTaskInfo,
+  //       (_assignmentId: string, data: UpdatedTaskResponse) => {
+  //         dispatch(projectSlice.actions.updateTaskInfo(data))
+  //       }
+  //     )
+  //     // ReceiveAddSubtaskResult
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.addSubtaskResult,
+  //       (_assignmentId: string, taskid: string, subtasks: SubtaskForBoard[]) => {
+  //         dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: subtasks.length }))
+  //       }
+  //     )
+  //     // ReceiveDeleteSubtask
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.deleteSubtask,
+  //       (_assignmentId: string, taskid: string, _subtaskId: number) => {
+  //         dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 }))
+  //       }
+  //     )
+  //     // ReceiveCheckSubtask
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.checkSubtask,
+  //       (_assignmentId: string, taskid: string, _subtaskId: number, status: boolean) => {
+  //         dispatch(projectSlice.actions.changeSubtaskStatus({ taskId: taskid, status }))
+  //       }
+  //     )
+  //     // ReceiveAddNewTask
+  //     projectHub.connection?.on(hubs.project.receive.addNewTask, (_assignmentId: string, data: CreateTaskResponse) => {
+  //       dispatch(projectSlice.actions.addNewTask(data))
+  //     })
+  //     // SendAddNewList
+  //     projectHub.connection?.on(hubs.project.receive.addNewList, (_assignmentId: string, data: CreateListResponse) => {
+  //       dispatch(projectSlice.actions.addNewList(data))
+  //     })
+  //     // SendDeleteList
+  //     projectHub.connection?.on(hubs.project.receive.deleteList, (_assignmentId: string, listId: string) => {
+  //       dispatch(projectSlice.actions.deleteList(listId))
+  //     })
+  //     projectHub.connection?.on(hubs.project.receive.markTask, (_assignmentId: string, data: MarkedTaskResponse) => {
+  //       dispatch(projectSlice.actions.markTask(data))
+  //     })
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.assignMemberToTask,
+  //       (_assignmentId: string, data: AssignByTaskResponse) => {
+  //         dispatch(projectSlice.actions.addAssignmentToTask(data))
+  //       }
+  //     )
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.duplicateTasks,
+  //       (_assignmentId: string, data: TaskResponseForBoard) => {
+  //         dispatch(projectSlice.actions.setDuplicateTasks(data))
+  //       }
+  //     )
+  //     projectHub.connection?.on(hubs.project.receive.joinTask, (_assignmentId: string, data: JoinTaskResponse) => {
+  //       dispatch(projectSlice.actions.joinTask(data))
+  //     })
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.unassignTaskAssignment,
+  //       (_assignmentId: string, data: DeletedTaskAssignmentResponse) => {
+  //         dispatch(projectSlice.actions.removeTaskAssignment(data))
+  //       }
+  //     )
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.addTaskDependencies,
+  //       (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+  //         console.log('addTaskDependencies')
+  //         dispatch(
+  //           projectSlice.actions.addFromDependencies({
+  //             taskId,
+  //             relatedTasks
+  //           } as DispatchRelatedTaskResponse)
+  //         )
+  //       }
+  //     )
+  //     projectHub.connection?.on(
+  //       hubs.project.receive.addChildrenTasks,
+  //       (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
+  //         dispatch(
+  //           projectSlice.actions.addFromChildren({
+  //             taskId,
+  //             relatedTasks
+  //           } as DispatchRelatedTaskResponse)
+  //         )
+  //       }
+  //     )
+  //     // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   }
+  // }, [projectHub.isConnected, project?.board?.id])
 
   const findColumnByCardId = (cardId: string) => {
     return listState?.find(list => list?.tasks?.map(task => task.id).includes(cardId))
@@ -346,6 +346,7 @@ function BoardContent() {
 
     // sau 60s mà chưa clear cái timeout này thì sẽ block người dùng
     const timeOutId = setTimeout(() => {
+      alert('Block state is on')
       setBlockDragState(prev => ({ ...prev, isDisabled: true }))
 
       // roll back UI
@@ -536,33 +537,43 @@ function BoardContent() {
   const sensors = useSensors(customMouseSensor, touchSensor)
   return (
     <>
-      <DndContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd} sensors={sensors}>
-        <SortableContext
-          disabled={remoteDragging?.isDragging || blockDragState.isDisabled}
-          items={listState?.map(l => l?.id) ?? []}
-          strategy={horizontalListSortingStrategy}
+      {!blockDragState.isDisabled && (
+        <DndContext
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          sensors={sensors}
         >
-          <Flex $gap='1.5rem' className='column-list page-slide'>
-            {listState?.map(column => (
-              <SortableColumn
-                blockDragState={blockDragState}
-                remoteDragging={remoteDragging}
-                key={column.id}
-                column={column}
-              />
-            ))}
-            <AddNewList />
-          </Flex>
-        </SortableContext>
-        <DragOverlay dropAnimation={dropAnimation}>
-          {activeDragItem &&
-            (activeDragItem.dragObject === 'Card' ? (
-              <TaskCard task={activeDragItem.data as TaskResponseForBoard} />
-            ) : (
-              <SortableColumn column={activeDragItem.data as ListResponseForBoard} />
-            ))}
-        </DragOverlay>
-      </DndContext>
+          <SortableContext
+            disabled={remoteDragging?.isDragging}
+            items={listState?.map(l => l?.id) ?? []}
+            strategy={horizontalListSortingStrategy}
+          >
+            <Flex $gap='1.5rem' className='column-list page-slide'>
+              {listState?.map(column => (
+                <SortableColumn
+                  blockDragState={blockDragState}
+                  remoteDragging={remoteDragging}
+                  key={column.id}
+                  column={column}
+                />
+              ))}
+              <AddNewList />
+            </Flex>
+          </SortableContext>
+          <DragOverlay dropAnimation={dropAnimation}>
+            {activeDragItem &&
+              (activeDragItem.dragObject === 'Card' ? (
+                <TaskCard task={activeDragItem.data as TaskResponseForBoard} />
+              ) : (
+                <SortableColumn column={activeDragItem.data as ListResponseForBoard} />
+              ))}
+          </DragOverlay>
+        </DndContext>
+      )}
+      {blockDragState.isDisabled && (
+        <h2 className='text-danger text-center'>Wait for {config.timeOut.dragBlock / 1000} seconds to continue!</h2>
+      )}
     </>
   )
 }

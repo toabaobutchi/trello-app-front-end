@@ -40,7 +40,8 @@ export const hubs = {
       unassignTaskAssignment: 'SendUnassignTaskAssignment',
       projectComment: 'SendProjectComment',
       addTaskDependencies: 'SendAddTaskDependencies',
-      addChildrenTasks: 'SendAddChildrenTasks'
+      addChildrenTasks: 'SendAddChildrenTasks',
+      deleteTask: 'SendDeleteTask'
     },
     receive: {
       startDragList: 'ReceiveStartDragList',
@@ -73,7 +74,8 @@ export const hubs = {
       unassignTaskAssignment: 'ReceiveUnassignTaskAssignment',
       projectComment: 'ReceiveProjectComment',
       addTaskDependencies: 'ReceiveAddTaskDependencies',
-      addChildrenTasks: 'ReceiveAddChildrenTasks'
+      addChildrenTasks: 'ReceiveAddChildrenTasks',
+      deleteTask: 'ReceiveDeleteTask'
     }
   },
   taskDetail: {

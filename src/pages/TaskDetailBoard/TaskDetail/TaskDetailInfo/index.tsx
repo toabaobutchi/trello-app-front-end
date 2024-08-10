@@ -5,6 +5,7 @@ import {
   AssignByTaskResponse,
   AssignmentResponse,
   DeletedTaskAssignmentResponse,
+  DeletedTaskResponse,
   JoinTaskResponse,
   ResetTaskModel,
   SubtaskForBoard,
@@ -23,6 +24,10 @@ import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
 import { resetTask, updateTask } from '@services/task.services'
 import UpdateStartDateEditor from './UpdateStartDateEditor'
+import Modal from '@comps/Modal'
+import { useModal } from '@hooks/useModal'
+import { useNavigate } from 'react-router-dom'
+import Button from '@comps/Button'
 
 type RemoteUpdatingType = {
   assignmentId: string
@@ -33,12 +38,21 @@ function TaskDetailInfo() {
   const context = useContext(TaskDetailContext)
   const taskDetail = context?.task
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const project = useSelector((state: RootState) => state.project.activeProject)
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
+  const [remoteDeleteModal, handleToggleRemoteDeleteModal, setRemoteDeleteModal] = useModal()
   const [creator] = useState<AssignmentResponse | undefined>(() =>
     project?.members.find(p => p.id === taskDetail?.creatorId)
   )
+  const [remoteDeleteType, setRemoteDeleteType] = useState<boolean>()
+
+  const handleCloseRemoteDeleteModal = () => {
+    setRemoteDeleteModal(false)
+    navigate(-1)
+  }
+
   useEffect(() => {
     if (projectHub.isConnected && taskDetail?.id) {
       // ReceiveUpdateTaskInfo
@@ -103,6 +117,20 @@ function TaskDetailInfo() {
                   taskAssignmentIds: prev?.taskAssignmentIds?.filter(id => id !== data.taskId)
                 } as typeof prev)
             )
+          }
+        }
+      )
+      projectHub.connection?.on(
+        hubs.project.receive.deleteTask,
+        (_assignmentId: string, _taskId: string, data: DeletedTaskResponse, moveToTrash: boolean) => {
+          if (data.id === taskDetail.id) {
+            handleToggleRemoteDeleteModal()
+            setRemoteDeleteType(moveToTrash)
+            if (moveToTrash) {
+              // move to trash
+            } else {
+              // delete task
+            }
           }
         }
       )
@@ -270,6 +298,28 @@ function TaskDetailInfo() {
           taskId={taskDetail?.id ?? ''}
         />
       </div>
+      <Modal
+        layout={{
+          header: { title: 'Warning', closeIcon: true },
+          footer: (
+            <>
+              <Button onClick={handleCloseRemoteDeleteModal} variant='filled'>
+                Exit
+              </Button>
+            </>
+          )
+        }}
+        open={remoteDeleteModal}
+        onClose={handleCloseRemoteDeleteModal}
+      >
+        <p className='mb-1 text-danger'>
+          The task <b>{taskDetail?.name}</b> was{' '}
+          {remoteDeleteType
+            ? 'moved to trash. Go to recycle bin and you can find and restore it!'
+            : 'deleted permanently!'}
+        </p>
+        <p>Close this dialog to exit!</p>
+      </Modal>
     </>
   )
 }

@@ -24,7 +24,7 @@ function SortByDueDateMenu() {
       <TableHeaderSort
         header={
           <>
-            Start date&nbsp;{' '}
+            Due date&nbsp;{' '}
             {searchParams.get(SORT_BY_DUE_DATE) ? (
               searchParams.get(SORT_BY_DUE_DATE) === 'asc' ? (
                 <i className='fa-solid fa-arrow-down-1-9'></i>

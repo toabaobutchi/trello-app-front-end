@@ -14,7 +14,6 @@ export class ProjectHub extends HubBase {
     this.connect().then(connection => {
       ProjectHub.connection = connection
       callback?.()
-      console.log('Connection established', ProjectHub.connection)
     })
     return Boolean(ProjectHub.connection)
   }

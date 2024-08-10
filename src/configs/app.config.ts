@@ -19,9 +19,9 @@ const config = {
   priorities: ['High', 'Medium', 'Normal', 'Low'],
   apiTimeout: 30 * 1000,
   timeOut: {
-    drag: 60 * 1000,
+    drag: 5 * 1000,
     delayAfterEndDrag: 1 * 1000,
-    dragBlock: 60 * 1000
+    dragBlock: 5 * 1000
   }
 }
 export default config

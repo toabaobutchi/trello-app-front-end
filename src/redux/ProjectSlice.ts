@@ -176,6 +176,7 @@ export const projectSlice = createSlice({
           task.description = data.description
           task.dueDate = data.dueDate
           task.priority = data.priority
+          task.startedAt = data.startedAt
           state.activeProject.changeId = new Date().getTime()
         }
       }

@@ -3,7 +3,9 @@ import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents'
 import { projectSlice } from '@redux/ProjectSlice'
 import { deleteTask } from '@services/task.services'
+import { hubs, ProjectHub } from '@utils/Hubs'
 import { TaskResponseForBoard } from '@utils/types'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 type DeleteTaskMenuProps = {
@@ -14,11 +16,19 @@ type DeleteTaskMenuProps = {
 
 function DeleteTaskMenu({ task, openModal, onClose }: DeleteTaskMenuProps) {
   const dispatch = useDispatch()
+  const [projectHub] = useState(new ProjectHub())
   const handleDeleteTask = async (moveToTrash: boolean = false) => {
     const res = await deleteTask(task.id, moveToTrash)
     if (res?.isSuccess) {
       const data = res.data
+
+      // dispatch man hinh chinh
       dispatch(projectSlice.actions.deleteTask(data))
+
+      // send to hub
+      if (projectHub.isConnected) {
+        projectHub.connection?.send(hubs.project.send.deleteTask, data, moveToTrash)
+      }
       onClose()
     }
   }
