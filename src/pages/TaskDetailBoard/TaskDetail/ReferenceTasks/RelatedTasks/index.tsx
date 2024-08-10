@@ -5,14 +5,15 @@ import RelatedTaskItem from './RelatedTaskItem'
 type RelatedTasksProps = {
   tasks?: RelatedTaskResponse[]
   onDelete?: (refTaskId: string) => void
+  isChildren?: boolean
 }
 
-function RelatedTasks({ tasks, onDelete = () => {} }: RelatedTasksProps) {
+function RelatedTasks({ tasks, isChildren = false, onDelete = () => {} }: RelatedTasksProps) {
   return (
     <>
       <div className='related-tasks'>
         {tasks?.map(task => (
-          <RelatedTaskItem task={task} key={task.id} onDelete={onDelete} />
+          <RelatedTaskItem isChildren={isChildren} task={task} key={task.id} onDelete={onDelete} />
         ))}
       </div>
     </>

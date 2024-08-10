@@ -126,11 +126,6 @@ function TaskDetailInfo() {
           if (data.id === taskDetail.id) {
             handleToggleRemoteDeleteModal()
             setRemoteDeleteType(moveToTrash)
-            if (moveToTrash) {
-              // move to trash
-            } else {
-              // delete task
-            }
           }
         }
       )

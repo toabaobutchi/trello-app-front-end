@@ -5,15 +5,42 @@ import { getDateString } from '@utils/functions'
 import Button from '@comps/Button'
 import Tooltip from '@comps/Tooltip-v2'
 import { NavLink } from 'react-router-dom'
+import { useContext, useState } from 'react'
+import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
+import { updateTask } from '@services/task.services'
+import { projectSlice } from '@redux/ProjectSlice'
+import { useDispatch } from 'react-redux'
+import { hubs, ProjectHub } from '@utils/Hubs'
 
 type RelatedTaskItemProps = {
   task: RelatedTaskResponse
   onDelete?: (refTaskId: string) => void
+  isChildren?: boolean
 }
 
-function RelatedTaskItem({ task, onDelete = () => {} }: RelatedTaskItemProps) {
+function RelatedTaskItem({ task, isChildren = false, onDelete = () => {} }: RelatedTaskItemProps) {
+  const context = useContext(TaskDetailContext)
+  const dispatch = useDispatch()
+  const [projectHub] = useState(new ProjectHub())
   const handleDelete = () => {
     onDelete(task.id)
+  }
+  const handleSetStartDate = async () => {
+    if (context?.task?.id && task.dueDate && !isChildren) {
+      const taskId = context?.task?.id
+      const res = await updateTask(taskId, { startedAt: task.dueDate })
+      if (res?.isSuccess) {
+        const data = res.data
+        context?.setTask?.(prev => ({ ...prev, startedAt: data?.startedAt } as typeof prev))
+        
+        dispatch(projectSlice.actions.updateTaskInfo(data))
+
+        if (projectHub.isConnected && data) {
+          // SendUpdateTaskInfo
+          projectHub.connection?.invoke(hubs.project.send.updateTaskInfo, data)
+        }
+      }
+    }
   }
   return (
     <>
@@ -55,9 +82,9 @@ function RelatedTaskItem({ task, onDelete = () => {} }: RelatedTaskItemProps) {
           </Flex>
         </div>
         <div className='related-tasks-item-actions'>
-          {Boolean(task.dueDate) && (
-            <Tooltip position='top' arrow content='Set as start date'>
-              <Button variant='text' className='set-start-date-btn'>
+          {Boolean(task.dueDate) && !isChildren && (
+            <Tooltip position='top' arrow content='Use this due date as begining'>
+              <Button onClick={handleSetStartDate} variant='text' className='set-start-date-btn'>
                 <i className='fa-solid fa-wrench'></i>
               </Button>
             </Tooltip>

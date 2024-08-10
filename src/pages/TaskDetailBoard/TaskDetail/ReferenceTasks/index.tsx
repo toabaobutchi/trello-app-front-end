@@ -203,7 +203,9 @@ function ReferenceTasks() {
         </div>
         <Tab tabs={tabs} onTabClick={handleTabClick} activeTab={activeTab}>
           <Tab.Content show>
-            {refTasks && <RelatedTasks onDelete={handleDelete} tasks={activeDataSource} />}
+            {refTasks && (
+              <RelatedTasks isChildren={activeTab === tabs[1].value} onDelete={handleDelete} tasks={activeDataSource} />
+            )}
           </Tab.Content>
         </Tab>
         <div className='reference-tasks-actions mt-1'>
