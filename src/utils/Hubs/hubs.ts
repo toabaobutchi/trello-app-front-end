@@ -43,7 +43,8 @@ export const hubs = {
       addChildrenTasks: 'SendAddChildrenTasks',
       deleteTask: 'SendDeleteTask',
       removeTaskDependency: 'SendRemoveTaskDependency',
-      removeChildrenTask: 'SendRemoveChildrenTask'
+      removeChildrenTask: 'SendRemoveChildrenTask',
+      removeAssignment: 'SendRemoveAssignment'
     },
     receive: {
       startDragList: 'ReceiveStartDragList',
@@ -79,7 +80,8 @@ export const hubs = {
       addChildrenTasks: 'ReceiveAddChildrenTasks',
       deleteTask: 'ReceiveDeleteTask',
       removeTaskDependency: 'ReceiveRemoveTaskDependency',
-      removeChildrenTask: 'ReceiveRemoveChildrenTask'
+      removeChildrenTask: 'ReceiveRemoveChildrenTask',
+      removeAssignment: 'ReceiveRemoveAssignment'
     }
   },
   taskDetail: {

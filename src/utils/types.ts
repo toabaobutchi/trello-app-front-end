@@ -674,3 +674,9 @@ export type DuplicateTaskModel = {
   duplicateTaskCount: number
   listId: string
 }
+
+export type DeleteAssignmentModel = {
+  assignmentId: string
+}
+
+export type DeletedAssignmentResponse = DeleteAssignmentModel

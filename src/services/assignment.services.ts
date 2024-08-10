@@ -4,6 +4,8 @@ import {
   AssignByTaskResponse,
   AssignmentProfileResponse,
   AssignmentResponse,
+  DeleteAssignmentModel,
+  DeletedAssignmentResponse,
   DeletedTaskAssignmentResponse,
   DeleteTaskAssignmentModel
 } from '@utils/types'
@@ -38,10 +40,16 @@ const unassignTaskAssignment = async (taskId: string, model: DeleteTaskAssignmen
   return res
 }
 
+const removeAssignment = async (assignmentId: string) => {
+  const res = await http.delete<DeletedAssignmentResponse>(`/assignments/remove/${assignmentId}`)
+  return res
+}
+
 export {
   getAssignmentsInProject,
   getAssignmentProfile,
   assignMembersToTask,
   getAssignmentsFromAnotherProject,
-  unassignTaskAssignment
+  unassignTaskAssignment,
+  removeAssignment
 }
