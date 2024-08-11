@@ -3,22 +3,23 @@ import './Column.scss'
 import { forwardRef, useEffect, useState } from 'react'
 import AddTask from './partials/AddTask'
 import { AssignmentResponse, ListResponseForBoard } from '@utils/types'
-import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import AddTaskAbove from './partials/AddTaskAbove'
 import ColumnOptionMenu from './partials/ColumnOptionMenu'
+import useProjectOutletContext from '@hooks/useProjectOutletContext'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
   column?: ListResponseForBoard
-  remoteDragging?: RemoteDraggingType
 }
 
 const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-  const { children, column, style, className, remoteDragging, ...restProps } = props
+  const { children, column, style, className, ...restProps } = props
   const members = useSelector((state: RootState) => state.project.activeProject.members)
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
+  const { remoteDragging } = useProjectOutletContext()
+  
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])

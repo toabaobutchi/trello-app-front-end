@@ -680,3 +680,10 @@ export type DeleteAssignmentModel = {
 }
 
 export type DeletedAssignmentResponse = DeleteAssignmentModel
+
+export type RemoteDraggingType = {
+  isDragging?: boolean
+  subId?: string
+  dragObjectId?: string
+  dragObject?: 'Column' | 'Card'
+}

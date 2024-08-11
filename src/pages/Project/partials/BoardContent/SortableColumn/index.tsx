@@ -4,21 +4,15 @@ import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-
 import { CSS } from '@dnd-kit/utilities'
 import { createCardId, mapOrder } from '@utils/functions'
 import { ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
-import { BlockDragState, RemoteDraggingType } from '..'
+import { BlockDragState } from '..'
+import useProjectOutletContext from '@hooks/useProjectOutletContext'
 
-function SortableColumn({
-  column,
-  remoteDragging,
-  blockDragState
-}: {
-  column: ListResponseForBoard
-  remoteDragging?: RemoteDraggingType
-  blockDragState?: BlockDragState
-}) {
+function SortableColumn({ column, blockDragState }: { column: ListResponseForBoard; blockDragState?: BlockDragState }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column.id,
     data: { ...column, dragObject: 'Column' }
   })
+  const { remoteDragging } = useProjectOutletContext()
 
   const tasks = mapOrder<TaskResponseForBoard>(
     column?.tasks as TaskResponseForBoard[],
@@ -36,7 +30,6 @@ function SortableColumn({
   return (
     <>
       <Column
-        remoteDragging={remoteDragging}
         {...attributes}
         {...listeners}
         ref={setNodeRef}
@@ -50,7 +43,7 @@ function SortableColumn({
           strategy={verticalListSortingStrategy}
         >
           {tasks?.map(task => (
-            <TaskCard remoteDragging={remoteDragging} key={task.id} task={task} />
+            <TaskCard key={task.id} task={task} />
           ))}
         </SortableContext>
       </Column>

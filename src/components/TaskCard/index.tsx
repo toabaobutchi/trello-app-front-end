@@ -7,11 +7,9 @@ import MenuItem from '@comps/MenuItem'
 import { AssignmentResponse, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { createCardId, DateCompareState, getDateString, isInToday, isOverdue } from '@utils/functions'
+import { createCardId, DateCompareState, getDateString, isOverdue } from '@utils/functions'
 import { useEffect, useMemo, useState } from 'react'
-import { RemoteDraggingType } from '@pages/Project/partials/BoardContent'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
+import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useProjectSelector } from '@hooks/useProjectSelector'
@@ -20,19 +18,21 @@ import { useModal } from '@hooks/useModal'
 import { joinTask } from '@services/task.services'
 import TaskCardTags from './TaskCardTags'
 import TaskDependencies from './TaskDependencies'
+import useProjectOutletContext from '@hooks/useProjectOutletContext'
 
 const displayAvatarCount = 3
 
-function TaskCard({ task, remoteDragging }: { task: TaskResponseForBoard; remoteDragging?: RemoteDraggingType }) {
+function TaskCard({ task }: { task: TaskResponseForBoard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: createCardId(task),
     data: { ...task, dragObject: 'Card' }
   })
   const { board } = useProjectSelector()
+  const { remoteDragging } = useProjectOutletContext()
 
   const isJoined = useMemo(
     () => task.taskAssignmentIds?.includes(board.assignmentId),
-    [task.id, task.taskAssignmentIds, board.assignmentId]
+    [task.taskAssignmentIds, board.assignmentId]
   )
   const style = {
     // touchAction: 'none',
