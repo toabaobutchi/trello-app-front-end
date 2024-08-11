@@ -10,28 +10,30 @@ import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import ProjectSideBar from './partials/ProjectSideBar'
-import { getAssignmentsInProject } from '@services/assignment.services'
+import { getAssignmentsInProject, revokeProjectAuth } from '@services/assignment.services'
 import { HttpResponse } from '@utils/Axios/HttpClientAuth'
 import ProjectChatRoom from './partials/ProjectChatRoom'
 import { useModal } from '@hooks/useModal'
 import Modal from '@comps/Modal'
 import routeLinks from '@routes/router'
 import Button from '@comps/Button'
+import toast from '@comps/Toast/toast'
 
 function Project() {
   const params = useParams() as ProjectPageParams
-  const { board: project } = useProjectSelector()
+  const { board: project, members } = useProjectSelector()
   const response = useLoaderData() as HttpResponse<ProjectResponseForBoard>
   const dispatch = useDispatch()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const [isConnected, setIsConnected] = useState(false)
-  const [removeAssignmentModal, handleToggleRemoveAssignmentModal, setRemoveAssignmentModal] = useModal()
   const navigate = useNavigate()
-
-  const handleCloseRemoveAssignmentModal = async () => {
-    setRemoveAssignmentModal(false)
-    navigate(routeLinks.home)
-  }
+  const [removeAssignmentModal, handleToggleRemoveAssignmentModal] = useModal(false, {
+    whenClose: () => navigate(routeLinks.home),
+    whenOpen: async () => {
+      await revokeProjectAuth()
+      projectHub.disconnect()
+    }
+  })
 
   useEffect(() => {
     if (!project || project?.id !== params.projectId) {
@@ -45,9 +47,9 @@ function Project() {
         }) // kết nối đến hub
       }
     }
-    return () => {
-      setIsConnected(_prev => false)
-    }
+    // return () => {
+    //   setIsConnected(_prev => false)
+    // }
   }, [params?.projectId])
 
   useEffect(() => {
@@ -57,13 +59,15 @@ function Project() {
       })
       projectHub.connection?.on(
         hubs.project.receive.removeAssignment,
-        (assignmentId: string, data: DeletedAssignmentResponse) => {
-          console.log('Remove assignment', project.assignmentId === data.assignmentId)
+        (_assignmentId: string, data: DeletedAssignmentResponse) => {
           if (project.assignmentId === data.assignmentId) {
-            // alert and send to API to revoke cookies
             handleToggleRemoveAssignmentModal()
           } else {
-            // TODO: remove assignment from project state
+            // dispatch members
+            dispatch(projectSlice.actions.removeAssignment(data.assignmentId))
+
+            const member = members.find(a => a.id === data.assignmentId)
+            toast.error('A member has been removed', `${member?.email} has been removed from this project`)
           }
         }
       )
@@ -82,6 +86,7 @@ function Project() {
         }
       })
   }, [project?.id, params.projectId])
+
   return (
     <>
       {project && (
@@ -106,13 +111,13 @@ function Project() {
         layout={{
           header: { title: 'You was kicked out from this project', closeIcon: true },
           footer: (
-            <Button onClick={handleCloseRemoveAssignmentModal} variant='filled' theme='danger'>
+            <Button onClick={handleToggleRemoveAssignmentModal} variant='filled' theme='danger'>
               Exit
             </Button>
           )
         }}
         open={removeAssignmentModal}
-        onClose={handleCloseRemoveAssignmentModal}
+        onClose={handleToggleRemoveAssignmentModal}
       >
         <p className='text-danger'>You was kicked out from this project!</p>
       </Modal>

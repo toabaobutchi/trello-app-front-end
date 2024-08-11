@@ -45,11 +45,17 @@ const removeAssignment = async (assignmentId: string) => {
   return res
 }
 
+const revokeProjectAuth = async () => {
+  const res = await http.postWithoutData(`/projects/auth/revoke`)
+  return res
+}
+
 export {
   getAssignmentsInProject,
   getAssignmentProfile,
   assignMembersToTask,
   getAssignmentsFromAnotherProject,
   unassignTaskAssignment,
-  removeAssignment
+  removeAssignment,
+  revokeProjectAuth
 }

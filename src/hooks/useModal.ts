@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 export type UseModalOptions = {
-  whenOpen: () => void
-  whenClose: () => void
+  whenOpen?: () => void
+  whenClose?: () => void
 }
 
 export function useModal(
@@ -13,11 +13,13 @@ export function useModal(
   }
 ) {
   const [modalOpen, setModalOpen] = useState(initState)
+
   const handleToggle = (e?: React.MouseEvent) => {
     e?.stopPropagation()
     setModalOpen(prevState => !prevState)
-    if (!modalOpen) options.whenOpen()
-    if (modalOpen) options.whenClose()
+    if (!modalOpen) options.whenOpen?.()
+    if (modalOpen) options.whenClose?.()
   }
+
   return [modalOpen, handleToggle, setModalOpen] as const
 }

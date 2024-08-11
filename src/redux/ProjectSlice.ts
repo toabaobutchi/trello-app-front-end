@@ -35,6 +35,14 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    removeAssignment: (state, action) => {
+      const assignmentId = action.payload as string
+      if (assignmentId) {
+        state.activeProject.members = state.activeProject.members.filter(m => m.id === assignmentId)
+        state.activeProject.onlineMembers = state.activeProject.onlineMembers.filter(m => m !== assignmentId)
+        state.activeProject.changeId = new Date().getTime()
+      }
+    },
     removeFromChildren: (state, action) => {
       const data = action.payload as DeletedRelationshipResponse
       if (data) {
