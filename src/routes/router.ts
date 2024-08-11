@@ -84,13 +84,24 @@ export const loader = {
     const page = parseInt(queryParams.get('p') ?? '1')
     let uid = queryParams.get('uid')
     const date = queryParams.get('d')
+    let task = queryParams.get('task')
 
     if (uid && uid === 'all') {
       uid = null
     }
 
+    if (task && task === 'all') {
+      task = null
+    }
+
     const { projectId } = params as ProjectPageParams
-    const res = await getChangeLogs(projectId, date ? parseInt(date) : undefined, uid ?? undefined, page)
+    const res = await getChangeLogs(
+      projectId,
+      date ? parseInt(date) : undefined,
+      uid ?? undefined,
+      task ?? undefined,
+      page
+    )
     return res
   }
 }

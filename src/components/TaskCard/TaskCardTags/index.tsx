@@ -40,6 +40,11 @@ function TaskCardTags({ task }: TaskCardTagsProps) {
             <i className='fa-solid fa-business-time'></i> Coming soon
           </div>
         )}
+        {task?.isReOpened && (
+          <div className='tag text-warning bg-warning'>
+            <i className='fa-solid fa-arrow-rotate-left'></i> Re-opened
+          </div>
+        )}
       </div>
     </>
   )

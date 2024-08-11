@@ -1,10 +1,10 @@
 import SelectList from '@comps/SelectList'
 import './ChangeLogFilters.scss'
-import { SelectListItem } from '@utils/types'
-import { useRef } from 'react'
+import { SelectListItem, TaskResponseForBoard } from '@utils/types'
+import { useEffect, useRef, useState } from 'react'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { useSearchParams } from 'react-router-dom'
-import { getDateString, getMiliseconds } from '@utils/functions'
+import { getDateString, getFlatTasks, getMiliseconds } from '@utils/functions'
 import Flex from '@comps/StyledComponents'
 import Button from '@comps/Button'
 
@@ -15,7 +15,15 @@ function ChangeLogFilters() {
 
   const memberSearchParam = searchParams.get('uid') ?? 'all'
   const dateSearchParam = searchParams.get('d')
+  const taskSearchParam = searchParams.get('task') ?? 'all'
   const page = searchParams.get('p')
+
+  const { board: project } = useProjectSelector()
+  const [tasks, setTasks] = useState<TaskResponseForBoard[]>([])
+
+  useEffect(() => {
+    setTasks(getFlatTasks(project) ?? [])
+  }, [project])
 
   const handleTogglePicker = () => {
     if (inputRef?.current) {
@@ -45,6 +53,28 @@ function ChangeLogFilters() {
     )
   ]
 
+  const taskSelectListItems: SelectListItem[] = [
+    {
+      value: 'all',
+      display: (
+        <>
+          <i className='fa-solid fa-tasks'></i>&nbsp; All tasks
+        </>
+      )
+    },
+    ...tasks.map(t => ({
+      value: t.id,
+      display: t.name
+    }))
+  ]
+
+  const handleSelectTaskFilter = ({ value }: { value: string }) => {
+    const newSearchParams = new URLSearchParams(searchParams)
+    newSearchParams.set('task', value)
+    newSearchParams.delete('p')
+    setSearchParams(newSearchParams)
+  }
+
   const handleChangeDateFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchParams = new URLSearchParams(searchParams)
     const selectedDate = new Date(e.target.value)
@@ -53,12 +83,14 @@ function ChangeLogFilters() {
     newSearchParams.delete('p')
     setSearchParams(newSearchParams)
   }
+
   const handleChooseMemberFilter = ({ value }: { value: string }) => {
     const newSearchParams = new URLSearchParams(searchParams)
     newSearchParams.set('uid', value)
     newSearchParams.delete('p')
     setSearchParams(newSearchParams)
   }
+
   const handleLoadMore = () => {
     const newSearchParams = new URLSearchParams(searchParams)
     const nextPage = parseInt(page ?? '1') + 1
@@ -86,14 +118,24 @@ function ChangeLogFilters() {
             Next <i className='fa-solid fa-angle-right'></i>
           </Button>
         </Flex>
+
         <Flex $alignItem='center' $gap='0.5rem'>
+          {tasks.length > 0 && (
+            <SelectList
+              size='small'
+              className='change-logs-filters-select-list change-logs-filters-tasks'
+              items={taskSelectListItems}
+              selectedValue={taskSearchParam}
+              onChoose={handleSelectTaskFilter}
+            />
+          )}
+
           {members.length > 0 && (
             <SelectList
               onChoose={handleChooseMemberFilter}
-              className='change-logs-filters-members'
+              className='change-logs-filters-select-list change-logs-filters-members'
               selectedValue={memberSearchParam}
               items={memberSelectListItems}
-              // manualSelectedValue={memberSearchParam}
             />
           )}
           <div className='change-logs-filters-date'>

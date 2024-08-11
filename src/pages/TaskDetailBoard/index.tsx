@@ -37,6 +37,7 @@ function TaskDetailBoard() {
       else setIsJoined(taskDetail?.taskAssignmentIds?.includes(member.id) ?? false)
     }
   }, [taskDetail?.id, members, taskDetail?.taskAssignmentIds, board?.assignmentId])
+
   useEffect(() => {
     if (taskId) {
       getTaskDetail(taskId).then(res => {
@@ -46,6 +47,7 @@ function TaskDetailBoard() {
       })
     }
   }, [taskId])
+
   const handleToggleDuplicateTaskModal = () => {
     setDuplicateTaskModal(!duplicateTaskModal)
   }
@@ -82,10 +84,11 @@ function TaskDetailBoard() {
   const handleCloseTaskDetailModal = () => {
     navigate(-1)
   }
+
   const handleMarkCompleteTask = async () => {
     if (taskId) {
       const res = await markTask(taskId, { isCompleted: true })
-      if (res?.status === HttpStatusCode.Ok) {
+      if (res?.isSuccess) {
         const data = res.data
         setTaskDetail(
           prev =>
@@ -101,7 +104,27 @@ function TaskDetailBoard() {
       }
     }
   }
+  const handleReOpenTask = async () => {
+    if (taskId) {
+      const res = await markTask(taskId, { isReOpened: true })
+      if (res?.isSuccess) {
+        const data = res.data
+        setTaskDetail(
+          prev =>
+            ({
+              ...prev,
+              isReopened: data?.isReOpened
+            } as TaskDetailForBoard)
+        )
 
+        dispatch(projectSlice.actions.markTask(data))
+
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
+        }
+      }
+    }
+  }
   const handleJoinTask = async () => {
     if (taskId) {
       const res = await joinTask(taskId)
@@ -188,6 +211,13 @@ function TaskDetailBoard() {
                       <>
                         <Button variant='text' theme='success'>
                           Completed <i className='fa-solid fa-check'></i>
+                        </Button>
+                      </>
+                    )}
+                    {taskDetail?.isCompleted && (
+                      <>
+                        <Button onClick={handleReOpenTask} variant='text' theme='warning'>
+                          <i className='fa-solid fa-arrow-rotate-left'></i> Re-open
                         </Button>
                       </>
                     )}

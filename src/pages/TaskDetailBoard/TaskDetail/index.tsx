@@ -40,14 +40,6 @@ const tabs = [
         <i className='fa-solid fa-link'></i> References
       </>
     )
-  },
-  {
-    value: 'changelogs',
-    display: (
-      <>
-        <i className='fa-regular fa-file-lines'></i> Change logs
-      </>
-    )
   }
 ]
 
@@ -63,7 +55,12 @@ const TaskDetail = memo(() => {
       <div className='task-details'>
         <TaskDetailInfo />
         <div className='task-details-additional-info'>
-          <Tab className='task-details-additional-info-tabs' onTabClick={handleTabClick} activeTab={activeTab} tabs={tabs}>
+          <Tab
+            className='task-details-additional-info-tabs'
+            onTabClick={handleTabClick}
+            activeTab={activeTab}
+            tabs={tabs}
+          >
             <Tab.Content show={activeTab === 'comments'}>
               <ChatBox />
             </Tab.Content>

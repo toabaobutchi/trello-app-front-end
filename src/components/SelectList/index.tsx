@@ -75,7 +75,9 @@ function SelectList({
               return (
                 <div
                   key={item.value}
-                  className={`select-list-data-context-item ${item.value === selectedItem?.value ? 'selected-context-item' : ''}`}
+                  className={`select-list-data-context-item ${
+                    item.value === selectedItem?.value ? 'selected-context-item' : ''
+                  }`}
                   onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                     e.stopPropagation()
                     handleSelect(item)
