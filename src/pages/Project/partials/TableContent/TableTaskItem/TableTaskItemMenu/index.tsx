@@ -7,13 +7,15 @@ import useClickTracker from '@hooks/useClickTracker'
 type TableTaskItemMenuProps = {
   onJoinTask?: () => void
   onDeleteTask?: () => void
+  onAssign?: () => void
   isJoined?: boolean
 }
 
 function TableTaskItemMenu({
   isJoined = false,
   onJoinTask = () => {},
-  onDeleteTask = () => {}
+  onDeleteTask = () => {},
+  onAssign = () => {}
 }: TableTaskItemMenuProps) {
   const [click, setClick] = useState(false)
 
@@ -39,15 +41,15 @@ function TableTaskItemMenu({
           <i className='fa-solid fa-screwdriver-wrench'></i>
         </Button>
         <div className={`table-task-item-actions-menu-dropdown menu-content-box-shadow${click ? ' expanded' : ''}`}>
-          <MenuItem className='table-task-item-actions-menu-item'>
+          {/* <MenuItem className='table-task-item-actions-menu-item'>
             <i className='fa-solid fa-wrench'></i>&nbsp; Details & Edit
-          </MenuItem>
+          </MenuItem> */}
           {!isJoined && (
             <MenuItem className='table-task-item-actions-menu-item' onClick={handleJoinTask}>
               <i className='fa-solid fa-right-to-bracket'></i>&nbsp; Join this task
             </MenuItem>
           )}
-          <MenuItem className='table-task-item-actions-menu-item'>
+          <MenuItem onClick={onAssign} className='table-task-item-actions-menu-item'>
             <i className='fa-solid fa-user-plus'></i>&nbsp; Assign
           </MenuItem>
           <MenuItem

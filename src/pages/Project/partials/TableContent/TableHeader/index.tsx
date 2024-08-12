@@ -3,9 +3,9 @@ function TableHeader({ items }: { items: React.ReactNode[] }) {
     <>
       <thead>
         <tr>
-          <th>
+          {/* <th>
             <input type='checkbox' className="table-option-checkbox" name='table-check-all' id='table-check-all' value='all' />
-          </th>
+          </th> */}
           {items.map((item, index) => (
             <th key={index}>{item}</th>
           ))}

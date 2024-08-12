@@ -1,7 +1,7 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import { AssignByTaskModel, TaskDetailForBoard } from '@utils/types'
+import { AssignByTaskModel, TaskDetailForBoard, TaskResponseForTable } from '@utils/types'
 import { useContext, useMemo, useState } from 'react'
 import './AssignMember.scss'
 import AssignmentMemberItem from './AssignmentMemberItem'
@@ -12,7 +12,7 @@ import { hubs, ProjectHub } from '@utils/Hubs'
 import { assignMembersToTask } from '@services/assignment.services'
 
 type AssignMemberProps = {
-  task: TaskDetailForBoard
+  task: TaskDetailForBoard | TaskResponseForTable
   onCloseModal?: () => void
 }
 type SelectedMember = {

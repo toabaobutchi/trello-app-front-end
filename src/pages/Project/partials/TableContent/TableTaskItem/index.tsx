@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import DeleteTaskMenu from '@comps/TaskCard/DeleteTaskMenu'
+import AssignMember from '@pages/TaskDetailBoard/TaskDetail/AssignMember'
 
 type TableTaskItemProps = {
   task: TaskResponseForTable
@@ -26,6 +27,7 @@ const NotSet = () => <span className='text-light'>[ Not set ]</span>
 function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
   const [joinTaskModal, handleToggleJoinTaskModal] = useModal()
   const [deleteModal, handleToggleDeleteModal] = useModal()
+  const [assignModal, handleToggleAssignModal] = useModal()
   const dispatch = useDispatch()
   const { members, board } = useProjectSelector()
   const [projectHub] = useState(new ProjectHub())
@@ -59,7 +61,7 @@ function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
   return (
     <>
       <tr className={`task-row__${isHighlight && task?.priority?.toLowerCase()}`}>
-        <td>
+        {/* <td>
           <input
             type='checkbox'
             className='table-option-checkbox'
@@ -67,7 +69,7 @@ function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
             id={`table-check-${task?.id}`}
             value={task?.id}
           />
-        </td>
+        </td> */}
         <td className='table-task-name'>
           <NavLink to={`task/${task.id}`}>{task.name}</NavLink>
         </td>
@@ -87,6 +89,7 @@ function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
             isJoined={isJoined}
             onDeleteTask={handleToggleDeleteModal}
             onJoinTask={handleToggleJoinTaskModal}
+            onAssign={handleToggleAssignModal}
           />
         </td>
       </tr>
@@ -117,6 +120,9 @@ function TableTaskItem({ task, isHighlight = false }: TableTaskItemProps) {
           Join task <span className='text-primary fw-bold'>{task?.name}</span>
         </Modal>
       )}
+      <Modal open={assignModal} onClose={handleToggleAssignModal}>
+        <AssignMember task={task} onCloseModal={handleToggleAssignModal} />
+      </Modal>
       <DeleteTaskMenu task={task} openModal={deleteModal} onClose={handleToggleDeleteModal} />
     </>
   )
