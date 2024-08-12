@@ -41,12 +41,13 @@ import { AppDispatch, RootState } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
 import { cloneDeep } from 'lodash'
 import { MyCustomSensor } from '@utils/MyCustomSensor'
-import { filterLists } from '@utils/functions'
+import { filterLists, isAdminOrOwner } from '@utils/functions'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { changeTaskOrder } from '@services/task.services'
 import { changeListOrder } from '@services/list.services'
 import config from '@confs/app.config'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 type ActiveDragItemType = {
   id?: string | number
@@ -72,7 +73,7 @@ export type BlockDragState = {
 
 function BoardContent() {
   const dispatch = useDispatch<AppDispatch>()
-  const project = useSelector((state: RootState) => state.project.activeProject)
+  const { board, currentFilters, changeId } = useProjectSelector()
   // dùng để lưu trữ tạm thời để các kéo thả - sau đó cập nhật lại sau
   const [listState, setListState] = useState<ListResponseForBoard[]>([])
   const [activeDragItem, setActiveDragItem] = useState<ActiveDragItemType>()
@@ -84,9 +85,9 @@ function BoardContent() {
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
 
   useEffect(() => {
-    const lists = filterLists(project?.board?.lists, project?.currentFilters)
+    const lists = filterLists(board?.lists, currentFilters)
     setListState(_prev => lists as ListResponseForBoard[])
-  }, [project?.board?.lists, dispatch, project?.currentFilters, project?.changeId])
+  }, [board?.lists, dispatch, currentFilters, changeId])
 
   const findColumnByCardId = (cardId: string) => {
     return listState?.find(list => list?.tasks?.map(task => task.id).includes(cardId))
@@ -144,7 +145,7 @@ function BoardContent() {
         .then(res => {
           if (!res?.isSuccess) {
             console.log('Update task order failed')
-            setListState(_prev => project?.board?.lists as ListResponseForBoard[])
+            setListState(_prev => board?.lists as ListResponseForBoard[])
           } else {
             const dragOverResult: DragOverResult = {
               activeList: nextActiveColumn as ListResponseForBoard,
@@ -158,7 +159,7 @@ function BoardContent() {
             }
           }
         })
-        .catch(() => setListState(_prev => project?.board?.lists as ListResponseForBoard[]))
+        .catch(() => setListState(_prev => board?.lists as ListResponseForBoard[]))
     }
   }
 
@@ -175,7 +176,7 @@ function BoardContent() {
       setBlockDragState(prev => ({ ...prev, isDisabled: true }))
 
       // roll back UI
-      setListState(filterLists(project?.board?.lists, project?.currentFilters))
+      setListState(filterLists(board?.lists, currentFilters))
 
       // sau 60s sẽ mở lại
       setTimeout(() => {
@@ -304,7 +305,7 @@ function BoardContent() {
           changeTaskOrder(activeDragItem.id as string, changeTaskOrderModel).then(res => {
             if (!res?.isSuccess) {
               console.log('Update task order failed')
-              setListState(_prev => project?.board?.lists as ListResponseForBoard[])
+              setListState(_prev => board?.lists as ListResponseForBoard[])
             } else {
               const dragOverResult: DragOverResult = {
                 activeList: targetColumn as ListResponseForBoard,
@@ -360,6 +361,7 @@ function BoardContent() {
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
 
   const sensors = useSensors(customMouseSensor, touchSensor)
+  const isListPermission = isAdminOrOwner(board.context)
   return (
     <>
       {!blockDragState.isDisabled && (
@@ -370,17 +372,13 @@ function BoardContent() {
           sensors={sensors}
         >
           <SortableContext
-            disabled={remoteDragging?.isDragging}
+            disabled={!isListPermission || remoteDragging?.isDragging}
             items={listState?.map(l => l?.id) ?? []}
             strategy={horizontalListSortingStrategy}
           >
             <Flex $gap='1.5rem' className='column-list page-slide'>
               {listState?.map(column => (
-                <SortableColumn
-                  blockDragState={blockDragState}
-                  key={column.id}
-                  column={column}
-                />
+                <SortableColumn blockDragState={blockDragState} key={column.id} column={column} />
               ))}
               <AddNewList />
             </Flex>

@@ -8,7 +8,8 @@ import { CreateTaskModel, InputChange, ListResponseForBoard } from '@utils/types
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNewTask } from '@services/task.services'
-import { handleTriggerKeyPress } from '@utils/functions'
+import { containsSpecialCharacters, handleTriggerKeyPress } from '@utils/functions'
+import { toast } from 'react-toastify'
 
 function AddTask({ column }: { column?: ListResponseForBoard }) {
   const [isAddingTask, setIsAddingTask] = useState(false)
@@ -32,6 +33,8 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
   const [addTask, setAddTask] = useState<string>('')
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const dispatch = useDispatch()
+  const [error, setError] = useState('')
+
   const handleChangeTaskName = (e: InputChange) => {
     setAddTask(e.target.value)
   }
@@ -45,13 +48,17 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
   }, [onCancelAddTask, outClick])
 
   const handleAddTask = async () => {
-    if (!addTask) {
-      console.log('Please enter a task name')
+    if (!addTask.trim()) {
+      setError('Please enter a task name')
+    } else if (containsSpecialCharacters(addTask)) {
+      setError('Task name cannot contain special characters')
+      return
     } else {
-      if (!column?.id) {
-        console.log('Can not create when list id is not provided')
+      if (!column?.id?.trim()) {
+        toast.error('Can not create when list id is not provided')
         return
       }
+
       const newTask: CreateTaskModel = {
         listId: column?.id,
         name: addTask
@@ -61,7 +68,7 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
         const data = res.data
         onCancelAddTask()
         dispatch(projectSlice.actions.addNewTask(data))
-        
+
         if (projectHub.isConnected) {
           projectHub.connection?.invoke(hubs.project.send.addNewTask, data)
         }
@@ -80,6 +87,7 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
           input={{ autoFocus: true, value: addTask, id: 'add-task-input', onKeyDown: handleTrigger.handler }}
           onChange={handleChangeTaskName}
         />
+        {error && <p className='text-danger'>{error}</p>}
         <Flex $alignItem='center' $gap='0.5rem'>
           <Button onClick={handleAddTask} variant='filled'>
             Add task
