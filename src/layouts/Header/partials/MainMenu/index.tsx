@@ -21,7 +21,7 @@ function MainMenu() {
           <h1 className='main-menu-header-text'>{config.appName}</h1>
         </div>
 
-        <NavBar />
+        {/* <NavBar /> */}
         <AddItemMenu />
       </div>
     </>

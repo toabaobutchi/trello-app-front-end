@@ -31,9 +31,9 @@ function SideBar() {
         <SideBarItem.Link to={routeLinks.home} onClick={closeSidebarWhenRedirectInMobileMode}>
           <i className='fa-solid fa-house-flag'></i> Home - Overview
         </SideBarItem.Link>
-        <SideBarItem.Link to={routeLinks.yourTasks} onClick={closeSidebarWhenRedirectInMobileMode}>
+        {/* <SideBarItem.Link to={routeLinks.yourTasks} onClick={closeSidebarWhenRedirectInMobileMode}>
           <i className='fa-solid fa-list-check'></i> Your tasks
-        </SideBarItem.Link>
+        </SideBarItem.Link> */}
         <SideBarItem style={{ paddingTop: 0, paddingBottom: 0 }}>
           <Expander
             header={{
