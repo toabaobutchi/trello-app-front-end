@@ -7,7 +7,7 @@ import MenuItem from '@comps/MenuItem'
 import { AssignmentResponse, TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { createCardId, DateCompareState, getDateString, isOverdue } from '@utils/functions'
+import { createCardId, DateCompareState, getDateString, isAdminOrOwner, isOverdue } from '@utils/functions'
 import { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
@@ -27,7 +27,7 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
     id: createCardId(task),
     data: { ...task, dragObject: 'Card' }
   })
-  const { board } = useProjectSelector()
+  const { board, members } = useProjectSelector()
   const { remoteDragging } = useProjectOutletContext()
 
   const isJoined = useMemo(
@@ -44,7 +44,6 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
   const dispatch = useDispatch()
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { members } = useProjectSelector()
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   const [confirmDeleteModal, handleToggleConfirmDeleteModal] = useModal()
   const taskAssignments = useMemo(() => {
@@ -110,12 +109,11 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
               }
             }}
           >
-            <MenuItem onClick={handleToggleConfirmDeleteModal} className='text-danger'>
-              <i className='fa-solid fa-trash-can'></i> Delete task
-            </MenuItem>
-            <MenuItem className='text-primary'>
-              <i className='fa-solid fa-up-down-left-right'></i> Move
-            </MenuItem>
+            {isAdminOrOwner(board.context) && (
+              <MenuItem onClick={handleToggleConfirmDeleteModal} className='text-danger'>
+                <i className='fa-solid fa-trash-can'></i> Delete task
+              </MenuItem>
+            )}
             {!isJoined && (
               <MenuItem onClick={handleJoinTask}>
                 <i className='fa-solid fa-right-to-bracket'></i> Join

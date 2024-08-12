@@ -6,6 +6,7 @@ import { createCardId, mapOrder } from '@utils/functions'
 import { ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
 import { BlockDragState } from '..'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 function SortableColumn({ column, blockDragState }: { column: ListResponseForBoard; blockDragState?: BlockDragState }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -13,7 +14,7 @@ function SortableColumn({ column, blockDragState }: { column: ListResponseForBoa
     data: { ...column, dragObject: 'Column' }
   })
   const { remoteDragging } = useProjectOutletContext()
-
+  const { board } = useProjectSelector()
   const tasks = mapOrder<TaskResponseForBoard>(
     column?.tasks as TaskResponseForBoard[],
     column?.taskOrder?.split(',') as string[],
@@ -27,18 +28,12 @@ function SortableColumn({ column, blockDragState }: { column: ListResponseForBoa
     opacity: isDragging ? 0.5 : 1,
     border: isDragging ? '1px solid #4B70F5' : 'unset'
   }
+  const isObserver = board.context.toLowerCase() === 'observer'
   return (
     <>
-      <Column
-        {...attributes}
-        {...listeners}
-        ref={setNodeRef}
-        style={style}
-        key={column.id}
-        column={column}
-      >
+      <Column {...attributes} {...listeners} ref={setNodeRef} style={style} key={column.id} column={column}>
         <SortableContext
-          disabled={remoteDragging?.isDragging || blockDragState?.isDisabled}
+          disabled={isObserver || remoteDragging?.isDragging || blockDragState?.isDisabled}
           items={tasks?.map(t => createCardId(t)) as string[]}
           strategy={verticalListSortingStrategy}
         >
