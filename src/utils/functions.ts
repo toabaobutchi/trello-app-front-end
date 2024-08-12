@@ -302,3 +302,13 @@ export const getFlatTasks = (project?: ProjectResponseForBoard) => {
   if (!project) return []
   return project.lists?.flatMap<TaskResponseForBoard>(l => l?.tasks ?? [])
 }
+
+export function containsSpecialCharacters(str: string) {
+  const specialCharactersPattern = /[!@#$%^&*(),.?":{}|<>]/g
+  return specialCharactersPattern.test(str)
+}
+
+export function isAdminOrOwner(context: string) {
+  const permission = context.toLowerCase()
+  return permission === 'admin' || permission === 'owner'
+}

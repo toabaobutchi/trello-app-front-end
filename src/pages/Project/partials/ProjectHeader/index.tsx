@@ -33,7 +33,7 @@ function ProjectHeader() {
             </Flex>
             <p className='text-secondary' style={{ fontSize: '0.9rem' }}>
               <i className='fa-regular fa-calendar'></i> Due date:{' '}
-              {project?.board.dueDate ? getDateString(new Date(project?.board.dueDate * 1000)) : 'Not set'}
+              {project?.board.dueDate ? getDateString(new Date(project?.board.dueDate)) : 'Not set'}
             </p>
           </div>
         </Flex>

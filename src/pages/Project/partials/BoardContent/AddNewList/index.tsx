@@ -10,13 +10,18 @@ import { RootState } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { createList } from '@services/list.services'
-import { handleTriggerKeyPress } from '@utils/functions'
+import { containsSpecialCharacters, handleTriggerKeyPress } from '@utils/functions'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 function AddNewList() {
   const [isAddingList, setIsAddingList] = useState(false)
+  const { board } = useProjectSelector()
   const handleToggleAddNewList = () => {
     setIsAddingList(!isAddingList)
   }
+  const permission = board.context.toLowerCase()
+  const canCreate = permission === 'admin' || permission === 'owner'
+  if (!canCreate) return <></>
   return (
     <>
       {!isAddingList ? (
@@ -43,6 +48,7 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { outClick } = useClickTracker(containerRef?.current as HTMLElement)
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
+  const [error, setError] = useState('')
   const handleChangeListName = (e: InputChange) => {
     setListName(e.target.value)
   }
@@ -52,15 +58,17 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
     }
   }, [onCancel, outClick])
   const handleSubmit = async () => {
-    if (!listName) {
-      console.log('Please enter a list name')
+    if (!listName.trim()) {
+      setError('Please enter a name')
+      return
+    } else if (containsSpecialCharacters(listName)) {
+      setError('List name cannot contain special characters')
       return
     }
     const postData: CreateListModel = {
       name: listName,
       projectId: activeProject.id
     }
-    // const res = await http.postAuth('/lists', postData)
     const res = await createList(postData)
     if (res?.isSuccess) {
       onCancel()
@@ -88,6 +96,7 @@ function AddNewListInput({ onCancel }: { onCancel: () => void }) {
             input={{ id: 'add-new-list-input', value: listName, autoFocus: true, onKeyDown: handleTrigger.handler }}
             style={{ width: '100%', fontSize: '1.1rem' }}
           />
+          {error && <p className='text-danger'>{error}</p>}
           <Flex $alignItem='center' $gap='0.5rem'>
             <Button onClick={handleSubmit} variant='filled'>
               Add list

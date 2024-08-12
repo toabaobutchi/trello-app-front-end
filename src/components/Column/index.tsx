@@ -8,6 +8,8 @@ import { RootState } from '@redux/store'
 import AddTaskAbove from './partials/AddTaskAbove'
 import ColumnOptionMenu from './partials/ColumnOptionMenu'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import { isAdminOrOwner } from '@utils/functions'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode
@@ -16,15 +18,16 @@ interface ColumnProps extends React.ComponentProps<'div'> {
 
 const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const { children, column, style, className, ...restProps } = props
-  const members = useSelector((state: RootState) => state.project.activeProject.members)
+  const { members, board } = useProjectSelector()
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   const { remoteDragging } = useProjectOutletContext()
-  
+
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
   }, [remoteDragging, members])
   const overFlowWIP =
     column?.wipLimit !== undefined && column?.wipLimit > 0 && (column.tasks?.length ?? 0) >= column?.wipLimit
+  const hasPermission = isAdminOrOwner(board.context)
   return (
     <>
       <div
@@ -51,15 +54,17 @@ const Column = forwardRef((props: ColumnProps, ref: React.ForwardedRef<HTMLDivEl
               </p>
             )}
           </div>
-          <Flex $alignItem='center' $gap='0.25rem'>
-            {!overFlowWIP && <AddTaskAbove column={column} />}
-            <ColumnOptionMenu list={column} />
-          </Flex>
+          {hasPermission && (
+            <Flex $alignItem='center' $gap='0.25rem'>
+              {!overFlowWIP && <AddTaskAbove column={column} />}
+              <ColumnOptionMenu list={column} />
+            </Flex>
+          )}
         </Flex>
         <div onPointerDown={e => e.stopPropagation()} className='column-body'>
           {children}
         </div>
-        <div className='column-footer'>{!overFlowWIP && <AddTask column={props?.column} />}</div>
+        {hasPermission && <div className='column-footer'>{!overFlowWIP && <AddTask column={props?.column} />}</div>}
       </div>
     </>
   )

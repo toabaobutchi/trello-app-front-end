@@ -6,6 +6,7 @@ import MenuHeaderWithAction from '@comps/MenuHeaderWithAction'
 import MenuItem from '@comps/MenuItem'
 import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents'
+import toast from '@comps/Toast/toast'
 import { useModal } from '@hooks/useModal'
 import { projectSlice } from '@redux/ProjectSlice'
 import { deleteList, updateList } from '@services/list.services'
@@ -21,6 +22,7 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [deleteModal, handleToggleDeleteModal] = useModal()
   const [projectHub] = useState(new ProjectHub())
+
   const handleToggleMenu = () => {
     if (state?.openMenu === undefined) {
       dispatch(actions.openMainMenu(buttonRef.current as HTMLElement))
@@ -77,6 +79,7 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
     if (list?.id) {
       const res = await deleteList(list.id)
       if (res?.isSuccess) {
+        toast.success('Successfully deleted', '')
         const data = res.data
         reduxDispatch(projectSlice.actions.deleteList(data))
         handleToggleDeleteModal()

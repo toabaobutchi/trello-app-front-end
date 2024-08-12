@@ -134,17 +134,7 @@ function CreateBoardModal({ open, onClose = () => {} }: CreateBoardModalProps) {
               />
             </Flex>
             <Flex className='mt-1' $gap='0.5rem' $alignItem='center'>
-              <SwitchButton
-                inputAttributes={{ type: 'checkbox', id: 'set-dute-date', checked: boardData.dueDate === undefined }}
-                size='small'
-                onChange={handleChangeBoard.toggleSetDueDate}
-                theme={{
-                  checked: 'primary'
-                }}
-              />
-              <label style={{ cursor: 'pointer' }} htmlFor='set-dute-date'>
-                I do not want to set due date
-              </label>
+              <label htmlFor='due-date-selector'> Due date </label>
               {boardData.dueDate !== undefined && (
                 <input
                   type='datetime-local'
