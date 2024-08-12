@@ -21,6 +21,7 @@ import {
   RemoteDraggingType,
   SubtaskForBoard,
   TaskResponseForBoard,
+  UpdatedListResponse,
   UpdatedTaskResponse
 } from '@utils/types'
 import { Suspense, useEffect, useRef, useState } from 'react'
@@ -290,6 +291,9 @@ function Project() {
         dispatch(projectSlice.actions.removeFromChildren(data))
       }
     )
+    projectHub.connection?.on(hubs.project.receive.updateWIP, (_assignmentId: string, data: UpdatedListResponse) => {
+      dispatch(projectSlice.actions.updateListInfo(data))
+    })
     projectHub.connection?.invoke(hubs.project.send.getOnlineMembers).catch(_ => {})
     // }
   }

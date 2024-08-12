@@ -61,7 +61,7 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
     // kiểm tra giá trị đầu vào
     if (!wip || !list?.id) return
     else if (isNaN(parseInt(wip))) {
-      console.log(`${wip} is not a number`)
+      toast.error(`${wip} is not a number`, '')
       return
     }
     const validWip = parseInt(wip)
@@ -70,8 +70,11 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
         const data = res.data
         reduxDispatch(projectSlice.actions.updateListInfo(data))
         handleCloseMenu()
+        if (projectHub.isConnected) {
+          projectHub.connection?.invoke(hubs.project.send.updateWIP, data)
+        }
       } else {
-        console.log('Update WIP limit failed')
+        toast.error('Update WIP limit failed', '')
       }
     })
   }

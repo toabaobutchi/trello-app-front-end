@@ -48,6 +48,7 @@ import { changeListOrder } from '@services/list.services'
 import config from '@confs/app.config'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import toast from '@comps/Toast/toast'
 
 type ActiveDragItemType = {
   id?: string | number
@@ -219,8 +220,9 @@ function BoardContent() {
     if (activeList.id !== overList.id) {
       // nếu có chỉ định wip limit và số lượng task trong list đã đủ thì ngừng lại
       if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length === overList.wipLimit) {
-        console.log('WIP Limit: ' + overList.wipLimit, overList.tasks?.length)
+        toast.error('WIP Limit: ' + overList.wipLimit, '')
         return
+
       }
       moveCardsInDifferentColumns(
         overList,

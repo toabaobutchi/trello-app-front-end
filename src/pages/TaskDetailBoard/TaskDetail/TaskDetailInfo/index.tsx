@@ -1,11 +1,13 @@
 import Flex from '@comps/StyledComponents/Flex'
 import Subtasks from './Subtasks'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import {
   AssignByTaskResponse,
   AssignmentResponse,
+  ChangeTaskOrderResponse,
   DeletedTaskAssignmentResponse,
   DeletedTaskResponse,
+  DragOverResult,
   JoinTaskResponse,
   ResetTaskModel,
   SubtaskForBoard,
@@ -29,6 +31,7 @@ import { useModal } from '@hooks/useModal'
 import { useNavigate } from 'react-router-dom'
 import Button from '@comps/Button'
 import toast from '@comps/Toast/toast'
+import config from '@confs/app.config'
 
 type RemoteUpdatingType = {
   assignmentId: string
@@ -44,6 +47,7 @@ function TaskDetailInfo() {
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
   const [remoteDeleteModal, handleToggleRemoteDeleteModal, setRemoteDeleteModal] = useModal()
+  const remoteUpdateTimeoutId = useRef<number>()
   const [creator] = useState<AssignmentResponse | undefined>(() =>
     project?.members.find(p => p.id === taskDetail?.creatorId)
   )
@@ -78,12 +82,30 @@ function TaskDetailInfo() {
       )
       // ReceiveStartUpdateTaskInfo
       projectHub.connection?.on(hubs.project.receive.startUpdateTaskInfo, (assignmentId: string, taskId: string) => {
-        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(_prev => ({ assignmentId, taskId }))
-      })
+        if (taskId && taskId === taskDetail?.id) {
+          setRemoteUpdating(_ => ({ assignmentId, taskId }))
 
+          if (remoteUpdateTimeoutId.current) {
+            clearTimeout(remoteUpdateTimeoutId.current)
+            remoteUpdateTimeoutId.current = undefined
+          }
+
+          // sau x giây thì giải phóng người dùng
+          remoteUpdateTimeoutId.current = setTimeout(() => {
+            setRemoteUpdating(_ => undefined)
+            remoteUpdateTimeoutId.current = undefined
+          }, config.timeOut.drag)
+        }
+      })
       // ReceiveCancelUpdateTaskInfo
       projectHub.connection?.on(hubs.project.receive.cancelUpdateTaskInfo, (_assignmentId: string, taskId: string) => {
-        if (taskId && taskId === taskDetail?.id) setRemoteUpdating(_prev => undefined)
+        if (taskId && taskId === taskDetail?.id) {
+          setRemoteUpdating(_ => undefined)
+          if (remoteUpdateTimeoutId.current) {
+            clearTimeout(remoteUpdateTimeoutId.current)
+            remoteUpdateTimeoutId.current = undefined
+          }
+        }
       })
 
       projectHub.connection?.on(
@@ -97,7 +119,6 @@ function TaskDetailInfo() {
           }
         }
       )
-
       projectHub.connection?.on(hubs.project.receive.joinTask, (_assignmentId: string, data: JoinTaskResponse) => {
         // dispatch(projectSlice.actions.joinTask(data))
         if (data.taskId === taskDetail.id) {
@@ -107,7 +128,6 @@ function TaskDetailInfo() {
           )
         }
       })
-
       projectHub.connection?.on(
         hubs.project.receive.unassignTaskAssignment,
         (_assignmentId: string, data: DeletedTaskAssignmentResponse) => {
@@ -131,9 +151,22 @@ function TaskDetailInfo() {
           }
         }
       )
-      // projectHub.connection?.on(hubs.project.receive.joinSubtask, () => {
-      //   // TODO: show modal join subtask
-      // })
+      projectHub.connection?.on(
+        hubs.project.receive.endDragTask,
+        (_assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
+          console.log('endDragTask')
+          if (context?.task?.id && res.updatedNewTaskOrder.includes(context?.task?.id)) {
+            context?.setTask?.(
+              prev =>
+                ({
+                  ...prev,
+                  listId: dragResult?.overList?.id,
+                  listName: dragResult?.overList?.name
+                } as typeof prev)
+            )
+          }
+        }
+      )
     }
   }, [projectHub, taskDetail?.id, context])
   // lấy thông tin creator

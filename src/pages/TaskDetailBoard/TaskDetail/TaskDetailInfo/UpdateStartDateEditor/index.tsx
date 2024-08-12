@@ -1,9 +1,8 @@
-import Button from '@comps/Button'
 import DatePicker from '@comps/DatePicker'
 import IconButton from '@comps/IconButton'
 import Flex from '@comps/StyledComponents'
 import Tooltip from '@comps/Tooltip-v2'
-import { getDateString, getDateTimeString } from '@utils/functions'
+import { getDateString } from '@utils/functions'
 import { ResetTaskModel } from '@utils/types'
 
 type UpdateStartDateEditorProps = {

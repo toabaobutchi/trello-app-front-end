@@ -18,7 +18,6 @@ function UpdateTaskNameEditor({ task, onUpdateTaskName = () => {}, hubConnection
     setName(name !== undefined ? undefined : task?.name)
     if (hubConnection) {
       if (name === undefined) {
-        // trường hợp đang chuẩn bị bật editor
         // SendStartUpdateTaskInfo
         hubConnection.invoke(hubs.project.send.startUpdateTaskInfo, task?.id)
       }
