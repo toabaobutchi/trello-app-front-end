@@ -17,6 +17,7 @@ import AssignMember from '@pages/TaskDetailBoard/TaskDetail/AssignMember'
 import LoadingLayout from '@layouts/LoadingLayout'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { getTaskDetail, joinTask, markTask } from '@services/task.services'
+import { isAdminOrOwner } from '@utils/functions'
 
 function TaskDetailBoard() {
   const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
@@ -113,7 +114,8 @@ function TaskDetailBoard() {
           prev =>
             ({
               ...prev,
-              isReopened: data?.isReOpened
+              isReOpened: data?.isReOpened,
+              isCompleted: data?.isCompleted
             } as TaskDetailForBoard)
         )
 
@@ -156,7 +158,7 @@ function TaskDetailBoard() {
       }
     }
   }
-
+  const isAdminorOwner = isAdminOrOwner(board.context)
   return (
     <>
       <TaskDetailContext.Provider value={{ task: taskDetail, setTask: setTaskDetail }}>
@@ -169,20 +171,21 @@ function TaskDetailBoard() {
               title: (
                 <>
                   <Flex $alignItem='center' $gap='1rem'>
-                    <Button onClick={handleToggleDuplicateTaskModal} variant='text' theme='default'>
-                      <i className='fa-regular fa-clone'></i> Duplicate
-                    </Button>
-                    {/* <Button variant='text' theme='default'>
-                      <i className='fa-regular fa-trash-can'></i> Delete
-                    </Button> */}
+                    {isAdminorOwner && (
+                      <Button onClick={handleToggleDuplicateTaskModal} variant='text' theme='default'>
+                        <i className='fa-regular fa-clone'></i> Duplicate
+                      </Button>
+                    )}
                     {!isJoined && (
                       <Button onClick={handleToggleJoinModal} variant='text' theme='default'>
                         <i className='fa-solid fa-right-to-bracket'></i> Join
                       </Button>
                     )}
-                    <Button onClick={handleToggleAssignModal} variant='text' theme='default'>
-                      <i className='fa-solid fa-user-plus'></i> Assign
-                    </Button>
+                    {isAdminorOwner && (
+                      <Button onClick={handleToggleAssignModal} variant='text' theme='default'>
+                        <i className='fa-solid fa-user-plus'></i> Assign
+                      </Button>
+                    )}
                     {taskDetail?.id && (
                       <Flex $alignItem='center' $gap='0.5rem'>
                         <SwitchButton
@@ -214,7 +217,7 @@ function TaskDetailBoard() {
                         </Button>
                       </>
                     )}
-                    {taskDetail?.isCompleted && (
+                    {taskDetail?.isCompleted && isAdminorOwner && (
                       <>
                         <Button onClick={handleReOpenTask} variant='text' theme='warning'>
                           <i className='fa-solid fa-arrow-rotate-left'></i> Re-open

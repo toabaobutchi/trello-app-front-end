@@ -6,7 +6,8 @@ import Menu from '@comps/Menu'
 import Button from '@comps/Button'
 import { useState } from 'react'
 import { changeSubtaskName } from '@services/subtask.services'
-import { handleTriggerKeyPress } from '@utils/functions'
+import { handleTriggerKeyPress, isAdminOrOwner } from '@utils/functions'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 type SubtaskItemProps = {
   subTask: SubtaskForBoard
@@ -21,6 +22,7 @@ function SubtaskItem({
   onDeleteSubtask = () => {},
   onChangeSubTaskName = () => {}
 }: SubtaskItemProps) {
+  const { board } = useProjectSelector()
   const menu = useMenu<HTMLSpanElement>()
   const [subtaskName, setSubtaskName] = useState<string>()
 
@@ -48,6 +50,9 @@ function SubtaskItem({
     }
   }
 
+  const canCheck = board.assignmentId === subTask.assignmentId || !subTask.assignmentId || isAdminOrOwner(board.context)
+  const canEdit = isAdminOrOwner(board.context)
+
   const handleTrigger = handleTriggerKeyPress(() => {
     handleSubmitSubtaskName()
   }, 'Enter')
@@ -56,13 +61,16 @@ function SubtaskItem({
     <>
       <Flex key={subTask?.id} $alignItem='center' $justifyContent='space-between' className='subtasks-item'>
         <Flex $alignItem='center' $gap='0.5rem' className='subtasks-item-title'>
-          <input
-            type='checkbox'
-            name='subtaskStatus'
-            onChange={onCheckSubTask}
-            checked={subTask?.isCompleted}
-            id={`subtaskStatus-${subTask?.id}`}
-          />
+          {canCheck && (
+            <input
+              type='checkbox'
+              name='subtaskStatus'
+              onChange={onCheckSubTask}
+              checked={subTask?.isCompleted}
+              id={`subtaskStatus-${subTask?.id}`}
+              disabled={!canCheck}
+            />
+          )}
           {subtaskName === undefined ? (
             <label htmlFor={`subtaskStatus-${subTask?.id}`}>{subTask?.title}</label>
           ) : (
@@ -82,9 +90,11 @@ function SubtaskItem({
         <Flex $alignItem='center' $gap='1.5rem'>
           {/* update subtask name */}
 
-          <span onClick={handleToggleChangeSubtaskName} className='subtasks-item-icon'>
-            <i className='fa-regular fa-pen-to-square'></i>
-          </span>
+          {canEdit && (
+            <span onClick={handleToggleChangeSubtaskName} className='subtasks-item-icon'>
+              <i className='fa-regular fa-pen-to-square'></i>
+            </span>
+          )}
 
           <SubtaskMemberSelector subtaskId={subTask.id} assignmentId={subTask.assignmentId} />
           <span ref={menu.anchorRef} onClick={menu.toggleMenu} className='subtasks-item-icon'>

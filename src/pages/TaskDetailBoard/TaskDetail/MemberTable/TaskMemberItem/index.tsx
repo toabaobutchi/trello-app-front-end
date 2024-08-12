@@ -1,6 +1,7 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import { isAdminOrOwner } from '@utils/functions'
 import { AssignmentResponse } from '@utils/types'
 
 function TaskMemberItem({
@@ -15,6 +16,7 @@ function TaskMemberItem({
     onUnassign(taskMember.id)
   }
   const isYou = taskMember.id === project.assignmentId
+  const isAdminorOwner = isAdminOrOwner(project.context)
   return (
     <>
       <div key={taskMember.id} className='member-info'>
@@ -27,7 +29,7 @@ function TaskMemberItem({
             <p className='member-info-role'>{taskMember.permission}</p>
           </div>
         </Flex>
-        {!isYou && (
+        {!isYou && isAdminorOwner && (
           <Button theme='danger' onClick={handleUnassignTaskAssignment}>
             <i className='fa-regular fa-trash-can'></i>
           </Button>

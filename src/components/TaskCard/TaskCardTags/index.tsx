@@ -15,7 +15,7 @@ function TaskCardTags({ task }: TaskCardTagsProps) {
             <i className='fa-solid fa-hourglass-half'></i> Duesoon
           </p>
         )}
-        {isOverdue((task?.dueDate ?? 0)) === DateCompareState.Overdue && (
+        {isOverdue(task?.dueDate ?? 0) === DateCompareState.Overdue && (
           <p className='tag text-danger bg-danger'>
             <i className='fa-regular fa-calendar-xmark'></i> Overdue
           </p>
@@ -40,7 +40,7 @@ function TaskCardTags({ task }: TaskCardTagsProps) {
             <i className='fa-solid fa-business-time'></i> Coming soon
           </div>
         )}
-        {task?.isReOpened && (
+        {task?.isReOpened && !task?.isCompleted && (
           <div className='tag text-warning bg-warning'>
             <i className='fa-solid fa-arrow-rotate-left'></i> Re-opened
           </div>
