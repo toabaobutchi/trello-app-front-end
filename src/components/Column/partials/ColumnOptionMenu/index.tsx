@@ -79,14 +79,18 @@ const ColumnOptionMenu = memo(({ list }: { list?: ListResponseForBoard }) => {
     if (list?.id) {
       const res = await deleteList(list.id)
       if (res?.isSuccess) {
-        toast.success('Successfully deleted', '')
         const data = res.data
+
+        toast.success('Successfully deleted', `List ${data.name} was successfully deleted`)
+
         reduxDispatch(projectSlice.actions.deleteList(data))
         handleToggleDeleteModal()
         handleCloseMenu()
         if (projectHub.isConnected) {
           projectHub.connection?.invoke(hubs.project.send.deleteList, data)
         }
+      } else {
+        toast.error('Failed to delete', 'Something went wrong')
       }
     }
   }
