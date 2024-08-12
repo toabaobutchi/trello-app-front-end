@@ -1,0 +1,29 @@
+.calendar-container {
+  overflow: auto;
+  padding: 0.7rem 0 3.7rem 0.7rem;
+  width: 100%;
+  flex: 1;
+  // background-color: var(--board-bg-color);
+  // border-radius: var(--primary-radius);
+  height: 100%;
+
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+}
+
+.calendar-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border: var(--thin-border-width) solid var(--light-color);
+  border-radius: var(--primary-radius);
+  width: max-content;
+}
+
+.calendar-content {
+  padding: 0.5rem;
+  padding-top: 0;
+}

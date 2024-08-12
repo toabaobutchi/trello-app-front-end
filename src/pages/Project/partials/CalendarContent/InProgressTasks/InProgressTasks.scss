@@ -1,0 +1,12 @@
+.calendar-content-in-progress-filters {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.calendar-content-in-progress {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}

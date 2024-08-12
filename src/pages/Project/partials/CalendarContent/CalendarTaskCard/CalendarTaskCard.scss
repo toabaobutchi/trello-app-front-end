@@ -1,0 +1,9 @@
+.calendar-task-card {
+  padding: 0.5rem 1rem;
+  border-radius: var(--primary-radius);
+  border: var(--thin-border-width) solid var(--light-color);
+
+  &-name {
+    font-size: 1.2rem;
+  }
+}

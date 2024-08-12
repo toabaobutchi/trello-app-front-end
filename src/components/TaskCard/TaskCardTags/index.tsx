@@ -15,7 +15,7 @@ function TaskCardTags({ task }: TaskCardTagsProps) {
             <i className='fa-solid fa-hourglass-half'></i> Duesoon
           </p>
         )}
-        {isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.Overdue && (
+        {isOverdue((task?.dueDate ?? 0)) === DateCompareState.Overdue && (
           <p className='tag text-danger bg-danger'>
             <i className='fa-regular fa-calendar-xmark'></i> Overdue
           </p>

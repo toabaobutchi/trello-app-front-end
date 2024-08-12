@@ -3,6 +3,7 @@ import Flex from '@comps/StyledComponents/Flex'
 import ProjectHeader from './partials/ProjectHeader'
 import {
   AssignByTaskResponse,
+  AssignSubtaskResponse,
   ChangeTaskOrderResponse,
   CreateListResponse,
   CreateTaskResponse,
@@ -90,6 +91,27 @@ function Project() {
 
           const member = members.find(a => a.id === data.assignmentId)
           toast.error('A member has been removed', `${member?.email} has been removed from this project`)
+        }
+      }
+    )
+    projectHub.connection?.on(
+      hubs.project.receive.assignSubtask,
+      (assignmentIds: string, data: AssignSubtaskResponse) => {
+        if (data.isNewAssignment) {
+          // thêm thành viên mới vào task - thay đổi context
+          // context?.setTask?.(prev => {
+          //   const taskDetail = { ...prev } as typeof prev
+          //   taskDetail?.taskAssignmentIds?.push(data.assignmentId)
+          //   return taskDetail
+          // })
+
+          // thay đổi store bên ngoài - dispatch
+          const payload: AssignByTaskResponse = {
+            assignerId: data.assignerId ?? '',
+            assignmentIds: [data.assignmentId],
+            taskId: data.taskId
+          }
+          dispatch(projectSlice.actions.addAssignmentToTask(payload))
         }
       }
     )
