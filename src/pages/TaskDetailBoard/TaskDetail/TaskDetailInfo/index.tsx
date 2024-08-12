@@ -28,6 +28,7 @@ import Modal from '@comps/Modal'
 import { useModal } from '@hooks/useModal'
 import { useNavigate } from 'react-router-dom'
 import Button from '@comps/Button'
+import toast from '@comps/Toast/toast'
 
 type RemoteUpdatingType = {
   assignmentId: string
@@ -67,7 +68,8 @@ function TaskDetailInfo() {
                   name: data?.name,
                   description: data?.description,
                   priority: data?.priority,
-                  dueDate: data?.dueDate
+                  dueDate: data?.dueDate,
+                  startedAt: data?.startedAt
                 } as typeof prev)
             )
             setRemoteUpdating(_prev => undefined)
@@ -129,6 +131,9 @@ function TaskDetailInfo() {
           }
         }
       )
+      // projectHub.connection?.on(hubs.project.receive.joinSubtask, () => {
+      //   // TODO: show modal join subtask
+      // })
     }
   }, [projectHub, taskDetail?.id, context])
   // lấy thông tin creator
@@ -186,7 +191,7 @@ function TaskDetailInfo() {
       const res = await updateTask(taskDetail.id, { startedAt: startDate })
       if (res?.isSuccess) {
         if (res?.status === HttpStatusCode.ResetContent) {
-          console.log('Task due date is larger than project due date')
+          toast.error('Task due date is larger than project due date', '')
         } else {
           const data = res.data
           updateTaskContext('startedAt', 'startedAt', data)

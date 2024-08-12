@@ -1,6 +1,7 @@
 import Button from '@comps/Button'
 import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents'
+import toast from '@comps/Toast/toast'
 import { projectSlice } from '@redux/ProjectSlice'
 import { deleteTask } from '@services/task.services'
 import { hubs, ProjectHub } from '@utils/Hubs'
@@ -30,6 +31,8 @@ function DeleteTaskMenu({ task, openModal, onClose }: DeleteTaskMenuProps) {
         projectHub.connection?.send(hubs.project.send.deleteTask, data, moveToTrash)
       }
       onClose()
+    } else {
+      toast.error('Failed to delete task', '')
     }
   }
   const handleDeletePermantly = async () => {

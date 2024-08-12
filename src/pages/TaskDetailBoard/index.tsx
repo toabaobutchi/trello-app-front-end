@@ -172,9 +172,9 @@ function TaskDetailBoard() {
                     <Button onClick={handleToggleDuplicateTaskModal} variant='text' theme='default'>
                       <i className='fa-regular fa-clone'></i> Duplicate
                     </Button>
-                    <Button variant='text' theme='default'>
+                    {/* <Button variant='text' theme='default'>
                       <i className='fa-regular fa-trash-can'></i> Delete
-                    </Button>
+                    </Button> */}
                     {!isJoined && (
                       <Button onClick={handleToggleJoinModal} variant='text' theme='default'>
                         <i className='fa-solid fa-right-to-bracket'></i> Join

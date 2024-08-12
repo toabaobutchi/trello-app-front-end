@@ -28,7 +28,7 @@ function UpdateDueDateEditor({ dueDate, onUpdate = () => {}, onClear = () => {} 
           {dueDate ? (
             <Flex $alignItem='center' $gap='0.5rem'>
               <p>{getDateString(new Date(dueDate))}</p>
-              <Tooltip content='Reset start date' position='top' arrow>
+              <Tooltip content='Reset due date' position='top' arrow>
                 <IconButton onClick={handleClear} dashedBorder size='small' theme='danger' blurWhenNotHover>
                   <i className='fa-solid fa-xmark'></i>
                 </IconButton>

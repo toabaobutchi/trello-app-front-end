@@ -12,6 +12,8 @@ import { hubs, ProjectHub } from '@utils/Hubs'
 import { projectSlice } from '@redux/ProjectSlice'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import toast from '@comps/Toast/toast'
 
 type SubtaskMemberSelectorProps = {
   assignmentId?: string
@@ -19,7 +21,7 @@ type SubtaskMemberSelectorProps = {
 }
 
 function SubtaskMemberSelector({ assignmentId, subtaskId }: SubtaskMemberSelectorProps) {
-  const projectMembers = useSelector((state: RootState) => state.project.activeProject.members)
+  const { members, board } = useProjectSelector()
   const [assignment, setAssignment] = useState<AssignmentResponse>()
   const [subtaskAssignmentModal, handleToggleSubtaskAssignmentModal] = useModal()
   const context = useContext(TaskDetailContext)
@@ -27,7 +29,7 @@ function SubtaskMemberSelector({ assignmentId, subtaskId }: SubtaskMemberSelecto
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setAssignment(projectMembers.find(m => m.id === assignmentId))
+    setAssignment(members.find(m => m.id === assignmentId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assignmentId])
 
@@ -79,6 +81,11 @@ function SubtaskMemberSelector({ assignmentId, subtaskId }: SubtaskMemberSelecto
   }
 
   const handleJoinSubtask = async () => {
+    const isJoined = context?.task?.taskAssignmentIds?.includes(board.assignmentId)
+    if (!isJoined) {
+      toast.warning('You must join the task first!', '')
+      return
+    }
     const res = await joinSubtask(subtaskId)
     if (res?.isSuccess) {
       const data = res.data

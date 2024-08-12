@@ -20,11 +20,13 @@ function ChangeLog() {
 
   useEffect(() => {
     if (projectHub.isConnected) {
+      console.log('Listen', projectHub.connection)
       projectHub.connection?.on(hubs.project.receive.changeLog, (changeLog: ChangeLogResponse) => {
+        console.log('Change log', changeLog)
         setChangeLogs(prev => [changeLog, ...prev])
       })
     }
-  }, [projectHub.isConnected])
+  }, [projectHub.isConnected, projectHub.connection])
 
   return (
     <>
