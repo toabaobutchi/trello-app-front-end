@@ -2,10 +2,7 @@ import { ProjectCardType } from '@utils/types'
 import './ProjectCard.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import Button from '@comps/Button'
-import Menu from '@comps/Menu'
-import MenuItem from '@comps/MenuItem'
 import Tooltip from '@comps/Tooltip'
-import useMenu from '@hooks/useMenu'
 import { useNavigate } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
 import { useState } from 'react'
@@ -15,7 +12,7 @@ import Modal from '@comps/Modal'
 import UpdateProjectEditor from './UpdateProjectEditor'
 
 function ProjectCard({ project }: { project: ProjectCardType }) {
-  const { open, anchorRef, toggleMenu, closeMenu } = useMenu<HTMLButtonElement>()
+  // const { open, anchorRef, toggleMenu, closeMenu } = useMenu<HTMLButtonElement>()
   const [updateModal, setUpdateModal] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -40,8 +37,8 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
   }
   const handleToggleUpdateModal = () => {
     setUpdateModal(!updateModal)
-    closeMenu()
   }
+  const isOwner = project?.context?.toLowerCase() === 'owner'
   return (
     <>
       <div
@@ -92,22 +89,12 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
           <Button onClick={navigateToProjectDetail} variant='filled'>
             Take a look
           </Button>
-          {project?.context?.toLowerCase() === 'owner' && (
-            <Button ref={anchorRef} variant='text' theme='secondary' className='row' onClick={toggleMenu}>
-              More&nbsp;<i className='fa-solid fa-caret-down'></i>
+          {isOwner && (
+            <Button onClick={handleToggleUpdateModal} variant='text' theme='secondary' className='row'>
+              Update&nbsp;<i className='fa-solid fa-pen-nib'></i>
             </Button>
           )}
         </Flex>
-        {project?.context?.toLowerCase() === 'owner' && (
-          <Menu open={open} anchorElement={anchorRef?.current} onClose={closeMenu}>
-            <MenuItem onClick={handleToggleUpdateModal} className='project-update-btn'>
-              <i className='fa-regular fa-pen-to-square'></i> Update
-            </MenuItem>
-            <MenuItem className='project-delete-btn'>
-              <i className='fa-regular fa-trash-can'></i> Delete
-            </MenuItem>
-          </Menu>
-        )}
       </div>
       <Modal
         open={updateModal}

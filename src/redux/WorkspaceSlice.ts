@@ -8,7 +8,6 @@ import {
 // import { http as httpAuth } from '@utils/Axios/HttpClientAuth'
 import { createWorkspace, loadSharedWorkspaces, loadWorkspaces } from '@services/workspace.services'
 
-
 export const workspaceSlice = createSlice({
   name: 'workspaces',
   initialState: {
@@ -32,6 +31,7 @@ export const workspaceSlice = createSlice({
       const updatedProject = action.payload as UpdateProjectResponse
       if (!updatedProject) return
       const project = state.activeWorkspace?.projects?.find(project => project.id === updatedProject.id)
+
       if (project) {
         project.name = updatedProject.name
         project.description = updatedProject.description
