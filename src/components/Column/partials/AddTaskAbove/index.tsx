@@ -67,7 +67,7 @@ function AddTaskAbove({ column }: { column?: ListResponseForBoard }) {
       >
         <FloatLabelInput
           label='Task name'
-          className='mb-1'
+          // className='mb-1'
           onChange={handleChangeNewTaskName}
           input={{ id: 'add-task-input-above', value: newTaskName, autoFocus: true, onKeyDown: handleTrigger.handler }}
         />
