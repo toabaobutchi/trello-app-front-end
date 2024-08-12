@@ -7,6 +7,8 @@ import InProgressTasks from './InProgressTasks'
 import { getFlatTasks } from '@utils/functions'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { TaskResponseForBoard } from '@utils/types'
+import DueInWeekTasks from './DueInWeekTasks'
+import PendingTasks from './PendingTasks'
 
 const tabs: TabNav[] = [
   {
@@ -54,11 +56,11 @@ function CalendarContent() {
             <Tab.Content show={activeTab === tabs[0].value}>
               <InProgressTasks tasks={tasks} date={date} />
             </Tab.Content>
-            <Tab.Content show={activeTab === tabs[1].value}></Tab.Content>
+            <Tab.Content show={activeTab === tabs[1].value}>
+              <DueInWeekTasks tasks={tasks} date={date} />
+            </Tab.Content>
             <Tab.Content show={activeTab === tabs[2].value}>
-              <div className='pending-content'>
-                <h2>Pending tasks</h2>
-              </div>
+              <PendingTasks tasks={tasks} date={date} />
             </Tab.Content>
           </Tab>
         </div>

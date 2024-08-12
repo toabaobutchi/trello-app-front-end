@@ -33,12 +33,12 @@ const ProjectViewModeNavBar = memo(
             <i className='fa-regular fa-calendar-days'></i>{' '}
             <span className='project-view-mode-item-text'>Calendar</span>
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to={linkCreator.project({ projectId, ownerShip, slug, viewMode: 'chart' })}
             className='project-view-mode-item view-mode'
           >
             <i className='fa-solid fa-chart-pie'></i> <span className='project-view-mode-item-text'>Dashboard</span>
-          </NavLink>
+          </NavLink> */}
         </Flex>
       </>
     )

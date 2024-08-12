@@ -1,9 +1,44 @@
 .calendar-task-card {
+  --calendar-task-card-fg-color: var(--secondary-color);
+  --calendar-task-card-bg-color: var(--light-color);
   padding: 0.5rem 1rem;
   border-radius: var(--primary-radius);
   border: var(--thin-border-width) solid var(--light-color);
 
+  &__high {
+    --calendar-task-card-bg-color: var(--danger-bg-color);
+    --calendar-task-card-fg-color: var(--danger-color);
+  }
+  &__medium {
+    --calendar-task-card-bg-color: var(--warning-bg-color);
+    --calendar-task-card-fg-color: var(--warning-color);
+  }
+  &__low {
+    --calendar-task-card-bg-color: var(--success-bg-color);
+    --calendar-task-card-fg-color: var(--success-color);
+  }
+  &__normal {
+    --calendar-task-card-bg-color: var(--primary-bg-color);
+    --calendar-task-card-fg-color: var(--primary-color);
+  }
+
   &-name {
     font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    color: var(--calendar-task-card-fg-color);
+    display: block;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &-body {
+    margin-top: 0.25rem;
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
   }
 }

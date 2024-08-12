@@ -14,17 +14,23 @@ function InProgressTasks({ tasks, date }: InProgressTasksProps) {
   const inProgressTasks = useMemo(() => {
     return tasks.filter(task => {
       const taskDueDate = task.dueDate
+      const taskStartDate = task.startedAt
+      let isStarted = true
+      if (taskStartDate) {
+        // ngày bắt đầu đã qua
+        isStarted = taskStartDate < date.startOf('week').valueOf()
+      }
       if (taskDueDate) {
         // ngày đến hạn không đến trong tuần đang chọn
         const isInWeek = taskDueDate > date.endOf('week').valueOf()
-        return isInWeek
+        return isStarted && isInWeek
       }
-      return true
+      return true && isStarted
     })
   }, [tasks, date])
   return (
     <>
-      <div className='calendar-content-in-progress-filters'>
+      {/* <div className='calendar-content-in-progress-filters'>
         <Flex $alignItem='center' $gap='0.5rem'>
           <SwitchButton
             inputAttributes={{
@@ -47,11 +53,12 @@ function InProgressTasks({ tasks, date }: InProgressTasksProps) {
             Only tasks with no due date
           </label>
         </Flex>
-      </div>
+      </div> */}
       <div className='calendar-content-in-progress'>
         {inProgressTasks.map(t => (
-          <CalendarTaskCard task={t} />
+          <CalendarTaskCard key={t.id} task={t} />
         ))}
+        {!inProgressTasks?.length && <p className='text-success'>No task is in progress in week</p>}
       </div>
     </>
   )
