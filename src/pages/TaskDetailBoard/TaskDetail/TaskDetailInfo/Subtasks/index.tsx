@@ -30,6 +30,7 @@ function Subtasks({ subtasks, taskId, hubConnection }: SubtasksProps) {
   useEffect(() => {
     setSubtasks(subtasks)
   }, [subtasks])
+  
   useEffect(() => {
     if (hubConnection) {
       // ReceiveCheckSubtask

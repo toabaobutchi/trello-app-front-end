@@ -95,7 +95,7 @@ function Project() {
         } else {
           // dispatch members
           dispatch(projectSlice.actions.removeAssignment(data.assignmentId))
-
+          
           const member = members.find(a => a.id === data.assignmentId)
           toast.error('A member has been removed', `${member?.email} has been removed from this project`)
         }
@@ -269,13 +269,19 @@ function Project() {
     projectHub.connection?.on(
       hubs.project.receive.unassignTaskAssignment,
       (_assignmentId: string, data: DeletedTaskAssignmentResponse) => {
+        if (data.assignmentId === responseData.assignmentId) {
+          const tasks = getFlatTasks(responseData)
+          if (tasks) {
+            const task = tasks.find(t => t.id === data.taskId)
+            toast.error(`You was unassgned from task ${task?.name}`, '')
+          }
+        }
         dispatch(projectSlice.actions.removeTaskAssignment(data))
       }
     )
     projectHub.connection?.on(
       hubs.project.receive.addTaskDependencies,
       (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
-        console.log('addTaskDependencies')
         dispatch(
           projectSlice.actions.addFromDependencies({
             taskId,
