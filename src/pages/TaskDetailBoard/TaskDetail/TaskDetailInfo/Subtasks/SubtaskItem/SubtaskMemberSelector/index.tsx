@@ -75,6 +75,8 @@ function SubtaskMemberSelector({ assignmentId, subtaskId }: SubtaskMemberSelecto
       if (projectHub.isConnected) {
         projectHub.connection?.invoke(hubs.project.send.assignSubtask, data)
       }
+    } else {
+      toast.error('Cannot assign this member', '')
     }
     handleToggleSubtaskAssignmentModal()
   }
@@ -119,6 +121,8 @@ function SubtaskMemberSelector({ assignmentId, subtaskId }: SubtaskMemberSelecto
         if (projectHub.isConnected) {
           projectHub.connection?.invoke(hubs.project.send.unassignSubtask, data)
         }
+      } else {
+        toast.error('Cannot unassign this member', '')
       }
     }
   }
