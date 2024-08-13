@@ -76,6 +76,10 @@ const resetTask = async (taskId: string, model: ResetTaskModel) => {
   const res = await http.put<ResetTaskModel, UpdatedTaskResponse>(`/tasks/${taskId}/reset`, model)
   return res
 }
+const restoreTask = async (taskId: string) => {
+  const res = await http.putWithoutData<TaskResponseForBoard>(`/tasks/${taskId}/restore`)
+  return res
+}
 
 const getDependenciesTasks = async (taskId: string) => {
   const res = await http.get<RelatedTaskResponse[]>(`/tasks/${taskId}/dependencies`)
@@ -120,5 +124,6 @@ export {
   addDependencies,
   getRelatedTasks,
   addChildrenTasks,
-  deleteRelatedTask
+  deleteRelatedTask,
+  restoreTask
 }

@@ -53,7 +53,7 @@ function Project() {
   const navigate = useNavigate()
   const remoteDragTimeOutId = useRef<number>()
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState(projectHub.isConnected) // test
   const [removeAssignmentModal, handleToggleRemoveAssignmentModal] = useModal(false, {
     whenClose: () => navigate(routeLinks.home),
     whenOpen: async () => {
@@ -95,7 +95,7 @@ function Project() {
         } else {
           // dispatch members
           dispatch(projectSlice.actions.removeAssignment(data.assignmentId))
-          
+
           const member = members.find(a => a.id === data.assignmentId)
           toast.error('A member has been removed', `${member?.email} has been removed from this project`)
         }

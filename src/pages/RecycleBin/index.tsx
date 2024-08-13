@@ -5,12 +5,17 @@ import { InTrashTaskResponse } from '@utils/types'
 import DeletedTaskCard from './DeletedTaskCard'
 import Flex from '@comps/StyledComponents'
 import Button from '@comps/Button'
+import { useState } from 'react'
 
 function RecycleBin() {
   const response = useLoaderData() as AxiosResponse
-  const deletedTasks = response.data as InTrashTaskResponse[]
+  // const deletedTasks = response.data as InTrashTaskResponse[]
+  const [deletedTasks, setDeletedTasks] = useState(response.data as InTrashTaskResponse[])
   const navigate = useNavigate()
   const handleBack = () => navigate(-1)
+  const handleRemove = (taskId: string) => {
+    setDeletedTasks(prev => prev.filter(task => task.id !== taskId))
+  }
   return (
     <>
       <div className='recycle-bin flex-1'>
@@ -24,7 +29,7 @@ function RecycleBin() {
         </Flex>
         <div className='deleted-tasks-container'>
           {deletedTasks?.map(item => {
-            return <DeletedTaskCard deletedTask={item} key={item.id} />
+            return <DeletedTaskCard onDelete={handleRemove} deletedTask={item} key={item.id} />
           })}
         </div>
       </div>

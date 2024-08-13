@@ -5,12 +5,46 @@ import { getDateString } from '@utils/functions'
 import Button from '@comps/Button'
 import { useNavigate, useParams } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
+import { deleteTask, restoreTask } from '@services/task.services'
+import toast from '@comps/Toast/toast'
+import { useDispatch } from 'react-redux'
+import { projectSlice } from '@redux/ProjectSlice'
 
-function DeletedTaskCard({ deletedTask }: { deletedTask: InTrashTaskResponse }) {
+function DeletedTaskCard({
+  deletedTask,
+  onDelete
+}: {
+  deletedTask: InTrashTaskResponse
+  onDelete: (taskId: string) => void
+}) {
   const navigate = useNavigate()
   const params = useParams() as ProjectPageParams
   const handleNavigateToMemberDetail = () => {
     navigate(linkCreator.projectMember(params, deletedTask.deleter?.id))
+  }
+  const dispatch = useDispatch()
+  const handleDelete = async () => {
+    const res = await deleteTask(deletedTask.id)
+    if (res?.isSuccess) {
+      const data = res.data
+      onDelete(data.id)
+      // navigate(linkCreator.projectRecycleBin(params))
+    } else {
+      // Handle error
+      toast.error('Cannot delete task', '')
+    }
+  }
+  const handleRestore = async () => {
+    const res = await restoreTask(deletedTask.id)
+    if (res?.isSuccess) {
+      const data = res.data
+      dispatch(projectSlice.actions.addNewTask(data))
+      // navigate(linkCreator.projectRecycleBin(params))
+      onDelete(data.id)
+    } else {
+      // Handle error
+      toast.error('Cannot store task', '')
+    }
   }
   return (
     <>
@@ -27,10 +61,10 @@ function DeletedTaskCard({ deletedTask }: { deletedTask: InTrashTaskResponse }) 
           </div>
         </Flex>
         <Flex $alignItem='center' $gap='0.5rem' $justifyContent='end' className='mt-1'>
-          <Button variant='filled' theme='danger'>
+          <Button onClick={handleDelete} variant='filled' theme='danger'>
             <i className='fa-regular fa-trash-can'></i> Delete
           </Button>
-          <Button variant='filled' theme='primary'>
+          <Button onClick={handleRestore} variant='filled' theme='primary'>
             <i className='fa-regular fa-window-restore'></i> Restore
           </Button>
         </Flex>

@@ -75,6 +75,20 @@ function ProjectSideBarItem({ item }: { item: ProjectCardType }) {
                 <i className='fa-solid fa-table-list'></i>&nbsp; Table
               </span>
             </NavLink>
+            <NavLink
+              className='project-side-bar-item project-side-bar-item-children row jcsb ps-1'
+              // key={item.id}
+              to={linkCreator.project({
+                projectId: item.id,
+                slug: item.slug,
+                ownerShip: item.context,
+                viewMode: 'calendar'
+              })}
+            >
+              <span>
+                <i className='fa-solid fa-table-list'></i>&nbsp; Calendar
+              </span>
+            </NavLink>
           </Expander>
 
           <NavLink to={linkCreator.projectMember(params)} className='project-side-bar-item'>

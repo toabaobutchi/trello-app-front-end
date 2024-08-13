@@ -204,7 +204,7 @@ class HttpClientAuth {
 
   async putWithoutData<TReponse = any>(url: string, options: AxiosRequestConfig<object> = {}) {
     try {
-      const httpResponse = await this.post<object, TReponse>(url, {}, options)
+      const httpResponse = await this.put<object, TReponse>(url, {}, options)
       return httpResponse
     } catch (err) {
       this.logError(err)
