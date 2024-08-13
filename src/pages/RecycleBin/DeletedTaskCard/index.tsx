@@ -1,5 +1,5 @@
 import Flex from '@comps/StyledComponents'
-import { InTrashTaskResponse, ProjectPageParams } from '@utils/types'
+import { CreateTaskResponse, InTrashTaskResponse, ProjectPageParams } from '@utils/types'
 import './DeletedTaskCard.scss'
 import { getDateString } from '@utils/functions'
 import Button from '@comps/Button'
@@ -38,7 +38,10 @@ function DeletedTaskCard({
     const res = await restoreTask(deletedTask.id)
     if (res?.isSuccess) {
       const data = res.data
-      dispatch(projectSlice.actions.addNewTask(data))
+      // const model: CreateTaskResponse = {
+
+      // }
+      // dispatch(projectSlice.actions.addNewTask(data))
       // navigate(linkCreator.projectRecycleBin(params))
       onDelete(data.id)
     } else {

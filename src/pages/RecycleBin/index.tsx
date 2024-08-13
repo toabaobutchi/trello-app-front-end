@@ -14,7 +14,14 @@ function RecycleBin() {
   const navigate = useNavigate()
   const handleBack = () => navigate(-1)
   const handleRemove = (taskId: string) => {
-    setDeletedTasks(prev => prev.filter(task => task.id !== taskId))
+    setDeletedTasks(prev => {
+      const newPrev = { ...prev }
+      newPrev.splice(
+        prev.findIndex(t => t.id === taskId),
+        1
+      )
+      return newPrev
+    })
   }
   return (
     <>
