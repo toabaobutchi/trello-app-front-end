@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom'
 import BoardContent from '../BoardContent'
 import TableContent from '../TableContent'
 import CalendarContent from '../CalendarContent'
+import OverviewContent from '../OverviewContent'
 function ViewContent() {
   const params = useParams() as ProjectPageParams
   const { board: project } = useProjectSelector()
@@ -203,6 +204,7 @@ function ViewContent() {
           {params.viewMode === 'board' && <BoardContent />}
           {params.viewMode === 'table' && <TableContent />}
           {params.viewMode === 'calendar' && <CalendarContent />}
+          {params.viewMode === 'overview' && <OverviewContent />}
         </>
       )}
       <Outlet />

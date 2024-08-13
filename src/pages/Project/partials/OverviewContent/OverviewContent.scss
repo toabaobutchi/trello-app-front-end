@@ -1,0 +1,59 @@
+.overview-container {
+  overflow: auto;
+  padding: 0.7rem 0 3.7rem 0.7rem;
+  width: 100%;
+  flex: 1;
+  background-color: var(--board-bg-color);
+  border-radius: var(--primary-radius);
+  height: 100%;
+
+  display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  // display: grid;
+  // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.5rem;
+}
+
+.overview-card {
+  background-color: var(--theme-bg-color);
+  border-radius: var(--primary-radius);
+  box-shadow: var(--task-card-box-shadow);
+  width: max-content;
+  padding: 1rem;
+}
+
+.overview-project {
+  // background-color: var(--theme-bg-color);
+  // border-radius: var(--primary-radius);
+  // box-shadow: var(--task-card-box-shadow);
+  // width: max-content;
+  // padding: 1rem;
+  &-name {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+  }
+}
+.list-state-header {
+  font-size: 1.3rem;
+  padding: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: var(--thin-border-width) solid var(--light-color);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.list-state-hz-line {
+  width: 500px;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.list-state-item {
+  height: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}

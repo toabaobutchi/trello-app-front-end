@@ -8,7 +8,7 @@ type TooltipProps = {
   arrow?: boolean
   theme?: ThemeType
   delay?: string
-}
+} & React.ComponentProps<'div'>
 
 function Tooltip({
   children = '',
@@ -16,17 +16,21 @@ function Tooltip({
   position = 'top',
   arrow = false,
   theme = 'dark',
-  delay
+  delay,
+  ...props
 }: TooltipProps) {
   return (
     <>
       <div
         style={
           {
-            '--tooltip-delay': delay
+            '--tooltip-delay': delay,
+            ...props.style
           } as React.CSSProperties
         }
-        className={`tooltip-container ${position}-tooltip ${arrow ? ' arrow-tooltip' : ''} tooltip__${theme}`}
+        className={`tooltip-container ${position}-tooltip ${arrow ? ' arrow-tooltip' : ''} tooltip__${theme} ${
+          props?.className
+        }`}
         data-tooltip-content={content}
       >
         {children}

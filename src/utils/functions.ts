@@ -312,3 +312,6 @@ export function isAdminOrOwner(context: string) {
   const permission = context.toLowerCase()
   return permission === 'admin' || permission === 'owner'
 }
+export function getColor() {
+  return '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')
+}
