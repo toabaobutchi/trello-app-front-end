@@ -8,8 +8,8 @@ function UtilitiesMenu() {
   return (
     <>
       <div className='utils-menu'>
-        <SearchInput attributes={{ placeholder: 'Search', id: 'search-workspace' }} />
-        <MobileSearch />
+        {/* <SearchInput attributes={{ placeholder: 'Search', id: 'search-workspace' }} /> */}
+        {/* <MobileSearch /> */}
         <NotificationMenu />
         <AccountMenu />
       </div>

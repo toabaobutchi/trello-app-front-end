@@ -12,6 +12,7 @@ import Menu from '@comps/Menu'
 import { addWorkspace } from '@redux/WorkspaceSlice'
 import CreateBoardModal from './partials/CreateBoardModal'
 import MainMenu from './partials/MainMenu'
+import toast from '@comps/Toast/toast'
 
 function AddItemMenu() {
   const [state, dispatch] = useReducer(reducer, { anchorEl: null } as State)
@@ -72,7 +73,7 @@ function AddItemMenu() {
   const handleSubmit = {
     async workspace() {
       if (!state?.workspace?.title?.trim()) {
-        console.error('Please enter a workspace title')
+        toast.error('Please enter a workspace title', '')
       } else {
         // call API to add workspace
         const { title, description } = state.workspace
@@ -171,7 +172,7 @@ function AddItemMenu() {
         </Button>
       </Menu>
 
-      {/* Join board menu */}
+      {/* Join board menu
       <Menu
         anchorElement={state.anchorEl}
         open={state.anchorEl !== null && state.openMenu === EActionType.JOIN_BOARD_MENU}
@@ -193,7 +194,7 @@ function AddItemMenu() {
         <Button disabled={true} style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
           Send resquest
         </Button>
-      </Menu>
+      </Menu> */}
     </>
   )
 }

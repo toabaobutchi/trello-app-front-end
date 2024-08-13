@@ -2,9 +2,9 @@ import { useProjectSelector } from '@hooks/useProjectSelector'
 import './OverviewContent.scss'
 import { getDateString } from '@utils/functions'
 import ListState from './ListState'
+import AssignmentInfo from './AssignmentInfo'
 function OverviewContent() {
   const { board: project } = useProjectSelector()
-  // const workspaces = useSelector((state: RootState) => state.workspaces.workspaceList)
   return (
     <div className='overview-container'>
       <div className='overview-card overview-project'>
@@ -33,6 +33,7 @@ function OverviewContent() {
         </p> */}
       </div>
       <ListState />
+      <AssignmentInfo />
     </div>
   )
 }

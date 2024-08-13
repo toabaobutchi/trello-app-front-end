@@ -34,12 +34,12 @@ function MainMenu({ open, anchorElement, handleCloseMenu = () => {}, handleOpenS
             <i className='fa-solid fa-chevron-right'></i>
           </div>
         </MenuItem>
-        <MenuItem size='small' onClick={handleOpenSubMenu?.openJoinBoard}>
+        {/* <MenuItem size='small' onClick={handleOpenSubMenu?.openJoinBoard}>
           <div className='row jcsb'>
             <p>Join a board</p>
             <i className='fa-solid fa-chevron-right'></i>
           </div>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </>
   )

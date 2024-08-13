@@ -62,7 +62,7 @@ function Project() {
   })
 
   useEffect(() => {
-    if (!project || project?.id !== params.projectId) {
+    if (!project?.id || project?.id !== params.projectId) {
       if (response?.isSuccess) {
         const data = response.data
         dispatch(projectSlice.actions.setActiveProjectBoard(data))
@@ -74,9 +74,12 @@ function Project() {
         }) // kết nối đến hub
       }
     }
-    // return () => {
-    //   setIsConnected(_prev => false)
-    // }
+    return () => {
+      if (project?.id && project?.id !== params.projectId) {
+        projectHub.disconnect()
+        setIsConnected(_prev => false)
+      }
+    }
   }, [params?.projectId])
 
   const handleListenHub = () => {
