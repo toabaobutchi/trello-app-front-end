@@ -23,7 +23,9 @@ function Workspaces() {
   return (
     <>
       <div className='workspaces'>
-        <div className='page-header mt-2'>Workspaces</div>
+        <div className='page-header bold' style={{ fontSize: '2rem' }}>
+          Workspaces
+        </div>
         <div className='workspaces-content'>
           <Tab
             tabs={[

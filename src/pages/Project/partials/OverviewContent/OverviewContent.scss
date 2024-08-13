@@ -47,7 +47,8 @@
   border: var(--thin-border-width) solid transparent;
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &.expanded {
     border-radius: var(--primary-radius);
     border-color: var(--primary-color);
   }
@@ -135,6 +136,25 @@
 
 .list-state-task-item-completed-subtask {
   background-color: var(--success-color);
-  height: 10px;
+  height: 7px;
   border-radius: 5px;
+}
+
+.list-state-tasks-container {
+  padding: 0.5rem;
+  visibility: hidden;
+  height: 0;
+  opacity: 0;
+  // scale: 0;
+  // box-shadow: var(--task-card-box-shadow);
+  transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: top center;
+
+  &.expanded {
+    visibility: visible;
+    height: max-content;
+    // overflow-y: auto;
+    // scale: 1;
+    opacity: 1;
+  }
 }

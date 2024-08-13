@@ -1,8 +1,6 @@
-import Modal from '@comps/Modal'
 import Tooltip from '@comps/Tooltip-v2'
-import { useModal } from '@hooks/useModal'
 import { ListResponseForBoard } from '@utils/types'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import TaskItem from './TaskItem'
 
 type PriorityGroup = {
@@ -10,7 +8,7 @@ type PriorityGroup = {
 }
 
 function ListStateItem({ list }: { list: ListResponseForBoard }) {
-  const [taskModal, handleToggleTaskModal] = useModal()
+  const [expandTasks, setExpandTasks] = useState(false)
   const priorityGroup = useMemo(
     () =>
       list.tasks?.reduce<PriorityGroup>((groups, task) => {
@@ -25,9 +23,10 @@ function ListStateItem({ list }: { list: ListResponseForBoard }) {
       }, {}) ?? {},
     [list.tasks]
   )
+  const handleToggleExpand = () => setExpandTasks(!expandTasks)
   return (
     <>
-      <div onClick={list.tasks?.length ? handleToggleTaskModal : undefined} key={list.id} className='list-state-item'>
+      <div onClick={list.tasks?.length ? handleToggleExpand : undefined} key={list.id} className={`list-state-item${expandTasks ? ' expanded' : ''}`}>
         <p className='list-state-item-name'>
           {list.name} ({list.tasks?.length ?? 0})
         </p>
@@ -45,16 +44,11 @@ function ListStateItem({ list }: { list: ListResponseForBoard }) {
           ))}
         </div>
       </div>
-      <Modal
-        layout={{ header: { title: `Tasks in ${list.name}`, closeIcon: true } }}
-        style={{ width: '35%' }}
-        open={taskModal}
-        onClose={handleToggleTaskModal}
-      >
+      <div className={`list-state-tasks-container${expandTasks ? ' expanded' : ''}`}>
         {list.tasks?.map(task => (
           <TaskItem key={task.id} task={task} />
         ))}
-      </Modal>
+      </div>
     </>
   )
 }
