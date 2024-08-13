@@ -1,8 +1,6 @@
-import SearchInput from '@comps/SearchInput'
 import './UtilitiesMenu.scss'
 import NotificationMenu from './partials/NotificationsMenu'
 import AccountMenu from './partials/AccountMenu'
-import MobileSearch from './partials/MobileSearch'
 
 function UtilitiesMenu() {
   return (
