@@ -25,7 +25,7 @@ import {
   UpdatedTaskResponse
 } from '@utils/types'
 import { Suspense, useEffect, useRef, useState } from 'react'
-import { Outlet, useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { NavLink, Outlet, useLoaderData, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import LoadingLayout from '@layouts/LoadingLayout'
@@ -42,6 +42,7 @@ import Button from '@comps/Button'
 import toast from '@comps/Toast/toast'
 import config from '@confs/app.config'
 import { ProjectContextType } from '@hooks/useProjectOutletContext'
+import { getFlatTasks } from '@utils/functions'
 
 function Project() {
   const params = useParams() as ProjectPageParams
@@ -69,7 +70,7 @@ function Project() {
 
         // sau khi tải dữ liệu thì khởi tạo kết nối thời gian thực
         projectHub.connectToHub(() => {
-          handleListenHub()
+          handleListenHub(data)
           setIsConnected(true)
         }) // kết nối đến hub
       }
@@ -82,7 +83,7 @@ function Project() {
     }
   }, [params?.projectId])
 
-  const handleListenHub = () => {
+  const handleListenHub = (responseData: ProjectResponseForBoard) => {
     projectHub.connection?.on(hubs.project.receive.onlineMembers, (assignmentIds: string[]) => {
       dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
     })
@@ -110,7 +111,18 @@ function Project() {
             assignmentIds: [data.assignmentId],
             taskId: data.taskId
           }
+
+          if (payload.assignmentIds.findIndex(id => id === responseData.assignmentId) >= 0) {
+            const tasks = getFlatTasks(responseData)
+            if (tasks) {
+              const task = tasks.find(t => t.id === data.taskId)
+              toast.success('Assigned to task', `You was assigned to task ${task?.name}`)
+            }
+          }
           dispatch(projectSlice.actions.addAssignmentToTask(payload))
+        }
+        if (data.assignmentId === responseData.assignmentId) {
+          toast.success(`You was assigned to subtask ${data.title}`, '')
         }
       }
     )
@@ -235,6 +247,13 @@ function Project() {
     projectHub.connection?.on(
       hubs.project.receive.assignMemberToTask,
       (_assignmentId: string, data: AssignByTaskResponse) => {
+        if (data.assignmentIds.findIndex(id => id === responseData.assignmentId) >= 0) {
+          const tasks = getFlatTasks(responseData)
+          if (tasks) {
+            const task = tasks.find(t => t.id === data.taskId)
+            toast.success('Assigned to task', `You was assigned to task ${task?.name}`)
+          }
+        }
         dispatch(projectSlice.actions.addAssignmentToTask(data))
       }
     )

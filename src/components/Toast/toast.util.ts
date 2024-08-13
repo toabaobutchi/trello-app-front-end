@@ -58,9 +58,6 @@ function getHtml(title?: React.ReactNode, content?: React.ReactNode, options?: T
   const contentHtml = renderToString(content)
   const titleHtml = renderToString(title)
   const closeIconHtml = renderToString(React.createElement('i', { className: 'fa-solid fa-xmark' }))
-
-  console.log(icon)
-
   const iconHtml = renderToString(icon)
 
   return `<div class='toast-icon'>${iconHtml}</div>
@@ -75,7 +72,6 @@ function getHtml(title?: React.ReactNode, content?: React.ReactNode, options?: T
 function getIcon(options?: ToastOptions): React.ReactNode {
   // let icon = options?.icon ?? React.createElement('i', { className: 'fa-solid fa-circle-xmark' })
   if (options?.icon) return options.icon
-  console.log(options)
   if (options?.type) {
     switch (options.type) {
       case 'error':
