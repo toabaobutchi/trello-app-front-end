@@ -14,7 +14,7 @@ function JoinedTasksTable({ joinedTasks }: { joinedTasks?: JoinedTaskResponse[] 
     <>
       {tasks && tasks.length > 0 && (
         <>
-          <Flex $alignItem='center' $justifyContent='space-between' className='w-full mb-1 joined-task-filters'>
+          {/* <Flex $alignItem='center' $justifyContent='space-between' className='w-full mb-1 joined-task-filters'>
             <Button variant='text' theme='default'>
               <i className='fa-solid fa-sliders'></i>&nbsp; Filters
             </Button>
@@ -23,7 +23,7 @@ function JoinedTasksTable({ joinedTasks }: { joinedTasks?: JoinedTaskResponse[] 
               className='joined-tasks-search-input'
               input={{ id: 'search-joined-tasks-input', name: 'searchJoinedTasks' }}
             />
-          </Flex>
+          </Flex> */}
           <div className='joined-tasks-container'>
             {tasks.map(task => (
               <JoinedTaskItem key={task.id} task={task} />

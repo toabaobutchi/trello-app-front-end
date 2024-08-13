@@ -4,6 +4,7 @@ import {
   AssignByTaskResponse,
   AssignmentProfileResponse,
   AssignmentResponse,
+  ChangePermissionResonse,
   DeleteAssignmentModel,
   DeletedAssignmentResponse,
   DeletedTaskAssignmentResponse,
@@ -50,6 +51,14 @@ const revokeProjectAuth = async () => {
   return res
 }
 
+const changePermission = async (assignmentId: string, permission: string) => {
+  const res = await http.put<{ permission: string }, ChangePermissionResonse>(
+    `/assignments/change-permission/${assignmentId}`,
+    { permission }
+  )
+  return res
+}
+
 export {
   getAssignmentsInProject,
   getAssignmentProfile,
@@ -57,5 +66,6 @@ export {
   getAssignmentsFromAnotherProject,
   unassignTaskAssignment,
   removeAssignment,
-  revokeProjectAuth
+  revokeProjectAuth,
+  changePermission
 }

@@ -13,7 +13,7 @@ function ProjectMember() {
   return (
     <>
       <Flex $flexDirection='column' $gap='1rem' className='project-member-container page-slide'>
-        <ProjectMemberFilter />
+        {/* <ProjectMemberFilter /> */}
         <Flex $justifyContent='space-between' className='w-full' $gap='1rem'>
           <Flex $alignItem='center' $flexDirection='column' $gap='0.5rem'>
             {projectMembers.map(member => (

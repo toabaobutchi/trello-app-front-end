@@ -687,3 +687,8 @@ export type RemoteDraggingType = {
   dragObjectId?: string
   dragObject?: 'Column' | 'Card'
 }
+
+export type ChangePermissionResonse = {
+  assignmentId: string
+  newPermission: string
+}

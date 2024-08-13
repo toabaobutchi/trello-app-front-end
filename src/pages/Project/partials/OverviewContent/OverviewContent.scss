@@ -140,7 +140,7 @@
   border-radius: 5px;
 }
 
-.list-state-tasks-container {
+.list-state-tasks-container, .doing-task-ratio {
   padding: 0.5rem;
   visibility: hidden;
   height: 0;
@@ -157,4 +157,44 @@
     // scale: 1;
     opacity: 1;
   }
+}
+
+.assignment-info {
+  flex: 1;
+}
+
+.assignment-info-item {
+  padding: 1rem;
+  border-radius: var(--primary-radius);
+  border: var(--thin-border-width) solid transparent;
+  cursor: pointer;
+
+  &:hover,
+  &.expanded {
+    border-color: var(--primary-color);
+  }
+
+  &-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 1rem;
+    object-fit: cover;
+  }
+  &-email {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+  }
+}
+.doing-task-total-count {
+  width: 50%;
+  background-color: var(--light-color);
+  border-radius: 5px;
+}
+
+.doing-task-count {
+  height: 10px;
+  background-color: var(--success-color);
+  border-radius: 5px;
 }

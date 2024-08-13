@@ -27,9 +27,9 @@ function ProjectHeader() {
               <p className='page-header project-name'>
                 <i className='fa-brands fa-flipboard'></i> {project?.board?.name}
               </p>
-              <p className='text-secondary project-info-toggle-button'>
+              {/* <p className='text-secondary project-info-toggle-button'>
                 <i className='fa-solid fa-circle-info'></i>
-              </p>
+              </p> */}
             </Flex>
             <p className='text-secondary' style={{ fontSize: '0.9rem' }}>
               <i className='fa-regular fa-calendar'></i> Due date:{' '}

@@ -19,7 +19,8 @@ import {
   UpdatedTaskResponse,
   DeletedTaskAssignmentResponse,
   DispatchRelatedTaskResponse,
-  DeletedRelationshipResponse
+  DeletedRelationshipResponse,
+  ChangePermissionResonse
 } from '@utils/types'
 
 export const projectSlice = createSlice({
@@ -35,6 +36,16 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
+    changePermission: (state, action) => {
+      const data = action.payload as ChangePermissionResonse
+      if (data) {
+        const member = state.activeProject.members.find(m => m.id === data.assignmentId)
+        if (member) {
+          member.permission = data.newPermission
+          state.activeProject.changeId = new Date().getTime()
+        }
+      }
+    },
     removeAssignment: (state, action) => {
       const assignmentId = action.payload as string
       if (assignmentId) {

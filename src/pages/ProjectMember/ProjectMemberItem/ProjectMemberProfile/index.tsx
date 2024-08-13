@@ -14,10 +14,6 @@ const tabs: TabNav[] = [
   {
     value: 'joinedTasks',
     display: 'Join tasks'
-  },
-  {
-    value: 'activities',
-    display: 'Activities'
   }
 ]
 
@@ -49,12 +45,11 @@ function ProjectMemberProfile() {
             <p className='member-info-full-email'>{memberInfo?.email}</p>
           </div>
         </Flex>
-        {profile && <p className='mb-1'>Join project at: {getDateString(new Date(profile.joinAt * 1000), true)}</p>}
+        {profile && <p className='mb-1'>Join project at: {getDateString(new Date(profile.joinAt), true)}</p>}
         <Tab tabs={tabs} activeTab={activeTab} onTabClick={handleTabClick}>
           <Tab.Content show={activeTab === tabs[0].value}>
             {profile && <JoinedTasksTable joinedTasks={profile.joinedTasks} />}
           </Tab.Content>
-          <Tab.Content show={activeTab === tabs[1].value}>Activities</Tab.Content>
         </Tab>
       </div>
       {/* dùng để hiển thị task detail hoặc something  */}

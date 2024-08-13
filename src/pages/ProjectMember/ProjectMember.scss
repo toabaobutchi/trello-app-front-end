@@ -77,3 +77,14 @@
   border-radius: var(--primary-radius);
   border: var(--thin-border-width) solid var(--primary-color);
 }
+.member-info-permission-selector {
+  select {
+    padding: 0.25rem 0.5rem;
+    font: inherit;
+    color: inherit;
+    outline: none;
+    border: var(--thin-border-width) solid var(--light-color);
+    border-radius: var(--primary-radius);
+    cursor: pointer;
+  }
+}
