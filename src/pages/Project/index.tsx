@@ -53,7 +53,7 @@ function Project() {
   const navigate = useNavigate()
   const remoteDragTimeOutId = useRef<number>()
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
-  const [isConnected, setIsConnected] = useState(projectHub.isConnected) // test
+  const [isConnected, setIsConnected] = useState(false) // test
   const [removeAssignmentModal, handleToggleRemoveAssignmentModal] = useModal(false, {
     whenClose: () => navigate(routeLinks.home),
     whenOpen: async () => {
@@ -188,6 +188,7 @@ function Project() {
     projectHub.connection?.on(
       hubs.project.receive.endDragTask,
       (_assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
+        console.log('Received drag operation - end task')
         dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
         // setRemoteDragging(undefined)
         setTimeout(() => {

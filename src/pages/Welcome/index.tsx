@@ -110,9 +110,7 @@ function Welcome() {
                 <Title>{config.appName}</Title>
                 <SubTitle>Powerful tool to manage your projects</SubTitle>
                 <IntroContent>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit obcaecati nostrum minima quasi. Eos,
-                  recusandae! Sequi ratione inventore ab maxime adipisci dolorem reprehenderit iusto ut, temporibus
-                  nulla vel sunt minima!
+                  You can manage everything in this! Keep your project clear and manageable! Sign in and get started!
                 </IntroContent>
                 <div style={{ marginTop: '1rem' }}>
                   <GoogleLogin

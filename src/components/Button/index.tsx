@@ -22,9 +22,11 @@ const Button = forwardRef((props: ButtonProps, ref: React.ForwardedRef<HTMLButto
     onClick = () => {},
     ...buttonProps
   } = props
+
   return (
     <>
-      <button ref={ref}
+      <button
+        ref={ref}
         onClick={onClick}
         className={`btn ${variant}-btn ${theme}-btn ${size}-btn ${className}`}
         style={style}
