@@ -1,4 +1,4 @@
-import useClickTracker from '@hooks/useClickTracker';
+import useClickTracker from '@hooks/useClickTracker'
 import { useEffect, useRef } from 'react'
 
 type ClickTrackerResult = {
@@ -12,18 +12,18 @@ type ExcludeSelector = {
 
 type ExcludeElement = {
   useSelector: false
-  elements: HTMLElement[]
+  elements: (HTMLElement | null)[]
 }
 
 const initOutClickResult: ClickTrackerResult = {
   isOutClick: false,
   clickedElement: null
 }
-/** 
+/**
  * @version v2 of {@link useClickTracker}
  */
 export default function useClickTracker_v2<TElement extends HTMLElement = HTMLElement>(
-  trackedElement?: TElement,
+  trackedElement?: TElement | null,
   excludes?: ExcludeSelector | ExcludeElement
 ) {
   const outClickResultRef = useRef(initOutClickResult)
@@ -48,7 +48,7 @@ export default function useClickTracker_v2<TElement extends HTMLElement = HTMLEl
           } else {
             const elements = excludes.elements
             elements.forEach(element => {
-              if (element.contains(e.target as Node)) {
+              if (element?.contains(e.target as Node)) {
                 isClickOnExcludesElement = true
                 return
               }
@@ -70,7 +70,7 @@ export default function useClickTracker_v2<TElement extends HTMLElement = HTMLEl
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [])
+  }, [trackedElement])
 
   return outClickResultRef.current
 }

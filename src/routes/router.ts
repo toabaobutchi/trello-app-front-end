@@ -2,7 +2,7 @@ import { getChangeLogs } from '@services/changelog.services'
 import { getInvitedProjects } from '@services/invitation.services'
 import { getProjectForDisplaying } from '@services/project.services'
 import { getRecycleBin } from '@services/task.services'
-import { getWorkspaceWithProjects } from '@services/workspace.services'
+import { getWorkspaceWithProjects, loadWorkspaces } from '@services/workspace.services'
 import { getSlug } from '@utils/functions'
 import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
 import { parseInt } from 'lodash'
@@ -58,6 +58,10 @@ export const linkCreator = {
 }
 
 export const loader = {
+  layoutLoader: async () => {
+    const res = await loadWorkspaces()
+    return res
+  },
   workspace: async ({ params }: LoaderFunctionArgs) => {
     const { ownerShip, workspaceId } = params as WorkspacePageParams
     const res = await getWorkspaceWithProjects(ownerShip, workspaceId)

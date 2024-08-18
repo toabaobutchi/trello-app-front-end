@@ -16,6 +16,12 @@ export const workspaceSlice = createSlice({
     activeWorkspace: undefined as unknown as WorkspaceResponseWithRelatedProjects
   },
   reducers: {
+    setOwnWorkspaces: (state, action) => {
+      const res = action.payload
+      if (res?.isSuccess) {
+        state.workspaceList = res.data
+      }
+    },
     // payload: {projectId?: string, isPinned: boolean}
     togglePinProject: (state, action) => {
       const { projectId, isPinned } = action.payload as { projectId?: string; isPinned: boolean }

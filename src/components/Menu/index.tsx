@@ -2,6 +2,7 @@ import useClickTracker from '@hooks/useClickTracker'
 import { useEffect, useRef } from 'react'
 import './Menu.scss'
 import { isOutOfScreen } from '@utils/functions'
+import useClickTracker_v2 from '@hooks/useClickTrackerv2'
 
 type MenuProps = {
   anchorElement: HTMLElement | null
@@ -19,7 +20,8 @@ function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: Men
   const handleClose = () => {
     onClose()
   }
-  const { outClick, reset } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
+  // const { outClick, reset } = useClickTracker(menuRef.current as HTMLElement, [anchorElement as HTMLElement])
+  const outClick = useClickTracker_v2(menuRef.current, { elements: [anchorElement], useSelector: false })
 
   useEffect(() => {
     if (menuRef.current && open) {
@@ -33,7 +35,6 @@ function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: Men
   useEffect(() => {
     if (outClick.isOutClick && open) {
       handleClose()
-      reset()
     }
   })
 
