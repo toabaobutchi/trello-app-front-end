@@ -1,0 +1,22 @@
+@mixin register-button-scheme($schemeName, $primaryColor, $filledHoverColor, $textAndOutlinedHoverButtonColor) {
+  .btn__#{$schemeName} {
+    &.btn__text,
+    &.btn__outlined {
+      color: $primaryColor;
+
+      &:hover {
+        background-color: $textAndOutlinedHoverButtonColor;
+      }
+    }
+    &.btn__filled {
+      background-color: $primaryColor;
+
+      &:hover {
+        background-color: $filledHoverColor;
+      }
+    }
+    &.btn__outlined {
+      border: var(--thin-border-width) solid $primaryColor;
+    }
+  }
+}

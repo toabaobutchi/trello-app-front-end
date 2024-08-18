@@ -1,22 +1,24 @@
-.btn {
-  --primary-button-hover-color: #1976d222;
-  --primary-filled-button-hover-color: #1565c0;
-  --danger-button-hover-color: #e9067822;
-  --danger-filled-button-hover-color: #d3086d;
-  --secondary-button-hover-color: #77777722;
-  --secondary-filled-button-hover-color: #646464;
-  --default-button-hover-color: #44546f22;
-  --default-filled-button-hover-color: #77777746;
-  --default-filled-button-color: #77777728;
-  --success-button-hover-color: #02a4302a;
-  --warning-button-hover-color: #d89e0022;
-  --warning-filled-button-hover-color: #d89e00;
+@use './button.mixin' as *;
 
+$primaryButtonShemes: 'primary', var(--primary-color), #1565c0, #1976d222;
+$dangerButtonSchemes: 'danger', var(--danger-color), #d3086d, #e9067822;
+$secondaryButtonSchemes: 'secondary', var(--secondary-color), #383737, #77777722;
+$successButtonSchemes: 'success', var(--success-color), #02a430, #02a4302a;
+$warningButtonSchemes: 'warning', var(--warning-color), #d89e00, #d89e0022;
+$defaultButtonSchemes: 'default', #777777, #77777746, #44546f22;
+
+@include register-button-scheme($primaryButtonShemes...);
+@include register-button-scheme($dangerButtonSchemes...);
+@include register-button-scheme($secondaryButtonSchemes...);
+@include register-button-scheme($defaultButtonSchemes...);
+@include register-button-scheme($successButtonSchemes...);
+@include register-button-scheme($warningButtonSchemes...);
+
+.btn {
   border: none;
   outline: none;
   border-radius: var(--primary-radius);
   cursor: pointer;
-  // font-weight: 600;
   font: inherit;
   background-color: inherit;
 
@@ -24,185 +26,33 @@
     cursor: not-allowed;
   }
 
-  &.small-btn {
+  &.btn__small {
     padding: 0.3rem 0.7rem;
     font-size: 0.9rem;
     outline: none;
   }
 
-  &.medium-btn {
+  &.btn__medium {
     padding: 0.5rem 1.1rem;
     font-size: 1rem;
     outline: none;
   }
 
-  &.large-btn {
+  &.btn__large {
     padding: 0.7rem 1.5rem;
     font-size: 1.1rem;
     outline: none;
   }
 
-  &.text-btn,
-  &.filled-btn {
+  &.btn__filled,
+  &.btn__filled {
     border: none;
   }
 
-  &.filled-btn {
-    color: #fff;
+  &.btn__filled {
+    color: var(--theme-bg-color);
     &:hover {
       box-shadow: var(--button-hover-shadow);
-    }
-  }
-
-  &.primary-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--primary-color);
-
-      &:hover {
-        background-color: var(--primary-button-hover-color);
-      }
-    }
-    &.filled-btn {
-      background-color: var(--primary-color);
-
-      &:hover {
-        background-color: var(--primary-filled-button-hover-color);
-      }
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--primary-color);
-    }
-  }
-  &.danger-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--danger-color);
-
-      &:hover {
-        background-color: var(--danger-button-hover-color);
-      }
-    }
-    &.filled-btn {
-      background-color: var(--danger-color);
-
-      &:hover {
-        background-color: var(--danger-filled-button-hover-color);
-      }
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--danger-color);
-    }
-  }
-  &.warning-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--warning-color);
-      &:hover {
-        background-color: var(--warning-button-hover-color);
-      }
-    }
-    &.filled-btn {
-      background-color: var(--warning-color);
-
-      &:hover {
-        background-color: var(--warning-filled-button-hover-color);
-      }
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--warning-color);
-    }
-  }
-  &.info-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--info-color);
-    }
-    &.filled-btn {
-      background-color: var(--info-color);
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--info-color);
-    }
-  }
-  &.secondary-btn,
-  &:disabled {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--secondary-color);
-
-      &:hover {
-        background-color: var(--secondary-button-hover-color);
-      }
-    }
-    &.filled-btn {
-      background-color: var(--secondary-color);
-      &:hover {
-        background-color: var(--secondary-filled-button-hover-color);
-      }
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--secondary-color);
-    }
-  }
-  &.light-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--light-color);
-    }
-    &.filled-btn {
-      background-color: var(--light-color);
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--light-color);
-    }
-  }
-  &.dark-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--dark-color);
-    }
-    &.filled-btn {
-      background-color: var(--dark-color);
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--dark-color);
-    }
-  }
-  &.success-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--success-color);
-
-      &:hover {
-        background-color: var(--success-button-hover-color);
-      }
-    }
-    &.filled-btn {
-      background-color: var(--success-color);
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--success-color);
-    }
-  }
-  &.default-btn {
-    &.text-btn,
-    &.outlined-btn {
-      color: var(--text-secondary-color);
-
-      &:hover {
-        background-color: var(--default-button-hover-color);
-      }
-    }
-    &.filled-btn {
-      background-color: var(--default-filled-button-color);
-      color: var(--secondary-color);
-      &:hover {
-        background-color: var(--default-filled-button-hover-color);
-      }
-    }
-    &.outlined-btn {
-      border: var(--thin-border-width) solid var(--text-secondary-color);
     }
   }
 }

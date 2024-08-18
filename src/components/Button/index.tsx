@@ -1,41 +1,34 @@
-import { ThemeType } from '@utils/types'
 import './Button.scss'
 import { forwardRef } from 'react'
+import { Size, Theme, Variant } from '@utils/types/theme.type'
 
-interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
-  variant?: 'text' | 'filled' | 'outlined'
-  disabled?: boolean
+type ButtonProps = React.ComponentPropsWithRef<'button'> & {
+  variant?: Variant
   children?: React.ReactNode
-  theme?: ThemeType
-  size?: 'small' | 'medium' | 'large'
+  theme?: Theme
+  size?: Size
 }
 
 const Button = forwardRef((props: ButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
   const {
     variant = 'outlined',
-    disabled = false,
     children = '',
     theme = 'primary',
     size = 'medium',
     style = {},
     className = '',
-    onClick = () => {},
     ...buttonProps
   } = props
 
   return (
-    <>
-      <button
-        ref={ref}
-        onClick={onClick}
-        className={`btn ${variant}-btn ${theme}-btn ${size}-btn ${className}`}
-        style={style}
-        disabled={disabled}
-        {...buttonProps}
-      >
-        {children}
-      </button>
-    </>
+    <button
+      ref={ref}
+      className={`btn btn__${variant} btn__${theme} btn__${size}${className ? ' ' + className : ''}`}
+      style={style}
+      {...buttonProps}
+    >
+      {children}
+    </button>
   )
 })
 
