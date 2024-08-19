@@ -4,7 +4,7 @@ import './SideBarItem.scss'
 function SideBarItem({ children = '', ...props }: React.ComponentProps<'div'>) {
   return (
     <>
-      <div className={`sidebar-item ${props?.className ?? ''}`.trimEnd()} style={props?.style}>
+      <div {...props} className={`sidebar-item ${props?.className ?? ''}`.trimEnd()} style={props?.style}>
         <div className='sidebar-item-content'>{children}</div>
       </div>
     </>

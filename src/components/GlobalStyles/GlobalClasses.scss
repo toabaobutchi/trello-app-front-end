@@ -240,3 +240,45 @@
 .border-top {
   border-top: var(--thin-border-width) solid var(--light-color);
 }
+
+.posa {
+  position: absolute;
+}
+
+.t-0 {
+  top: 0;
+}
+
+.r-0 {
+  right: 0;
+}
+
+.l-0 {
+  left: 0;
+}
+
+.b-0 {
+  bottom: 0;
+}
+.border {
+  border-style: solid;
+  border-color: transparent;
+}
+
+.border-thin {
+  border-width: var(--thin-border-width);
+}
+
+.border-normal {
+  border-width: var(--normal-border-width);
+}
+
+.border-light {
+  border-color: var(--light-color);
+}
+.border-primary {
+  border-color: var(--primary-color);
+}
+.primary-radius {
+  border-radius: var(--primary-radius);
+}

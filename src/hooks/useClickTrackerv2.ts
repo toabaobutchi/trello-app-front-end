@@ -70,7 +70,7 @@ export default function useClickTracker_v2<TElement extends HTMLElement = HTMLEl
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [trackedElement])
+  }, [trackedElement, JSON.stringify(excludes)])
 
   return outClickResultRef.current
 }

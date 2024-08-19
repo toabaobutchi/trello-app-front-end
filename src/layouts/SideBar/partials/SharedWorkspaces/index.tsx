@@ -14,7 +14,7 @@ function SharedWorkspaces() {
   }
   return (
     <>
-      <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
+      <SideBarItem className='sidebar-text' style={{ paddingBottom: 0, paddingTop: 0 }}>
         <Expander
           onExpand={handleFetchSharedWorkspaces}
           header={{

@@ -2,86 +2,130 @@ import Expander from '@comps/Expander'
 import './SideBar.scss'
 import './SideBar.responsive.scss'
 import SideBarItem from './partials/SideBarItem'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
-import { defaultLayoutSlice } from '@layouts/DefaultLayout/DefaultLayoutSlice'
 import Button from '@comps/Button'
 import routeLinks, { linkCreator } from '@routes/router'
 import config from '@confs/app.config'
 import SharedWorkspaces from './partials/SharedWorkspaces'
 import { getSlug } from '@utils/functions'
 import AddWorkspace from './partials/AddWorkspace'
+import Flex from '@comps/StyledComponents'
+import { useState } from 'react'
+import RenderIf from '@comps/RenderIf'
+import useToggle from '@hooks/useToggle'
 
 function SideBar() {
-  const sideBarStatus = useSelector((state: RootState) => state.sideBar.expand)
   const workspaces = useSelector((state: RootState) => state.workspaces)
-  const dispatch = useDispatch()
+  const isMobileMode = window.innerWidth <= config.sideBar.startMobileMode.width
+
+  const [workspaceMenuExpanded, handleToggleWorkspaceMenu, setWorkspaceMenuExpanded] = useToggle(false)
+
+  const [sideBarExpanded, setSidebarExpanded] = useState<boolean>(
+    localStorage.getItem('sidebar') === 'true' && !isMobileMode
+  )
+
   const toggleSidebar = () => {
-    dispatch(defaultLayoutSlice.actions.toggleSidebar())
+    setSidebarExpanded(!sideBarExpanded)
+    setWorkspaceMenuExpanded(false)
   }
   const closeSidebarWhenRedirectInMobileMode = () => {
     if (window.innerWidth <= config.sideBar.startMobileMode.width) {
-      dispatch(defaultLayoutSlice.actions.toggleSidebar())
+      setSidebarExpanded(false)
+      setWorkspaceMenuExpanded(false)
     }
   }
+  console.log('workspaceMenuExpanded', workspaceMenuExpanded)
   return (
     <>
-      <div className={`sidebar-overlay${sideBarStatus ? ' hide' : ''}`} onClick={toggleSidebar}></div>
-      <div className={`sidebar${sideBarStatus ? '' : ' collapsed'}`}>
+      <div className={`sidebar-overlay${sideBarExpanded ? ' hide' : ''}`} onClick={toggleSidebar}></div>
+      <div className={`sidebar${sideBarExpanded ? '' : ' collapsed'}`}>
+        <Flex $alignItem='center' $justifyContent='space-between' className='sidebar-header mb-1'>
+          <div className='sidebar-title'>{config.appName}</div>
+          <Button variant='text' theme='default' className='sidebar-toggle-btn' onClick={toggleSidebar}>
+            {sideBarExpanded ? (
+              <i className='fa-solid fa-arrow-left'></i>
+            ) : (
+              <i className='fa-solid fa-bars-staggered'></i>
+            )}
+          </Button>
+        </Flex>
         <SideBarItem.Link to={routeLinks.home} onClick={closeSidebarWhenRedirectInMobileMode}>
-          <i className='fa-solid fa-house-flag'></i> Home - Overview
+          <i className='fa-solid fa-house-flag'></i> <span className='sidebar-text'>Home - Overview</span>
         </SideBarItem.Link>
-        {/* <SideBarItem.Link to={routeLinks.yourTasks} onClick={closeSidebarWhenRedirectInMobileMode}>
-          <i className='fa-solid fa-list-check'></i> Your tasks
-        </SideBarItem.Link> */}
-        <SideBarItem style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <Expander
-            header={{
-              content: (
-                <>
-                  <i className='fa-regular fa-folder-open'></i> Workspaces
-                </>
-              ),
-              style: { flex: 1 }
-            }}
-            defaultExpand
-          >
-            <SideBarItem style={{ paddingBottom: 0, paddingTop: 0 }}>
-              <Expander
-                header={{
-                  content: (
-                    <p>
-                      <i className='fa-solid fa-cloud'></i> Your workspaces
-                    </p>
-                  )
-                }}
-                defaultExpand
-              >
-                {workspaces.workspaceList?.map(workspace => {
-                  const path = linkCreator.workspaces({
-                    slug: getSlug(workspace.slug),
-                    workspaceId: workspace.id + '',
-                    ownerShip: workspace.context
-                  })
-                  return (
-                    <SideBarItem.Link to={path} key={workspace?.id}>
-                      <i className='fa-solid fa-layer-group'></i> {workspace.name}
-                    </SideBarItem.Link>
-                  )
-                })}
-                {(!workspaces.workspaceList || workspaces.workspaceList?.length <= 0) && (
+
+        <RenderIf check={sideBarExpanded}>
+          <SideBarItem style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <Expander
+              useArrow={false}
+              header={{
+                content: (
                   <>
-                    <AddWorkspace />
+                    <i className='fa-regular fa-folder-open'></i> <span className='sidebar-text'>Workspaces</span>
                   </>
-                )}
-              </Expander>
-            </SideBarItem>
-            <SharedWorkspaces />
-          </Expander>
-        </SideBarItem>
+                ),
+                style: { flex: 1 }
+              }}
+              defaultExpand
+            >
+              <SideBarItem className='sidebar-text' style={{ paddingBottom: 0, paddingTop: 0 }}>
+                <Expander
+                  useArrow={false}
+                  header={{
+                    content: (
+                      <p>
+                        <i className='fa-solid fa-cloud'></i> Your workspaces
+                      </p>
+                    )
+                  }}
+                  defaultExpand
+                >
+                  {workspaces.workspaceList?.map(workspace => {
+                    const path = linkCreator.workspaces({
+                      slug: getSlug(workspace.slug),
+                      workspaceId: workspace.id + '',
+                      ownerShip: workspace.context
+                    })
+                    return (
+                      <SideBarItem.Link to={path} key={workspace?.id}>
+                        <i className='fa-solid fa-layer-group'></i> {workspace.name}
+                      </SideBarItem.Link>
+                    )
+                  })}
+                  {(!workspaces.workspaceList || workspaces.workspaceList?.length <= 0) && (
+                    <>
+                      <AddWorkspace />
+                    </>
+                  )}
+                </Expander>
+              </SideBarItem>
+              <SharedWorkspaces />
+            </Expander>
+          </SideBarItem>
+        </RenderIf>
+
+        <RenderIf check={!sideBarExpanded}>
+          <SideBarItem
+            className={`posr${workspaceMenuExpanded ? ' row jcc text-primary bg-primary' : ''}`}
+            onClick={handleToggleWorkspaceMenu}
+          >
+            {!workspaceMenuExpanded ? (
+              <i className='fa-solid fa-folder'></i>
+            ) : (
+              <>
+                <i className='fa-regular fa-folder-open'></i>
+                <div className={`menu-content-box-shadow hide-sidebar-workspace-menu t-0 r-0 posa`}>
+                  Xin chao cac ban
+                </div>
+              </>
+            )}
+          </SideBarItem>
+        </RenderIf>
+
         <SideBarItem.Link to={routeLinks.projectInvitation}>
           <i className='fa-solid fa-envelope sidebar-close-icon'></i>{' '}
-          <i className='fa-solid fa-envelope-open-text sidebar-open-icon'></i> Invitations
+          <i className='fa-solid fa-envelope-open-text sidebar-open-icon'></i>{' '}
+          <span className='sidebar-text'>Invitations</span>
         </SideBarItem.Link>
 
         <Button
