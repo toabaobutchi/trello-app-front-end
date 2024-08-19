@@ -8,12 +8,13 @@ import Button from '@comps/Button'
 import routeLinks, { linkCreator } from '@routes/router'
 import config from '@confs/app.config'
 import SharedWorkspaces from './partials/SharedWorkspaces'
-import { getSlug } from '@utils/functions'
+import { getSlug, stopPropagation } from '@utils/functions'
 import AddWorkspace from './partials/AddWorkspace'
 import Flex from '@comps/StyledComponents'
 import { useState } from 'react'
 import RenderIf from '@comps/RenderIf'
 import useToggle from '@hooks/useToggle'
+import HideSidebarMenu from './partials/HideSidebarMenu'
 
 function SideBar() {
   const workspaces = useSelector((state: RootState) => state.workspaces)
@@ -35,7 +36,6 @@ function SideBar() {
       setWorkspaceMenuExpanded(false)
     }
   }
-  console.log('workspaceMenuExpanded', workspaceMenuExpanded)
   return (
     <>
       <div className={`sidebar-overlay${sideBarExpanded ? ' hide' : ''}`} onClick={toggleSidebar}></div>
@@ -105,17 +105,17 @@ function SideBar() {
         </RenderIf>
 
         <RenderIf check={!sideBarExpanded}>
-          <SideBarItem
-            className={`posr${workspaceMenuExpanded ? ' row jcc text-primary bg-primary' : ''}`}
-            onClick={handleToggleWorkspaceMenu}
-          >
+          <SideBarItem className={`posr`} onClick={handleToggleWorkspaceMenu}>
             {!workspaceMenuExpanded ? (
               <i className='fa-solid fa-folder'></i>
             ) : (
               <>
                 <i className='fa-regular fa-folder-open'></i>
-                <div className={`menu-content-box-shadow hide-sidebar-workspace-menu t-0 r-0 posa`}>
-                  Xin chao cac ban
+                <div
+                  onClick={stopPropagation}
+                  className={`menu-content-box-shadow hide-sidebar-workspace-menu t-0 r-0 posa`}
+                >
+                  <HideSidebarMenu />
                 </div>
               </>
             )}

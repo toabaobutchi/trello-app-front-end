@@ -1,13 +1,14 @@
 import Expander from '@comps/Expander'
 import SideBarItem from '../SideBarItem'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@redux/store'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@redux/store'
 import { fetchSharedWorkspaces } from '@redux/WorkspaceSlice'
 import { linkCreator } from '@routes/router'
 import { getSlug } from '@utils/functions'
+import useWorkspace from '@hooks/useWorkspace'
 
 function SharedWorkspaces() {
-  const sharedWorkspaces = useSelector((state: RootState) => state.workspaces.sharedWorkspaceList)
+  const { sharedWorkspaceList } = useWorkspace()
   const dispatch = useDispatch<AppDispatch>()
   const handleFetchSharedWorkspaces = (expand: boolean) => {
     if (expand) dispatch(fetchSharedWorkspaces())
@@ -26,7 +27,7 @@ function SharedWorkspaces() {
           }}
           useArrow={true}
         >
-          {sharedWorkspaces?.map(workspace => {
+          {sharedWorkspaceList?.map(workspace => {
             return (
               <SideBarItem.Link
                 to={linkCreator.workspaces({

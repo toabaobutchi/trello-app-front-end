@@ -315,3 +315,7 @@ export function isAdminOrOwner(context: string) {
 export function getColor() {
   return '#' + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, '0')
 }
+
+export function stopPropagation<TEvent extends React.SyntheticEvent>(e: TEvent) {
+  e.stopPropagation()
+}
