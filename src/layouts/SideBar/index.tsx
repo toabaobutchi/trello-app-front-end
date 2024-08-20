@@ -113,7 +113,7 @@ function SideBar() {
               ) : (
                 <>
                   <i className='fa-regular fa-folder-open'></i>
-                  <HideSidebarMenu onToggle={handleToggleWorkspaceMenu} />
+                  <HideSidebarMenu />
                 </>
               )}
             </SideBarItem>

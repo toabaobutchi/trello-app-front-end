@@ -1,14 +1,13 @@
 import Button from '@comps/Button'
-import Menu from '@comps/Menu'
+import Menu from '@comps/Menu_v2'
 import MenuItem from '@comps/MenuItem'
 import useMenu from '@hooks/useMenu'
 import { linkCreator } from '@routes/router'
 import { ProjectPageParams } from '@utils/types'
 import { useNavigate, useParams } from 'react-router-dom'
-import ProjectChatRoom from '../../ProjectChatRoom'
 
 function ProjectUtilities() {
-  const { anchorRef, closeMenu, toggleMenu, open } = useMenu<HTMLButtonElement>()
+  const { closeMenu, toggleMenu, open } = useMenu<HTMLButtonElement>()
   const navigate = useNavigate()
   // const { pathname } = useLocation()
   const params = useParams() as ProjectPageParams
@@ -26,10 +25,10 @@ function ProjectUtilities() {
   }
   return (
     <>
-      <Button onClick={toggleMenu} ref={anchorRef} variant='filled'>
+      <Button id='utilities-toggle-menu-btn' onClick={toggleMenu} variant='filled'>
         <span className='project-util-button-text'>Utilities</span> <i className='fa-solid fa-caret-down'></i>
       </Button>
-      <Menu open={open} anchorElement={anchorRef.current} onClose={closeMenu} style={{ width: '300px' }}>
+      <Menu anchorId='utilities-toggle-menu-btn' open={open} onClose={closeMenu} style={{ width: '300px' }}>
         <MenuItem className='utils-menu-item' onClick={handleNavigateMemberBoard}>
           <i className='fa-solid fa-users-gear'></i> Members
         </MenuItem>

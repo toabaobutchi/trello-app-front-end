@@ -95,7 +95,7 @@ export const mapOrder = <T>(originalArray?: T[], orderArray?: string[], key?: ke
   if (!originalArray || !orderArray || !key) return []
   const clonedArray = [...originalArray]
   const orderedArray = clonedArray.sort((a, b) => {
-    return orderArray.indexOf(a[key]) - orderArray.indexOf(b[key])
+    return orderArray.indexOf(a[key] as string) - orderArray.indexOf(b[key] as string)
   })
   return orderedArray
 }
@@ -318,4 +318,31 @@ export function getColor() {
 
 export function stopPropagation<TEvent extends React.SyntheticEvent>(e: TEvent) {
   e.stopPropagation()
+}
+
+export function outClickHandler(
+  trackedSelector: string | (HTMLElement | null),
+  handler?: (event: EventTarget | null) => void,
+  excludeIds?: string[]
+) {
+  return function (e: MouseEvent) {
+    const trackedElement =
+      typeof trackedSelector === 'string' ? document.getElementById(trackedSelector) : trackedSelector
+    if (trackedElement && !trackedElement.contains(e.target as Node)) {
+      let isClickOnExcludesElement = false
+      const clickedElement = e.target as HTMLElement
+      if (excludeIds && excludeIds.length > 0) {
+        excludeIds.forEach(selector => {
+          if (clickedElement.closest(selector)) {
+            isClickOnExcludesElement = true
+            return
+          }
+        })
+      }
+      // click bên ngoài phần tử đang xét và cũng không click vào phần tử ngoại lệ
+      if (!isClickOnExcludesElement) {
+        handler?.(e.target)
+      }
+    }
+  }
 }

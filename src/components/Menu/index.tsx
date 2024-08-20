@@ -21,7 +21,6 @@ function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: Men
       onClose()
     }
   }
-  
   useClickTracker_v2(menuRef, handleClose, { elements: [anchorElement], useSelector: false })
 
   useEffect(() => {
