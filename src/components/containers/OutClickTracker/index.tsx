@@ -1,56 +1,40 @@
-import useClickTracker from '@hooks/useClickTracker'
 import { useEffect, useRef } from 'react'
 
-type ClickTrackerResult = {
-  isOutClick: boolean
-  clickedElement: HTMLElement | null
-}
-type ExcludeSelector = {
-  useSelector: true
-  selectors: string[]
-}
+type OutClickTrackerProps = {
+  children: React.ReactNode
+  onOutClick?: (clickedElement: HTMLElement) => void
+  excludes?: string[] | HTMLElement[]
+} & React.ComponentPropsWithoutRef<'div'>
 
-type ExcludeElement = {
-  useSelector: false
-  elements: (HTMLElement | null)[]
-}
+function OutClickTracker({ children, onOutClick, excludes, ...props }: OutClickTrackerProps) {
+  const outClickTrackerRef = useRef<HTMLDivElement>(null)
 
-// const initOutClickResult: ClickTrackerResult = {
-//   isOutClick: false,
-//   clickedElement: null
-// }
-/**
- * @version v2 of {@link useClickTracker}
- */
-export default function useClickTracker_v2<TElement extends HTMLElement = HTMLElement>(
-  trackedRef: React.RefObject<TElement>,
-  handler?: () => void,
-  excludes?: ExcludeSelector | ExcludeElement
-) {
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       // reset tracker state
-      const trackedElement = trackedRef.current
+      const trackedElement = outClickTrackerRef.current
       if (trackedElement && !trackedElement.contains(e.target as Node)) {
         let isClickOnExcludesElement = false
-
-        if (excludes) {
-          if (excludes.useSelector) {
-            const selectors = excludes.selectors
+        let clickedElement = e.target as HTMLElement
+        if (excludes && excludes.length > 0) {
+          if (typeof excludes[0] === 'string') {
+            const selectors = excludes as string[]
 
             selectors.forEach(selector => {
               const element = document.querySelector(selector)
               if (element && element.contains(e.target as Node)) {
                 isClickOnExcludesElement = true
+                clickedElement = e.target as HTMLElement
                 return
               }
             })
           } else {
-            const elements = excludes.elements
+            const elements = excludes as HTMLElement[]
 
             elements.forEach(element => {
               if (element?.contains(e.target as Node)) {
                 isClickOnExcludesElement = true
+                clickedElement = e.target as HTMLElement
                 return
               }
             })
@@ -58,7 +42,7 @@ export default function useClickTracker_v2<TElement extends HTMLElement = HTMLEl
         }
         // click bên ngoài phần tử đang xét và cũng không click vào phần tử ngoại lệ
         if (!isClickOnExcludesElement) {
-          handler?.()
+          onOutClick?.(clickedElement)
         }
       }
     }
@@ -68,4 +52,12 @@ export default function useClickTracker_v2<TElement extends HTMLElement = HTMLEl
       document.removeEventListener('click', handleOutsideClick)
     }
   }, [])
+
+  return (
+    <div ref={outClickTrackerRef} {...props}>
+      {children}
+    </div>
+  )
 }
+
+export default OutClickTracker

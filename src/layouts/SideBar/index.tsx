@@ -8,13 +8,14 @@ import Button from '@comps/Button'
 import routeLinks, { linkCreator } from '@routes/router'
 import config from '@confs/app.config'
 import SharedWorkspaces from './partials/SharedWorkspaces'
-import { getSlug, stopPropagation } from '@utils/functions'
+import { getSlug } from '@utils/functions'
 import AddWorkspace from './partials/AddWorkspace'
 import Flex from '@comps/StyledComponents'
 import { useState } from 'react'
 import RenderIf from '@comps/RenderIf'
 import useToggle from '@hooks/useToggle'
 import HideSidebarMenu from './partials/HideSidebarMenu'
+import OutClickTracker from '@comps/containers/OutClickTracker'
 
 function SideBar() {
   const workspaces = useSelector((state: RootState) => state.workspaces)
@@ -25,7 +26,7 @@ function SideBar() {
   const [sideBarExpanded, setSidebarExpanded] = useState<boolean>(
     localStorage.getItem('sidebar') === 'true' && !isMobileMode
   )
-
+  const handleCloseWorkspaceMenu = () => setWorkspaceMenuExpanded(false)
   const toggleSidebar = () => {
     setSidebarExpanded(!sideBarExpanded)
     setWorkspaceMenuExpanded(false)
@@ -105,21 +106,18 @@ function SideBar() {
         </RenderIf>
 
         <RenderIf check={!sideBarExpanded}>
-          <SideBarItem className={`posr`} onClick={handleToggleWorkspaceMenu}>
-            {!workspaceMenuExpanded ? (
-              <i className='fa-solid fa-folder'></i>
-            ) : (
-              <>
-                <i className='fa-regular fa-folder-open'></i>
-                <div
-                  onClick={stopPropagation}
-                  className={`menu-content-box-shadow hide-sidebar-workspace-menu t-0 r-0 posa`}
-                >
-                  <HideSidebarMenu />
-                </div>
-              </>
-            )}
-          </SideBarItem>
+          <OutClickTracker onOutClick={handleCloseWorkspaceMenu}>
+            <SideBarItem className={`posr`} onClick={handleToggleWorkspaceMenu}>
+              {!workspaceMenuExpanded ? (
+                <i className='fa-solid fa-folder'></i>
+              ) : (
+                <>
+                  <i className='fa-regular fa-folder-open'></i>
+                  <HideSidebarMenu onToggle={handleToggleWorkspaceMenu} />
+                </>
+              )}
+            </SideBarItem>
+          </OutClickTracker>
         </RenderIf>
 
         <SideBarItem.Link to={routeLinks.projectInvitation}>

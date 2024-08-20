@@ -1,13 +1,15 @@
 import Tab, { TabNav } from '@comps/Tab'
 import useWorkspace from '@hooks/useWorkspace'
 import { linkCreator } from '@routes/router'
-import { getSlug } from '@utils/functions'
-import { useState } from 'react'
+import { getSlug, stopPropagation } from '@utils/functions'
+import { useEffect, useRef, useState } from 'react'
 import SideBarItem from '../SideBarItem'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@redux/store'
 import { fetchSharedWorkspaces } from '@redux/WorkspaceSlice'
 import RenderIf from '@comps/RenderIf'
+import useClickTracker_v2 from '@hooks/useClickTrackerv2'
+import OutClickTracker from '@comps/containers/OutClickTracker'
 
 const tabs: TabNav[] = [
   {
@@ -20,11 +22,14 @@ const tabs: TabNav[] = [
   }
 ]
 const initTab = 'hidesidebar-own-workspace'
-
-function HideSidebarMenu() {
+type HideSidebarMenuProps = {
+  onToggle?: () => void
+}
+function HideSidebarMenu({ onToggle = () => {} }: HideSidebarMenuProps) {
   const [activeTab, setActiveTab] = useState(initTab)
   const { workspaceList, sharedWorkspaceList } = useWorkspace()
   const dispatch = useDispatch<AppDispatch>()
+
   const handleFetchSharedWorkspaces = () => {
     dispatch(fetchSharedWorkspaces())
   }
@@ -34,9 +39,11 @@ function HideSidebarMenu() {
       handleFetchSharedWorkspaces()
     }
   }
+
   const displayWorkspace = activeTab === tabs[0].value ? workspaceList : sharedWorkspaceList
+
   return (
-    <>
+    <div onClick={stopPropagation} className='menu-content-box-shadow hide-sidebar-workspace-menu t-0 r-0 posa'>
       <Tab tabs={tabs} onTabClick={handleTabClick} activeTab={activeTab}>
         <Tab.Content show>
           {displayWorkspace?.map(workspace => {
@@ -56,7 +63,7 @@ function HideSidebarMenu() {
           </RenderIf>
         </Tab.Content>
       </Tab>
-    </>
+    </div>
   )
 }
 
