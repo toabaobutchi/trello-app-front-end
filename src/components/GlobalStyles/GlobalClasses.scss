@@ -43,6 +43,11 @@
   padding-left: 1rem !important;
 }
 
+.px-1 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .flex-1 {
   flex: 1;
 }
@@ -276,9 +281,31 @@
 .border-light {
   border-color: var(--light-color);
 }
-.border-primary {
+.border-primary,
+.border-hover-primary:hover {
   border-color: var(--primary-color);
 }
 .primary-radius {
   border-radius: var(--primary-radius);
+}
+.avatar-img {
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  object-fit: cover;
+  max-width: 100%;
+}
+
+.avatar-img {
+  &__tiny {
+    width: 20px;
+  }
+  &__small {
+    width: 25px;
+  }
+  &__medium {
+    width: 30px;
+  }
+  &__large {
+    width: 40px;
+  }
 }

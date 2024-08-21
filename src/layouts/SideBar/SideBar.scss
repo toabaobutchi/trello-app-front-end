@@ -134,3 +134,18 @@
     transform: translateX(100%) scale(1);
   }
 }
+
+.sidebar-account {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+
+  &-email {
+    color: var(--text-secondary-color);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
