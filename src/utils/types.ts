@@ -5,17 +5,6 @@ export interface CustomizablePropType {
   customHtmlAttributes?: object
 }
 
-export type ThemeType =
-  | 'success'
-  | 'warning'
-  | 'danger'
-  | 'primary'
-  | 'info'
-  | 'light'
-  | 'secondary'
-  | 'dark'
-  | 'default'
-
 export type SubtaskForBoard = {
   id: number
   title: string
@@ -80,30 +69,6 @@ export interface ToastType {
   content?: React.ReactNode
   type?: 'success' | 'error' | 'warning' | 'info'
   options?: ToastOptionsType
-}
-
-export type Workspace = {
-  id: number
-  name: string
-  createAt: number
-  slug: string
-  description: string
-  projects?: Project[]
-}
-
-export type WorkspaceResponse = {
-  id: number
-  name: string
-  description?: string
-  slug: string
-  createdAt: number
-  ownerId: string
-  context: string
-}
-
-export type CreateWorkspaceModel = {
-  name: string
-  description?: string
 }
 
 export type CreateListModel = {
@@ -189,25 +154,6 @@ export type ProjectContextResponse = {
 }
 
 export type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-
-// export type ProjectPageParams = {
-//   ownerShip: string | OwnerShipType
-//   projectId: string
-//   slug: string
-//   viewMode?: string | ProjectViewMode
-// }
-
-// export type ProjectMemberPageParams = {
-//   memberId?: string
-// } & Omit<ProjectPageParams, 'viewMode'>
-
-// export type WorkspacePageParams = {
-//   ownerShip: string | OwnerShipType
-//   workspaceId: string
-//   slug: string
-// }
-// export type OwnerShipType = 'owner' | 'admin' | 'member' | 'observer'
-// export type ProjectViewMode = 'board' | 'table' | 'chart' | 'calendar'
 
 export interface ResponseForBoard {
   id: string
@@ -309,45 +255,6 @@ export type ProjectResponseForTable = {
   dueDate?: number
   context: string
   tasks?: TaskResponseForTable[]
-}
-
-export type AssignmentConfig = {
-  assignmentId: string
-  isPinned?: boolean
-  lastViewAt?: number
-  permission?: string
-  projectId: string
-}
-export type ProjectCardType = {
-  id: string
-  name: string
-  slug: string
-  color?: string
-  description?: string
-  workspaceId: string
-  createdAt: number
-  memberCount: number
-  dueDate?: number
-  context: string
-  assignmentConfig: AssignmentConfig
-}
-export type OwnerInfo = {
-  id: string
-  displayName?: string
-  email?: string
-  avatar?: string
-}
-
-export type WorkspaceResponseWithRelatedProjects = {
-  id: number
-  name: string
-  description?: string
-  slug: string
-  createdAt: number
-  ownerId: string
-  context: string
-  projects: ProjectCardType[]
-  owner?: OwnerInfo
 }
 
 export type ProjectResponseForUpdating = {
@@ -508,11 +415,6 @@ export type User = {
   email: string
   displayName?: string
   avatar?: string
-}
-
-export type WorkspaceUpdateModel = {
-  name?: string
-  description?: string
 }
 
 export type MarkTaskModel = {

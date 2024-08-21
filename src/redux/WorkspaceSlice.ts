@@ -1,12 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import {
-  CreateWorkspaceModel,
-  UpdateProjectResponse,
-  WorkspaceResponse,
-  WorkspaceResponseWithRelatedProjects
-} from '@utils/types'
-// import { http as httpAuth } from '@utils/Axios/HttpClientAuth'
+import { UpdateProjectResponse } from '@utils/types'
 import { createWorkspace, loadSharedWorkspaces, loadWorkspaces } from '@services/workspace.services'
+import { CreateWorkspaceModel, WorkspaceResponse, WorkspaceResponseWithRelatedProjects } from '@utils/types/workspace.type'
 
 export const workspaceSlice = createSlice({
   name: 'workspaces',
@@ -22,7 +17,6 @@ export const workspaceSlice = createSlice({
         state.workspaceList = res.data
       }
     },
-    // payload: {projectId?: string, isPinned: boolean}
     togglePinProject: (state, action) => {
       const { projectId, isPinned } = action.payload as { projectId?: string; isPinned: boolean }
       if (projectId) {

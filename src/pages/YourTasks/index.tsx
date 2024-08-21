@@ -5,11 +5,11 @@ import { useState } from 'react'
 import Input from '@comps/Input'
 import Flex from '@comps/StyledComponents'
 import Tooltip from '@comps/Tooltip'
-import { ThemeType } from '@utils/types'
+import { Theme } from '@utils/types/theme.type'
 
 type PriorityType = {
-  text: string,
-  theme: ThemeType
+  text: string
+  theme: Theme
 }
 
 const priorities = {

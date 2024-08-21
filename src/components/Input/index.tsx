@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './Input.scss'
-import { CustomizablePropType, ThemeType } from '@utils/types'
+import { CustomizablePropType } from '@utils/types'
+import { Theme } from '@utils/types/theme.type'
 
 interface TextBoxProps extends React.ComponentProps<'input'> {
   inputSize?: 'small' | 'medium' | 'large'
@@ -37,8 +38,8 @@ interface CheckBoxProps extends React.ComponentProps<'input'> {
   children?: React.ReactNode
   label?: Omit<CustomizablePropType, 'content'>
   borderTheme?: {
-    onChecked?: ThemeType 
-    normal?: ThemeType
+    onChecked?: Theme 
+    normal?: Theme
     applyToForeground?: boolean
   }
 }

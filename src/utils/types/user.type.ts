@@ -12,3 +12,5 @@ export type LoginInfo = {
 }
 
 export type AuthResponse = LoginInfo
+
+export type OwnerInfo = AccountType

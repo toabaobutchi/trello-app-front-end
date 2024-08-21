@@ -1,11 +1,11 @@
-import { ThemeType } from '@utils/types'
+import { Theme } from '@utils/types/theme.type'
 import './IconButton.scss'
 
 type IconButtonProps = {
   size?: 'small' | 'medium' | 'large'
   shape?: 'square' | 'circle'
   children: React.ReactNode
-  theme?: ThemeType
+  theme?: Theme
   dashedBorder?: boolean
   blurWhenNotHover?: boolean
 } & React.ComponentProps<'button'>

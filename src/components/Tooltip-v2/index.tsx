@@ -1,4 +1,4 @@
-import { ThemeType } from '@utils/types'
+import { Theme } from '@utils/types/theme.type'
 import './Tooltip.v2.scss'
 
 type TooltipProps = {
@@ -6,7 +6,7 @@ type TooltipProps = {
   content?: string
   position?: 'top' | 'bottom' | 'left' | 'right'
   arrow?: boolean
-  theme?: ThemeType
+  theme?: Theme
   delay?: string
 } & React.ComponentProps<'div'>
 

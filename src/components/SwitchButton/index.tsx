@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './SwitchButton.scss'
-import { ThemeType } from '@utils/types'
+import { Theme } from '@utils/types/theme.type'
 
 interface SwitchInputType extends React.ComponentProps<'input'> {
   type?: 'radio' | 'checkbox'
@@ -12,8 +12,8 @@ interface SwitchButtonProps {
   size?: 'tiny' | 'small' | 'normal' | 'medium' | 'large'
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   icon?: { checked?: React.ReactNode; unchecked?: React.ReactNode }
-  theme?: { checked?: ThemeType; unchecked?: ThemeType }
-  foreGround?: true | ThemeType
+  theme?: { checked?: Theme; unchecked?: Theme }
+  foreGround?: true | Theme
 }
 
 function SwitchButton({

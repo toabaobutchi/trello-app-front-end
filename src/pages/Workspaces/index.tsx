@@ -1,26 +1,27 @@
-import { WorkspacePageParams, WorkspaceResponseWithRelatedProjects } from '@utils/types'
+import { WorkspaceResponseWithRelatedProjects } from '@utils/types/workspace.type'
 import { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
-import { useLoaderData, useParams } from 'react-router-dom'
+import { useLoaderData } from 'react-router-dom'
 import './Workspaces.scss'
 import ProjectCard from './partials/ProjectCard'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
 import WorkspaceHeader from './partials/WorkspaceHeader'
 import emptyWorkspaceImage from '@assets/empty-workspace.svg'
 import Flex from '@comps/StyledComponents/Flex'
 import Button from '@comps/Button'
 import CreateBoardModal from '@layouts/Header/partials/MainMenu/partials/AddItemMenu/partials/CreateBoardModal'
-import { RootState } from '@redux/store'
+import { WorkspacePageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
+import useWorkspace from '@hooks/useWorkspace'
 
 function Workspaces() {
   const dispatch = useDispatch()
-
   const res = useLoaderData() as AxiosResponse
   const workspace = res?.data as WorkspaceResponseWithRelatedProjects
   const [projectModal, setProjectModal] = useState(false)
-  const params = useParams() as WorkspacePageParams
-  const activeWorkspace = useSelector((state: RootState) => state.workspaces.activeWorkspace)
+  const params = usePageParams<WorkspacePageParams>()
+  const { activeWorkspace } = useWorkspace()
   // đặt activeWorkspace (workspace đang thao tác)
   useEffect(() => {
     if (workspace?.id) dispatch(workspaceSlice.actions.setActiveWorkspace(workspace))

@@ -1,5 +1,5 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import { AuthResponse } from '@utils/types'
+import { AuthResponse } from '@utils/types/user.type'
 
 const login = async (credentials: string) => {
   const res = await http.post<{ credentials: string }, AuthResponse>('/auth/login', { credentials })

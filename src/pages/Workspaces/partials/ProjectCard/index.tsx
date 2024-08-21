@@ -1,19 +1,18 @@
-import { ProjectCardType } from '@utils/types'
+import { ProjectCardType } from '@utils/types/project.type'
 import './ProjectCard.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import Button from '@comps/Button'
 import Tooltip from '@comps/Tooltip'
 import { useNavigate } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'
 import Modal from '@comps/Modal'
 import UpdateProjectEditor from './UpdateProjectEditor'
+import { useModal } from '@hooks/useModal'
 
 function ProjectCard({ project }: { project: ProjectCardType }) {
-  // const { open, anchorRef, toggleMenu, closeMenu } = useMenu<HTMLButtonElement>()
-  const [updateModal, setUpdateModal] = useState(false)
+  const [updateModal, handleToggleUpdateModal] = useModal()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const navigateToProjectDetail = () => {
@@ -34,9 +33,6 @@ function ProjectCard({ project }: { project: ProjectCardType }) {
         isPinned: Boolean(project.assignmentConfig?.isPinned)
       })
     )
-  }
-  const handleToggleUpdateModal = () => {
-    setUpdateModal(!updateModal)
   }
   const isOwner = project?.context?.toLowerCase() === 'owner'
   return (
