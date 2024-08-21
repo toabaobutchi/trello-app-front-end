@@ -12,7 +12,7 @@ import { getSlug } from '@utils/functions'
 import AddWorkspace from './partials/AddWorkspace'
 import Flex from '@comps/StyledComponents'
 import { useState } from 'react'
-import RenderIf from '@comps/RenderIf'
+import RenderIf from '@comps/containers/RenderIf'
 import useToggle from '@hooks/useToggle'
 import HideSidebarMenu from './partials/HideSidebarMenu'
 import OutClickTracker from '@comps/containers/OutClickTracker'
@@ -139,7 +139,7 @@ function SideBar() {
           <i className='fa-solid fa-chevron-left'></i>
         </Button>
 
-        <SidebarAccount />
+        <SidebarAccount sidebarExpanded={sideBarExpanded} />
       </div>
     </>
   )

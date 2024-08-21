@@ -1,14 +1,14 @@
 .tooltip-container {
   position: relative;
   cursor: pointer;
-}
-
-.tooltip-container::before,
-.tooltip-container::after {
   --scale: 0;
   --tooltip-bg-color: #333;
   --tooltip-fg-color: #fff;
   --tooltip-opacity: 0;
+}
+
+.tooltip-container::before,
+.tooltip-container::after {
   content: '';
   position: absolute;
   transition: 0.25s ease-in-out var(--tooltip-delay, 0s);

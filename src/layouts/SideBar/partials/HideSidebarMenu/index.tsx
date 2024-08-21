@@ -7,7 +7,7 @@ import SideBarItem from '../SideBarItem'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@redux/store'
 import { fetchSharedWorkspaces } from '@redux/WorkspaceSlice'
-import RenderIf from '@comps/RenderIf'
+import RenderIf from '@comps/containers/RenderIf'
 
 const tabs: TabNav[] = [
   {

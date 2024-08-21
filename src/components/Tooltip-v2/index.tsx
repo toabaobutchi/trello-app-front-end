@@ -12,13 +12,14 @@ type TooltipProps = {
 
 function Tooltip({
   children = '',
-  content = '',
+  content,
   position = 'top',
   arrow = false,
   theme = 'dark',
   delay,
   ...props
 }: TooltipProps) {
+  if (!content) return children
   return (
     <>
       <div
@@ -28,8 +29,8 @@ function Tooltip({
             ...props.style
           } as React.CSSProperties
         }
-        className={`tooltip-container ${position}-tooltip ${arrow ? ' arrow-tooltip' : ''} tooltip__${theme} ${
-          props?.className
+        className={`tooltip-container ${position}-tooltip ${arrow ? ' arrow-tooltip' : ''} tooltip__${theme}${
+          props?.className ? ' ' + props?.className : ''
         }`}
         data-tooltip-content={content}
       >
