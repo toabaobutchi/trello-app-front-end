@@ -1,4 +1,4 @@
-import { AccountType } from '@utils/types'
+import { AccountType } from '@utils/types/user.type'
 
 export default function useAccount() {
   const token = localStorage.getItem('account')

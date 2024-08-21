@@ -61,13 +61,6 @@ export type MarkedTaskResponse = {
   isMarkedNeedHelp?: boolean
 }
 
-export interface AccountType {
-  id: string
-  displayName: string
-  avatar?: string
-  email: string
-}
-
 export type CreateListResponse = {
   createdList: ListResponseForBoard
   listOrder?: string
@@ -193,11 +186,6 @@ export type ProjectContextResponse = {
   color?: string
   dueDate?: number
   context: string
-}
-
-export type LoginInfo = {
-  accessToken: string
-  accountInfo: AccountType
 }
 
 export type InputChange = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -520,11 +508,6 @@ export type User = {
   email: string
   displayName?: string
   avatar?: string
-}
-
-export type AuthResponse = {
-  accessToken: string
-  user?: AccountType
 }
 
 export type WorkspaceUpdateModel = {

@@ -2,7 +2,7 @@
 import config from '@confs/app.config'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { refreshToken } from '@services/auth.services'
-import { AccountType, AuthResponse } from '@utils/types'
+import { AccountType, AuthResponse } from '@utils/types/user.type'
 
 interface RefreshTokenResponse {
   access_token: string
@@ -107,8 +107,8 @@ class HttpClientAuth {
 
   setLoginData(res: AuthResponse) {
     localStorage.setItem('access_token', res.accessToken)
-    HttpClientAuth.account = res.user
-    localStorage.setItem('account', btoa(JSON.stringify(res.user)))
+    HttpClientAuth.account = res.accountInfo
+    localStorage.setItem('account', btoa(JSON.stringify(res.accountInfo)))
   }
 
   isSuccessResponse(response: AxiosResponse) {

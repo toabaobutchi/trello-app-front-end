@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import HttpClientAuth from '@utils/Axios/HttpClientAuth'
-import { AccountType, AuthResponse } from '@utils/types'
+import { AccountType, AuthResponse } from '@utils/types/user.type'
 
 export const loginSlice = createSlice({
   name: 'login',
@@ -11,7 +11,7 @@ export const loginSlice = createSlice({
     setAccessToken: (state, action) => {
       const data = action.payload as AuthResponse
       if (data) {
-        state.accountInfo = data.user as AccountType
+        state.accountInfo = data.accountInfo as AccountType
       }
     }
   }
