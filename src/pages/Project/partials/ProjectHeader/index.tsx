@@ -2,21 +2,21 @@ import Flex from '@comps/StyledComponents/Flex'
 import ProjectViewModeNavBar from './ProjectViewModeNavBar'
 import ProjectFilterMenu from './ProjectFilterMenu'
 import WorkspaceTreeMenu from './WorkspaceTreeMenu'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
 import ProjectUtilities from './ProjectUtilities'
 import './ProjectHeader.responsive.scss'
 import ProjectSearch from './ProjectSearch'
 import { getDateString } from '@utils/functions'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
 
 import Tooltip from '@comps/Tooltip-v2'
-import { ProjectPageParams } from '@utils/types'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import { usePageParams } from '@hooks/usePageParams'
 
 function ProjectHeader() {
-  const project = useSelector((state: RootState) => state.project.activeProject)
-  const params = useParams() as ProjectPageParams
+  const project = useProjectSelector()
+  const params = usePageParams<ProjectPageParams>()
   return (
     <>
       <Flex $alignItem='center' $justifyContent='space-between' $flexWrap='wrap' className='project-header'>

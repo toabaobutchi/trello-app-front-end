@@ -1,11 +1,13 @@
 import Expander from '@comps/Expander'
 import Flex from '@comps/StyledComponents'
+import { usePageParams } from '@hooks/usePageParams'
 import { linkCreator } from '@routes/router'
-import { ProjectCardType, ProjectPageParams } from '@utils/types'
-import { NavLink, useParams } from 'react-router-dom'
+import { ProjectCardType } from '@utils/types'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { NavLink } from 'react-router-dom'
 
 function ProjectSideBarItem({ item }: { item: ProjectCardType }) {
-  const params = useParams() as ProjectPageParams
+  const params = usePageParams<ProjectPageParams>()
   return (
     <>
       <Flex $flexDirection='column'>

@@ -1,14 +1,14 @@
 import Flex from '@comps/StyledComponents'
-import { CreateTaskResponse, InTrashTaskResponse, ProjectPageParams } from '@utils/types'
+import { InTrashTaskResponse } from '@utils/types'
 import './DeletedTaskCard.scss'
 import { getDateString } from '@utils/functions'
 import Button from '@comps/Button'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
 import { deleteTask, restoreTask } from '@services/task.services'
 import toast from '@comps/Toast/toast'
-import { useDispatch } from 'react-redux'
-import { projectSlice } from '@redux/ProjectSlice'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
 
 function DeletedTaskCard({
   deletedTask,
@@ -18,11 +18,10 @@ function DeletedTaskCard({
   onDelete: (taskId: string) => void
 }) {
   const navigate = useNavigate()
-  const params = useParams() as ProjectPageParams
+  const params = usePageParams<ProjectPageParams>()
   const handleNavigateToMemberDetail = () => {
     navigate(linkCreator.projectMember(params, deletedTask.deleter?.id))
   }
-  const dispatch = useDispatch()
   const handleDelete = async () => {
     const res = await deleteTask(deletedTask.id)
     if (res?.isSuccess) {
@@ -45,7 +44,6 @@ function DeletedTaskCard({
       // navigate(linkCreator.projectRecycleBin(params))
       onDelete(data.id)
     } else {
-      // Handle error
       toast.error('Cannot store task', '')
     }
   }

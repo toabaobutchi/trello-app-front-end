@@ -1,17 +1,19 @@
-import { ProjectCommentResponse, ProjectPageParams } from '@utils/types'
+import { ProjectCommentResponse } from '@utils/types'
 import './ProjectChatItem.scss'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { useState } from 'react'
 import { autoDetectLinks, getCommentTime } from '@utils/functions'
 import Tooltip from '@comps/Tooltip-v2'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
 
 function ProjectChatItem({ comment }: { comment: ProjectCommentResponse }) {
   const { members, board } = useProjectSelector()
   const [assignment] = useState(() => members.find(m => m.id === comment.assignmentId))
   const commentTime = getCommentTime(comment.commentAt)
-  const params = useParams() as ProjectPageParams
+  const params = usePageParams<ProjectPageParams>()
   return (
     <>
       <div className={`project-chat-item${assignment?.id === board.assignmentId ? ' self-comment' : ''}`}>

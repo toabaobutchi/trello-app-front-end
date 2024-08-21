@@ -15,7 +15,6 @@ import {
   DragOverResult,
   JoinTaskResponse,
   MarkedTaskResponse,
-  ProjectPageParams,
   ProjectResponseForBoard,
   RelatedTaskResponse,
   RemoteDraggingType,
@@ -25,7 +24,7 @@ import {
   UpdatedTaskResponse
 } from '@utils/types'
 import { Suspense, useEffect, useRef, useState } from 'react'
-import { NavLink, Outlet, useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLoaderData, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import LoadingLayout from '@layouts/LoadingLayout'
@@ -43,9 +42,11 @@ import toast from '@comps/Toast/toast'
 import config from '@confs/app.config'
 import { ProjectContextType } from '@hooks/useProjectOutletContext'
 import { getFlatTasks } from '@utils/functions'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
 
 function Project() {
-  const params = useParams() as ProjectPageParams
+  const params = usePageParams<ProjectPageParams>()
   const { board: project, members } = useProjectSelector()
   const response = useLoaderData() as HttpResponse<ProjectResponseForBoard>
   const dispatch = useDispatch()

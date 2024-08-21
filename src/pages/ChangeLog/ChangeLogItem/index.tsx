@@ -1,10 +1,13 @@
-import { AssignmentResponse, ChangeLogResponse, ProjectPageParams } from '@utils/types'
+import { AssignmentResponse, ChangeLogResponse } from '@utils/types'
 import './ChangeLogItem.scss'
 import { useEffect, useState } from 'react'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { getDateString } from '@utils/functions'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
+
 type ChangeLogItemProps = {
   changeLog: ChangeLogResponse
 }
@@ -12,7 +15,7 @@ type ChangeLogItemProps = {
 function ChangeLogItem({ changeLog }: ChangeLogItemProps) {
   const [assignment, setAssignment] = useState<AssignmentResponse>()
   const { members } = useProjectSelector()
-  const params = useParams() as ProjectPageParams
+  const params = usePageParams<ProjectPageParams>()
   useEffect(() => {
     setAssignment(members.find(a => a.id === changeLog.assignmentId))
   }, [members, changeLog.assignmentId])

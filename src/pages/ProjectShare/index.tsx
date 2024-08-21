@@ -5,12 +5,14 @@ import { useState } from 'react'
 import Flex from '@comps/StyledComponents/Flex'
 import Input from '@comps/Input'
 import SelectList from '@comps/SelectList'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import shareImage from '@assets/share-project.jpg'
 import Tab from '@comps/Tab'
 import ShareProjectByOtherProject from './ShareProjectByOtherProject'
 import { inviteToProjectByEmail } from '@services/project.services'
-import { InputChange, ProjectPageParams } from '@utils/types'
+import { InputChange } from '@utils/types'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
 
 const roles = [
   { value: 'admin', display: 'Admin' },
@@ -42,7 +44,7 @@ function ProjectShare() {
     permission: 'member'
   })
   const navigate = useNavigate()
-  const params = useParams() as ProjectPageParams
+  const params = usePageParams<ProjectPageParams>()
 
   const handleShareProject = async () => {
     const { email, permission } = invitation

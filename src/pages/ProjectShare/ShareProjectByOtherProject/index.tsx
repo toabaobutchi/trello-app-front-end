@@ -1,10 +1,13 @@
-import { ProjectPageParams, ProjectResponse } from '@utils/types'
+import { ProjectResponse } from '@utils/types'
 import { useCallback, useEffect, useState } from 'react'
 import ProjectOptions, { ProjectSelectOptions } from './ProjectOptions'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { getJoinedProjects, inviteToProjectByAnotherMember } from '@services/project.services'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
+import toast from '@comps/Toast/toast'
 
 type ProjectShareState = {
   [projectId: string]: ShareInfo
@@ -32,7 +35,7 @@ function ShareProjectByOtherProject() {
   // danh sách các dự án đã tham gia
   const [projects, setProjects] = useState<ProjectResponse[]>([])
   const [projectShareState, setProjectShareState] = useState<ProjectShareState>()
-  const { projectId } = useParams() as ProjectPageParams
+  const { projectId } = usePageParams<ProjectPageParams>()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -52,10 +55,10 @@ function ShareProjectByOtherProject() {
   const handleShareProject = async () => {
     const res = await inviteToProjectByAnotherMember(projectId, destructState(projectShareState))
     if (res?.isSuccess) {
-      console.log('Invite successfully')
+      toast.success('Successfully share', '')
       navigate(-1)
     } else {
-      console.log('Invite failed')
+      toast.error('Invite failed', '')
     }
   }
   return (

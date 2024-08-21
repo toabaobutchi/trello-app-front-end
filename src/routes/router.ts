@@ -4,7 +4,7 @@ import { getProjectForDisplaying } from '@services/project.services'
 import { getRecycleBin } from '@services/task.services'
 import { getWorkspaceWithProjects, loadWorkspaces } from '@services/workspace.services'
 import { getSlug } from '@utils/functions'
-import { ProjectPageParams, WorkspacePageParams } from '@utils/types'
+import { ProjectPageParams, WorkspacePageParams } from '@utils/types/page-params.type'
 import { parseInt } from 'lodash'
 import { LoaderFunctionArgs } from 'react-router-dom'
 

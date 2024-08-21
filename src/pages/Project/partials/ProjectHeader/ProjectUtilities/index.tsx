@@ -2,15 +2,15 @@ import Button from '@comps/Button'
 import Menu from '@comps/Menu_v2'
 import MenuItem from '@comps/MenuItem'
 import useMenu from '@hooks/useMenu'
+import { usePageParams } from '@hooks/usePageParams'
 import { linkCreator } from '@routes/router'
-import { ProjectPageParams } from '@utils/types'
-import { useNavigate, useParams } from 'react-router-dom'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { useNavigate } from 'react-router-dom'
 
 function ProjectUtilities() {
   const { closeMenu, toggleMenu, open } = useMenu<HTMLButtonElement>()
   const navigate = useNavigate()
-  // const { pathname } = useLocation()
-  const params = useParams() as ProjectPageParams
+  const params = usePageParams<ProjectPageParams>()
   const handleNavigateMemberBoard = () => {
     navigate(linkCreator.projectMember(params))
     closeMenu()
