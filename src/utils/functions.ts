@@ -327,7 +327,9 @@ export function outClickHandler(
 ) {
   return function (e: MouseEvent) {
     const trackedElement =
-      typeof trackedSelector === 'string' ? document.getElementById(trackedSelector) : trackedSelector
+      typeof trackedSelector === 'string'
+        ? document.getElementById(trackedSelector.replaceAll('#', ''))
+        : trackedSelector
     if (trackedElement && !trackedElement.contains(e.target as Node)) {
       let isClickOnExcludesElement = false
       const clickedElement = e.target as HTMLElement

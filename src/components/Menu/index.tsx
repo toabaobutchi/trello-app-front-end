@@ -10,6 +10,7 @@ type MenuProps = {
   onClose?: () => void
 } & React.ComponentProps<'div'>
 
+/**@deprecated */
 function Menu({ anchorElement, open, onClose = () => {}, header, ...props }: MenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   const position = {
