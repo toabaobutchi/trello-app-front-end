@@ -2,14 +2,13 @@ import Flex from '@comps/StyledComponents/Flex'
 import './Column.scss'
 import { forwardRef, useEffect, useState } from 'react'
 import AddTask from './partials/AddTask'
-import { AssignmentResponse, ListResponseForBoard } from '@utils/types'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
+import { ListResponseForBoard } from '@utils/types'
 import AddTaskAbove from './partials/AddTaskAbove'
 import ColumnOptionMenu from './partials/ColumnOptionMenu'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { isAdminOrOwner } from '@utils/functions'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 
 interface ColumnProps extends React.ComponentProps<'div'> {
   children?: React.ReactNode

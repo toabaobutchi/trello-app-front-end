@@ -1,6 +1,6 @@
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { getFlatTasks } from '@utils/functions'
-import { AssignmentResponse } from '@utils/types'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 import { useMemo, useState } from 'react'
 import TaskItem from '../../ListState/ListStateItem/TaskItem'
 

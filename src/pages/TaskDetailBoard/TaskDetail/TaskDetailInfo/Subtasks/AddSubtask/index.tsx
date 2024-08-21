@@ -1,12 +1,11 @@
 import Button from '@comps/Button'
 import MultipleInput from '@comps/MultipleInput'
 import Flex from '@comps/StyledComponents/Flex'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 import { HubConnection } from '@microsoft/signalr'
-import { RootState } from '@redux/store'
 import { hubs } from '@utils/Hubs'
-import { AssignmentResponse } from '@utils/types'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 type AddSubtaskProps = {
   onAddTask: (values: string[]) => void
@@ -17,7 +16,7 @@ type AddSubtaskProps = {
 function AddSubtask({ onAddTask, hubConnection, taskId }: AddSubtaskProps) {
   const [texts, setTexts] = useState<string[]>([])
   const [remoteActors, setRemoteActors] = useState<AssignmentResponse[]>([])
-  const project = useSelector((state: RootState) => state.project.activeProject)
+  const project = useProjectSelector()
   const [openInput, setOpenInput] = useState(false)
   useEffect(() => {
     if (hubConnection) {

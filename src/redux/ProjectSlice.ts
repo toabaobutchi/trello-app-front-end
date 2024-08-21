@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import { mapOrder } from '@utils/functions'
 import {
   AssignByTaskResponse,
-  AssignmentResponse,
   ChangeTaskOrderResponse,
   CreateListResponse,
   CreateTaskResponse,
@@ -22,6 +21,7 @@ import {
   DeletedRelationshipResponse,
   ChangePermissionResonse
 } from '@utils/types'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 
 export const projectSlice = createSlice({
   name: 'project',

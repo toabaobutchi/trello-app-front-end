@@ -1,6 +1,5 @@
 import { http } from '@utils/Axios/HttpClientAuth'
 import {
-  AssignmentResponse,
   CreateProjectModel,
   ProjectContextResponse,
   ProjectResponse,
@@ -9,6 +8,7 @@ import {
   UpdateProjectModel,
   UpdateProjectResponse
 } from '@utils/types'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 
 const createProject = async (model: CreateProjectModel) => {
   const res = await http.post<CreateProjectModel, ProjectContextResponse>('/projects', model)

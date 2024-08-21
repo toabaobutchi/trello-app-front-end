@@ -1,6 +1,5 @@
-import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
-import { AssignmentResponse } from '@utils/types'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 import { useState } from 'react'
 
 type AssignmentMemberItemProps = {

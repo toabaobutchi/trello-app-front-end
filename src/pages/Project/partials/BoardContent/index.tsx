@@ -1,23 +1,9 @@
 import Flex from '@comps/StyledComponents/Flex'
 import {
-  AssignByTaskResponse,
   ChangeTaskOrderModel,
-  ChangeTaskOrderResponse,
-  CreateListResponse,
-  CreateTaskResponse,
-  DeletedTaskAssignmentResponse,
-  DispatchRelatedTaskResponse,
   DragOverResult,
-  JoinTaskResponse,
   ListResponseForBoard,
-  MarkedTaskResponse,
-  RelatedTaskResponse,
-  RemoteDraggingType,
-  SubtaskForBoard,
-  TaskResponseForBoard,
-  UnassignSubtaskResponse,
-  UpdatedTaskResponse
-} from '@utils/types'
+  TaskResponseForBoard} from '@utils/types'
 import {
   DndContext,
   DragEndEvent,
@@ -36,8 +22,8 @@ import SortableColumn from './SortableColumn'
 import { useEffect, useState } from 'react'
 import AddNewList from './AddNewList'
 import TaskCard from '@comps/TaskCard'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@redux/store'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@redux/store'
 import { projectSlice } from '@redux/ProjectSlice'
 import { cloneDeep } from 'lodash'
 import { MyCustomSensor } from '@utils/MyCustomSensor'

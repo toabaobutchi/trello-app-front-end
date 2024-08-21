@@ -1,14 +1,16 @@
 import Tab, { TabNav } from '@comps/Tab'
 import useTab from '@hooks/useTab'
 import { getDateString } from '@utils/functions'
-import { AssignmentProfileResponse, AssignmentResponse, ProjectMemberPageParams } from '@utils/types'
+import { AssignmentProfileResponse, AssignmentResponse } from '@utils/types/assignment.type'
 import { useEffect, useState } from 'react'
 import JoinedTasksTable from './JoinedTasksTable'
-import { Outlet, useParams } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import './ProjectMemberProfile.scss'
 import Flex from '@comps/StyledComponents'
 import { getAssignmentProfile } from '@services/assignment.services'
+import { ProjectMemberPageParams } from '@utils/types/page-params.type'
+import { usePageParams } from '@hooks/usePageParams'
 
 const tabs: TabNav[] = [
   {
@@ -21,9 +23,10 @@ const initTabs = 'joinedTasks'
 function ProjectMemberProfile() {
   const { activeTab, handleTabClick } = useTab(initTabs)
   const [profile, setProfile] = useState<AssignmentProfileResponse>()
-  const { memberId } = useParams() as ProjectMemberPageParams
+  const { memberId } = usePageParams<ProjectMemberPageParams>()
   const { members } = useProjectSelector()
   const [memberInfo, setMemberInfo] = useState<AssignmentResponse>()
+  
   useEffect(() => {
     if (memberId) {
       getAssignmentProfile(memberId).then(res => {

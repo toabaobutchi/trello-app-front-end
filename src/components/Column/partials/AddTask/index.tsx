@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNewTask } from '@services/task.services'
 import { containsSpecialCharacters, handleTriggerKeyPress } from '@utils/functions'
-import { toast } from 'react-toastify'
+import toast from '@comps/Toast/toast'
 
 function AddTask({ column }: { column?: ListResponseForBoard }) {
   const [isAddingTask, setIsAddingTask] = useState(false)
@@ -55,7 +55,7 @@ function AddTaskInput({ onCancelAddTask, column }: { onCancelAddTask: () => void
       return
     } else {
       if (!column?.id?.trim()) {
-        toast.error('Can not create when list id is not provided')
+        toast.error('Can not create when list id is not provided', '')
         return
       }
 

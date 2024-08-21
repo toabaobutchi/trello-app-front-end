@@ -3,7 +3,6 @@ import Subtasks from './Subtasks'
 import { useContext, useEffect, useRef, useState } from 'react'
 import {
   AssignByTaskResponse,
-  AssignmentResponse,
   ChangeTaskOrderResponse,
   DeletedTaskAssignmentResponse,
   DeletedTaskResponse,
@@ -14,8 +13,7 @@ import {
   TaskDetailForBoard,
   UpdatedTaskResponse
 } from '@utils/types'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
+import { useDispatch } from 'react-redux'
 import UpdateTaskNameEditor from './UpdateTaskNameEditor'
 import { HttpStatusCode } from 'axios'
 import UpdatePriorityEditor from './UpdatePriorityEditor'
@@ -32,6 +30,8 @@ import { useNavigate } from 'react-router-dom'
 import Button from '@comps/Button'
 import toast from '@comps/Toast/toast'
 import config from '@confs/app.config'
+import { AssignmentResponse } from '@utils/types/assignment.type'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 type RemoteUpdatingType = {
   assignmentId: string
@@ -43,7 +43,7 @@ function TaskDetailInfo() {
   const taskDetail = context?.task
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const project = useSelector((state: RootState) => state.project.activeProject)
+  const project = useProjectSelector()
   const [projectHub] = useState<ProjectHub>(new ProjectHub())
   const [remoteUpdating, setRemoteUpdating] = useState<RemoteUpdatingType>()
   const [remoteDeleteModal, handleToggleRemoteDeleteModal, setRemoteDeleteModal] = useModal()

@@ -355,7 +355,6 @@ function Project() {
             <Flex className='w-full flex-1' style={{ overflow: 'hidden' }} $gap='0.5rem'>
               <ProjectSideBar />
               {isConnected && <Outlet context={{ remoteDragging } satisfies ProjectContextType} />}
-              {/* <Outlet context={{ remoteDragging } satisfies ProjectContextType} /> */}
             </Flex>
           </Suspense>
           <ProjectChatRoom />

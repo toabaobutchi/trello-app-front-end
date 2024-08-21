@@ -1,6 +1,6 @@
 import Flex from '@comps/StyledComponents/Flex'
 import { RootState } from '@redux/store'
-import { AssignmentResponse } from '@utils/types'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import './ImagesRow.scss'

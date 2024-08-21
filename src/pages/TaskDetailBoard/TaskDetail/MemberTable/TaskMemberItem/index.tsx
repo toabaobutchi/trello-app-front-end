@@ -2,7 +2,7 @@ import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { isAdminOrOwner } from '@utils/functions'
-import { AssignmentResponse } from '@utils/types'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 
 function TaskMemberItem({
   taskMember,

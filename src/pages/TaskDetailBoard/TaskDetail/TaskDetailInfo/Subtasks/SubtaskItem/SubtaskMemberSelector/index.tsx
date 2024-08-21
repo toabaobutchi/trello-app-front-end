@@ -1,7 +1,7 @@
 import Modal from '@comps/Modal'
 import Tooltip from '@comps/Tooltip-v2'
 import { useModal } from '@hooks/useModal'
-import { AssignByTaskResponse, AssignmentResponse, AssignSubtaskResponse, JoinSubtaskResponse } from '@utils/types'
+import { AssignByTaskResponse, AssignSubtaskResponse, JoinSubtaskResponse } from '@utils/types'
 import { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import SubtaskMemberSelectorMenu from './SubtaskMemberSelectorMenu'
@@ -13,6 +13,7 @@ import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import toast from '@comps/Toast/toast'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 
 type SubtaskMemberSelectorProps = {
   assignmentId?: string

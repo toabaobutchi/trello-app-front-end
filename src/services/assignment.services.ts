@@ -2,14 +2,12 @@ import { http } from '@utils/Axios/HttpClientAuth'
 import {
   AssignByTaskModel,
   AssignByTaskResponse,
-  AssignmentProfileResponse,
-  AssignmentResponse,
   ChangePermissionResonse,
-  DeleteAssignmentModel,
   DeletedAssignmentResponse,
   DeletedTaskAssignmentResponse,
   DeleteTaskAssignmentModel
 } from '@utils/types'
+import { AssignmentProfileResponse, AssignmentResponse } from '@utils/types/assignment.type'
 
 const getAssignmentsInProject = async (projectId: string, exceptMe: boolean = false) => {
   const res = await http.get<AssignmentResponse[]>(

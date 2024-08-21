@@ -4,7 +4,7 @@ import './TaskCard.scss'
 import Button from '@comps/Button'
 import DropdownMenu from '@comps/DropdownMenu'
 import MenuItem from '@comps/MenuItem'
-import { AssignmentResponse, TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types'
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId, DateCompareState, getDateString, isAdminOrOwner, isOverdue } from '@utils/functions'
@@ -19,6 +19,7 @@ import { joinTask } from '@services/task.services'
 import TaskCardTags from './TaskCardTags'
 import TaskDependencies from './TaskDependencies'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 
 const displayAvatarCount = 3
 

@@ -1,4 +1,4 @@
-import { AssignmentResponse, ChangeLogResponse } from '@utils/types'
+import { ChangeLogResponse } from '@utils/types'
 import './ChangeLogItem.scss'
 import { useEffect, useState } from 'react'
 import { useProjectSelector } from '@hooks/useProjectSelector'
@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
 import { ProjectPageParams } from '@utils/types/page-params.type'
 import { usePageParams } from '@hooks/usePageParams'
+import { AssignmentResponse } from '@utils/types/assignment.type'
 
 type ChangeLogItemProps = {
   changeLog: ChangeLogResponse
