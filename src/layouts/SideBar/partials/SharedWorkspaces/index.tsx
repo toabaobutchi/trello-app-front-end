@@ -25,7 +25,7 @@ function SharedWorkspaces() {
               </p>
             )
           }}
-          useArrow={true}
+          useArrow={false}
         >
           {sharedWorkspaceList?.map(workspace => {
             return (

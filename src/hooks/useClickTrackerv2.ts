@@ -1,10 +1,10 @@
 import useClickTracker from '@hooks/useClickTracker'
 import { useEffect, useRef } from 'react'
 
-type ClickTrackerResult = {
-  isOutClick: boolean
-  clickedElement: HTMLElement | null
-}
+// type ClickTrackerResult = {
+//   isOutClick: boolean
+//   clickedElement: HTMLElement | null
+// }
 type ExcludeSelector = {
   useSelector: true
   selectors: string[]
@@ -21,6 +21,7 @@ type ExcludeElement = {
 // }
 /**
  * @version v2 of {@link useClickTracker}
+ * @obsolete
  */
 export default function useClickTracker_v2<TElement extends HTMLElement = HTMLElement>(
   trackedRef: React.RefObject<TElement>,

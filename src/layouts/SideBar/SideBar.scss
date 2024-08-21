@@ -11,6 +11,11 @@
   white-space: nowrap;
   overflow-x: hidden;
 
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+
   &-title {
     color: var(--primary-color);
     font-weight: bold;
