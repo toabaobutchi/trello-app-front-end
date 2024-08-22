@@ -1,4 +1,4 @@
-import { WorkspaceResponse } from '@utils/types'
+import { WorkspaceResponse } from '@utils/types/workspace.type'
 import './WorkspaceCard.scss'
 import { useNavigate } from 'react-router-dom'
 import { linkCreator } from '@routes/router'

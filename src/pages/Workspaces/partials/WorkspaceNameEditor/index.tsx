@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './WorkspaceNameEditor.scss'
-import { WorkspaceResponseWithRelatedProjects } from '@utils/types'
+import { WorkspaceResponseWithRelatedProjects } from '@utils/types/workspace.type'
 import { HttpStatusCode } from 'axios'
 import { useDispatch } from 'react-redux'
 import { workspaceSlice } from '@redux/WorkspaceSlice'

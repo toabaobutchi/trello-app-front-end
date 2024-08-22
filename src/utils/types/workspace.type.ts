@@ -5,7 +5,7 @@ import { OwnerInfo } from './user.type'
 export type Workspace = {
   id: number
   name: string
-  createAt: number
+  createdAt: number
   slug: string
   description: string
 }

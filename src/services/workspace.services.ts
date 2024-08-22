@@ -4,7 +4,7 @@ import {
   WorkspaceResponse,
   WorkspaceResponseWithRelatedProjects,
   WorkspaceUpdateModel
-} from '@utils/types'
+} from '@utils/types/workspace.type'
 
 const loadWorkspaces = async () => {
   const res = await http.get<WorkspaceResponse[]>('/workspaces')

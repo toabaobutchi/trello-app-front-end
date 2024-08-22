@@ -1,7 +1,7 @@
 import Flex from '@comps/StyledComponents/Flex'
 import './WorkspaceHeader.scss'
 import WorkspaceNameEditor from '../WorkspaceNameEditor'
-import { WorkspaceResponseWithRelatedProjects } from '@utils/types'
+import { WorkspaceResponseWithRelatedProjects } from '@utils/types/workspace.type'
 import { useState } from 'react'
 import useAccount from '@hooks/useAccount'
 
