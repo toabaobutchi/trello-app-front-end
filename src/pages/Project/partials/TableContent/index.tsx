@@ -1,6 +1,6 @@
 import './TableContent.scss'
 import { useEffect, useState } from 'react'
-import { TaskResponseForTable } from '@utils/types'
+import { TaskResponseForTable } from '@utils/types/task.type'
 import TableHeader from './TableHeader'
 import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'

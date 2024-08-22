@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import './RecycleBin.scss'
 import { AxiosResponse } from 'axios'
-import { InTrashTaskResponse } from '@utils/types'
+import { InTrashTaskResponse } from '@utils/types/task.type'
 import DeletedTaskCard from './DeletedTaskCard'
 import Flex from '@comps/StyledComponents'
 import Button from '@comps/Button'

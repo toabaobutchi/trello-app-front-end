@@ -1,5 +1,5 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import { ChangeLogResponse } from '@utils/types'
+import { ChangeLogResponse } from '@utils/types/changelog.type'
 
 const getChangeLogs = async (
   projectId: string,

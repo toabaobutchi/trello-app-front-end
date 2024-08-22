@@ -1,4 +1,4 @@
-import { TaskDetailForBoard } from '@utils/types'
+import { TaskDetailForBoard } from '@utils/types/task.type'
 import './DuplicateTask.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'

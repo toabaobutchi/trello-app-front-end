@@ -1,5 +1,5 @@
 import { getCommentsInProject } from '@services/comment.services'
-import { ProjectCommentResponse } from '@utils/types'
+import { ProjectCommentResponse } from '@utils/types/comment.type'
 import { useEffect, useState } from 'react'
 import ProjectChatItem from '../ProjectChatItem'
 import ProjectChatSender from '../ProjectChatSender'

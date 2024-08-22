@@ -3,7 +3,7 @@ import './UpdateTaskNameEditor.scss'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { HubConnection } from '@microsoft/signalr'
-import { TaskDetailForBoard } from '@utils/types'
+import { TaskDetailForBoard } from '@utils/types/task.type'
 import { hubs } from '@utils/Hubs'
 
 type UpdateTaskNameEditorProps = {

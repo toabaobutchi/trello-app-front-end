@@ -6,7 +6,7 @@ import Tab, { TabNav } from '@comps/Tab'
 import InProgressTasks from './InProgressTasks'
 import { getFlatTasks } from '@utils/functions'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import DueInWeekTasks from './DueInWeekTasks'
 import PendingTasks from './PendingTasks'
 

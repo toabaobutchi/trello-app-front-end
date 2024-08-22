@@ -1,4 +1,4 @@
-import { ProjectResponse } from '@utils/types'
+import { ProjectResponse } from '@utils/types/project.type'
 import { useCallback, useEffect, useState } from 'react'
 import ProjectOptions, { ProjectSelectOptions } from './ProjectOptions'
 import { useNavigate } from 'react-router-dom'

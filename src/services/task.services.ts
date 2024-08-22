@@ -3,23 +3,23 @@ import { http } from '@utils/Axios/HttpClientAuth'
 import {
   ChangeTaskOrderModel,
   ChangeTaskOrderResponse,
+  TaskDetailForBoard,
+  MarkTaskModel,
+  MarkedTaskResponse,
+  JoinTaskResponse,
+  DuplicateTaskModel,
+  TaskResponseForBoard,
+  InTrashTaskResponse,
+  UpdateTaskModel,
+  UpdatedTaskResponse,
   CreateTaskModel,
   CreateTaskResponse,
-  DeletedRelationshipResponse,
   DeletedTaskResponse,
-  DuplicateTaskModel,
-  InTrashTaskResponse,
-  JoinTaskResponse,
-  MarkedTaskResponse,
-  MarkTaskModel,
-  ReferenceTasks,
-  RelatedTaskResponse,
   ResetTaskModel,
-  TaskDetailForBoard,
-  TaskResponseForBoard,
-  UpdatedTaskResponse,
-  UpdateTaskModel
-} from '@utils/types'
+  RelatedTaskResponse,
+  ReferenceTasks,
+  DeletedRelationshipResponse
+} from '@utils/types/task.type'
 
 const changeTaskOrder = async (taskId: string, model: ChangeTaskOrderModel) => {
   const res = http.put<ChangeTaskOrderModel, ChangeTaskOrderResponse>(`/tasks/${taskId}/change-order`, model)

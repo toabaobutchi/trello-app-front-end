@@ -1,5 +1,5 @@
 import { getDateString } from '@utils/functions'
-import { InvitedProjectResponse } from '@utils/types'
+import { InvitedProjectResponse } from '@utils/types/project.type'
 import './InvitedProjectCard.scss'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents'

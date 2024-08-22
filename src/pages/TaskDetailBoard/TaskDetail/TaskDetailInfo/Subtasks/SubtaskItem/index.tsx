@@ -1,6 +1,6 @@
 import Flex from '@comps/StyledComponents/Flex'
 import SubtaskMemberSelector from './SubtaskMemberSelector'
-import { InputChange, SubtaskForBoard } from '@utils/types'
+import { InputChange } from '@utils/types'
 import useMenu from '@hooks/useMenu'
 import Menu from '@comps/Menu'
 import Button from '@comps/Button'
@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { changeSubtaskName } from '@services/subtask.services'
 import { handleTriggerKeyPress, isAdminOrOwner } from '@utils/functions'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import { SubtaskForBoard } from '@utils/types/subtask.type'
 
 type SubtaskItemProps = {
   subTask: SubtaskForBoard

@@ -1,5 +1,5 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import { CommentResponse, CreateCommentModel, ProjectCommentResponse } from '@utils/types'
+import { CommentResponse, CreateCommentModel, ProjectCommentResponse } from '@utils/types/comment.type'
 
 const getCommentsInTask = async (taskId: string) => {
   const res = await http.get<CommentResponse[]>(`/comments/in-task/${taskId}`)

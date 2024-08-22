@@ -1,6 +1,6 @@
 import TaskCardTags from '@comps/TaskCard/TaskCardTags'
 import Tooltip from '@comps/Tooltip-v2'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import { NavLink } from 'react-router-dom'
 
 function TaskItem({ task }: { task: TaskResponseForBoard }) {

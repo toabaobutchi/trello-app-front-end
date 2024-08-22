@@ -3,10 +3,11 @@ import TaskCard from '@comps/TaskCard'
 import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { createCardId, mapOrder } from '@utils/functions'
-import { ListResponseForBoard, TaskResponseForBoard } from '@utils/types'
 import { BlockDragState } from '..'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import { ListResponseForBoard } from '@utils/types/list.type'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 
 function SortableColumn({ column, blockDragState }: { column: ListResponseForBoard; blockDragState?: BlockDragState }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({

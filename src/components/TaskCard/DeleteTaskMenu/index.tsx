@@ -5,7 +5,7 @@ import toast from '@comps/Toast/toast'
 import { projectSlice } from '@redux/ProjectSlice'
 import { deleteTask } from '@services/task.services'
 import { hubs, ProjectHub } from '@utils/Hubs'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 

@@ -3,7 +3,7 @@ import Flex from '@comps/StyledComponents/Flex'
 import { useState } from 'react'
 import './UpdateDescriptionEditor.scss'
 import Tooltip from '@comps/Tooltip-v2'
-import { TaskDetailForBoard } from '@utils/types'
+import { TaskDetailForBoard } from '@utils/types/task.type'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
 

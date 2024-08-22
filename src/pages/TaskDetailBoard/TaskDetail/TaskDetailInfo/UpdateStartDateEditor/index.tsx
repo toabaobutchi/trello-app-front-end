@@ -3,7 +3,7 @@ import IconButton from '@comps/IconButton'
 import Flex from '@comps/StyledComponents'
 import Tooltip from '@comps/Tooltip-v2'
 import { getDateString } from '@utils/functions'
-import { ResetTaskModel } from '@utils/types'
+import { ResetTaskModel } from '@utils/types/task.type'
 
 type UpdateStartDateEditorProps = {
   startDate?: number

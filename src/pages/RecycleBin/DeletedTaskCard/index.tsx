@@ -1,5 +1,5 @@
 import Flex from '@comps/StyledComponents'
-import { InTrashTaskResponse } from '@utils/types'
+import { InTrashTaskResponse } from '@utils/types/task.type'
 import './DeletedTaskCard.scss'
 import { getDateString } from '@utils/functions'
 import Button from '@comps/Button'
@@ -57,7 +57,7 @@ function DeletedTaskCard({
         <Flex $alignItem='center' $gap='0.5rem' className='in-trash-task-card-deleter'>
           <img className='in-trash-task-card-deleter-avatar' src={deletedTask.deleter?.avatar} alt='avatar' />
           <div onClick={handleNavigateToMemberDetail} className='cpointer'>
-            <p className='in-trash-task-card-deleter-name'>{deletedTask.deleter?.name}</p>
+            <p className='in-trash-task-card-deleter-name'>{deletedTask.deleter?.displayName}</p>
             <p className='in-trash-task-card-deleter-email'>{deletedTask.deleter?.email}</p>
           </div>
         </Flex>

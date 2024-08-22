@@ -19,12 +19,6 @@ export type UpdatedListResponse = {
   wipLimit?: number
 }
 
-export type ListChangeResponse = {
-  listId: string
-  updatedIndex: number
-  updatedAt: number
-}
-
 export type ListResponseForBoard = {
   id: string
   name: string

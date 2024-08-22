@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { UpdateProjectResponse } from '@utils/types'
+import { UpdateProjectResponse } from '@utils/types/project.type'
 import { createWorkspace, loadSharedWorkspaces, loadWorkspaces } from '@services/workspace.services'
-import { CreateWorkspaceModel, WorkspaceResponse, WorkspaceResponseWithRelatedProjects } from '@utils/types/workspace.type'
+import {
+  CreateWorkspaceModel,
+  WorkspaceResponse,
+  WorkspaceResponseWithRelatedProjects
+} from '@utils/types/workspace.type'
 
 export const workspaceSlice = createSlice({
   name: 'workspaces',

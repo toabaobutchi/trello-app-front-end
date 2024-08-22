@@ -4,7 +4,7 @@ import Flex from '@comps/StyledComponents'
 import PriorityTag from '@comps/TaskCard/PriorityTag'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
-import { ResetTaskModel } from '@utils/types'
+import { ResetTaskModel } from '@utils/types/task.type'
 import { useState } from 'react'
 
 type UpdatePriorityEditorProps = {

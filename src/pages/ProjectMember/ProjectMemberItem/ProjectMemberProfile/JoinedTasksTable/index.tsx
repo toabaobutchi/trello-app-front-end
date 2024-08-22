@@ -1,10 +1,7 @@
-import { JoinedTaskResponse } from '@utils/types'
+import { JoinedTaskResponse } from '@utils/types/task.type'
 import './JoinedTasksTable.scss'
 import JoinedTaskItem from './JoinedTaskItem'
-import Flex from '@comps/StyledComponents'
-import Button from '@comps/Button'
 import { useEffect, useState } from 'react'
-import FloatLabelInput from '@comps/FloatLabelInput'
 function JoinedTasksTable({ joinedTasks }: { joinedTasks?: JoinedTaskResponse[] }) {
   const [tasks, setTasks] = useState(joinedTasks)
   useEffect(() => {

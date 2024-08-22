@@ -1,28 +1,6 @@
 import './Project.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import ProjectHeader from './partials/ProjectHeader'
-import {
-  AssignByTaskResponse,
-  AssignSubtaskResponse,
-  ChangeTaskOrderResponse,
-  CreateListResponse,
-  CreateTaskResponse,
-  DeletedAssignmentResponse,
-  DeletedRelationshipResponse,
-  DeletedTaskAssignmentResponse,
-  DeletedTaskResponse,
-  DispatchRelatedTaskResponse,
-  DragOverResult,
-  JoinTaskResponse,
-  MarkedTaskResponse,
-  ProjectResponseForBoard,
-  RelatedTaskResponse,
-  RemoteDraggingType,
-  SubtaskForBoard,
-  TaskResponseForBoard,
-  UpdatedListResponse,
-  UpdatedTaskResponse
-} from '@utils/types'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { Outlet, useLoaderData, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -44,6 +22,25 @@ import { ProjectContextType } from '@hooks/useProjectOutletContext'
 import { getFlatTasks } from '@utils/functions'
 import { ProjectPageParams } from '@utils/types/page-params.type'
 import { usePageParams } from '@hooks/usePageParams'
+import { ProjectResponseForBoard } from '@utils/types/project.type'
+import { DragOverResult, RemoteDraggingType } from '@utils/types'
+import { DeletedAssignmentResponse } from '@utils/types/assignment.type'
+import { AssignSubtaskResponse, SubtaskForBoard } from '@utils/types/subtask.type'
+import {
+  AssignByTaskResponse,
+  ChangeTaskOrderResponse,
+  CreateTaskResponse,
+  DeletedRelationshipResponse,
+  DeletedTaskResponse,
+  DispatchRelatedTaskResponse,
+  JoinTaskResponse,
+  MarkedTaskResponse,
+  RelatedTaskResponse,
+  TaskResponseForBoard,
+  UpdatedTaskResponse
+} from '@utils/types/task.type'
+import { CreateListResponse, UpdatedListResponse } from '@utils/types/list.type'
+import { DeletedTaskAssignmentResponse } from '@utils/types/task-assignment.type'
 
 function Project() {
   const params = usePageParams<ProjectPageParams>()

@@ -4,12 +4,14 @@ import Flex from '@comps/StyledComponents/Flex'
 import useClickTracker from '@hooks/useClickTracker'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
-import { CreateTaskModel, InputChange, ListResponseForBoard } from '@utils/types'
+import { InputChange } from '@utils/types'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNewTask } from '@services/task.services'
 import { containsSpecialCharacters, handleTriggerKeyPress } from '@utils/functions'
 import toast from '@comps/Toast/toast'
+import { ListResponseForBoard } from '@utils/types/list.type'
+import { CreateTaskModel } from '@utils/types/task.type'
 
 function AddTask({ column }: { column?: ListResponseForBoard }) {
   const [isAddingTask, setIsAddingTask] = useState(false)

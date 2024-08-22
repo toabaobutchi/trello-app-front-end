@@ -6,7 +6,7 @@ import {
   ProjectResponseForUpdating,
   UpdateProjectModel,
   UpdateProjectResponse
-} from '@utils/types'
+} from '@utils/types/project.type'
 import { AssignmentResponse } from '@utils/types/assignment.type'
 import { CreateProjectResponse } from '@utils/types/project.type'
 

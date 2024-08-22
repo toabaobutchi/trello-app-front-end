@@ -1,7 +1,5 @@
-import Flex from '@comps/StyledComponents'
-import SwitchButton from '@comps/SwitchButton'
 import './InProgressTasks.scss'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import { useMemo } from 'react'
 import CalendarTaskCard from '../CalendarTaskCard'
 

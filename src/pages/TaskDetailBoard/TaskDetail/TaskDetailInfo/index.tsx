@@ -1,18 +1,6 @@
 import Flex from '@comps/StyledComponents/Flex'
 import Subtasks from './Subtasks'
 import { useContext, useEffect, useRef, useState } from 'react'
-import {
-  AssignByTaskResponse,
-  ChangeTaskOrderResponse,
-  DeletedTaskAssignmentResponse,
-  DeletedTaskResponse,
-  DragOverResult,
-  JoinTaskResponse,
-  ResetTaskModel,
-  SubtaskForBoard,
-  TaskDetailForBoard,
-  UpdatedTaskResponse
-} from '@utils/types'
 import { useDispatch } from 'react-redux'
 import UpdateTaskNameEditor from './UpdateTaskNameEditor'
 import { HttpStatusCode } from 'axios'
@@ -32,6 +20,18 @@ import toast from '@comps/Toast/toast'
 import config from '@confs/app.config'
 import { AssignmentResponse } from '@utils/types/assignment.type'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import { DragOverResult } from '@utils/types'
+import { SubtaskForBoard } from '@utils/types/subtask.type'
+import { DeletedTaskAssignmentResponse } from '@utils/types/task-assignment.type'
+import {
+  UpdatedTaskResponse,
+  AssignByTaskResponse,
+  JoinTaskResponse,
+  DeletedTaskResponse,
+  ChangeTaskOrderResponse,
+  TaskDetailForBoard,
+  ResetTaskModel
+} from '@utils/types/task.type'
 
 type RemoteUpdatingType = {
   assignmentId: string

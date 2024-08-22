@@ -4,7 +4,7 @@ import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
 import TaskDetail from '@pages/TaskDetailBoard/TaskDetail'
 import DuplicateTask from '@pages/TaskDetailBoard/TaskDetail/DuplicateTask'
-import { TaskDetailForBoard } from '@utils/types'
+import { TaskDetailForBoard } from '@utils/types/task.type'
 import { HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -21,12 +21,12 @@ import { isAdminOrOwner } from '@utils/functions'
 
 function TaskDetailBoard() {
   const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
-  const [duplicateTaskModal, setDuplicateTaskModal] = useState(false)
+  const [duplicateTaskModal, handleToggleDuplicateTaskModal] = useModal()
+  const [joinModal, handleToggleJoinModal] = useModal()
   const { members, board } = useProjectSelector()
   const dispatch = useDispatch()
   const [isJoined, setIsJoined] = useState(false)
   const navigate = useNavigate()
-  const [joinModal, setJoinModal] = useState(false)
   const [assignModal, handleToggleAssignModal] = useModal()
   const { taskId } = useParams()
   const [projectHub] = useState(new ProjectHub())
@@ -49,12 +49,12 @@ function TaskDetailBoard() {
     }
   }, [taskId])
 
-  const handleToggleDuplicateTaskModal = () => {
-    setDuplicateTaskModal(!duplicateTaskModal)
-  }
-  const handleToggleJoinModal = () => {
-    setJoinModal(!joinModal)
-  }
+  // const handleToggleDuplicateTaskModal = () => {
+  //   setDuplicateTaskModal(!duplicateTaskModal)
+  // }
+  // const handleToggleJoinModal = () => {
+  //   setJoinModal(!joinModal)
+  // }
   const timeOutId = useRef<number>()
   const handleMarkNeedHelp = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // xoá đi vòng lặp cũ

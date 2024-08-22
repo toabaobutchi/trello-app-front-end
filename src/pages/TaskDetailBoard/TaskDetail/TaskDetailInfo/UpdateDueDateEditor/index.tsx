@@ -3,7 +3,7 @@ import './UpdateDueDateEditor.scss'
 import DatePicker from '@comps/DatePicker'
 import Tooltip from '@comps/Tooltip-v2'
 import IconButton from '@comps/IconButton'
-import { ResetTaskModel } from '@utils/types'
+import { ResetTaskModel } from '@utils/types/task.type'
 import { getDateString } from '@utils/functions'
 
 type UpdateDueDateEditorProps = {

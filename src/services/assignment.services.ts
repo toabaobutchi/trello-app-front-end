@@ -1,13 +1,7 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import {
-  AssignByTaskModel,
-  AssignByTaskResponse,
-  ChangePermissionResonse,
-  DeletedAssignmentResponse,
-  DeletedTaskAssignmentResponse,
-  DeleteTaskAssignmentModel
-} from '@utils/types'
-import { AssignmentProfileResponse, AssignmentResponse } from '@utils/types/assignment.type'
+import { AssignmentProfileResponse, AssignmentResponse, ChangePermissionResonse, DeletedAssignmentResponse } from '@utils/types/assignment.type'
+import { DeleteTaskAssignmentModel, DeletedTaskAssignmentResponse } from '@utils/types/task-assignment.type'
+import { AssignByTaskModel, AssignByTaskResponse } from '@utils/types/task.type'
 
 const getAssignmentsInProject = async (projectId: string, exceptMe: boolean = false) => {
   const res = await http.get<AssignmentResponse[]>(

@@ -1,12 +1,11 @@
 import Flex from '@comps/StyledComponents/Flex'
-import { RootState } from '@redux/store'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 import { getCommentTime } from '@utils/functions'
-import { CommentResponse } from '@utils/types'
+import { CommentResponse } from '@utils/types/comment.type'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 function ChatBoxItem({ comment }: { comment: CommentResponse }) {
-  const members = useSelector((state: RootState) => state.project.activeProject.members)
+  const { members } = useProjectSelector()
   const [commentor] = useState(() => members.find(m => m.id === comment?.assignmentId))
   const [commentTime, setCommentTime] = useState<{ diff: number; unit: string }>()
   useEffect(() => {

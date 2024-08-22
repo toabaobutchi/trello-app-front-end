@@ -1,7 +1,7 @@
 import PriorityTag from '@comps/TaskCard/PriorityTag'
 import TaskCardTags from '@comps/TaskCard/TaskCardTags'
 import { getDateString } from '@utils/functions'
-import { TaskResponseForTable } from '@utils/types'
+import { TaskResponseForTable } from '@utils/types/task.type'
 import { NavLink } from 'react-router-dom'
 import TableTaskItemMenu from './TableTaskItemMenu'
 import { useModal } from '@hooks/useModal'

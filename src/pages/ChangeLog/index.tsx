@@ -1,5 +1,5 @@
 import { HttpResponse } from '@utils/Axios/HttpClientAuth'
-import { ChangeLogResponse } from '@utils/types'
+import { ChangeLogResponse } from '@utils/types/changelog.type'
 import { useEffect, useState } from 'react'
 import { Outlet, useLoaderData } from 'react-router-dom'
 import ChangeLogItem from './ChangeLogItem'

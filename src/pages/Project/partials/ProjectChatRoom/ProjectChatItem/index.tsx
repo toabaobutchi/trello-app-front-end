@@ -1,4 +1,4 @@
-import { ProjectCommentResponse } from '@utils/types'
+import { ProjectCommentResponse } from '@utils/types/comment.type'
 import './ProjectChatItem.scss'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { useState } from 'react'

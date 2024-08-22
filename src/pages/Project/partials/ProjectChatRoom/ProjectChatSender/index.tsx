@@ -1,6 +1,6 @@
 import { sendProjectComment } from '@services/comment.services'
 import { handleTriggerKeyPress } from '@utils/functions'
-import { ProjectCommentResponse } from '@utils/types'
+import { ProjectCommentResponse } from '@utils/types/comment.type'
 import { useState } from 'react'
 
 function ProjectChatSender({ updateChat = () => {} }: { updateChat?: (response: ProjectCommentResponse) => void }) {

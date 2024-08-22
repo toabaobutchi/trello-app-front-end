@@ -3,13 +3,13 @@ import './Attachment.scss'
 import emptyAttachmentImage from '@assets/attachment.svg'
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
-import { AttachmentResponse, CreateAttachmentModel } from '@utils/types'
+import { AttachmentResponse, CreateAttachmentModel } from '@utils/types/attachment.type'
 import AttachmentInput from './AttachmentInput'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
 import Tooltip from '@comps/Tooltip-v2'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { addAttachment, getAttachmentsInTask } from '@services/attachment.services'
+import useAccount from '@hooks/useAccount'
+import { useProjectSelector } from '@hooks/useProjectSelector'
 
 export type AttachmentInputs = {
   link: string
@@ -18,8 +18,8 @@ export type AttachmentInputs = {
 
 function Attachment() {
   const taskDetail = useContext(TaskDetailContext)?.task
-  const members = useSelector((state: RootState) => state?.project?.activeProject?.members)
-  const account = useSelector((state: RootState) => state?.login?.accountInfo)
+  const { members } = useProjectSelector()
+  const account = useAccount()
   const [attachments, setAttatchments] = useState<AttachmentResponse[]>([])
   const [addingAttachment, setAddingAttachment] = useState<AttachmentInputs>()
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { RelatedTaskResponse } from '@utils/types'
+import { RelatedTaskResponse } from '@utils/types/task.type'
 import './RelatedTaskItem.scss'
 import Flex from '@comps/StyledComponents'
 import { getDateString } from '@utils/functions'

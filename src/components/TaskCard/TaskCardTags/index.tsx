@@ -1,5 +1,5 @@
 import { DateCompareState, isInToday, isOverdue } from '@utils/functions'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import './TaskCardTags.scss'
 
 type TaskCardTagsProps = {

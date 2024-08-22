@@ -1,7 +1,7 @@
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import './TaskDependencies.scss'
 import { useEffect, useState } from 'react'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import { getFlatTasks } from '@utils/functions'
 import { NavLink } from 'react-router-dom'
 

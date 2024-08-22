@@ -1,4 +1,4 @@
-import { ChangeLogResponse } from '@utils/types'
+import { ChangeLogResponse } from '@utils/types/changelog.type'
 import './ChangeLogItem.scss'
 import { useEffect, useState } from 'react'
 import { useProjectSelector } from '@hooks/useProjectSelector'

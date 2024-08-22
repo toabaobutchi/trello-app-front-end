@@ -1,5 +1,5 @@
 import Tooltip from '@comps/Tooltip-v2'
-import { ListResponseForBoard } from '@utils/types'
+import { ListResponseForBoard } from '@utils/types/list.type'
 import { useMemo, useState } from 'react'
 import TaskItem from './TaskItem'
 
@@ -26,7 +26,11 @@ function ListStateItem({ list }: { list: ListResponseForBoard }) {
   const handleToggleExpand = () => setExpandTasks(!expandTasks)
   return (
     <>
-      <div onClick={list.tasks?.length ? handleToggleExpand : undefined} key={list.id} className={`list-state-item${expandTasks ? ' expanded' : ''}`}>
+      <div
+        onClick={list.tasks?.length ? handleToggleExpand : undefined}
+        key={list.id}
+        className={`list-state-item${expandTasks ? ' expanded' : ''}`}
+      >
         <p className='list-state-item-name'>
           {list.name} ({list.tasks?.length ?? 0})
         </p>

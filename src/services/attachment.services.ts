@@ -1,5 +1,5 @@
 import { http } from '@utils/Axios/HttpClientAuth'
-import { AttachmentResponse, CreateAttachmentModel } from '@utils/types'
+import { AttachmentResponse, CreateAttachmentModel } from '@utils/types/attachment.type'
 
 const getAttachmentsInTask = async (taskId: string) => {
   const res = await http.get<AttachmentResponse[]>(`/attachments/in-task/${taskId}`)

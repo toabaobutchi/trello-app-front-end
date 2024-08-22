@@ -1,6 +1,5 @@
 import { AssignmentConfig } from './assignment.type'
 import { ListResponseForBoard } from './list.type'
-import { TaskResponseForTable } from './task.type'
 
 /** lớp project base */
 export type Project = {
@@ -49,16 +48,6 @@ export type CreateProjectModel = {
   listOrder?: string // JSON string
 }
 
-export type ProjectResponseForTable = {
-  id: string
-  name: string
-  color?: string
-  createdAt: number
-  dueDate?: number
-  context: string
-  tasks?: TaskResponseForTable[]
-}
-
 export type ProjectResponseForUpdating = {
   name: string
   description?: string
@@ -92,14 +81,7 @@ export type ProjectResponse = {
   color?: string
   workspaceId: string
   slug: string
-  listOrder?: string
-}
-
-export type JoinTaskResponse = {
-  taskId: string
-  assignmentId: string
-  assignerId: string
-  assignedAt: number
+  listOrder?: string // khoong can
 }
 
 export type InvitedProjectResponse = {

@@ -3,7 +3,7 @@ import './AddNewList.scss'
 import { useEffect, useRef, useState } from 'react'
 import Flex from '@comps/StyledComponents/Flex'
 import FloatLabelInput from '@comps/FloatLabelInput'
-import { CreateListModel, InputChange } from '@utils/types'
+import { InputChange } from '@utils/types'
 import useClickTracker from '@hooks/useClickTracker'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
@@ -12,6 +12,7 @@ import { hubs, ProjectHub } from '@utils/Hubs'
 import { createList } from '@services/list.services'
 import { containsSpecialCharacters, handleTriggerKeyPress } from '@utils/functions'
 import { useProjectSelector } from '@hooks/useProjectSelector'
+import { CreateListModel } from '@utils/types/list.type'
 
 function AddNewList() {
   const [isAddingList, setIsAddingList] = useState(false)

@@ -1,4 +1,4 @@
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import './CalendarTaskCard.scss'
 import PriorityTag from '@comps/TaskCard/PriorityTag'
 import { getDateString } from '@utils/functions'

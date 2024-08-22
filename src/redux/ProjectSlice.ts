@@ -1,27 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { mapOrder } from '@utils/functions'
+import { ProjectFilterType, DragOverResult } from '@utils/types'
+import { AssignmentResponse, ChangePermissionResonse } from '@utils/types/assignment.type'
 import {
-  AssignByTaskResponse,
-  ChangeTaskOrderResponse,
-  CreateListResponse,
-  CreateTaskResponse,
   DeletedListResponse,
-  DeletedTaskResponse,
-  DragOverResult,
-  ProjectFilterType,
-  JoinTaskResponse,
-  ListResponseForBoard,
-  MarkedTaskResponse,
-  ProjectResponseForBoard,
-  TaskResponseForBoard,
   UpdatedListResponse,
-  UpdatedTaskResponse,
-  DeletedTaskAssignmentResponse,
-  DispatchRelatedTaskResponse,
+  ListResponseForBoard,
+  CreateListResponse
+} from '@utils/types/list.type'
+import { ProjectResponseForBoard } from '@utils/types/project.type'
+import { DeletedTaskAssignmentResponse } from '@utils/types/task-assignment.type'
+import {
   DeletedRelationshipResponse,
-  ChangePermissionResonse
-} from '@utils/types'
-import { AssignmentResponse } from '@utils/types/assignment.type'
+  DispatchRelatedTaskResponse,
+  AssignByTaskResponse,
+  MarkedTaskResponse,
+  UpdatedTaskResponse,
+  DeletedTaskResponse,
+  CreateTaskResponse,
+  TaskResponseForBoard,
+  ChangeTaskOrderResponse,
+  JoinTaskResponse
+} from '@utils/types/task.type'
 
 export const projectSlice = createSlice({
   name: 'project',

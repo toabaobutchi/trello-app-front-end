@@ -8,15 +8,10 @@ import Modal from '@comps/Modal'
 import ReferenceTaskSelector from './ReferenceTaskSelector'
 import { addChildrenTasks, addDependencies, deleteRelatedTask, getRelatedTasks } from '@services/task.services'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
-import {
-  DeletedRelationshipResponse,
-  DispatchRelatedTaskResponse,
-  ReferenceTasks as RefTasks,
-  RelatedTaskResponse
-} from '@utils/types'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
+import { DeletedRelationshipResponse, DispatchRelatedTaskResponse, ReferenceTasks as RefTasks, RelatedTaskResponse } from '@utils/types/task.type'
 
 const tabs: TabNav[] = [
   {
@@ -38,6 +33,7 @@ const tabs: TabNav[] = [
 ]
 
 const initTab = 'dependencies'
+// type RefTasks = ReferenceTasks
 const initRefTask: RefTasks = {
   childTasks: [],
   dependencies: []

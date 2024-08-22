@@ -1,6 +1,6 @@
 import Flex from '@comps/StyledComponents/Flex'
 import { getDateString } from '@utils/functions'
-import { JoinedTaskResponse } from '@utils/types'
+import { JoinedTaskResponse } from '@utils/types/task.type'
 import { NavLink } from 'react-router-dom'
 
 function JoinedTaskItem({ task }: { task: JoinedTaskResponse }) {

@@ -1,7 +1,7 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import { AssignByTaskModel, TaskDetailForBoard, TaskResponseForTable } from '@utils/types'
+import { AssignByTaskModel, TaskDetailForBoard, TaskResponseForTable } from '@utils/types/task.type'
 import { useContext, useMemo, useState } from 'react'
 import './AssignMember.scss'
 import AssignmentMemberItem from './AssignmentMemberItem'

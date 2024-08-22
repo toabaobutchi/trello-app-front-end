@@ -1,4 +1,4 @@
-import { TaskDetailForBoard } from '@utils/types'
+import { TaskDetailForBoard } from '@utils/types/task.type'
 import { createContext } from 'react'
 
 export type TaskDetailContextType = {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import './PendingTasks.scss'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import CalendarTaskCard from '../CalendarTaskCard'
 
 type PendingTasksProps = {

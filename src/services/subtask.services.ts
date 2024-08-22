@@ -1,12 +1,12 @@
 import { http } from '@utils/Axios/HttpClientAuth'
 import {
   AddSubtasksModel,
-  AssignSubtaskResponse,
-  JoinSubtaskResponse,
   SubtaskForBoard,
   SubtaskResponse,
+  JoinSubtaskResponse,
+  AssignSubtaskResponse,
   UnassignSubtaskResponse
-} from '@utils/types'
+} from '@utils/types/subtask.type'
 
 const addSubtasks = async (model: AddSubtasksModel) => {
   const res = await http.post<AddSubtasksModel, SubtaskForBoard[]>('/subtasks', model)

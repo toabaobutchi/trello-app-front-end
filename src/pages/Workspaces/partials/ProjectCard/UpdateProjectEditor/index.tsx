@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './UpdateProjectEditor.scss'
-import { ProjectDataInput, ProjectResponseForUpdating, UpdateProjectModel } from '@utils/types'
+import { ProjectDataInput, ProjectResponseForUpdating, UpdateProjectModel } from '@utils/types/project.type'
 import LoadingLayout from '@layouts/LoadingLayout'
 import FloatLabelInput from '@comps/FloatLabelInput'
 import TextArea from '@comps/TextArea'

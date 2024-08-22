@@ -2,19 +2,14 @@ import './Subtasks.scss'
 import { useContext, useEffect, useState } from 'react'
 import AddSubtask from './AddSubtask'
 import SubtaskItem from './SubtaskItem'
-import {
-  AssignByTaskResponse,
-  AssignSubtaskResponse,
-  JoinSubtaskResponse,
-  SubtaskForBoard,
-  UnassignSubtaskResponse
-} from '@utils/types'
 import { HubConnection } from '@microsoft/signalr'
 import { hubs } from '@utils/Hubs'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
 import { addSubtasks, checkSubtask, deleteSubtask } from '@services/subtask.services'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
+import { SubtaskForBoard, JoinSubtaskResponse, AssignSubtaskResponse, UnassignSubtaskResponse } from '@utils/types/subtask.type'
+import { AssignByTaskResponse } from '@utils/types/task.type'
 
 type SubtasksProps = {
   subtasks: SubtaskForBoard[]

@@ -1,10 +1,11 @@
-import { ProjectResponse, SelectListItem } from '@utils/types'
+import { SelectListItem } from '@utils/types'
 import './ProjectOptions.scss'
 import Flex from '@comps/StyledComponents/Flex'
 import { useState } from 'react'
 import SelectList from '@comps/SelectList'
 import { getAssignmentsFromAnotherProject } from '@services/assignment.services'
 import { AssignmentResponse } from '@utils/types/assignment.type'
+import { ProjectResponse } from '@utils/types/project.type'
 
 type ProjectOptionsProps = {
   project: ProjectResponse

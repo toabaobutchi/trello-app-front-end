@@ -1,7 +1,6 @@
 import Button from '@comps/Button'
 import Flex from '@comps/StyledComponents/Flex'
 import Tooltip from '@comps/Tooltip-v2'
-import { AssignmentResponse, ProjectMemberPageParams } from '@utils/types'
 import { useNavigate, useParams } from 'react-router-dom'
 import { linkCreator } from '@routes/router'
 import { useEffect, useMemo, useState } from 'react'
@@ -11,6 +10,8 @@ import { hubs, ProjectHub } from '@utils/Hubs'
 import toast from '@comps/Toast/toast'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
+import { AssignmentResponse } from '@utils/types/assignment.type'
+import { ProjectMemberPageParams } from '@utils/types/page-params.type'
 
 type MemberItemProps = {
   member: AssignmentResponse

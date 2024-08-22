@@ -1,7 +1,7 @@
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { TaskDetailContext } from '@pages/TaskDetailBoard/context'
 import { getFlatTasks } from '@utils/functions'
-import { ReferenceTasks, TaskResponseForBoard } from '@utils/types'
+import { ReferenceTasks, TaskResponseForBoard } from '@utils/types/task.type'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import ReferenceTaskSelectorItem from './ReferenceTaskSelectorItem'
 import Button from '@comps/Button'

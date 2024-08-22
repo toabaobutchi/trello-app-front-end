@@ -1,12 +1,9 @@
 import { cloneDeep } from 'lodash'
-import {
-  ListResponseForBoard,
-  ProjectFilterType,
-  ProjectResponseForBoard,
-  TaskResponseForBoard,
-  TaskResponseForTable
-} from './types'
 import { AssignmentResponse } from './types/assignment.type'
+import { ProjectFilterType } from './types'
+import { ListResponseForBoard } from './types/list.type'
+import { ProjectResponseForBoard } from './types/project.type'
+import { TaskResponseForBoard, TaskResponseForTable } from './types/task.type'
 
 export const isOutClick = (parent: HTMLElement, child: HTMLElement | null) => {
   return parent && !parent.contains(child as Node)

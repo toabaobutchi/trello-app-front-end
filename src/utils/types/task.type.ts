@@ -73,7 +73,7 @@ export type DeletedTaskResponse = {
   listId: string
 }
 
-export interface TaskResponseForTable extends TaskResponseForBoard {
+export type TaskResponseForTable = TaskResponseForBoard & {
   listName: string
 }
 
@@ -177,4 +177,11 @@ export type ChangeTaskOrderResponse = {
 export type CreateTaskModel = {
   name: string
   listId: string
+}
+
+export type JoinTaskResponse = {
+  taskId: string
+  assignmentId: string
+  assignerId: string
+  assignedAt: number
 }

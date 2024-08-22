@@ -1,10 +1,5 @@
 import Flex from '@comps/StyledComponents/Flex'
 import {
-  ChangeTaskOrderModel,
-  DragOverResult,
-  ListResponseForBoard,
-  TaskResponseForBoard} from '@utils/types'
-import {
   DndContext,
   DragEndEvent,
   TouchSensor,
@@ -35,6 +30,9 @@ import config from '@confs/app.config'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import toast from '@comps/Toast/toast'
+import { DragOverResult } from '@utils/types'
+import { ListResponseForBoard } from '@utils/types/list.type'
+import { TaskResponseForBoard, ChangeTaskOrderModel } from '@utils/types/task.type'
 
 type ActiveDragItemType = {
   id?: string | number

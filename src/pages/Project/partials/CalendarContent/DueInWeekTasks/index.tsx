@@ -1,4 +1,4 @@
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import './DueInWeekTasks.scss'
 import { useMemo } from 'react'
 import CalendarTaskCard from '../CalendarTaskCard'

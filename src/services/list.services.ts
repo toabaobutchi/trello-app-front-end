@@ -5,7 +5,7 @@ import {
   DeletedListResponse,
   UpdatedListResponse,
   UpdateListModel
-} from '@utils/types'
+} from '@utils/types/list.type'
 
 const createList = async (model: CreateListModel) => {
   const res = await http.post<CreateListModel, CreateListResponse>('/lists', model)

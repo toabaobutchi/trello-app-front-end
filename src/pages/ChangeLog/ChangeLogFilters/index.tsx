@@ -1,12 +1,13 @@
 import SelectList from '@comps/SelectList'
 import './ChangeLogFilters.scss'
-import { SelectListItem, TaskResponseForBoard } from '@utils/types'
+import { SelectListItem } from '@utils/types'
 import { useEffect, useRef, useState } from 'react'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import { useSearchParams } from 'react-router-dom'
 import { getDateString, getFlatTasks, getMiliseconds } from '@utils/functions'
 import Flex from '@comps/StyledComponents'
 import Button from '@comps/Button'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 
 function ChangeLogFilters() {
   const { members } = useProjectSelector()

@@ -1,5 +1,5 @@
 import { getDateString } from '@utils/functions'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 import './ReferenceTaskSelectorItem.scss'
 import { useState } from 'react'
 

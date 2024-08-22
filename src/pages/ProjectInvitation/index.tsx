@@ -1,7 +1,7 @@
 import './ProjectInvitation.scss'
 import { useLoaderData } from 'react-router-dom'
 import { AxiosResponse } from 'axios'
-import { InvitedProjectResponse } from '@utils/types'
+import { InvitedProjectResponse } from '@utils/types/project.type'
 import InvitedProjectCard from './InvitedProjectCard'
 import Flex from '@comps/StyledComponents'
 import emptyInvitationImagePage from '@assets/empty_invitation.jpg'

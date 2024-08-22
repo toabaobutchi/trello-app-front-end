@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useProjectSelector } from './useProjectSelector'
-import { TaskResponseForBoard } from '@utils/types'
+import { TaskResponseForBoard } from '@utils/types/task.type'
 
 export default function useTasks() {
   const { board, changeId } = useProjectSelector()

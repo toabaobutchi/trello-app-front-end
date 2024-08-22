@@ -1,4 +1,4 @@
-import { RelatedTaskResponse } from '@utils/types'
+import { RelatedTaskResponse } from '@utils/types/task.type'
 import './RelatedTasks.scss'
 import RelatedTaskItem from './RelatedTaskItem'
 
