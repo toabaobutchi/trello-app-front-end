@@ -285,7 +285,7 @@ function Project() {
           projectSlice.actions.addFromDependencies({
             taskId,
             relatedTasks
-          } as DispatchRelatedTaskResponse)
+          })
         )
       }
     )

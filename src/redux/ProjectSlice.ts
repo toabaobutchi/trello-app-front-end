@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { mapOrder } from '@utils/functions'
 import { ProjectFilterType, DragOverResult } from '@utils/types'
 import { AssignmentResponse, ChangePermissionResonse } from '@utils/types/assignment.type'
@@ -107,8 +107,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    addFromDependencies: (state, action) => {
-      const data = action.payload as DispatchRelatedTaskResponse
+    addFromDependencies: (state, action: PayloadAction<DispatchRelatedTaskResponse>) => {
+      const data = action.payload
       if (data) {
         const { taskId, relatedTasks } = data
         const list = state.activeProject.board?.lists?.find(l => (l.tasks?.findIndex(t => t.id === taskId) ?? -1) >= 0)

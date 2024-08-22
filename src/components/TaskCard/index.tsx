@@ -11,7 +11,7 @@ import { createCardId, DateCompareState, getDateString, isAdminOrOwner, isOverdu
 import { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { projectSlice } from '@redux/ProjectSlice'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import DeleteTaskMenu from './DeleteTaskMenu'
 import { useModal } from '@hooks/useModal'
@@ -20,6 +20,7 @@ import TaskCardTags from './TaskCardTags'
 import TaskDependencies from './TaskDependencies'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
 import { AssignmentResponse } from '@utils/types/assignment.type'
+import RenderIf from '@comps/containers/RenderIf'
 
 const displayAvatarCount = 3
 
@@ -47,6 +48,7 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
   const navigate = useNavigate()
   const [dragSub, setDragSub] = useState<AssignmentResponse>()
   const [confirmDeleteModal, handleToggleConfirmDeleteModal] = useModal()
+  const [searchParams] = useSearchParams()
   const taskAssignments = useMemo(() => {
     const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
     return tAssignments
@@ -60,20 +62,13 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
     navigate(`${pathname}/task/${task?.id}`)
   }
 
-  // const handleDeleteTask = async () => {
-  //   const res = await http.deleteAuth(`/tasks/${task.id}`)
-  //   if (res?.status === HttpStatusCode.Ok) {
-  //     const data = res?.data as DeletedTaskResponse
-  //     dispatch(projectSlice.actions.deleteTask(data))
-  //   }
-  // }
-
   const handleJoinTask = async () => {
     const res = await joinTask(task.id)
     if (res?.isSuccess) {
       dispatch(projectSlice.actions.joinTask(res.data))
     }
   }
+  const compactViewMode = searchParams.get('boardMode') === 'compact'
   return (
     <>
       <div
@@ -129,48 +124,53 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
           </div>
           <TaskCardTags task={task} />
         </div>
-        <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>
-          <Flex $alignItem='center' $gap='1rem'>
-            {task.subTaskCount ? (
-              <div className='task-card-body-subtasks'>
-                <i className='fa-regular fa-square-check'></i> {task.completedSubTaskCount}/{task.subTaskCount}
+        <RenderIf check={!compactViewMode}>
+          <Flex $alignItem='center' $justifyContent='space-between' className='task-card-footer'>
+            <Flex $alignItem='center' $gap='1rem'>
+              {task.subTaskCount ? (
+                <div className='task-card-body-subtasks'>
+                  <i className='fa-regular fa-square-check'></i> {task.completedSubTaskCount}/{task.subTaskCount}
+                </div>
+              ) : (
+                <></>
+              )}
+              <div className='task-card-body-comments'>
+                <i className='fa-regular fa-message'></i> {task?.commentCount ?? 0}
               </div>
-            ) : (
-              <></>
-            )}
-            <div className='task-card-body-comments'>
-              <i className='fa-regular fa-message'></i> {task?.commentCount ?? 0}
+            </Flex>
+            <div
+              className={`task-card-footer-due-date ${
+                isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.DueSoon
+                  ? 'text-warning bold'
+                  : isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.Overdue
+                  ? 'text-danger bold'
+                  : ''
+              }`}
+            >
+              <i className='fa-regular fa-clock'></i>{' '}
+              {task?.dueDate ? getDateString(new Date(task.dueDate)) : <span className='text-light'>Not set</span>}
             </div>
           </Flex>
-          <div
-            className={`task-card-footer-due-date ${
-              isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.DueSoon
-                ? 'text-warning bold'
-                : isOverdue((task?.dueDate ?? 0) * 1000) === DateCompareState.Overdue
-                ? 'text-danger bold'
-                : ''
-            }`}
+
+          <Flex
+            $alignItem='center'
+            $justifyContent='start'
+            $flexDirection='row-reverse'
+            className='posr task-card-footer-members'
           >
-            <i className='fa-regular fa-clock'></i>{' '}
-            {task?.dueDate ? getDateString(new Date(task.dueDate)) : <span className='text-light'>Not set</span>}
-          </div>
-        </Flex>
-        <Flex
-          $alignItem='center'
-          $justifyContent='start'
-          $flexDirection='row-reverse'
-          className='posr task-card-footer-members'
-        >
-          {taskAssignments.length - displayAvatarCount > 0 && (
-            <div className='task-card-footer-members-more'>+{taskAssignments.length - displayAvatarCount} more</div>
+            {taskAssignments.length - displayAvatarCount > 0 && (
+              <div className='task-card-footer-members-more'>+{taskAssignments.length - displayAvatarCount} more</div>
+            )}
+            {taskAssignments.slice(0, displayAvatarCount).map(member => (
+              <div key={member.id} className='task-card-footer-members-image-container'>
+                <img src={member.avatar} alt='avatar' />
+              </div>
+            ))}
+          </Flex>
+          {task.dependencyIds && task.dependencyIds.length > 0 && (
+            <TaskDependencies dependencyIds={task.dependencyIds} />
           )}
-          {taskAssignments.slice(0, displayAvatarCount).map(member => (
-            <div key={member.id} className='task-card-footer-members-image-container'>
-              <img src={member.avatar} alt='avatar' />
-            </div>
-          ))}
-        </Flex>
-        {task.dependencyIds && task.dependencyIds.length > 0 && <TaskDependencies dependencyIds={task.dependencyIds} />}
+        </RenderIf>
       </div>
     </>
   )
