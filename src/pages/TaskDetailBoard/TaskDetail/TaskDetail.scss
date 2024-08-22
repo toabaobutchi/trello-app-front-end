@@ -84,7 +84,8 @@
 }
 
 .priorities-select-list {
-  border: none;
+  // border: none;
+  border-color: transparent !important;
   .selected-item {
     padding: 0 !important;
     color: var(--text-secondary-color);

@@ -30,6 +30,7 @@ function SideBar() {
   const handleCloseWorkspaceMenu = () => setWorkspaceMenuExpanded(false)
   const toggleSidebar = () => {
     setSidebarExpanded(!sideBarExpanded)
+    localStorage.setItem('sidebar', !sideBarExpanded ? 'true' : 'false')
     setWorkspaceMenuExpanded(false)
   }
   const closeSidebarWhenRedirectInMobileMode = () => {
