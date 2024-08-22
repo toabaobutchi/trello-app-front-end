@@ -24,3 +24,14 @@ export type AssignmentProfileResponse = {
   joinAt: number
   joinedTasks: JoinedTaskResponse[]
 }
+
+export type DeleteAssignmentModel = {
+  assignmentId: string
+}
+
+export type DeletedAssignmentResponse = DeleteAssignmentModel
+
+export type ChangePermissionResonse = {
+  assignmentId: string
+  newPermission: string
+}
