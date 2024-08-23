@@ -1,57 +1,57 @@
-import './Project.scss'
-import Flex from '@comps/StyledComponents/Flex'
-import ProjectHeader from './partials/ProjectHeader'
-import { Suspense, useEffect, useRef, useState } from 'react'
-import { Outlet, useLoaderData, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { projectSlice } from '@redux/ProjectSlice'
-import LoadingLayout from '@layouts/LoadingLayout'
-import { hubs, ProjectHub } from '@utils/Hubs'
-import { useProjectSelector } from '@hooks/useProjectSelector'
-import ProjectSideBar from './partials/ProjectSideBar'
-import { getAssignmentsInProject, revokeProjectAuth } from '@services/assignment.services'
-import { HttpResponse } from '@utils/Axios/HttpClientAuth'
-import ProjectChatRoom from './partials/ProjectChatRoom'
-import { useModal } from '@hooks/useModal'
-import Modal from '@comps/Modal'
-import routeLinks from '@routes/router'
 import Button from '@comps/Button'
+import Modal from '@comps/Modal'
+import Flex from '@comps/StyledComponents/Flex'
 import toast from '@comps/Toast/toast'
 import config from '@confs/app.config'
-import { ProjectContextType } from '@hooks/useProjectOutletContext'
-import { getFlatTasks } from '@utils/functions'
-import { ProjectPageParams } from '@utils/types/page-params.type'
+import { useModal } from '@hooks/useModal'
 import { usePageParams } from '@hooks/usePageParams'
-import { ProjectResponseForBoard } from '@utils/types/project.type'
+import useProjectDispatch from '@hooks/useProjectDispatch'
+import useProjectHub from '@hooks/useProjectHub'
+import { ProjectContextType } from '@hooks/useProjectOutletContext'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import LoadingLayout from '@layouts/LoadingLayout'
+import routeLinks from '@routes/router'
+import { getAssignmentsInProject, revokeProjectAuth } from '@services/assignment.services'
+import { HttpResponse } from '@utils/Axios/HttpClientAuth'
+import { getFlatTasks } from '@utils/functions'
+import { hubs } from '@utils/Hubs'
 import { DragOverResult, RemoteDraggingType } from '@utils/types'
 import { DeletedAssignmentResponse } from '@utils/types/assignment.type'
+import { CreateListResponse, DeletedListResponse, UpdatedListResponse } from '@utils/types/list.type'
+import { ProjectPageParams } from '@utils/types/page-params.type'
+import { ProjectResponseForBoard } from '@utils/types/project.type'
 import { AssignSubtaskResponse, SubtaskForBoard } from '@utils/types/subtask.type'
+import { DeletedTaskAssignmentResponse } from '@utils/types/task-assignment.type'
 import {
   AssignByTaskResponse,
   ChangeTaskOrderResponse,
   CreateTaskResponse,
   DeletedRelationshipResponse,
   DeletedTaskResponse,
-  DispatchRelatedTaskResponse,
   JoinTaskResponse,
   MarkedTaskResponse,
   RelatedTaskResponse,
   TaskResponseForBoard,
   UpdatedTaskResponse
 } from '@utils/types/task.type'
-import { CreateListResponse, DeletedListResponse, UpdatedListResponse } from '@utils/types/list.type'
-import { DeletedTaskAssignmentResponse } from '@utils/types/task-assignment.type'
+import { Suspense, useEffect, useRef, useState } from 'react'
+import { Outlet, useLoaderData, useNavigate } from 'react-router-dom'
+import ProjectChatRoom from './partials/ProjectChatRoom'
+import ProjectHeader from './partials/ProjectHeader'
+import ProjectSideBar from './partials/ProjectSideBar'
+import './Project.scss'
 
 function Project() {
   const params = usePageParams<ProjectPageParams>()
   const { board: project, members } = useProjectSelector()
   const response = useLoaderData() as HttpResponse<ProjectResponseForBoard>
-  const dispatch = useDispatch()
-  const [projectHub] = useState<ProjectHub>(new ProjectHub())
+  const projectDispatch = useProjectDispatch()
+  const projectHub = useProjectHub()
   const navigate = useNavigate()
   const remoteDragTimeOutId = useRef<number>()
   const [remoteDragging, setRemoteDragging] = useState<RemoteDraggingType>()
   const [isConnected, setIsConnected] = useState(false) // test
+
   const [removeAssignmentModal, handleToggleRemoveAssignmentModal] = useModal(false, {
     whenClose: () => navigate(routeLinks.home),
     whenOpen: async () => {
@@ -64,7 +64,7 @@ function Project() {
     if (!project?.id || project?.id !== params.projectId) {
       if (response?.isSuccess) {
         const data = response.data
-        dispatch(projectSlice.actions.setActiveProjectBoard(data))
+        projectDispatch.setActiveProjectBoard(data)
 
         // sau khi tải dữ liệu thì khởi tạo kết nối thời gian thực
         projectHub.connectToHub(() => {
@@ -83,7 +83,7 @@ function Project() {
 
   const handleListenHub = (responseData: ProjectResponseForBoard) => {
     projectHub.connection?.on(hubs.project.receive.onlineMembers, (assignmentIds: string[]) => {
-      dispatch(projectSlice.actions.setOnlineMembers(assignmentIds))
+      projectDispatch.setOnlineMembers(assignmentIds)
     })
     projectHub.connection?.on(
       hubs.project.receive.removeAssignment,
@@ -92,7 +92,7 @@ function Project() {
           handleToggleRemoveAssignmentModal()
         } else {
           // dispatch members
-          dispatch(projectSlice.actions.removeAssignment(data.assignmentId))
+          projectDispatch.removeAssignment(data.assignmentId)
 
           const member = members.find(a => a.id === data.assignmentId)
           toast.error('A member has been removed', `${member?.email} has been removed from this project`)
@@ -117,7 +117,7 @@ function Project() {
               toast.success('Assigned to task', `You was assigned to task ${task?.name}`)
             }
           }
-          dispatch(projectSlice.actions.addAssignmentToTask(payload))
+          projectDispatch.addAssignmentToTask(payload)
         }
         if (data.assignmentId === responseData.assignmentId) {
           toast.success(`You was assigned to subtask ${data.title}`, '')
@@ -147,7 +147,7 @@ function Project() {
     })
     // ReceiveEndDragList
     projectHub.connection?.on(hubs.project.receive.endDragList, (_assignmentId: string, updatedListOrder: string) => {
-      dispatch(projectSlice.actions.changeListOrder(updatedListOrder))
+      projectDispatch.changeListOrder(updatedListOrder)
       setTimeout(() => {
         setRemoteDragging(_prev => undefined)
 
@@ -186,8 +186,7 @@ function Project() {
     projectHub.connection?.on(
       hubs.project.receive.endDragTask,
       (_assignmentId: string, res: ChangeTaskOrderResponse, dragResult: DragOverResult) => {
-        console.log('Received drag operation - end task')
-        dispatch(projectSlice.actions.changeTaskOrder({ resData: res, dragOverResult: dragResult }))
+        projectDispatch.changeTaskOrder({ resData: res, dragOverResult: dragResult })
         // setRemoteDragging(undefined)
         setTimeout(() => {
           setRemoteDragging(_prev => undefined)
@@ -204,44 +203,44 @@ function Project() {
     projectHub.connection?.on(
       hubs.project.receive.updateTaskInfo,
       (_assignmentId: string, data: UpdatedTaskResponse) => {
-        dispatch(projectSlice.actions.updateTaskInfo(data))
+        projectDispatch.updateTaskInfo(data)
       }
     )
     // ReceiveAddSubtaskResult
     projectHub.connection?.on(
       hubs.project.receive.addSubtaskResult,
       (_assignmentId: string, taskid: string, subtasks: SubtaskForBoard[]) => {
-        dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: subtasks.length }))
+        projectDispatch.changeSubtaskCount({ taskId: taskid, subtaskCount: subtasks.length })
       }
     )
     // ReceiveDeleteSubtask
     projectHub.connection?.on(
       hubs.project.receive.deleteSubtask,
       (_assignmentId: string, taskid: string, _subtaskId: number) => {
-        dispatch(projectSlice.actions.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 }))
+        projectDispatch.changeSubtaskCount({ taskId: taskid, subtaskCount: -1 })
       }
     )
     // ReceiveCheckSubtask
     projectHub.connection?.on(
       hubs.project.receive.checkSubtask,
       (_assignmentId: string, taskid: string, _subtaskId: number, status: boolean) => {
-        dispatch(projectSlice.actions.changeSubtaskStatus({ taskId: taskid, status }))
+        projectDispatch.changeSubtaskStatus({ taskId: taskid, status })
       }
     )
     // ReceiveAddNewTask
     projectHub.connection?.on(hubs.project.receive.addNewTask, (_assignmentId: string, data: CreateTaskResponse) => {
-      dispatch(projectSlice.actions.addNewTask(data))
+      projectDispatch.addNewTask(data)
     })
     // SendAddNewList
     projectHub.connection?.on(hubs.project.receive.addNewList, (_assignmentId: string, data: CreateListResponse) => {
-      dispatch(projectSlice.actions.addNewList(data))
+      projectDispatch.addNewList(data)
     })
     // SendDeleteList
     projectHub.connection?.on(hubs.project.receive.deleteList, (_assignmentId: string, data: DeletedListResponse) => {
-      dispatch(projectSlice.actions.deleteList(data))
+      projectDispatch.deleteList(data)
     })
     projectHub.connection?.on(hubs.project.receive.markTask, (_assignmentId: string, data: MarkedTaskResponse) => {
-      dispatch(projectSlice.actions.markTask(data))
+      projectDispatch.markTask(data)
     })
     projectHub.connection?.on(
       hubs.project.receive.assignMemberToTask,
@@ -253,17 +252,17 @@ function Project() {
             toast.success('Assigned to task', `You was assigned to task ${task?.name}`)
           }
         }
-        dispatch(projectSlice.actions.addAssignmentToTask(data))
+        projectDispatch.addAssignmentToTask(data)
       }
     )
     projectHub.connection?.on(
       hubs.project.receive.duplicateTasks,
       (_assignmentId: string, data: TaskResponseForBoard[]) => {
-        dispatch(projectSlice.actions.setDuplicateTasks(data))
+        projectDispatch.setDuplicateTasks(data)
       }
     )
     projectHub.connection?.on(hubs.project.receive.joinTask, (_assignmentId: string, data: JoinTaskResponse) => {
-      dispatch(projectSlice.actions.joinTask(data))
+      projectDispatch.joinTask(data)
     })
     projectHub.connection?.on(
       hubs.project.receive.unassignTaskAssignment,
@@ -275,51 +274,47 @@ function Project() {
             toast.error(`You was unassgned from task ${task?.name}`, '')
           }
         }
-        dispatch(projectSlice.actions.removeTaskAssignment(data))
+        projectDispatch.removeTaskAssignment(data)
       }
     )
     projectHub.connection?.on(
       hubs.project.receive.addTaskDependencies,
       (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
-        dispatch(
-          projectSlice.actions.addFromDependencies({
-            taskId,
-            relatedTasks
-          })
-        )
+        projectDispatch.addFromDependencies({
+          taskId,
+          relatedTasks
+        })
       }
     )
     projectHub.connection?.on(
       hubs.project.receive.addChildrenTasks,
       (_assignmentId: string, taskId: string, relatedTasks: RelatedTaskResponse[]) => {
-        dispatch(
-          projectSlice.actions.addFromChildren({
-            taskId,
-            relatedTasks
-          } as DispatchRelatedTaskResponse)
-        )
+        projectDispatch.addFromChildren({
+          taskId,
+          relatedTasks
+        })
       }
     )
     projectHub.connection?.on(
       hubs.project.receive.deleteTask,
       (_assignmentId: string, _taskId: string, data: DeletedTaskResponse, _moveToTrash: boolean) => {
-        dispatch(projectSlice.actions.deleteTask(data))
+        projectDispatch.deleteTask(data)
       }
     )
     projectHub.connection?.on(
       hubs.project.receive.removeTaskDependency,
       (_assignmentId: string, _taskId: string, data: DeletedRelationshipResponse) => {
-        dispatch(projectSlice.actions.removeFromDependencies(data))
+        projectDispatch.removeFromDependencies(data)
       }
     )
     projectHub.connection?.on(
       hubs.project.receive.removeChildrenTask,
       (_assignmentId: string, _taskId: string, data: DeletedRelationshipResponse) => {
-        dispatch(projectSlice.actions.removeFromChildren(data))
+        projectDispatch.removeFromChildren(data)
       }
     )
     projectHub.connection?.on(hubs.project.receive.updateWIP, (_assignmentId: string, data: UpdatedListResponse) => {
-      dispatch(projectSlice.actions.updateListInfo(data))
+      projectDispatch.updateListInfo(data)
     })
     projectHub.connection?.invoke(hubs.project.send.getOnlineMembers).catch(_ => {})
     // }
@@ -330,9 +325,9 @@ function Project() {
     if (project?.id && project.id === params.projectId)
       getAssignmentsInProject(project.id).then(res => {
         if (res?.isSuccess) {
-          dispatch(projectSlice.actions.setProjectMembers(res.data))
+          projectDispatch.setProjectMembers(res.data)
         } else {
-          console.log('Can not get project members', res?.data)
+          toast.error('Can not get project members', '')
         }
       })
   }, [project?.id, params.projectId])

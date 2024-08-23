@@ -206,7 +206,6 @@ function BoardContent() {
       if (overList.wipLimit && overList.tasks?.length && overList.tasks?.length === overList.wipLimit) {
         toast.error('WIP Limit: ' + overList.wipLimit, '')
         return
-
       }
       moveCardsInDifferentColumns(
         overList,

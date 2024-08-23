@@ -9,8 +9,6 @@ import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import { createCardId, DateCompareState, getDateString, isAdminOrOwner, isOverdue } from '@utils/functions'
 import { useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { projectSlice } from '@redux/ProjectSlice'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import DeleteTaskMenu from './DeleteTaskMenu'
@@ -21,6 +19,7 @@ import TaskDependencies from './TaskDependencies'
 import useProjectOutletContext from '@hooks/useProjectOutletContext'
 import { AssignmentResponse } from '@utils/types/assignment.type'
 import RenderIf from '@comps/containers/RenderIf'
+import useProjectDispatch from '@hooks/useProjectDispatch'
 
 const displayAvatarCount = 3
 
@@ -31,6 +30,17 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
   })
   const { board, members } = useProjectSelector()
   const { remoteDragging } = useProjectOutletContext()
+  const { joinTask: joinTaskDispatch } = useProjectDispatch()
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const [dragSub, setDragSub] = useState<AssignmentResponse>()
+  const [confirmDeleteModal, handleToggleConfirmDeleteModal] = useModal()
+  const [searchParams] = useSearchParams()
+
+  const taskAssignments = useMemo(() => {
+    const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
+    return tAssignments
+  }, [members, task?.taskAssignmentIds])
 
   const isJoined = useMemo(
     () => task.taskAssignmentIds?.includes(board.assignmentId),
@@ -43,16 +53,6 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
     opacity: isDragging ? 0.5 : 1,
     border: isDragging ? '1px solid #4B70F5' : 'unset'
   }
-  const dispatch = useDispatch()
-  const { pathname } = useLocation()
-  const navigate = useNavigate()
-  const [dragSub, setDragSub] = useState<AssignmentResponse>()
-  const [confirmDeleteModal, handleToggleConfirmDeleteModal] = useModal()
-  const [searchParams] = useSearchParams()
-  const taskAssignments = useMemo(() => {
-    const tAssignments = members.filter(m => task?.taskAssignmentIds?.includes(m?.id))
-    return tAssignments
-  }, [members, task?.taskAssignmentIds])
 
   useEffect(() => {
     setDragSub(members.find(m => m.id === remoteDragging?.subId))
@@ -65,7 +65,7 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
   const handleJoinTask = async () => {
     const res = await joinTask(task.id)
     if (res?.isSuccess) {
-      dispatch(projectSlice.actions.joinTask(res.data))
+      joinTaskDispatch(res.data)
     }
   }
   const compactViewMode = searchParams.get('boardMode') === 'compact'

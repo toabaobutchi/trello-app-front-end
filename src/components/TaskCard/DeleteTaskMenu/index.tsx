@@ -2,12 +2,11 @@ import Button from '@comps/Button'
 import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents'
 import toast from '@comps/Toast/toast'
-import { projectSlice } from '@redux/ProjectSlice'
+import useProjectDispatch from '@hooks/useProjectDispatch'
+import useProjectHub from '@hooks/useProjectHub'
 import { deleteTask } from '@services/task.services'
-import { hubs, ProjectHub } from '@utils/Hubs'
+import { hubs } from '@utils/Hubs'
 import { TaskResponseForBoard } from '@utils/types/task.type'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 type DeleteTaskMenuProps = {
   task: TaskResponseForBoard
@@ -16,15 +15,16 @@ type DeleteTaskMenuProps = {
 }
 
 function DeleteTaskMenu({ task, openModal, onClose }: DeleteTaskMenuProps) {
-  const dispatch = useDispatch()
-  const [projectHub] = useState(new ProjectHub())
+  const { deleteTask: deleteTaskDispatch } = useProjectDispatch()
+  const projectHub = useProjectHub()
+
   const handleDeleteTask = async (moveToTrash: boolean = false) => {
     const res = await deleteTask(task.id, moveToTrash)
     if (res?.isSuccess) {
       const data = res.data
 
       // dispatch man hinh chinh
-      dispatch(projectSlice.actions.deleteTask(data))
+      deleteTaskDispatch(data)
 
       // send to hub
       if (projectHub.isConnected) {
