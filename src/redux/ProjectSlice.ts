@@ -173,7 +173,6 @@ export const projectSlice = createSlice({
     },
     joinTask: (state, action: PayloadAction<JoinTaskResponse>) => {
       const data = action?.payload
-      console.log('joinTask >>> ', data)
       if (data) {
         const containList = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(data.taskId))
         if (containList) {
@@ -185,7 +184,7 @@ export const projectSlice = createSlice({
         }
       }
     },
-    changeSubtaskStatus: (state, action) => {
+    changeSubtaskStatus: (state, action: PayloadAction<{ taskId: string; status: boolean }>) => {
       const data = action.payload
       const taskId = data?.taskId as string
       const isCompleted = data?.status as boolean
@@ -313,8 +312,8 @@ export const projectSlice = createSlice({
       const members = action.payload
       state.activeProject.members = members
     },
-    setOnlineMembers: (state, action) => {
-      const onlineMembers = action.payload as string[]
+    setOnlineMembers: (state, action: PayloadAction<string[]>) => {
+      const onlineMembers = action.payload
       state.activeProject.onlineMembers = onlineMembers
     },
     setDuplicateTasks: (state, action: PayloadAction<TaskResponseForBoard[]>) => {
