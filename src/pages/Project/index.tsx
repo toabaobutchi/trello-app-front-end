@@ -39,7 +39,7 @@ import {
   TaskResponseForBoard,
   UpdatedTaskResponse
 } from '@utils/types/task.type'
-import { CreateListResponse, UpdatedListResponse } from '@utils/types/list.type'
+import { CreateListResponse, DeletedListResponse, UpdatedListResponse } from '@utils/types/list.type'
 import { DeletedTaskAssignmentResponse } from '@utils/types/task-assignment.type'
 
 function Project() {
@@ -237,8 +237,8 @@ function Project() {
       dispatch(projectSlice.actions.addNewList(data))
     })
     // SendDeleteList
-    projectHub.connection?.on(hubs.project.receive.deleteList, (_assignmentId: string, listId: string) => {
-      dispatch(projectSlice.actions.deleteList(listId))
+    projectHub.connection?.on(hubs.project.receive.deleteList, (_assignmentId: string, data: DeletedListResponse) => {
+      dispatch(projectSlice.actions.deleteList(data))
     })
     projectHub.connection?.on(hubs.project.receive.markTask, (_assignmentId: string, data: MarkedTaskResponse) => {
       dispatch(projectSlice.actions.markTask(data))
@@ -258,7 +258,7 @@ function Project() {
     )
     projectHub.connection?.on(
       hubs.project.receive.duplicateTasks,
-      (_assignmentId: string, data: TaskResponseForBoard) => {
+      (_assignmentId: string, data: TaskResponseForBoard[]) => {
         dispatch(projectSlice.actions.setDuplicateTasks(data))
       }
     )

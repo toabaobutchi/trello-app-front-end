@@ -62,7 +62,7 @@ function MemberTable() {
         style={{ marginTop: '0.5rem', padding: '0 0.25rem' }}
       >
         {taskMembers?.map(tm => {
-          return <TaskMemberItem taskMember={tm} onUnassign={handleUnassign} />
+          return <TaskMemberItem key={tm.id} taskMember={tm} onUnassign={handleUnassign} />
         })}
         {taskMembers && taskMembers.length <= 0 && (
           <>

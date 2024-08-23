@@ -49,12 +49,6 @@ function TaskDetailBoard() {
     }
   }, [taskId])
 
-  // const handleToggleDuplicateTaskModal = () => {
-  //   setDuplicateTaskModal(!duplicateTaskModal)
-  // }
-  // const handleToggleJoinModal = () => {
-  //   setJoinModal(!joinModal)
-  // }
   const timeOutId = useRef<number>()
   const handleMarkNeedHelp = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // xoá đi vòng lặp cũ
@@ -85,7 +79,6 @@ function TaskDetailBoard() {
   const handleCloseTaskDetailModal = () => {
     navigate(-1)
   }
-
   const handleMarkCompleteTask = async () => {
     if (taskId) {
       const res = await markTask(taskId, { isCompleted: true })

@@ -36,8 +36,8 @@ export const projectSlice = createSlice({
     }
   },
   reducers: {
-    changePermission: (state, action) => {
-      const data = action.payload as ChangePermissionResonse
+    changePermission: (state, action: PayloadAction<ChangePermissionResonse>) => {
+      const data = action.payload
       if (data) {
         const member = state.activeProject.members.find(m => m.id === data.assignmentId)
         if (member) {
@@ -46,16 +46,16 @@ export const projectSlice = createSlice({
         }
       }
     },
-    removeAssignment: (state, action) => {
-      const assignmentId = action.payload as string
+    removeAssignment: (state, action: PayloadAction<string>) => {
+      const assignmentId = action.payload
       if (assignmentId) {
         state.activeProject.members = state.activeProject.members.filter(m => m.id === assignmentId)
         state.activeProject.onlineMembers = state.activeProject.onlineMembers.filter(m => m !== assignmentId)
         state.activeProject.changeId = new Date().getTime()
       }
     },
-    removeFromChildren: (state, action) => {
-      const data = action.payload as DeletedRelationshipResponse
+    removeFromChildren: (state, action: PayloadAction<DeletedRelationshipResponse>) => {
+      const data = action.payload
       if (data) {
         const list = state.activeProject.board?.lists?.find(
           l => (l.tasks?.findIndex(t => t.id === data.relationshipId) ?? -1) >= 0
@@ -69,8 +69,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    removeFromDependencies: (state, action) => {
-      const data = action.payload as DeletedRelationshipResponse
+    removeFromDependencies: (state, action: PayloadAction<DeletedRelationshipResponse>) => {
+      const data = action.payload
       if (data) {
         const list = state.activeProject.board?.lists?.find(
           l => (l.tasks?.findIndex(t => t.id === data.taskId) ?? -1) >= 0
@@ -84,8 +84,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    addFromChildren: (state, action) => {
-      const data = action.payload as DispatchRelatedTaskResponse
+    addFromChildren: (state, action: PayloadAction<DispatchRelatedTaskResponse>) => {
+      const data = action.payload
       if (data) {
         let isChange = false
         const { taskId, relatedTasks } = data
@@ -121,8 +121,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    removeTaskAssignment: (state, action) => {
-      const data = action.payload as DeletedTaskAssignmentResponse
+    removeTaskAssignment: (state, action: PayloadAction<DeletedTaskAssignmentResponse>) => {
+      const data = action.payload
       if (data) {
         const list = state.activeProject.board.lists?.find(
           l => (l.tasks?.findIndex(t => t.id === data.taskId) ?? -1) >= 0
@@ -136,8 +136,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    addAssignmentToTask: (state, action) => {
-      const data = action.payload as AssignByTaskResponse
+    addAssignmentToTask: (state, action: PayloadAction<AssignByTaskResponse>) => {
+      const data = action.payload
       if (data) {
         const containList = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(data.taskId))
         if (containList) {
@@ -149,8 +149,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    markTask: (state, action) => {
-      const data = action.payload as MarkedTaskResponse
+    markTask: (state, action: PayloadAction<MarkedTaskResponse>) => {
+      const data = action.payload
       if (data) {
         const list = state.activeProject.board.lists?.find(l => l.id === data.listId)
         if (list) {
@@ -164,16 +164,16 @@ export const projectSlice = createSlice({
         }
       }
     },
-    deleteList: (state, action) => {
-      const data = action.payload as DeletedListResponse
+    deleteList: (state, action: PayloadAction<DeletedListResponse>) => {
+      const data = action.payload
       if (data) {
-        console.log('Delete list')
         state.activeProject.board.lists = state.activeProject.board.lists?.filter(l => l.id !== data.id)
         state.activeProject.changeId = new Date().getTime()
       }
     },
-    joinTask: (state, action) => {
-      const data = action?.payload as JoinTaskResponse
+    joinTask: (state, action: PayloadAction<JoinTaskResponse>) => {
+      const data = action?.payload
+      console.log('joinTask >>> ', data)
       if (data) {
         const containList = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(data.taskId))
         if (containList) {
@@ -201,10 +201,10 @@ export const projectSlice = createSlice({
         }
       }
     },
-    changeSubtaskCount: (state, action) => {
+    changeSubtaskCount: (state, action: PayloadAction<{ taskId: string; subtaskCount: number }>) => {
       const data = action.payload
-      const taskId = data?.taskId as string
-      const subtaskCount = data?.subtaskCount as number
+      const taskId = data?.taskId
+      const subtaskCount = data?.subtaskCount
       if (taskId && subtaskCount) {
         const list = state.activeProject.board.lists?.find(l => l.tasks?.map(t => t.id).includes(taskId))
         if (list) {
@@ -216,8 +216,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    updateTaskInfo: (state, action) => {
-      const data = action.payload as UpdatedTaskResponse
+    updateTaskInfo: (state, action: PayloadAction<UpdatedTaskResponse>) => {
+      const data = action.payload
       if (data) {
         const task = state.activeProject.board.lists
           ?.find(l => l.id === data.listId)
@@ -232,8 +232,8 @@ export const projectSlice = createSlice({
         }
       }
     },
-    updateListInfo: (state, action) => {
-      const updatedList = action?.payload as UpdatedListResponse
+    updateListInfo: (state, action: PayloadAction<UpdatedListResponse>) => {
+      const updatedList = action?.payload
       if (updatedList) {
         const list = state.activeProject.board.lists?.find(l => l.id === updatedList.id)
         if (list) {
@@ -244,8 +244,8 @@ export const projectSlice = createSlice({
       }
     },
     // payload: deletedTask: DeletedTaskResponse
-    deleteTask: (state, action) => {
-      const deletedTask = action.payload as DeletedTaskResponse
+    deleteTask: (state, action: PayloadAction<DeletedTaskResponse>) => {
+      const deletedTask = action.payload
       if (deletedTask) {
         const list = state.activeProject.board.lists?.find(l => l.id === deletedTask.listId)
         if (list) {
@@ -253,36 +253,35 @@ export const projectSlice = createSlice({
         }
       }
     },
-    setActiveProjectBoard: (state, action) => {
-      try {
-        const project = action.payload as ProjectResponseForBoard
-        const listOrder = project?.listOrder?.split(',')
-        project!.lists = [...mapOrder(project?.lists as ListResponseForBoard[], listOrder as string[], 'id')]
-        state.activeProject.board = project
-      } catch {
-        console.error('Error setting active project board')
-      }
+    setActiveProjectBoard: (state, action: PayloadAction<ProjectResponseForBoard>) => {
+      const project = action.payload
+      const listOrder = project?.listOrder?.split(',')
+      project!.lists = [...mapOrder(project?.lists as ListResponseForBoard[], listOrder as string[], 'id')]
+      state.activeProject.board = project
     },
-    addNewList: (state, action) => {
-      const res = action.payload as CreateListResponse
+    addNewList: (state, action: PayloadAction<CreateListResponse>) => {
+      const res = action.payload
       state.activeProject.board.lists?.push(res.createdList)
       state.activeProject.board.listOrder = res.listOrder
     },
-    addNewTask: (state, action) => {
-      const res = action.payload as CreateTaskResponse
-      const task = res.createdTask as TaskResponseForBoard
+    addNewTask: (state, action: PayloadAction<CreateTaskResponse>) => {
+      const res = action.payload
+      const task = res.createdTask
       const list = state.activeProject.board.lists?.find(l => l.id === task.listId)
       if (list) {
         list.tasks?.push(task)
         list.taskOrder = res.taskOrder
       }
     },
-    changeListOrder: (state, action) => {
-      const newListOrder = action?.payload as string
+    changeListOrder: (state, action: PayloadAction<string>) => {
+      const newListOrder = action?.payload
       state.activeProject.board.listOrder = newListOrder
       state.activeProject.board!.lists = mapOrder(state.activeProject.board?.lists, newListOrder?.split(','), 'id')
     },
-    changeTaskOrder: (state, action) => {
+    changeTaskOrder: (
+      state,
+      action: PayloadAction<{ resData?: ChangeTaskOrderResponse; dragOverResult?: DragOverResult }>
+    ) => {
       const data = action?.payload
       const resData = data.resData as ChangeTaskOrderResponse
       const dragOverResult = data.dragOverResult as DragOverResult
@@ -310,16 +309,16 @@ export const projectSlice = createSlice({
         state.activeProject.board.lists?.splice(oldListIndex, 1, oldList as ListResponseForBoard)
       }
     },
-    setProjectMembers: (state, action) => {
-      const members = action.payload as AssignmentResponse[]
+    setProjectMembers: (state, action: PayloadAction<AssignmentResponse[]>) => {
+      const members = action.payload
       state.activeProject.members = members
     },
     setOnlineMembers: (state, action) => {
       const onlineMembers = action.payload as string[]
       state.activeProject.onlineMembers = onlineMembers
     },
-    setDuplicateTasks: (state, action) => {
-      const tasks = action.payload as TaskResponseForBoard[]
+    setDuplicateTasks: (state, action: PayloadAction<TaskResponseForBoard[]>) => {
+      const tasks = action.payload
       if (!tasks || tasks.length <= 0) {
         return
       }
@@ -330,8 +329,8 @@ export const projectSlice = createSlice({
         appendedList.taskOrder = appendedList.tasks?.map(t => t.id).join(',') || ''
       }
     },
-    setFilters: (state, action) => {
-      const filters = action.payload as ProjectFilterType
+    setFilters: (state, action: PayloadAction<ProjectFilterType>) => {
+      const filters = action.payload
       state.activeProject.currentFilters = filters
     }
   }

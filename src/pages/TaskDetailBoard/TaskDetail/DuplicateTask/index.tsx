@@ -22,7 +22,12 @@ export type InheritOptions = {
   listId?: string
 }
 
-function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailForBoard; onCloseModal?: () => void }) {
+type DuplicateTaskProps = {
+  task?: TaskDetailForBoard
+  onCloseModal?: () => void
+}
+
+function DuplicateTask({ task, onCloseModal = () => {} }: DuplicateTaskProps) {
   const [inheritOptions, setInheritOptions] = useState<InheritOptions>({
     priority: true,
     description: true,
@@ -38,11 +43,16 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
     // lấy list từ task
     const initList = board.lists?.find(l => l.id === inheritOptions?.listId)
     if (initList) {
-      return Boolean(
-        initList?.wipLimit &&
-          initList?.tasks?.length &&
-          initList.wipLimit < initList.tasks.length + (inheritOptions.duplicateTaskCount ?? 1)
-      )
+      const currentWip = initList?.wipLimit ?? 0
+      const currentTaskCount = initList?.tasks?.length ?? 0
+      const duplicateTaskCount = inheritOptions.duplicateTaskCount ?? 0
+
+      // không có wip - không cần xét tiếp
+      if (currentWip <= 0) return false
+
+      // trường hợp cón wip thì phải xét xem khi duplicate thì có vượt ngưỡng wip không
+      const newTaskCount = currentTaskCount + duplicateTaskCount
+      if (newTaskCount > currentWip) return true // vượt ngưỡng wip
     }
     return false
   }
@@ -67,7 +77,7 @@ function DuplicateTask({ task, onCloseModal = () => {} }: { task?: TaskDetailFor
         if (projectHub.isConnected) {
           projectHub.connection?.invoke(hubs.project.send.duplicateTasks, res.data)
         }
-        onCloseModal()
+        // onCloseModal()
       }
       onCloseModal()
     }
