@@ -1,0 +1,46 @@
+.modal-main {
+  &.modal-w-10,
+  &.modal-w-10-responsive {
+    width: 10%;
+  }
+  &.modal-w-20,
+  &.modal-w-20-responsive {
+    width: 20%;
+  }
+  &.modal-w-30,
+  &.modal-w-30-responsive {
+    width: 30%;
+  }
+  &.modal-w-40,
+  &.modal-w-40-responsive {
+    width: 40%;
+  }
+  &.modal-w-50,
+  &.modal-w-50-responsive,
+  &.modal-w-half,
+  &.modal-w-half-responsive {
+    width: 50%;
+  }
+  &.modal-w-60,
+  &.modal-w-60-responsive {
+    width: 60%;
+  }
+  &.modal-w-70,
+  &.modal-w-70-responsive {
+    width: 70%;
+  }
+  &.modal-w-80,
+  &.modal-w-80-responsive {
+    width: 80%;
+  }
+  &.modal-w-90,
+  &.modal-w-90-responsive {
+    width: 90%;
+  }
+  &.modal-w-100,
+  &.modal-w-100-responsive,
+  &.modal-w-full,
+  &.modal-w-full-responsive {
+    width: 100%;
+  }
+}

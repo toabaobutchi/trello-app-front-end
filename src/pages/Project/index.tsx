@@ -9,7 +9,6 @@ import useProjectDispatch from '@hooks/useProjectDispatch'
 import useProjectHub from '@hooks/useProjectHub'
 import { ProjectContextType } from '@hooks/useProjectOutletContext'
 import { useProjectSelector } from '@hooks/useProjectSelector'
-import LoadingLayout from '@layouts/LoadingLayout'
 import routeLinks from '@routes/router'
 import { getAssignmentsInProject, revokeProjectAuth } from '@services/assignment.services'
 import { HttpResponse } from '@utils/Axios/HttpClientAuth'
@@ -34,7 +33,7 @@ import {
   TaskResponseForBoard,
   UpdatedTaskResponse
 } from '@utils/types/task.type'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Outlet, useLoaderData, useNavigate } from 'react-router-dom'
 import ProjectChatRoom from './partials/ProjectChatRoom'
 import ProjectHeader from './partials/ProjectHeader'
@@ -337,18 +336,10 @@ function Project() {
       {project && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
-          <Suspense
-            fallback={
-              <>
-                <LoadingLayout className='row jcc' style={{ width: '100%', height: '100%' }} isLoading />
-              </>
-            }
-          >
             <Flex className='w-full flex-1' style={{ overflow: 'hidden' }} $gap='0.5rem'>
               <ProjectSideBar />
               {isConnected && <Outlet context={{ remoteDragging } satisfies ProjectContextType} />}
             </Flex>
-          </Suspense>
           <ProjectChatRoom />
         </Flex>
       )}

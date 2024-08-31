@@ -1,5 +1,5 @@
 type RenderIfProps = {
-  check: boolean
+  check: any
   children: React.ReactNode
 }
 

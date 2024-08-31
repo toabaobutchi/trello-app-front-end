@@ -1,7 +1,22 @@
 @mixin flex($jc: start, $aic: center, $dir: row, $wrap: wrap) {
-    display: flex;
-    align-items: $aic;
-    justify-content: $jc;
-    flex-direction: $dir;
-    flex-wrap: $wrap;
+  display: flex;
+  align-items: $aic;
+  justify-content: $jc;
+  flex-direction: $dir;
+  flex-wrap: $wrap;
 }
+
+@mixin register-width() {
+  @for $i from 1 through 10 {
+    .w-#{$i} {
+      width: #{$i * 10%};
+    }
+  }
+}
+@mixin register-height() {
+    @for $i from 1 through 10 {
+      .h-#{$i} {
+        height: #{$i * 10%};
+      }
+    }
+  }

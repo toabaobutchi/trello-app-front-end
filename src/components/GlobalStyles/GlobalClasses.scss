@@ -1,3 +1,8 @@
+@use './mixins' as *;
+
+@include register-width();
+@include register-height();
+
 .mt-1 {
   margin-top: 1rem;
 }
@@ -184,7 +189,6 @@
 }
 
 .input-group {
-  // width: 100%;
   &.small-input {
     --input-padding: 0.5rem;
   }
@@ -230,8 +234,16 @@
   width: 100%;
 }
 
+.w-half {
+  width: 50%;
+}
+
 .h-full {
   height: 100%;
+}
+
+.h-half {
+  height: 50%;
 }
 
 .cpointer {

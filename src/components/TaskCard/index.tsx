@@ -158,9 +158,10 @@ function TaskCard({ task }: { task: TaskResponseForBoard }) {
             $flexDirection='row-reverse'
             className='posr task-card-footer-members'
           >
-            {taskAssignments.length - displayAvatarCount > 0 && (
+            <RenderIf check={taskAssignments.length - displayAvatarCount > 0}>
               <div className='task-card-footer-members-more'>+{taskAssignments.length - displayAvatarCount} more</div>
-            )}
+            </RenderIf>
+
             {taskAssignments.slice(0, displayAvatarCount).map(member => (
               <div key={member.id} className='task-card-footer-members-image-container'>
                 <img src={member.avatar} alt='avatar' />

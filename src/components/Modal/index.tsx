@@ -1,12 +1,15 @@
 import Button from '@comps/Button'
-import './Modal.scss'
+import RenderIf from '@comps/containers/RenderIf'
+import { stopPropagation } from '@utils/functions'
 import { CustomizablePropType } from '@utils/types'
-import { useEffect, useId } from 'react'
+import { Theme } from '@utils/types/theme.type'
+import './Modal.scss'
+import './ModalWidth.scss'
 
 interface ModalProps extends React.ComponentProps<'div'> {
   open?: boolean
   layout?: {
-    theme?: 'error' | 'success' | 'warning' | 'info' | 'default'
+    theme?: Theme
     header?: {
       title?: React.ReactNode
       closeIcon?: boolean
@@ -16,42 +19,43 @@ interface ModalProps extends React.ComponentProps<'div'> {
   }
   children?: React.ReactNode
   onClose?: () => void
+  propagation?: boolean
 }
 
-function Modal({ open = false, layout = undefined, children = '', onClose = () => {}, ...props }: ModalProps) {
+function Modal({
+  open = false,
+  propagation = false,
+  layout = undefined,
+  children = '',
+  onClose = () => {},
+  ...props
+}: ModalProps) {
   // chuc nang xoa task
-  const handleStopPropagation = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()
   return (
-    <>
-      {open && (
-        <div
-          className={`modal${layout?.theme ? ' ' + layout.theme + '-modal' : ' default-modal'}`}
-          onClick={handleStopPropagation}
-        >
-          <div className='overlay' onClick={onClose}></div>
-          <div className={`modal-main menu-content-box-shadow ${props?.className ?? ''}`.trim()} style={props?.style}>
-            {layout?.header && (
-              <div className='modal-header'>
-                <div className='modal-header-text'>{layout?.header?.title}</div>
-                {layout?.header?.closeIcon && (
-                  <Button
-                    style={{ fontSize: '1.4rem', paddingLeft: '0.8rem', paddingRight: '0.8rem' }}
-                    className='modal-header-close-button'
-                    variant='text'
-                    theme='default'
-                    onClick={onClose}
-                  >
-                    <i className='fa-solid fa-xmark'></i>
-                  </Button>
-                )}
-              </div>
-            )}
-            <div className='modal-body'>{children}</div>
-            {layout?.footer && <div className='modal-footer'>{layout?.footer}</div>}
-          </div>
+    <RenderIf check={open && children}>
+      <div
+        className={`modal${layout?.theme ? ' ' + layout.theme + '-modal' : ' default-modal'}`}
+        onClick={propagation ? stopPropagation : undefined}
+      >
+        <div className='overlay' onClick={onClose}></div>
+        <div className={`modal-main menu-content-box-shadow ${props?.className ?? ''}`.trim()} style={props?.style}>
+          <RenderIf check={!!layout?.header}>
+            <div className='modal-header'>
+              <div className='modal-header-text'>{layout?.header?.title}</div>
+              <RenderIf check={!!layout?.header?.closeIcon}>
+                <Button className='modal-header-close-button' variant='text' theme='default' onClick={onClose}>
+                  <i className='fa-solid fa-xmark'></i>
+                </Button>
+              </RenderIf>
+            </div>
+          </RenderIf>
+          <div className='modal-body'>{children}</div>
+          <RenderIf check={!!layout?.footer}>
+            <div className='modal-footer'>{layout?.footer}</div>
+          </RenderIf>
         </div>
-      )}
-    </>
+      </div>
+    </RenderIf>
   )
 }
 

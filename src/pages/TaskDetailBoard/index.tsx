@@ -157,7 +157,6 @@ function TaskDetailBoard() {
       <TaskDetailContext.Provider value={{ task: taskDetail, setTask: setTaskDetail }}>
         <Modal
           className='task-detail-modal'
-          // style={{ width: '80%' }}
           layout={{
             header: {
               closeIcon: true,
@@ -233,7 +232,7 @@ function TaskDetailBoard() {
         {/* duplicate modal */}
         <Modal
           layout={{ header: { title: 'Duplicate task', closeIcon: true } }}
-          style={{ width: '30%' }}
+          className='modal-w-30'
           open={duplicateTaskModal}
           onClose={handleToggleDuplicateTaskModal}
         >
@@ -242,7 +241,7 @@ function TaskDetailBoard() {
 
         {/* join modal */}
         <Modal
-          style={{ width: '30%' }}
+          className='modal-w-30'
           layout={{
             header: {
               title: 'Join task',
@@ -272,7 +271,7 @@ function TaskDetailBoard() {
           open={assignModal}
           layout={{ header: { closeIcon: true, title: 'Assign to new members' } }}
           onClose={handleToggleAssignModal}
-          style={{ width: '30%' }}
+          className='modal-w-30'
         >
           {taskDetail && <AssignMember task={taskDetail} onCloseModal={handleToggleAssignModal} />}
         </Modal>
