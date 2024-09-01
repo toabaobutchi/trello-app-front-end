@@ -2,13 +2,15 @@ import { Theme } from '@utils/types/theme.type'
 import Modal from '..'
 import { CustomizablePropType } from '@utils/types'
 
+type ModalPropsType = React.ComponentPropsWithoutRef<typeof Modal>
+
 type BaseCustomModalProps = {
   title?: React.ReactNode
   closeIcon?: boolean
   theme?: Theme
   footer?: React.ReactNode
   overlay?: CustomizablePropType
-} & React.ComponentProps<typeof Modal>
+} & Omit<ModalPropsType, 'layout' | 'title'>
 
 function BaseCustomModal({
   title,
@@ -23,12 +25,7 @@ function BaseCustomModal({
 }: BaseCustomModalProps) {
   return (
     <>
-      <Modal
-        open={open}
-        onClose={onClose}
-        layout={{ header: { title: title, closeIcon: closeIcon }, theme, footer, overlay }}
-        {...props}
-      >
+      <Modal open={open} onClose={onClose} layout={{ header: { title, closeIcon }, theme, footer, overlay }} {...props}>
         {children}
       </Modal>
     </>

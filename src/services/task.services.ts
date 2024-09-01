@@ -1,4 +1,4 @@
-import { InheritOptions } from '@pages/TaskDetailBoard/TaskDetail/DuplicateTask'
+import { InheritOptions } from '@pages/TaskDetailBoard/TaskDetailHeaderToolBar/DuplicateTask'
 import { http } from '@utils/Axios/HttpClientAuth'
 import {
   ChangeTaskOrderModel,

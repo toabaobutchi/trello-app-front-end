@@ -7,19 +7,21 @@ import { useProjectSelector } from '@hooks/useProjectSelector'
 import { isAdminOrOwner } from '@utils/functions'
 import { TaskDetailForBoard } from '@utils/types/task.type'
 import { useEffect, useState } from 'react'
-import AssignMember from '../TaskDetail/AssignMember'
-import DuplicateTask from '../TaskDetail/DuplicateTask'
+import AssignMember from './AssignMember'
+import DuplicateTask from './DuplicateTask'
 type TaskDetailHeaderToolBarProps = {
   taskDetail?: TaskDetailForBoard
   onMarkNeedHelp: (e: React.ChangeEvent<HTMLInputElement>) => void
   onMarkCompleteTask: () => void
   onReOpenTask: () => void
+  onJoinTask: () => void
 }
 function TaskDetailHeaderToolBar({
   taskDetail,
   onMarkNeedHelp,
   onMarkCompleteTask,
-  onReOpenTask
+  onReOpenTask,
+  onJoinTask
 }: TaskDetailHeaderToolBarProps) {
   const [duplicateTaskModal, handleToggleDuplicateTaskModal] = useModal()
   const [joinModal, handleToggleJoinModal] = useModal()
@@ -35,6 +37,11 @@ function TaskDetailHeaderToolBar({
       else setIsJoined(taskDetail?.taskAssignmentIds?.includes(member.id) ?? false)
     }
   }, [taskDetail?.id, members, taskDetail?.taskAssignmentIds, board?.assignmentId])
+
+  const handleJoinTask = () => {
+    handleToggleJoinModal()
+    onJoinTask()
+  }
 
   return (
     <>

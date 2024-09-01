@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 import DeleteTaskMenu from '@comps/TaskCard/DeleteTaskMenu'
-import AssignMember from '@pages/TaskDetailBoard/TaskDetail/AssignMember'
+import AssignMember from '@pages/TaskDetailBoard/TaskDetailHeaderToolBar/AssignMember'
 
 type TableTaskItemProps = {
   task: TaskResponseForTable

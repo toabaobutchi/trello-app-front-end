@@ -10,7 +10,7 @@ import TaskMemberItem from './TaskMemberItem'
 import { projectSlice } from '@redux/ProjectSlice'
 import { hubs, ProjectHub } from '@utils/Hubs'
 import Modal from '@comps/Modal'
-import AssignMember from '../AssignMember'
+import AssignMember from '../../TaskDetailHeaderToolBar/AssignMember'
 import { useModal } from '@hooks/useModal'
 import { useProjectSelector } from '@hooks/useProjectSelector'
 

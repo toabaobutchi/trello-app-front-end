@@ -1,46 +1,27 @@
-import Button from '@comps/Button'
-import Modal from '@comps/Modal'
-import Flex from '@comps/StyledComponents/Flex'
-import SwitchButton from '@comps/SwitchButton'
-import { useModal, useProjectDispatch, useProjectHub, useProjectSelector } from '@hooks/index'
+import { useProjectDispatch, useProjectHub, useProjectSelector } from '@hooks/index'
 import LoadingLayout from '@layouts/LoadingLayout'
 import TaskDetail from '@pages/TaskDetailBoard/TaskDetail'
-import AssignMember from '@pages/TaskDetailBoard/TaskDetail/AssignMember'
-import DuplicateTask from '@pages/TaskDetailBoard/TaskDetail/DuplicateTask'
 import { getTaskDetail, joinTask, markTask } from '@services/task.services'
-import { isAdminOrOwner } from '@utils/functions'
 import { hubs } from '@utils/Hubs'
 import { TaskDetailForBoard } from '@utils/types/task.type'
-import { HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TaskDetailContext } from './context'
 import TaskDetailHeaderToolBar from './TaskDetailHeaderToolBar'
+import { BaseCustomModal } from '@comps/Modal/Custom'
 
 function TaskDetailBoard() {
   const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
-  const [duplicateTaskModal, handleToggleDuplicateTaskModal] = useModal()
-  const [joinModal, handleToggleJoinModal] = useModal()
-  const { members, board } = useProjectSelector()
+  const { members } = useProjectSelector()
   const dispatch = useProjectDispatch()
-  const [isJoined, setIsJoined] = useState(false)
   const navigate = useNavigate()
-  const [assignModal, handleToggleAssignModal] = useModal()
   const { taskId } = useParams()
   const projectHub = useProjectHub()
 
   useEffect(() => {
-    if (taskDetail?.id) {
-      const member = members.find(m => m.id === board?.assignmentId)
-      if (!member) setIsJoined(false)
-      else setIsJoined(taskDetail?.taskAssignmentIds?.includes(member.id) ?? false)
-    }
-  }, [taskDetail?.id, members, taskDetail?.taskAssignmentIds, board?.assignmentId])
-
-  useEffect(() => {
     if (taskId) {
       getTaskDetail(taskId).then(res => {
-        if (res?.status === HttpStatusCode.Ok) {
+        if (res?.isSuccess) {
           setTaskDetail(res?.data)
         } else console.log('Fail: ', res?.message)
       })
@@ -122,8 +103,7 @@ function TaskDetailBoard() {
     if (taskId) {
       const res = await joinTask(taskId)
       if (res?.isSuccess) {
-        handleToggleJoinModal()
-        setIsJoined(true)
+        // setIsJoined(true)
         const data = res.data
         dispatch.joinTask(data)
 
@@ -149,32 +129,27 @@ function TaskDetailBoard() {
       }
     }
   }
-  const isAdminorOwner = isAdminOrOwner(board.context)
   return (
     <>
       <TaskDetailContext.Provider value={{ task: taskDetail, setTask: setTaskDetail }}>
-        <Modal
+        <BaseCustomModal
           className='task-detail-modal'
-          layout={{
-            header: {
-              closeIcon: true,
-              title: (
-                <TaskDetailHeaderToolBar
-                  taskDetail={taskDetail}
-                  onMarkCompleteTask={handleMarkCompleteTask}
-                  onMarkNeedHelp={handleMarkNeedHelp}
-                  onReOpenTask={handleReOpenTask}
-                />
-              )
-            }
-          }}
+          title={
+            <TaskDetailHeaderToolBar
+              taskDetail={taskDetail}
+              onMarkCompleteTask={handleMarkCompleteTask}
+              onMarkNeedHelp={handleMarkNeedHelp}
+              onReOpenTask={handleReOpenTask}
+              onJoinTask={handleJoinTask}
+            />
+          }
           open
           onClose={handleCloseTaskDetailModal}
         >
           <LoadingLayout className='row jcc w-full h-full' isLoading={!taskDetail}>
             <TaskDetail />
           </LoadingLayout>
-        </Modal>
+        </BaseCustomModal>
       </TaskDetailContext.Provider>
     </>
   )
