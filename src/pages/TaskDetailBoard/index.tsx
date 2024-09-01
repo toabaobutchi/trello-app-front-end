@@ -2,34 +2,32 @@ import Button from '@comps/Button'
 import Modal from '@comps/Modal'
 import Flex from '@comps/StyledComponents/Flex'
 import SwitchButton from '@comps/SwitchButton'
+import { useModal, useProjectDispatch, useProjectHub, useProjectSelector } from '@hooks/index'
+import LoadingLayout from '@layouts/LoadingLayout'
 import TaskDetail from '@pages/TaskDetailBoard/TaskDetail'
+import AssignMember from '@pages/TaskDetailBoard/TaskDetail/AssignMember'
 import DuplicateTask from '@pages/TaskDetailBoard/TaskDetail/DuplicateTask'
+import { getTaskDetail, joinTask, markTask } from '@services/task.services'
+import { isAdminOrOwner } from '@utils/functions'
+import { hubs } from '@utils/Hubs'
 import { TaskDetailForBoard } from '@utils/types/task.type'
 import { HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { TaskDetailContext } from './context'
-import { useProjectSelector } from '@hooks/useProjectSelector'
-import { useDispatch } from 'react-redux'
-import { projectSlice } from '@redux/ProjectSlice'
-import { useModal } from '@hooks/useModal'
-import AssignMember from '@pages/TaskDetailBoard/TaskDetail/AssignMember'
-import LoadingLayout from '@layouts/LoadingLayout'
-import { hubs, ProjectHub } from '@utils/Hubs'
-import { getTaskDetail, joinTask, markTask } from '@services/task.services'
-import { isAdminOrOwner } from '@utils/functions'
+import TaskDetailHeaderToolBar from './TaskDetailHeaderToolBar'
 
 function TaskDetailBoard() {
   const [taskDetail, setTaskDetail] = useState<TaskDetailForBoard>()
   const [duplicateTaskModal, handleToggleDuplicateTaskModal] = useModal()
   const [joinModal, handleToggleJoinModal] = useModal()
   const { members, board } = useProjectSelector()
-  const dispatch = useDispatch()
+  const dispatch = useProjectDispatch()
   const [isJoined, setIsJoined] = useState(false)
   const navigate = useNavigate()
   const [assignModal, handleToggleAssignModal] = useModal()
   const { taskId } = useParams()
-  const [projectHub] = useState(new ProjectHub())
+  const projectHub = useProjectHub()
 
   useEffect(() => {
     if (taskDetail?.id) {
@@ -68,7 +66,7 @@ function TaskDetailBoard() {
               } as TaskDetailForBoard)
           )
           // dispatch to store
-          dispatch(projectSlice.actions.markTask(data))
+          dispatch.markTask(data)
           if (projectHub.isConnected) {
             projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
           }
@@ -91,7 +89,7 @@ function TaskDetailBoard() {
               isCompleted: data?.isCompleted
             } as TaskDetailForBoard)
         )
-        dispatch(projectSlice.actions.markTask(data))
+        dispatch.markTask(data)
         if (projectHub.isConnected) {
           projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
         }
@@ -112,7 +110,7 @@ function TaskDetailBoard() {
             } as TaskDetailForBoard)
         )
 
-        dispatch(projectSlice.actions.markTask(data))
+        dispatch.markTask(data)
 
         if (projectHub.isConnected) {
           projectHub.connection?.invoke(hubs.project.send.markTask, data).catch(_ => {})
@@ -127,7 +125,7 @@ function TaskDetailBoard() {
         handleToggleJoinModal()
         setIsJoined(true)
         const data = res.data
-        dispatch(projectSlice.actions.joinTask(data))
+        dispatch.joinTask(data)
 
         // set task assignments
         const newAssignment = members.find(m => m.id === data.assignmentId)?.id
@@ -161,63 +159,12 @@ function TaskDetailBoard() {
             header: {
               closeIcon: true,
               title: (
-                <>
-                  <Flex $alignItem='center' $gap='1rem'>
-                    {isAdminorOwner && (
-                      <Button onClick={handleToggleDuplicateTaskModal} variant='text' theme='default'>
-                        <i className='fa-regular fa-clone'></i> Duplicate
-                      </Button>
-                    )}
-                    {!isJoined && (
-                      <Button onClick={handleToggleJoinModal} variant='text' theme='default'>
-                        <i className='fa-solid fa-right-to-bracket'></i> Join
-                      </Button>
-                    )}
-                    {isAdminorOwner && (
-                      <Button onClick={handleToggleAssignModal} variant='text' theme='default'>
-                        <i className='fa-solid fa-user-plus'></i> Assign
-                      </Button>
-                    )}
-                    {taskDetail?.id && (
-                      <Flex $alignItem='center' $gap='0.5rem'>
-                        <SwitchButton
-                          inputAttributes={{
-                            id: 'need-help-toggle',
-                            type: 'checkbox',
-                            name: 'need-help-toggle',
-                            checked: Boolean(taskDetail?.isMarkedNeedHelp)
-                          }}
-                          onChange={handleMarkNeedHelp}
-                        />
-                        <label
-                          className={taskDetail?.isMarkedNeedHelp ? 'text-success' : 'text-secondary'}
-                          style={{ fontSize: '1rem' }}
-                          htmlFor='need-help-toggle'
-                        >
-                          Need help!
-                        </label>
-                      </Flex>
-                    )}
-                    {!taskDetail?.isCompleted ? (
-                      <Button onClick={handleMarkCompleteTask} variant='text' theme='default'>
-                        <i className='fa-solid fa-check'></i> Mark as completed
-                      </Button>
-                    ) : (
-                      <>
-                        <Button variant='text' theme='success'>
-                          Completed <i className='fa-solid fa-check'></i>
-                        </Button>
-                      </>
-                    )}
-                    {taskDetail?.isCompleted && isAdminorOwner && (
-                      <>
-                        <Button onClick={handleReOpenTask} variant='text' theme='warning'>
-                          <i className='fa-solid fa-arrow-rotate-left'></i> Re-open
-                        </Button>
-                      </>
-                    )}
-                  </Flex>
-                </>
+                <TaskDetailHeaderToolBar
+                  taskDetail={taskDetail}
+                  onMarkCompleteTask={handleMarkCompleteTask}
+                  onMarkNeedHelp={handleMarkNeedHelp}
+                  onReOpenTask={handleReOpenTask}
+                />
               )
             }
           }}
@@ -227,53 +174,6 @@ function TaskDetailBoard() {
           <LoadingLayout className='row jcc w-full h-full' isLoading={!taskDetail}>
             <TaskDetail />
           </LoadingLayout>
-        </Modal>
-
-        {/* duplicate modal */}
-        <Modal
-          layout={{ header: { title: 'Duplicate task', closeIcon: true } }}
-          className='modal-w-30'
-          open={duplicateTaskModal}
-          onClose={handleToggleDuplicateTaskModal}
-        >
-          <DuplicateTask task={taskDetail} onCloseModal={handleToggleDuplicateTaskModal} />
-        </Modal>
-
-        {/* join modal */}
-        <Modal
-          className='modal-w-30'
-          layout={{
-            header: {
-              title: 'Join task',
-              closeIcon: true
-            },
-            footer: (
-              <>
-                <Flex $alignItem='center' $gap='1rem'>
-                  <Button onClick={handleToggleJoinModal} variant='filled' theme='danger'>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleJoinTask} variant='filled' theme='primary'>
-                    Join
-                  </Button>
-                </Flex>
-              </>
-            )
-          }}
-          open={joinModal}
-          onClose={handleToggleJoinModal}
-        >
-          Join task <span className='text-primary fw-bold'>{taskDetail?.name}</span>
-        </Modal>
-
-        {/* assign modal */}
-        <Modal
-          open={assignModal}
-          layout={{ header: { closeIcon: true, title: 'Assign to new members' } }}
-          onClose={handleToggleAssignModal}
-          className='modal-w-30'
-        >
-          {taskDetail && <AssignMember task={taskDetail} onCloseModal={handleToggleAssignModal} />}
         </Modal>
       </TaskDetailContext.Provider>
     </>

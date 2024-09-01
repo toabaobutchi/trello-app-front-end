@@ -336,10 +336,10 @@ function Project() {
       {project && (
         <Flex $flexDirection='column' style={{ width: '100%', height: '100%' }}>
           <ProjectHeader />
-            <Flex className='w-full flex-1' style={{ overflow: 'hidden' }} $gap='0.5rem'>
-              <ProjectSideBar />
-              {isConnected && <Outlet context={{ remoteDragging } satisfies ProjectContextType} />}
-            </Flex>
+          <Flex className='w-full flex-1' style={{ overflow: 'hidden' }} $gap='0.5rem'>
+            <ProjectSideBar />
+            {isConnected && <Outlet context={{ remoteDragging } satisfies ProjectContextType} />}
+          </Flex>
           <ProjectChatRoom />
         </Flex>
       )}
