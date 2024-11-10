@@ -13,7 +13,7 @@ type ProjectShareState = {
   [projectId: string]: ShareInfo
 }
 
-type ShareInfo = {
+export type ShareInfo = {
   projectId: string
   options: ProjectSelectOptions
 }

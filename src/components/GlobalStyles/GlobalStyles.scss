@@ -99,15 +99,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 html {
-  font-family: 'Reddit Sans', 'Be Vietnam Pro', Inter, sans-serif;
+  font-family: 'SF Pro Display', 'Reddit Sans', 'Be Vietnam Pro', Inter, sans-serif;
   font-optical-sizing: auto;
   color: var(--text-primary-color);
   font-size: 14px;
-  font-weight: normal;
   scroll-behavior: smooth;
 }
 

@@ -16,6 +16,7 @@ import { usePageParams } from '@hooks/usePageParams'
 
 function ProjectHeader() {
   const project = useProjectSelector()
+  console.log('ProjectHeader >> ', project)
   const params = usePageParams<ProjectPageParams>()
   return (
     <>
