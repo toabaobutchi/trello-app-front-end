@@ -161,25 +161,31 @@
   }
 }
 
-.row {
+.row,
+.d-flex {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-}
-.jcc {
-  justify-content: center;
-}
 
-.jcsb {
-  justify-content: space-between;
-}
+  &.jcc {
+    justify-content: center;
+  }
 
-.jcse {
-  justify-content: space-evenly;
-}
+  &.jcsb {
+    justify-content: space-between;
+  }
 
-.jcsa {
-  justify-content: space-around;
+  &.jcse {
+    justify-content: space-evenly;
+  }
+
+  &.jcsa {
+    justify-content: space-around;
+  }
+  
+  .flex-1 {
+    flex: 1;
+  }
 }
 
 .page-header {

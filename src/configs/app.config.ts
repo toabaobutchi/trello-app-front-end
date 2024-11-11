@@ -22,6 +22,9 @@ const config = {
     drag: 5 * 1000,
     delayAfterEndDrag: 1 * 1000,
     dragBlock: 5 * 1000
+  },
+  texts: {
+    dateNotSet: '[Not set]'
   }
 }
 export default config
