@@ -11,6 +11,7 @@ import ProjectSearch from './ProjectSearch'
 import ProjectUtilities from './ProjectUtilities'
 import ProjectViewModeNavBar from './ProjectViewModeNavBar'
 import ProjectHeaderInfo from './ProjectHeaderInfo'
+import ProjectMembers from './ProjectMembers'
 
 function ProjectHeader() {
   const project = useProjectSelector().board
@@ -23,6 +24,7 @@ function ProjectHeader() {
           <ProjectHeaderInfo project={project} />
         </Flex>
         <ProjectSearch />
+        <ProjectMembers />
         <Flex $alignItem='center' $gap='1rem' $flexWrap='wrap'>
           <Tooltip content='Share project' position='bottom' arrow>
             <NavLink className='project-share-button' to={linkCreator.shareProject(params)}>
@@ -34,11 +36,7 @@ function ProjectHeader() {
       </Flex>
       {params.projectId === project.id && Boolean(params.viewMode) && (
         <Flex $alignItem='center' $justifyContent='space-between' className='w-full mb-1 bold'>
-          <ProjectViewModeNavBar
-            projectId={project?.id}
-            ownerShip={project?.context?.toLowerCase()}
-            slug={project?.slug ?? ''}
-          />
+          <ProjectViewModeNavBar projectId={project?.id} ownerShip={project?.context?.toLowerCase()} slug={project?.slug ?? ''} />
           <ProjectFilterMenu />
         </Flex>
       )}

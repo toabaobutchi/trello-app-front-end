@@ -1,19 +1,18 @@
-import Button from '@comps/Button'
-import routeLinks from '@routes/router'
-import { useLocation, useNavigate } from 'react-router-dom'
+import ImagesStack from '@comps/ImagesStack'
+import { useProjectSelector } from '@hooks/useProjectSelector'
+import useSlice from '@hooks/useSlice'
 
 function ProjectMembers() {
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
-  const handleNavigate = () => {
-    navigate(`${pathname}/${routeLinks.project.members.index}`)
-  }
+  const members = useProjectSelector().members
+  const imageSources = members.map(member => member.avatar || '')
+  const sliceResult = useSlice(imageSources, 0, 5)
   return (
-    <>
-      <Button onClick={handleNavigate}>
-        <i className='fa-solid fa-users-line'></i> Members
-      </Button>
-    </>
+    <ImagesStack className='cpointer'>
+      {sliceResult.data.map(src => (
+        <img key={src} src={src} alt='avatar' />
+      ))}
+      {sliceResult.hasMore && <div className='more-avatars'>+{sliceResult.rest.length}</div>}
+    </ImagesStack>
   )
 }
 

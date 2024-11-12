@@ -1,0 +1,18 @@
+.images-stack {
+  img,
+  .img {
+    width: 27px;
+    margin-left: -0.5rem;
+    border: 2px solid var(--theme-bg-color);
+  }
+  &-rest-count {
+    color: gray;
+    font-size: 0.9rem;
+  }
+}
+
+.image__circle img,
+.image__circle .img {
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
