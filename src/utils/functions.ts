@@ -345,3 +345,21 @@ export function outClickHandler(
     }
   }
 }
+
+export const clickOutsideTrigger = <TElement extends HTMLElement = HTMLElement>(
+  ref: React.RefObject<TElement> | React.RefObject<TElement>[],
+  handler: (event: MouseEvent | TouchEvent) => void
+) => {
+  return (event: MouseEvent | TouchEvent) => {
+    const target = event.target as Node
+    if (!target || !target.isConnected) return
+
+    const isClickOutside = Array.isArray(ref)
+      ? ref.filter(r => r.current).every(r => r.current && !r.current.contains(target))
+      : ref.current && !ref.current.contains(target)
+
+    if (isClickOutside) {
+      handler(event)
+    }
+  }
+}

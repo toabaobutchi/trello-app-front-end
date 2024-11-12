@@ -1,10 +1,12 @@
 import { clickOutsideTrigger } from '@utils/functions'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-export default function useOutClick<TElement extends HTMLElement = HTMLElement>(
-  ref: React.RefObject<TElement> | React.RefObject<TElement>[],
+/** New version of {@link useOutClick} hook */
+export function useOutClickRef<TElement extends HTMLElement = HTMLElement>(
   handler: (event: MouseEvent | TouchEvent) => void
 ) {
+  const ref = useRef<TElement>(null)
+
   useEffect(() => {
     const handleClickOutside = clickOutsideTrigger(ref, handler)
 
@@ -16,4 +18,6 @@ export default function useOutClick<TElement extends HTMLElement = HTMLElement>(
       document.removeEventListener('touchstart', handleClickOutside)
     }
   }, [handler, ref])
+
+  return ref
 }

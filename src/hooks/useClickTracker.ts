@@ -3,7 +3,7 @@ type OutClickResult = {
   isOutClick: boolean
   clickedElement: HTMLElement | null
 }
-
+/**@deprecated use `useOutClick` or `useOutClickRef` instead */
 export default function useClickTracker<TElement extends HTMLElement = HTMLElement>(
   trackedElement?: TElement | null,
   excludesElements?: HTMLElement[]

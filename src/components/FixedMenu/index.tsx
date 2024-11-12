@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import './FixedMenu.scss'
-import useOutClick from '@hooks/useOutClick'
+import useOutClick from '@hooks/useOutClick_'
 import { CustomizablePropType } from '@utils/types'
 
 interface FixedMenuProps {

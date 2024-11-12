@@ -2,6 +2,8 @@ import { useEffect, useId, useRef, useState } from 'react'
 import './SelectList.scss'
 import useClickTracker from '@hooks/useClickTracker'
 import { CustomizablePropType } from '@utils/types'
+import { useOutClickRef } from '@hooks/useOutClickRef'
+import useToggle from '@hooks/useToggle'
 
 interface SelectListItem {
   value: string
@@ -26,8 +28,7 @@ function SelectList({
   manualSelectedValue,
   ...props
 }: SelectListProps) {
-  const [expand, setExpand] = useState(false)
-  const selectListRef = useRef<HTMLDivElement>(null)
+  const [expand, handleToggleSelect, setExpand] = useToggle()
   const selectListId = useId()
   const [selectedItem, setSelectedItem] = useState<SelectListItem | undefined>(() => {
     const selected = items?.find(item => item.value === selectedValue) ?? items?.[0]
@@ -46,16 +47,15 @@ function SelectList({
     handleClose()
   }
   const handleClose = () => setExpand(_ => false)
-  const handleToggleSelect = () => {
-    setExpand(!expand)
-  }
-  const { outClick } = useClickTracker(selectListRef.current as HTMLElement)
-  useEffect(() => {
-    if (outClick.isOutClick && expand) {
-      handleClose()
-      // reset()
+
+  const selectListRef = useOutClickRef<HTMLDivElement>(e => {
+    const targetNode = e.target as HTMLElement
+    const hasParentSelectorAsSelectlistItem = targetNode.closest('.select-list-data-context-item') !== null
+    if (!targetNode.classList?.contains('select-list-data-context-item') && !hasParentSelectorAsSelectlistItem) {
+      expand && handleClose()
     }
-  }, [outClick])
+  })
+
   return (
     <>
       <p className={`select-list-label ${label?.className ?? ''}`.trimEnd()} style={label?.style}>
@@ -67,7 +67,7 @@ function SelectList({
         style={props?.style}
       >
         <div ref={selectListRef} className='selected-item' onClick={handleToggleSelect}>
-          <>{selectedItem?.display || selectedItem?.value}</> <i className='fa-solid fa-caret-down'></i>
+          {selectedItem?.display || selectedItem?.value} <i className='fa-solid fa-caret-down'></i>
         </div>
         {expand && items && (
           <div className='select-list-data-context'>
@@ -79,7 +79,7 @@ function SelectList({
                     item.value === selectedItem?.value ? 'selected-context-item' : ''
                   }`}
                   onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                    e.stopPropagation()
+                    // e.stopPropagation()
                     handleSelect(item)
                   }}
                 >

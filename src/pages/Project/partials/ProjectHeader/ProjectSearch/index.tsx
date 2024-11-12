@@ -4,20 +4,14 @@ import useClickTracker from '@hooks/useClickTracker'
 import { useEffect, useRef, useState } from 'react'
 import './ProjectSearch.scss'
 import ProjectSearchSuggestions from './ProjectSearchSuggestions'
+import { useOutClickRef } from '@hooks/useOutClickRef'
 
-function ProjectSearch() {
-  return (
-    <>
-      <ProjectSearchInput />
-    </>
-  )
-}
 const items = [
   { value: 'task', display: '@task' },
   { value: 'assignee', display: '@assignee' }
 ]
 
-function ProjectSearchInput() {
+function ProjectSearch() {
   const [searchObject, setSearchObject] = useState(items[0].value)
   const [quickSelectObject, setQuickSelectObject] = useState<string>()
   const [searchInput, setSearchInput] = useState('')
@@ -44,20 +38,17 @@ function ProjectSearchInput() {
     }
     setSearchInput(value)
   }
-  const trackedElement = useRef<HTMLDivElement>(null)
-  const { outClick } = useClickTracker<HTMLDivElement>(trackedElement?.current)
-  useEffect(() => {
-    if (outClick.isOutClick && !lostFocus) {
-      setLostFocus(true)
-    }
-    // else setLostFocus(false)
-  }, [outClick])
+
+  const trackedElementRef = useOutClickRef<HTMLDivElement>(() => {
+    if (!lostFocus) setLostFocus(true)
+  })
+
   const handleFocus = () => {
     setLostFocus(false)
   }
   return (
     <>
-      <div className='posr flex-1' ref={trackedElement}>
+      <div className='posr flex-1' ref={trackedElementRef}>
         <Flex $alignItem='center' className='project-search-container'>
           <SelectList
             size='small'
@@ -67,9 +58,18 @@ function ProjectSearchInput() {
             selectedValue={searchObject}
             className={`${lostFocus ? 'blur' : 'focused'}`}
           />
-          <input type='text' className='project-search-input' placeholder='Search for projects' value={searchInput} onChange={handleInputChange} onFocus={handleFocus} />
+          <input
+            type='text'
+            className='project-search-input'
+            placeholder='Search for projects'
+            value={searchInput}
+            onChange={handleInputChange}
+            onFocus={handleFocus}
+          />
         </Flex>
-        {searchInput && !searchInput.startsWith('@') && <ProjectSearchSuggestions searchText={searchInput} searchObject={searchObject} lostFocus={lostFocus} />}
+        {searchInput && !searchInput.startsWith('@') && (
+          <ProjectSearchSuggestions searchText={searchInput} searchObject={searchObject} lostFocus={lostFocus} />
+        )}
       </div>
     </>
   )
