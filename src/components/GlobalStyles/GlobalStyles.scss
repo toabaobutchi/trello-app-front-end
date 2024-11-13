@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 :root {
   // app config colors
-  --text-primary-color: #0f1b2f;
+  --text-primary-color: #333;
   // --text-primary-color: #000;
   --text-secondary-color: #4a4a4a;
 
@@ -44,7 +44,7 @@
   --secondary-bg-color: #77777721;
   --primary-bg-color: #007bc221;
 
-  --primary-radius: 13px;
+  --primary-radius: 0.7rem;
   --secondary-radius: 3px;
   --chat-input-radius: 1.3rem;
   --multiple-input-value-box-radius: 13px;
@@ -103,9 +103,9 @@
 
 html {
   font-family: 'SF Pro Display', 'Reddit Sans', 'Be Vietnam Pro', Inter, sans-serif;
-  font-optical-sizing: auto;
   color: var(--text-primary-color);
-  font-size: 14px;
+  font-weight: normal;
+  font-size: 13px;
   scroll-behavior: smooth;
 }
 

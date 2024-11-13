@@ -25,6 +25,10 @@ const config = {
   },
   texts: {
     dateNotSet: '[Not set]'
+  },
+  // qs: query string
+  qs: {
+    boardMode: 'boardMode'
   }
 }
 export default config

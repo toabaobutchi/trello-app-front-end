@@ -1,9 +1,9 @@
-import { useEffect, useId, useRef, useState } from 'react'
-import './SelectList.scss'
-import useClickTracker from '@hooks/useClickTracker'
-import { CustomizablePropType } from '@utils/types'
 import { useOutClickRef } from '@hooks/useOutClickRef'
 import useToggle from '@hooks/useToggle'
+import { CustomizablePropType } from '@utils/types'
+import { Theme } from '@utils/types/theme.type'
+import { useEffect, useId, useState } from 'react'
+import './SelectList.scss'
 
 interface SelectListItem {
   value: string
@@ -17,6 +17,7 @@ interface SelectListProps extends React.ComponentProps<'div'> {
   onChoose?: (selectedItem: SelectListItem) => void
   size?: 'small' | 'medium' | 'large'
   manualSelectedValue?: string
+  theme?: Theme
 }
 
 function SelectList({
@@ -26,6 +27,7 @@ function SelectList({
   label,
   size = 'medium',
   manualSelectedValue,
+  theme = 'primary',
   ...props
 }: SelectListProps) {
   const [expand, handleToggleSelect, setExpand] = useToggle()
@@ -63,10 +65,10 @@ function SelectList({
       </p>
       <div
         id={selectListId}
-        className={`select-list ${size}-list ${props?.className ?? ''}`.trimEnd()}
+        className={`select-list select-list__${theme} ${size}-list ${props?.className ?? ''}`.trimEnd()}
         style={props?.style}
       >
-        <div ref={selectListRef} className='selected-item' onClick={handleToggleSelect}>
+        <div ref={selectListRef} className={`selected-item`} onClick={handleToggleSelect}>
           {selectedItem?.display || selectedItem?.value} <i className='fa-solid fa-caret-down'></i>
         </div>
         {expand && items && (
@@ -78,7 +80,7 @@ function SelectList({
                   className={`select-list-data-context-item ${
                     item.value === selectedItem?.value ? 'selected-context-item' : ''
                   }`}
-                  onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                  onClick={() => {
                     // e.stopPropagation()
                     handleSelect(item)
                   }}

@@ -1,9 +1,20 @@
 .select-list {
+  --select-list-color: var(--primary-color);
+  --select-list-border-color: var(--primary-color);
   position: relative;
   font: inherit;
-  border: var(--thin-border-width) solid var(--primary-color);
-  color: var(--primary-color);
+  border: var(--thin-border-width) solid var(--select-list-border-color);
+  color: var(--select-list-color);
   border-radius: var(--primary-radius);
+
+  &.select-list__primary {
+    --select-list-color: var(--primary-color);
+    --select-list-border-color: var(--primary-color);
+  }
+  &.select-list__light {
+    --select-list-color: var(--text-secondary-color);
+    --select-list-border-color: var(--light-color);
+  }
 
   &.small-list {
     .selected-item {

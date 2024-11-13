@@ -1,3 +1,4 @@
+import { ProjectPageParams } from '@utils/types/page-params.type'
 import { cloneDeep } from 'lodash'
 import { AssignmentResponse } from './types/assignment.type'
 import { ProjectFilterType } from './types'
@@ -361,5 +362,18 @@ export const clickOutsideTrigger = <TElement extends HTMLElement = HTMLElement>(
     if (isClickOutside) {
       handler(event)
     }
+  }
+}
+interface IDestructibleProjectParams {
+  context: string
+  id: string
+  slug?: string
+}
+export const getProjectPageParams = (project: IDestructibleProjectParams, viewMode: string): ProjectPageParams => {
+  return {
+    ownerShip: project.context,
+    projectId: project.id,
+    slug: project.slug ?? '',
+    viewMode
   }
 }
