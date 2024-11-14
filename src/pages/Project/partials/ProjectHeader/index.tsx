@@ -7,9 +7,11 @@ import { ProjectPageParams } from '@utils/types/page-params.type'
 import { NavLink } from 'react-router-dom'
 import ProjectFilterMenu from './ProjectFilterMenu'
 import './ProjectHeader.responsive.scss'
+import './ProjectHeader.scss'
 import ProjectHeaderInfo from './ProjectHeaderInfo'
 import ProjectMembers from './ProjectMembers'
 import ProjectSearch from './ProjectSearch'
+import ProjectSort from './ProjectSort'
 import ProjectUtilities from './ProjectUtilities'
 import ProjectViewModeNavBar from './ProjectViewModeNavBar'
 
@@ -36,9 +38,11 @@ function ProjectHeader() {
       </Flex>
       {params.projectId === project.id && !!params.viewMode && (
         <Flex $alignItem='center' $justifyContent='space-between' className='w-full mb-1'>
-          {/* <ProjectViewModeNavBar projectId={project?.id} ownerShip={project?.context?.toLowerCase()} slug={project?.slug ?? ''} /> */}
           <ProjectViewModeNavBar project={project} />
-          <ProjectFilterMenu />
+          <Flex $alignItem='center' $gap='0.5rem'>
+            <ProjectSort />
+            <ProjectFilterMenu />
+          </Flex>
         </Flex>
       )}
     </>

@@ -1,7 +1,4 @@
 .icon-button {
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
   display: inline-block;
   color: var(--secondary-color);
   border: var(--thin-border-width) solid var(--light-color);
@@ -75,7 +72,7 @@
     }
   }
   &.icon-button__light {
-    color: var(--secondary-color);
+    color: var(--text-secondary-color);
 
     &:hover {
       background-color: var(--bright-color);

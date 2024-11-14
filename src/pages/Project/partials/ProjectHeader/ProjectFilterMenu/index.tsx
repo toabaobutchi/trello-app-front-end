@@ -116,12 +116,7 @@ const ProjectFilterMenu = memo(() => {
     dispatch(projectSlice.actions.setFilters(filter))
     handleToggleModal()
   }
-  const isFiltering =
-    (filter?.priorities?.length ?? 0) > 0 ||
-    filter?.dueDate !== undefined ||
-    filter?.noAssigneesFilter ||
-    Boolean(filter?.assignToMe) ||
-    (filter?.members?.length ?? 0) > 0
+  const isFiltering = (filter?.priorities?.length ?? 0) > 0 || filter?.dueDate !== undefined || filter?.noAssigneesFilter || Boolean(filter?.assignToMe) || (filter?.members?.length ?? 0) > 0
 
   return (
     <>
@@ -135,8 +130,8 @@ const ProjectFilterMenu = memo(() => {
           </Tooltip>
         }
       >
-        <Button onClick={handleToggleModal} variant='text' theme='primary'>
-          <i className='fa-solid fa-sliders'></i> Filters
+        <Button onClick={handleToggleModal} variant='text' theme={`${isFiltering ? 'primary' : 'light'}`}>
+          <i className='fa-solid fa-filter' /> Filters
         </Button>
       </ButtonGroup>
       <Modal
@@ -147,18 +142,9 @@ const ProjectFilterMenu = memo(() => {
           header: { title: 'Filters', closeIcon: true }
         }}
       >
-        <MultipleSelectList
-          items={items}
-          selectedItems={filter?.priorities}
-          label={<span className='filter-item-title'>Priorities</span>}
-          onSelect={handleSelectPriority}
-        />
+        <MultipleSelectList items={items} selectedItems={filter?.priorities} label={<span className='filter-item-title'>Priorities</span>} onSelect={handleSelectPriority} />
         <p className='mt-2 filter-item-title'>Assignees</p>
-        <MultipleSelectList
-          items={members?.map(pm => ({ value: pm.id, display: pm.email }))}
-          selectedItems={filter?.members}
-          onSelect={handleSelectMembers}
-        />
+        <MultipleSelectList items={members?.map(pm => ({ value: pm.id, display: pm.email }))} selectedItems={filter?.members} onSelect={handleSelectMembers} />
         <Flex $alignItem='center' $gap='0.5rem' style={{ margin: '0.5rem 0' }}>
           <SwitchButton
             theme={{
@@ -175,10 +161,7 @@ const ProjectFilterMenu = memo(() => {
               checked: <i className='fa-solid fa-user-slash'></i>
             }}
           />
-          <label
-            htmlFor='filter-no-assignee'
-            className={`cpointer ${filter?.noAssigneesFilter ? 'text-danger bold' : 'text-light'}`}
-          >
+          <label htmlFor='filter-no-assignee' className={`cpointer ${filter?.noAssigneesFilter ? 'text-danger bold' : 'text-light'}`}>
             No assignees <i className='fa-solid fa-user-slash'></i>
           </label>
         </Flex>
@@ -193,28 +176,13 @@ const ProjectFilterMenu = memo(() => {
             }}
             onChange={handleSelectAssignToMeFilter}
           />
-          <label
-            htmlFor='filter-assign-to-me'
-            className={`cpointer ${filter?.assignToMe ? 'text-success bold' : 'text-light'}`}
-          >
+          <label htmlFor='filter-assign-to-me' className={`cpointer ${filter?.assignToMe ? 'text-success bold' : 'text-light'}`}>
             Assign to me <i className='fa-solid fa-user-check'></i>
           </label>
         </Flex>
-        <Flex
-          className='w-full'
-          $alignItem='center'
-          $flexDirection='column'
-          $gap='1rem'
-          $justifyContent='space-between'
-        >
+        <Flex className='w-full' $alignItem='center' $flexDirection='column' $gap='1rem' $justifyContent='space-between'>
           <p className='w-full mt-2 filter-item-title'>Due date</p>
-          <Flex
-            className='w-full mb-1'
-            $alignItem='center'
-            $flexWrap='wrap'
-            $gap='0.5rem'
-            $justifyContent='space-between'
-          >
+          <Flex className='w-full mb-1' $alignItem='center' $flexWrap='wrap' $gap='0.5rem' $justifyContent='space-between'>
             <Flex $alignItem='center' $gap='0.5rem'>
               <SwitchButton
                 inputAttributes={{
@@ -225,10 +193,7 @@ const ProjectFilterMenu = memo(() => {
                 }}
                 onChange={handleToggleDueDateFilter}
               />
-              <label
-                htmlFor='choose-due-date-option'
-                className={filter.dueDate !== undefined ? 'text-success bold' : 'text-light'}
-              >
+              <label htmlFor='choose-due-date-option' className={filter.dueDate !== undefined ? 'text-success bold' : 'text-light'}>
                 Due date by
               </label>
               <input

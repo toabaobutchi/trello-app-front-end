@@ -1,16 +1,10 @@
 .project-view-mode {
-  color: var(--text-secondary-color);
-  // flex: 1;
+  color: var(--text-primary-color);
   font-size: 1.1rem;
 
   .project-view-mode-item {
     cursor: pointer;
   }
-
-  // .task-board-view {
-  //   display: none;
-  //   font-size: 0.9rem;
-  // }
 
   .view-mode {
     --active-border-bottom-width: 2px;
@@ -60,21 +54,6 @@
   }
 }
 
-.project-header {
-  padding-bottom: 1rem;
-  width: 100%;
-
-  .utils-menu-item {
-    text-decoration: none;
-    color: inherit;
-    // &:hover {
-    //   color: var(--primary-color);
-    //   background-color: var(--clicked-menu-color);
-    //   border-radius: var(--primary-radius);
-    //   font-weight: bold;
-    // }
-  }
-}
 
 .project-path-container {
   border-bottom: var(--thin-border-width) solid var(--bright-color);

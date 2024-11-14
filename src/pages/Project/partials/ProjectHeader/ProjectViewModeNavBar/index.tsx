@@ -80,13 +80,13 @@ const ProjectViewModeNavBar = memo(({ project }: { project: ProjectResponseForBo
           items={viewModeSelectListItems}
           size='small'
           selectedValue={projectParams.viewMode}
+          theme='light'
         />
       </Flex>
       {projectParams.viewMode === 'board' && (
         <Flex $alignItem='center' $gap='0.3rem' className='task-board-view'>
           <SwitchButton
             onChange={handleToggleCompactView}
-            // size='small'
             inputAttributes={{
               id: 'task-board-toggle-view',
               type: 'checkbox',
@@ -100,10 +100,7 @@ const ProjectViewModeNavBar = memo(({ project }: { project: ProjectResponseForBo
               unchecked: 'primary'
             }}
           />
-          <label
-            htmlFor='task-board-toggle-view'
-            className={`cpointer ${isCompactView ? 'text-success' : 'text-primary'}`}
-          >
+          <label htmlFor='task-board-toggle-view' className={`cpointer ${isCompactView ? 'text-success' : 'text-primary'}`}>
             {isCompactView ? 'Compact' : 'Detail'}
           </label>
         </Flex>
